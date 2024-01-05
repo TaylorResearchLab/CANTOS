@@ -26,9 +26,6 @@ setwd(getwd())
 root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
 util_dir <- file.path(root_dir, "util")
 data_dir <- file.path(root_dir,"data")
-input_dir <- file.path(root_dir,"data","input")
-analyses_dir <- file.path(root_dir,"analyses")
-intermediate_dir <- file.path(root_dir,"analyses","pmtl-pipeline","intermediate")
 source(paste(util_dir,"/nearest_ncit.R",sep=""))
 
 # Read CT embedding file 
