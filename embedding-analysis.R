@@ -362,23 +362,73 @@ apply(NCIT_embedding_df[,2:1537],1,CalculateEuclideanDistance,vect2=combined_emb
  rownames(outer_ncit_all_df) <- rownames(combined_embedding_df)
  colnames(outer_ncit_all_df) <- NCIT_embedding_df$Disease
 
- index_min <- index_min<- as.matrix(apply(outer_ncit_all_df, 1, which.min))
+ index_min <- as.matrix(apply(outer_ncit_all_df, 1, which.min))
  ncit_match_df <- cbind(rownames(outer_ncit_all_df))
  
  colnames(ncit_match_df)<-"Tumor_Names"
  ncit_match_df <-as.data.frame(ncit_match_df)
  
  ncit_match_df$NCIT_Matches<- NA
- 
+ ncit_match_df$ncit_distance<-NA
 
 for (iter in 1: dim(ncit_match_df)[1]){
   ncit_match_df$NCIT_Matches[iter] <- colnames(outer_ncit_all_df)[index_min[iter]]
+  ncit_match_df$ncit_distance[iter]<-outer_ncit_all_df[iter,index_min[iter]]
 }
 
  affinity_cluster_annotation2<-affinity_cluster_annotation 
  affinity_cluster_annotation2<- affinity_cluster_annotation2 %>% dplyr::left_join(ncit_match_df,by="Tumor_Names")
  
-
+###################### WHO MATCHES
+ outer_who_final<-invisible(foreach(i = 1:18014, .combine = rbind, .options.snow = opts, .verbose = T) %dopar% {
+   s <- apply(WHO_embedding_df[,2:1537],1,CalculateEuclideanDistance,vect2=combined_embedding_df[i,])
+   setTxtProgressBar(pb, i)
+   return(s)
+ })
+ 
+ outer_who_final_df<-outer_who_final[1:18014,]
+ rownames(outer_who_final_df) <- rownames(combined_embedding_df)
+ colnames(outer_who_final_df) <- WHO_embedding_df$Disease 
+ 
+ index_min_who <- as.matrix(apply(outer_who_final_df, 1, which.min))
+ who_match_df <- cbind(rownames(outer_who_final_df))
+ 
+ colnames(who_match_df)<-"Tumor_Names"
+ who_match_df <-as.data.frame(who_match_df)
+ 
+ who_match_df$WHO_Matches<- NA
+ who_match_df$WHO_distance<-NA
+ 
+ 
+ for (iter in 1: dim(who_match_df)[1]){
+   who_match_df$WHO_Matches[iter] <- colnames(outer_who_final_df)[index_min_who[iter]]
+   who_match_df$WHO_distance[iter]<-outer_who_final_df[iter,index_min_who[iter]]
+   
+ }
+ 
+ affinity_cluster_annotation2<- affinity_cluster_annotation2 %>% dplyr::left_join(who_match_df,by="Tumor_Names")
+ 
+ affinity_cluster_annotation2 <- affinity_cluster_annotation2 %>% dplyr::mutate(assigned_class = case_when(distance_ncit < WHO_distance ~ "NCIT",
+                                                                                                    distance_ncit > WHO_distance ~ "WHO",
+                                                                                                    TRUE ~ "Both"))
+ affinity_cluster_annotation3 <- affinity_cluster_annotation2 %>% select(Tumor_Names,Pediatric_SubsetCluster_ID,SubsetCluster_IDs,NCIT_Tumor,WHO_Tumor,assigned_class)
+ # Cluster voting
+ 
+ affinity_cluster_annotation2$cluster_label <- NA
+ subcluster_id_list<- unique(affinity_cluster_annotation2$SubsetCluster_IDs)
+ 
+ for (iter in 1:length(subcluster_id_list)){
+   
+   cluster_id_affinity <- subcluster_id_list[iter]
+   index_affinity <- which (affinity_cluster_annotation2$SubsetCluster_IDs==cluster_id_affinity)
+   totaling_table <- as.data.frame(table(affinity_cluster_annotation2$assigned_class[index_affinity]))
+   index_max<- which(totaling_table$Freq==max(totaling_table$Freq))
+   assigned_cluster_labels <- unique(affinity_cluster_annotation2$assigned_class[index_max])
+   affinity_cluster_annotation2$cluster_label[index_affinity]<- paste(assigned_cluster_labels,collapse = ";")
+ }
+ 
+ 
+ 
 # PAM
 pam_results<-fviz_nbclust_verbose(
        disease_transform,
