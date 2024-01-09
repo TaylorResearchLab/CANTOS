@@ -44,7 +44,7 @@ CT_embedding_df <- unique(CT_embedding_df) # STILL CONTAINS DISEASES WITH EXACT 
 CT_embedding_df <- CT_embedding_df %>% group_by(Disease) %>% summarise(across(everything(), list(mean)))
 
 # Read CT diseases to remove disease names corrupted added due to csv 
-CT_only_df <- read.csv(paste(data_dir,"/who_classification/CT_Only.csv",sep=""))
+CT_only_df <- read.csv(paste(data_dir,"/CT_Only.csv",sep=""))
 CT_embedding_agg_df <- CT_only_df %>% left_join(CT_embedding_df, by=c("DISEASE_NAMES"="Disease"))
 CT_embedding_agg_df<-CT_embedding_agg_df[order(CT_embedding_agg_df$DISEASE_NAMES),] # Order by names so the rows with missing values are next to their matched rows 
 
@@ -97,8 +97,8 @@ print(length(which(is.na(CT_embedding_agg_df[,2:1537]), arr.ind=TRUE)))
 CT_embedding_agg_df<-unique(CT_embedding_agg_df) # HERE START Again
 
 # Read NCIT Terms and WHO Terms with embedding
-NCIT_embedding_df <-read.csv(paste(analyses_dir,"/embedding-analysis-dt/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv",sep=""))
-WHO_embedding_df <-read.csv(paste(analyses_dir,"/embedding-analysis-dt/dt_input_file_6_dec/WHO_Only_terms_text-embedding-ada-002_embeddings.csv",sep=""))
+NCIT_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv",sep=""))
+WHO_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/WHO_Only_terms_text-embedding-ada-002_embeddings.csv",sep=""))
 
 NCIT_embedding_df<-NCIT_embedding_df[c(-1),] # Remove the header (column name) embedding
 WHO_embedding_df<-WHO_embedding_df[c(-1),] # Remove the header (column name) embedding
