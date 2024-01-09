@@ -355,7 +355,7 @@ apply(NCIT_embedding_df[,2:1537],1,CalculateEuclideanDistance,vect2=combined_emb
  })
 
 
- outer_ncit_all_df<-outer_ncit_all_df[1:18014,]
+ outer_ncit_all_df<-outer_ncit_all[1:18014,]
  rownames(outer_ncit_all_df) <- rownames(combined_embedding_df)
  colnames(outer_ncit_all_df) <- NCIT_embedding_df$Disease
 
@@ -402,13 +402,13 @@ for (iter in 1: dim(ncit_match_df)[1]){
    who_match_df$WHO_distance[iter]<-outer_who_final_df[iter,index_min_who[iter]]
    
  }
- 
+
  affinity_cluster_annotation2<- affinity_cluster_annotation2 %>% dplyr::left_join(who_match_df,by="Tumor_Names")
  
- affinity_cluster_annotation2 <- affinity_cluster_annotation2 %>% dplyr::mutate(assigned_class = case_when(distance_ncit < WHO_distance ~ "NCIT",
-                                                                                                    distance_ncit > WHO_distance ~ "WHO",
+ affinity_cluster_annotation2 <- affinity_cluster_annotation2 %>% dplyr::mutate(assigned_class = case_when(ncit_distance < WHO_distance ~ NCIT_Matches,
+                                                                                                           ncit_distance > WHO_distance ~ WHO_Matches,
                                                                                                     TRUE ~ "Both"))
- affinity_cluster_annotation3 <- affinity_cluster_annotation2 %>% select(Tumor_Names,Pediatric_SubsetCluster_ID,SubsetCluster_IDs,NCIT_Tumor,WHO_Tumor,assigned_class)
+ affinity_cluster_annotation3 <- affinity_cluster_annotation2 %>% dplyr::select(Tumor_Names,Pediatric_SubsetCluster_ID,SubsetCluster_IDs,NCIT_Tumor,WHO_Tumor,assigned_class)
  # Cluster voting
  
  affinity_cluster_annotation2$cluster_label <- NA
@@ -572,8 +572,8 @@ write.csv(missed_CT_embeddings,"/Users/lahiria/Desktop/MTP_Paper/PMTL_paper/anal
 save(diseases_cluster,file=paste(analyses_dir,"/embedding-analysis-dt/diseases_cluster.Rdata",sep=""))
 save(embedding_df_agg,file=paste(analyses_dir,"/embedding-analysis-dt/embedding_df_agg.Rdata",sep=""))
 
-save.image(file='/Users/lahiria/Desktop/MTP_Paper/PMTL_paper/analyses/embedding-analysis-dt/workspace.RData')
-load('/Users/lahiria/Desktop/MTP_Paper/PMTL_paper/analyses/embedding-analysis-dt/server_chop_download/workspace.RData')
+save.image(file='/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/chop_server_download/workspace.RData')
+load('/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/chop_server_download/workspace.RData')
 
 write.csv(affinity_cluster_annotation,"/Users/lahiria/Desktop/MTP_Paper/PMTL_paper/analyses/embedding-analysis-dt/affinity_annotation.csv")
 
