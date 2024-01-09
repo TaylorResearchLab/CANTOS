@@ -26,21 +26,21 @@ setwd(getwd())
 root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
 util_dir <- file.path(root_dir, "util")
 data_dir <- file.path(root_dir,"data")
+input_dir <- file.path(root_dir,"input")
+
 source(paste(util_dir,"/nearest_ncit.R",sep=""))
 
 # Read CT embedding file 
-embedding_df <- read.csv(paste(analyses_dir,"/embedding-analysis-dt/disease_embeddings.csv",sep=""))
+embedding_df <- read.csv(paste(data_dir,"/disease_embeddings.csv",sep=""))
 embedding_df<-embedding_df[order(embedding_df$Disease),]
 
 # Read missing CT embeddings 
-CT_missing_embedding_df <-read.csv(paste(analyses_dir,"/embedding-analysis-dt/dt_input_file_6_dec/missed_CT_result_embeddings.csv",sep=""))
+CT_missing_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/missed_CT_result_embeddings.csv",sep=""))
 
 # Combine all embeddings 
-#colnames(embedding_df_agg)<-colnames(CT_missing_embedding_df)
-#rownames(embedding_df_agg)<-NULL
+
 CT_embedding_df <- rbind(embedding_df,CT_missing_embedding_df)
 CT_embedding_df <- unique(CT_embedding_df) # STILL CONTAINS DISEASES WITH EXACT STRING NAME BUT SLIGHTLY VARYING EMBEDDINGS
-
 CT_embedding_df <- CT_embedding_df %>% group_by(Disease) %>% summarise(across(everything(), list(mean)))
 
 # Read CT diseases to remove disease names corrupted added due to csv 
