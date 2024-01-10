@@ -277,9 +277,9 @@ count_subset_table$SubsetCluster_IDs <- as.numeric(as.character(sub("," , ".", c
 
 
 affinity_cluster_df <- affinity_cluster_df %>% dplyr::left_join(count_subset_table,by ="SubsetCluster_IDs")
-
-
 affinity_cluster_annotation <- affinity_cluster_df %>% dplyr::select(Tumor_Names,Pediatric_SubsetCluster_ID,SubsetCluster_IDs)
+
+
 
 ####### CHECK IF NCIT OR WHO 
 
@@ -346,7 +346,7 @@ apply(NCIT_embedding_df[,2:1537],1,CalculateEuclideanDistance,vect2=combined_emb
   setTxtProgressBar(pb, i) 
 }
 
- 4
+ 
 
  outer_ncit_all<-invisible(foreach(i = 1:18014, .combine = rbind, .options.snow = opts, .verbose = T) %dopar% {
    s <- apply(NCIT_embedding_df[,2:1537],1,CalculateEuclideanDistance,vect2=combined_embedding_df[i,])
@@ -424,6 +424,18 @@ for (iter in 1: dim(ncit_match_df)[1]){
    assigned_cluster_labels <- unique(as.character(totaling_table$Var1[index_max]))
    
    affinity_cluster_annotation2$cluster_label[index_affinity]<- paste(assigned_cluster_labels,collapse = ";")
+ }
+ 
+ 
+ 
+ 
+ # Need for second run of clustering
+ 
+ affinity_cluster_nested <- affinity_cluster_annotation %>% dplyr::select(Tumor_Names,Pediatric_SubsetCluster_ID, SubsetCluster_IDs)
+ affinity_subcluster_labels <- unique(affinity_cluster_nested$SubsetCluster_IDs)
+ 
+ for(iter in 1:length(affinity_subcluster_labels)){
+   
  }
  
  
