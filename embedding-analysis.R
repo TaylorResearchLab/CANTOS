@@ -420,7 +420,9 @@ for (iter in 1: dim(ncit_match_df)[1]){
    index_affinity <- which (affinity_cluster_annotation2$SubsetCluster_IDs==cluster_id_affinity)
    totaling_table <- as.data.frame(table(affinity_cluster_annotation2$assigned_class[index_affinity]))
    index_max<- which(totaling_table$Freq==max(totaling_table$Freq))
-   assigned_cluster_labels <- unique(affinity_cluster_annotation2$assigned_class[index_max])
+   #assigned_cluster_labels <- unique(affinity_cluster_annotation2$assigned_class[index_max])
+   assigned_cluster_labels <- unique(as.character(totaling_table$Var1[index_max]))
+   
    affinity_cluster_annotation2$cluster_label[index_affinity]<- paste(assigned_cluster_labels,collapse = ";")
  }
  
@@ -576,6 +578,6 @@ save.image(file='/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/chop_server
 load('/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/chop_server_download/workspace.RData')
 
 write.csv(affinity_cluster_annotation,"/Users/lahiria/Desktop/MTP_Paper/PMTL_paper/analyses/embedding-analysis-dt/affinity_annotation.csv")
+write.csv(affinity_cluster_annotation2,"/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/table/affinity_annotation2.csv")
 
-r <- mclapply(1:5, function(i) {rnorm(3)}, mc.cores = 5)
 
