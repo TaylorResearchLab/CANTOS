@@ -29,7 +29,7 @@ data_dir <- file.path(root_dir,"data")
 input_dir <- file.path(root_dir,"input")
 
 source(paste(util_dir,"/nearest_ncit.R",sep=""))
-
+source(paste(util_dir,"/nested_affinity_cluster.R",sep=""))
 # Read CT embedding file 
 embedding_df <- read.csv(paste(data_dir,"/disease_embeddings.csv",sep=""))
 embedding_df<-embedding_df[order(embedding_df$Disease),]
