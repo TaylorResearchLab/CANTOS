@@ -30,6 +30,8 @@ input_dir <- file.path(root_dir,"input")
 
 source(paste(util_dir,"/nearest_ncit.R",sep=""))
 source(paste(util_dir,"/nested_affinity_cluster.R",sep=""))
+source(paste(util_dir,"/cluster_label_assignment.R",sep=""))
+
 # Read CT embedding file 
 embedding_df <- read.csv(paste(data_dir,"/disease_embeddings.csv",sep=""))
 embedding_df<-embedding_df[order(embedding_df$Disease),]
@@ -409,6 +411,28 @@ for (iter in 1: dim(ncit_match_df)[1]){
                                                                                                            ncit_distance > WHO_distance ~ WHO_Matches,
                                                                                                     TRUE ~ "Both"))
  affinity_cluster_annotation3 <- affinity_cluster_annotation2 %>% dplyr::select(Tumor_Names,Pediatric_SubsetCluster_ID,SubsetCluster_IDs,NCIT_Tumor,WHO_Tumor,assigned_class)
+
+ 
+ 
+ # Need for second run of clustering
+ 
+ affinity_cluster_nested <- affinity_cluster_annotation %>% dplyr::select(Tumor_Names,Pediatric_SubsetCluster_ID, SubsetCluster_IDs)
+ affinity_cluster_nested <- nested_affinity_cluster(n=3,affinity_cluster_nested)
+ 
+ 
+ affinity_cluster_nested<- affinity_cluster_nested %>% dplyr::left_join(ncit_match_df,by="Tumor_Names")
+ affinity_cluster_nested <- affinity_cluster_nested %>%dplyr::left_join(who_match_df,by="Tumor_Names")
+
+ 
+ 
+ affinity_cluster_nested <- affinity_cluster_nested %>% dplyr::mutate(assigned_class = case_when(ncit_distance < WHO_distance ~ NCIT_Matches,
+                                                                                                           ncit_distance > WHO_distance ~ WHO_Matches,
+                                                                                                           TRUE ~ "Both"))
+ 
+ # Cluster voting
+ 
+ affinity_cluster_nested<- cluster_label_assignment(affinity_cluster_nested)
+ 
  # Cluster voting
  
  affinity_cluster_annotation2$cluster_label <- NA
@@ -429,10 +453,6 @@ for (iter in 1: dim(ncit_match_df)[1]){
  
  
  
- # Need for second run of clustering
- 
- affinity_cluster_nested <- affinity_cluster_annotation %>% dplyr::select(Tumor_Names,Pediatric_SubsetCluster_ID, SubsetCluster_IDs)
- affinity_cluster_nested <- nested_affinity_cluster(n=3,affinity_cluster_nested)
  
  
 # PAM
@@ -585,6 +605,6 @@ save.image(file='/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/chop_server
 load('/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/chop_server_download/workspace.RData')
 
 write.csv(affinity_cluster_annotation,"/Users/lahiria/Desktop/MTP_Paper/PMTL_paper/analyses/embedding-analysis-dt/affinity_annotation.csv")
-write.csv(affinity_cluster_annotation2,"/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/table/affinity_annotation2.csv")
+write.csv(nested_subset_affinity_df,"/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/table/nested_subset_affinity.csv")
 
 
