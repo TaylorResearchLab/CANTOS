@@ -433,24 +433,27 @@ for (iter in 1: dim(ncit_match_df)[1]){
  
  affinity_cluster_nested<- cluster_label_assignment(affinity_cluster_nested)
  
+ disease_affinity_cluster_table<- affinity_cluster_nested %>% dplyr::select(Tumor_Names,cluster_label)
+ 
+ 
  # Cluster voting
  
- affinity_cluster_annotation2$cluster_label <- NA
- subcluster_id_list<- unique(affinity_cluster_annotation2$SubsetCluster_IDs)
- 
- for (iter in 1:length(subcluster_id_list)){
-   
-   cluster_id_affinity <- subcluster_id_list[iter]
-   index_affinity <- which (affinity_cluster_annotation2$SubsetCluster_IDs==cluster_id_affinity)
-   totaling_table <- as.data.frame(table(affinity_cluster_annotation2$assigned_class[index_affinity]))
-   index_max<- which(totaling_table$Freq==max(totaling_table$Freq))
-   #assigned_cluster_labels <- unique(affinity_cluster_annotation2$assigned_class[index_max])
-   assigned_cluster_labels <- unique(as.character(totaling_table$Var1[index_max]))
-   
-   affinity_cluster_annotation2$cluster_label[index_affinity]<- paste(assigned_cluster_labels,collapse = ";")
- }
- 
- 
+ # affinity_cluster_annotation2$cluster_label <- NA
+ # subcluster_id_list<- unique(affinity_cluster_annotation2$SubsetCluster_IDs)
+ # 
+ # for (iter in 1:length(subcluster_id_list)){
+ #   
+ #   cluster_id_affinity <- subcluster_id_list[iter]
+ #   index_affinity <- which (affinity_cluster_annotation2$SubsetCluster_IDs==cluster_id_affinity)
+ #   totaling_table <- as.data.frame(table(affinity_cluster_annotation2$assigned_class[index_affinity]))
+ #   index_max<- which(totaling_table$Freq==max(totaling_table$Freq))
+ #   #assigned_cluster_labels <- unique(affinity_cluster_annotation2$assigned_class[index_max])
+ #   assigned_cluster_labels <- unique(as.character(totaling_table$Var1[index_max]))
+ #   
+ #   affinity_cluster_annotation2$cluster_label[index_affinity]<- paste(assigned_cluster_labels,collapse = ";")
+ # }
+ # 
+ # 
  
  
  
@@ -604,7 +607,8 @@ save(embedding_df_agg,file=paste(analyses_dir,"/embedding-analysis-dt/embedding_
 save.image(file='/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/chop_server_download/workspace.RData')
 load('/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/chop_server_download/workspace.RData')
 
-write.csv(affinity_cluster_annotation,"/Users/lahiria/Desktop/MTP_Paper/PMTL_paper/analyses/embedding-analysis-dt/affinity_annotation.csv")
+#write.csv(affinity_cluster_annotation,"/Users/lahiria/Desktop/MTP_Paper/PMTL_paper/analyses/embedding-analysis-dt/affinity_annotation.csv")
 write.csv(nested_subset_affinity_df,"/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/table/nested_subset_affinity.csv")
 
+write.csv(disease_affinity_cluster_table,"/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/table/disease_affinity_cluster_table.csv")
 
