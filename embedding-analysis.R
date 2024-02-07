@@ -611,4 +611,5 @@ load('/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/chop_server_download/w
 write.csv(nested_subset_affinity_df,"/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/table/nested_subset_affinity.csv")
 
 write.csv(disease_affinity_cluster_table,"/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/table/disease_affinity_cluster_table.csv")
+write.csv(affinity_cluster_nested,"/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/table/affinity_cluster_nested.csv")
 
