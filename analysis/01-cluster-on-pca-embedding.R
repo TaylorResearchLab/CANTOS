@@ -35,6 +35,8 @@ index_opt_clust<- which(cluster_results$data$y==max(cluster_results$data$y))
 opt_clust_size<- as.integer(cluster_results$data$clusters[index_opt_clust]) # 4800
 kmeans_disease = kmeans(disease_transform, centers = opt_clust_size, nstart = 100)
 diseases_cluster_kmeans <- as.data.frame(kmeans_disease$cluster)
+diseases_cluster_kmeans<-cbind(disease_transform$Diseases,diseases_cluster_kmeans)
+rownames(diseases_cluster_kmeans)<-NULL
 
 
 ## CHI Index
@@ -56,3 +58,107 @@ for (iter in 1: length(d.apclus2@clusters)){
   affinity_cluster_df[iter,2] <- iter
 }
 affinity_cluster_df<- affinity_cluster_df %>% separate_rows(Tumor_Names, sep = '@')
+
+
+# Find cluster membership
+#affinity_cluster_df$Cluster_Total_Members <- NA
+count_table <- as.data.frame(table(affinity_cluster_df$Cluster_ID))
+colnames(count_table)<- c("Cluster_ID","Primary_Cluster_Frequency")
+count_table$Cluster_ID<- as.numeric(count_table$Cluster_ID)
+affinity_cluster_df <- affinity_cluster_df %>% dplyr::left_join(count_table,by="Cluster_ID")
+
+
+# Find children and pediatric cluster
+ind_ped <- c(which(str_detect(affinity_cluster_df$Tumor_Names, "childhood")),
+             which(str_detect(affinity_cluster_df$Tumor_Names, "children")),
+             which(str_detect(affinity_cluster_df$Tumor_Names, "child")),
+             which(str_detect(affinity_cluster_df$Tumor_Names, "pediatric")),
+             which(str_detect(affinity_cluster_df$Tumor_Names, "paediatric")))
+
+affinity_cluster_df$contains_pediatric_string <- "No"
+
+affinity_cluster_df$contains_pediatric_string[ind_ped]<-"Yes"
+
+pediatric_cluster_ID<-0
+
+affinity_cluster_df$Pediatric_SubsetCluster_ID <- NA  
+affinity_cluster_df$Pediatric_SubsetCluster_ID[ind_ped]<-pediatric_cluster_ID
+
+
+#Nested affinity clusters
+barplot(height=affinity_cluster_df$Primary_Cluster_Frequency, names=affinity_cluster_df$Cluster_ID, 
+        xlab="cluster_id", 
+        ylab="frequency", 
+        main="Cluster_Frequency", 
+        ylim=c(0,50)
+)
+
+large_cluster_index <- which(affinity_cluster_df$Primary_Cluster_Frequency > median(affinity_cluster_df$Primary_Cluster_Frequency))
+
+affinity_cluster_df$High_Primary_Cluster_Membership<-"No"
+affinity_cluster_df$High_Primary_Cluster_Membership[large_cluster_index]<-"Yes"
+
+affinity_cluster_df <- affinity_cluster_df %>% dplyr::select(Tumor_Names,Cluster_ID,Primary_Cluster_Frequency,
+                                                             High_Primary_Cluster_Membership,contains_pediatric_string,
+                                                             Pediatric_SubsetCluster_ID)
+Clusters_Names <- unique(affinity_cluster_df$Cluster_ID)
+
+disease_transform$Tumor_Name<-rownames(disease_transform)
+
+affinity_cluster_df$SubsetCluster_IDs <- NA
+
+
+
+for (iter in 1:length(Clusters_Names)) {
+  
+  print(iter)
+  is_large_cluster <- unique(affinity_cluster_df$High_Primary_Cluster_Membership[which(affinity_cluster_df$Cluster_ID==
+                                                                                         Clusters_Names[iter])])
+  
+  if(is_large_cluster=="Yes"){
+    
+    subset_embedding_df <- as.data.frame(affinity_cluster_df$Tumor_Names[affinity_cluster_df$Cluster_ID==Clusters_Names[iter]])
+    colnames(subset_embedding_df)<-"Tumor_Name"
+    rownames(subset_embedding_df)<-subset_embedding_df$Tumor_Name
+    subset_embedding_df<- subset_embedding_df %>% dplyr::left_join(disease_transform,by="Tumor_Name")
+    rownames(subset_embedding_df)<-subset_embedding_df$Tumor_Name
+    subset_embedding_df<-subset_embedding_df[,c(-1)]
+    
+    affinity_subset <- apcluster(negDistMat(r=2), subset_embedding_df)
+    cat("affinity propogation optimal number of clusters:", length(affinity_subset@clusters), "\n")
+    
+    subset_affinity_df<-as.data.frame(affinity_subset@idx)
+    subset_affinity_df<-as.data.frame(matrix(nrow=1,ncol=2))
+    colnames(subset_affinity_df)<-c("Tumor_Names","SubCluster_ID")
+    for (iter_subset in 1: length(affinity_subset@clusters)){
+      subset_affinity_df[iter_subset,1] <- paste(names(unlist(affinity_subset@clusters[iter_subset])),collapse = "@")
+      subset_affinity_df[iter_subset,2] <- iter_subset
+    }
+    subset_affinity_df<- subset_affinity_df %>% separate_rows(Tumor_Names, sep = '@')
+    largest_cluster_id <- max(subset_affinity_df$SubCluster_ID)
+    power_of_ten <- floor(log10(largest_cluster_id)) + 1
+    subset_affinity_df$SubCluster_ID<-subset_affinity_df$SubCluster_ID/(10^power_of_ten)+Clusters_Names[iter]
+    
+    for (iter_affinity_cluser in 1: dim(subset_affinity_df)[1]){
+      ind_location <- which (affinity_cluster_df$Tumor_Names==subset_affinity_df$Tumor_Names[iter_affinity_cluser])
+      affinity_cluster_df$SubsetCluster_IDs[ind_location]<-subset_affinity_df$SubCluster_ID[iter_affinity_cluser]
+    }
+    
+    
+  }
+}
+
+ind_subcluster_na <- which(is.na(affinity_cluster_df$SubsetCluster_IDs),arr.ind = TRUE)
+
+affinity_cluster_df$SubsetCluster_IDs[ind_subcluster_na] <- affinity_cluster_df$Cluster_ID[ind_subcluster_na]
+
+count_subset_table <- as.data.frame(table(affinity_cluster_df$SubsetCluster_IDs))
+colnames(count_subset_table) <- c("SubsetCluster_IDs", "Subset_Cluster_Freq")
+count_subset_table$SubsetCluster_IDs <- as.numeric(as.character(sub("," , ".", count_subset_table$SubsetCluster_IDs)))
+
+#count_subset_table$SubCluster_IDs<- as.numeric(as.character(count_subset_table$SubsetCluster_IDs))
+
+
+
+affinity_cluster_df <- affinity_cluster_df %>% dplyr::left_join(count_subset_table,by ="SubsetCluster_IDs")
+affinity_cluster_annotation <- affinity_cluster_df %>% dplyr::select(Tumor_Names,Pediatric_SubsetCluster_ID,SubsetCluster_IDs)
