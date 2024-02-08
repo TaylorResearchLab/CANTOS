@@ -24,7 +24,7 @@ intermediate_dir <- file.path(analysis_dir,"intermediate")
 # Load PCA Embeddings of CT , WHO, NCIT
 disease_transform<- read.csv(paste(intermediate_dir,"/disease_transform_pca.csv",sep="") )
 colnames(disease_transform)[1]<-"Diseases"
-
+rownames(disease_transform)<-disease_transform$Diseases # Needed for AP Clust
 
 # Peform Clustering 
 
@@ -48,8 +48,8 @@ CH_Results<-CHCriterion(disease_transform_pca_scaled, kmax=13434,clustermethod="
 
 #affinity cluster
 set.seed(13)
-d.apclus2 <- apcluster(negDistMat(r=2), disease_transform)
-cat("affinity propogation optimal number of clusters:", length(d.apclus2@clusters), "\n") #1255
+d.apclus2 <- apcluster(negDistMat(r=2), disease_transform) # 1 hr 28 mins
+cat("affinity propogation optimal number of clusters:", length(d.apclus2@clusters), "\n") #1255 , 1254 in new run 
 
 affinity_cluster_df<-as.data.frame(matrix(nrow=1,ncol=2))
 colnames(affinity_cluster_df)<-c("Tumor_Names","Cluster_ID")
@@ -60,7 +60,7 @@ for (iter in 1: length(d.apclus2@clusters)){
 affinity_cluster_df<- affinity_cluster_df %>% separate_rows(Tumor_Names, sep = '@')
 
 
-# Find cluster membership
+# Find cluster membership frequencies 
 #affinity_cluster_df$Cluster_Total_Members <- NA
 count_table <- as.data.frame(table(affinity_cluster_df$Cluster_ID))
 colnames(count_table)<- c("Cluster_ID","Primary_Cluster_Frequency")
@@ -68,7 +68,7 @@ count_table$Cluster_ID<- as.numeric(count_table$Cluster_ID)
 affinity_cluster_df <- affinity_cluster_df %>% dplyr::left_join(count_table,by="Cluster_ID")
 
 
-# Find children and pediatric cluster
+# Find if tumor has children and pediatric terms in their tumor names and make a seperate column for pediatric cluster
 ind_ped <- c(which(str_detect(affinity_cluster_df$Tumor_Names, "childhood")),
              which(str_detect(affinity_cluster_df$Tumor_Names, "children")),
              which(str_detect(affinity_cluster_df$Tumor_Names, "child")),
@@ -103,12 +103,12 @@ affinity_cluster_df <- affinity_cluster_df %>% dplyr::select(Tumor_Names,Cluster
                                                              Pediatric_SubsetCluster_ID)
 Clusters_Names <- unique(affinity_cluster_df$Cluster_ID)
 
-disease_transform$Tumor_Name<-rownames(disease_transform)
+#disease_transform$Tumor_Name<-rownames(disease_transform)
+colnames(disease_transform)[1]<-"Tumor_Name"
 
 affinity_cluster_df$SubsetCluster_IDs <- NA
 
-
-
+# First round of sub clustering 
 for (iter in 1:length(Clusters_Names)) {
   
   print(iter)
@@ -148,6 +148,8 @@ for (iter in 1:length(Clusters_Names)) {
   }
 }
 
+
+# Fill up the subclusters columns with NA values. Fill them with primary cluster IDs 
 ind_subcluster_na <- which(is.na(affinity_cluster_df$SubsetCluster_IDs),arr.ind = TRUE)
 
 affinity_cluster_df$SubsetCluster_IDs[ind_subcluster_na] <- affinity_cluster_df$Cluster_ID[ind_subcluster_na]
@@ -162,3 +164,33 @@ count_subset_table$SubsetCluster_IDs <- as.numeric(as.character(sub("," , ".", c
 
 affinity_cluster_df <- affinity_cluster_df %>% dplyr::left_join(count_subset_table,by ="SubsetCluster_IDs")
 affinity_cluster_annotation <- affinity_cluster_df %>% dplyr::select(Tumor_Names,Pediatric_SubsetCluster_ID,SubsetCluster_IDs)
+
+
+####### CHECK IF NCIT OR WHO 
+
+# Read NCIT Terms and WHO Terms with embedding
+NCIT_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv",sep=""))
+WHO_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/WHO_Only_terms_text-embedding-ada-002_embeddings.csv",sep=""))
+
+NCIT_embedding_df<-NCIT_embedding_df[c(-1),] # Remove the header (column name) embedding
+WHO_embedding_df<-WHO_embedding_df[c(-1),] # Remove the header (column name) embedding
+
+rownames(NCIT_embedding_df)<-NULL
+rownames(WHO_embedding_df)<-NULL
+
+affinity_cluster_annotation$NCIT_Tumor<-"No"
+affinity_cluster_annotation$WHO_Tumor<-"No"
+
+for (iter in 1:dim(affinity_cluster_annotation)[1]){
+  if(affinity_cluster_annotation$Tumor_Names[iter] %in% NCIT_embedding_df$Disease){
+    affinity_cluster_annotation$NCIT_Tumor[iter] <- "Yes"
+  }else if(affinity_cluster_annotation$Tumor_Names[iter] %in% WHO_embedding_df$Disease){
+    affinity_cluster_annotation$WHO_Tumor[iter] <- "Yes"
+  }
+}
+
+
+# write files 
+#save(d.apclus2,file = paste(intermediate_dir,"/d.apclus2.RData",sep=""))
+save(affinity_cluster_df,file = paste(intermediate_dir,"/affinity_cluster_df.RData",sep=""))
+save(affinity_cluster_annotation,file = paste(intermediate_dir,"/affinity_cluster_annotation.RData",sep=""))
