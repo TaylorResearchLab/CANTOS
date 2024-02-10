@@ -123,4 +123,6 @@ for (iter in 1: dim(who_match_df)[1]){
   who_match_df$WHO_distance[iter]<-outer_who_final_df[iter,index_min_who[iter]]
   
 }
-
+#
+write.csv(who_match_df,paste(intermediate_dir,"/who_ct_distance_mat.csv",sep=""))
+write.csv(ncit_match_df,paste(intermediate_dir,"/ncit_match_df.csv",sep=""))
