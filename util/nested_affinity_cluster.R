@@ -1,4 +1,4 @@
-nested_affinity_clusted <- function(n,affinity_cluster_nested){
+nested_affinity_cluster <- function(n,affinity_cluster_nested,disease_transform){
   
   for (iter_nest in 1:n){
     
