@@ -24,7 +24,11 @@ intermediate_dir <- file.path(analysis_dir,"intermediate")
 #load combined embedding
 combined_embedding_df <- read.csv(paste(intermediate_dir,"/combined_embedding_df.csv",sep="") )
 
+
 source(paste(util_dir,"/nearest_ncit.R",sep=""))
+
+
+
 
 
 # Compute distances 
