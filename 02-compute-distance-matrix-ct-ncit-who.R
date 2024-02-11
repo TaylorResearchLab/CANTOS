@@ -123,6 +123,18 @@ for (iter in 1: dim(who_match_df)[1]){
   who_match_df$WHO_distance[iter]<-outer_who_final_df[iter,index_min_who[iter]]
   
 }
+
+affinity_cluster_annotation2<- affinity_cluster_annotation2 %>% dplyr::left_join(who_match_df,by="Tumor_Names")
+
+affinity_cluster_annotation2 <- affinity_cluster_annotation2 %>% dplyr::mutate(assigned_class = case_when(ncit_distance < WHO_distance ~ NCIT_Matches,
+                                                                                                          ncit_distance > WHO_distance ~ WHO_Matches,
+                                                                                                          TRUE ~ "Both"))
+affinity_cluster_annotation3 <- affinity_cluster_annotation2 %>% dplyr::select(Tumor_Names,Pediatric_SubsetCluster_ID,SubsetCluster_IDs,NCIT_Tumor,WHO_Tumor,assigned_class)
+
+
+
+
 #
 write.csv(who_match_df,paste(intermediate_dir,"/who_ct_distance_mat.csv",sep=""))
 write.csv(ncit_match_df,paste(intermediate_dir,"/ncit_match_df.csv",sep=""))
+write.csv(affinity_cluster_annotation3,paste(intermediate_dir,"/affinity_cluster_annotation3.csv",sep=""))
