@@ -29,5 +29,11 @@ input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
 
+# Load functions
+source(paste(util_dir,"/split_drugs.R",sep = ""))
+source(paste(util_dir,"/create_disease_who_map.R",sep = ""))
+source(paste(util_dir,"/clustered_tumors.R",sep = ""))
+source(paste(util_dir,"/contains_target_word.R",sep = ""))
+source(paste(util_dir,"/string_dissimilarity.R",sep = ""))
 
 
