@@ -36,4 +36,10 @@ source(paste(util_dir,"/clustered_tumors.R",sep = ""))
 source(paste(util_dir,"/contains_target_word.R",sep = ""))
 source(paste(util_dir,"/string_dissimilarity.R",sep = ""))
 
+# Load CT data
+load(paste(input_dir,"/clinical_data.RData",sep=""))
+load(paste(input_dir,"/eligibility_data.RData",sep=""))
+load(paste(input_dir,"/conditions_data.RData",sep=""))
+load(paste(input_dir,"/browse_conditions_data.RData",sep=""))
 
+df_tumor<- read.csv(paste(input_dir,"/ct_master_tumor_ped_annotated.csv",sep=""))
