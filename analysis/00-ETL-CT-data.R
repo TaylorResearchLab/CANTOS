@@ -43,3 +43,24 @@ load(paste(input_dir,"/conditions_data.RData",sep=""))
 load(paste(input_dir,"/browse_conditions_data.RData",sep=""))
 
 df_tumor<- read.csv(paste(input_dir,"/ct_master_tumor_ped_annotated.csv",sep=""))
+
+
+# Relationship between Drug and Disease in CT and NCT IDS
+clinical_data <- clinical_data %>% dplyr::left_join(eligibility_data,by="nct_id")
+clinical_data<-clinical_data %>% dplyr::select(nct_id,intervention_type,name)
+clinical_data<-clinical_data %>% dplyr::filter(intervention_type %in% c("Drug","Biological","Combination Product","Genetic" ))
+colnames(clinical_data)[3]<-"Intervention_CT"
+
+clinical_data<-split_drugs(clinical_data)
+clinical_data<-distinct(clinical_data)
+clinical_data <- clinical_data %>% dplyr::select(nct_id,Intervention_CT)
+
+conditions_data <- conditions_data %>% dplyr::select(nct_id,downcase_name)
+browse_conditions_data<-browse_conditions_data %>% dplyr::select(nct_id,downcase_mesh_term)
+clinical_data <- clinical_data %>% dplyr::left_join(conditions_data,by="nct_id") # contains CT drugs and disease info with NCT_IDs
+colnames(clinical_data)[3]<-"diseases"
+
+df_tumor_drug<- dplyr::left_join(df_tumor,clinical_data, by="diseases")
+df_tumor_drug <- df_tumor_drug %>% dplyr::filter(validated_cancer_tumor!="No")
+df_tumor_drug <- df_tumor_drug %>% dplyr::filter(disease_name_inconclusive!="Yes")
+
