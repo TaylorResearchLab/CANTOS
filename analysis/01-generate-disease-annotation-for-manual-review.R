@@ -56,7 +56,7 @@ ct_disease_df$cancer_search_term[!ind_cancer_search_term]<-"No"
 
 
 ct_disease_df<-is_cancer_who(ct_disease_df,who_general_words)
-ct_disease_df<-ct_disease_df %>% dplyr::select(diseases,validated_cancer_tumor,cancer_search_term,is_cancer_who,PedCanTumor,Ped_Evidence)
+ct_disease_df<-ct_disease_df %>% dplyr::select(diseases,cancer_search_term,is_cancer_who)
 
-
-
+# Write this file and manually annotate with a column for validated_cancer_tumor ,PedCanTumor,Ped_Evidence 
+write.csv(ct_disease_df,paste(intermediate_dir,"ct_disease_df_manually_annotate.csv",sep=""))
