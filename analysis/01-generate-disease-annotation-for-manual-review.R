@@ -13,6 +13,7 @@ input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
 
+
 source(paste(util_dir,"/is_cancer_who.R",sep = ""))
 source(paste(util_dir,"/create_disease_who_map.R",sep = ""))
 source(paste(util_dir,"/cancer_fuzzy_match.R",sep = ""))
@@ -59,4 +60,4 @@ ct_disease_df<-is_cancer_who(ct_disease_df,who_general_words)
 ct_disease_df<-ct_disease_df %>% dplyr::select(diseases,cancer_search_term,is_cancer_who)
 
 # Write this file and manually annotate with a column for validated_cancer_tumor ,PedCanTumor,Ped_Evidence 
-write.csv(ct_disease_df,paste(intermediate_dir,"ct_disease_df_manually_annotate.csv",sep=""))
+write.csv(ct_disease_df,paste(intermediate_dir,"/ct_disease_df_manually_annotate.csv",sep="")) #16116 with either cancer_search_term =="Yes" or is_cancer_who=="Yes"
