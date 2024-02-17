@@ -72,12 +72,12 @@ rownames(dissimilarity_matrix_lv)<-df_tumor_names
 colnames(dissimilarity_matrix_lv)<-df_tumor_names
 
 
-for (iter in 1:dim(dissimilarity_matrix_lv)[1]){
-  print(iter)
-  disease_name <- colnames(dissimilarity_matrix_lv)[iter]
-  distances<-unlist(lapply(df_tumor_names,string_dissimilarity,S2=disease_name,meth="lv"))
-  dissimilarity_matrix_lv[iter,]<-distances
-}
+# for (iter in 1:dim(dissimilarity_matrix_lv)[1]){
+#   print(iter)
+#   disease_name <- colnames(dissimilarity_matrix_lv)[iter]
+#   distances<-unlist(lapply(df_tumor_names,string_dissimilarity,S2=disease_name,meth="lv"))
+#   dissimilarity_matrix_lv[iter,]<-distances
+# }
 
 
 cl <- makeCluster(5, outfile="")
@@ -89,3 +89,18 @@ dissimilarity_matrix_lv<-foreach(iter=1:length(df_tumor_names),.combine=rbind) %
   distances<-unlist(lapply(df_tumor_names,string_dissimilarity,S2=disease_name,meth="lv"))
   
 }
+rownames(dissimilarity_matrix_lv) <- df_tumor_names
+colnames(dissimilarity_matrix_lv) <- df_tumor_names
+
+# Jarro Winkler Distance
+dissimilarity_matrix_jw <- as.data.frame(matrix(nrow=length(df_tumor_names),ncol=length(df_tumor_names)))
+
+dissimilarity_matrix_jw<-foreach(iter=1:length(df_tumor_names),.combine=rbind) %dopar% {
+  print(iter)
+  disease_name <- colnames(dissimilarity_matrix_jw)[iter]
+  distances<-unlist(lapply(df_tumor_names,string_dissimilarity,S2=disease_name,meth="jw"))
+  
+}
+rownames(dissimilarity_matrix_jw) <- df_tumor_names
+colnames(dissimilarity_matrix_jw) <- df_tumor_names
+
