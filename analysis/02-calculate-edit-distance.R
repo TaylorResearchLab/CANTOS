@@ -1,6 +1,9 @@
 # Load libraries
 suppressPackageStartupMessages({
   library(dplyr)
+  library(doParallel)
+  library(foreach)
+  library(stringdist)
 })
 
 
@@ -76,3 +79,17 @@ for (iter in 1:dim(dissimilarity_matrix_lv)[1]){
   dissimilarity_matrix_lv[iter,]<-distances
 }
 
+
+cl <- makeCluster(5, outfile="")
+registerDoParallel(cl)
+iterations <- 18104
+pb <- txtProgressBar(max = iterations, style = 3)
+progress <- function(n) setTxtProgressBar(pb, n)
+opts <- list(progress = progress)
+
+dissimilarity_matrix_lv<-foreach(iter=1:200,.combine=rbind) %dopar% {
+  print(iter)
+  disease_name <- colnames(dissimilarity_matrix_lv)[iter]
+  distances<-unlist(lapply(df_tumor_names,string_dissimilarity,S2=disease_name,meth="lv"))
+  
+}
