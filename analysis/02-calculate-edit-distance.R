@@ -114,7 +114,7 @@ colnames(dissimilarity_matrix_cosine) <- df_tumor_names
 dissimilarity_matrix_cosine<-foreach(iter=1:length(df_tumor_names),.combine=rbind) %dopar% {
   print(iter)
   disease_name <- colnames(dissimilarity_matrix_cosine)[iter]
-  distances<-unlist(lapply(df_tumor_names,string_dissimilarity,S2=disease_name,meth="jw"))
+  distances<-unlist(lapply(df_tumor_names,string_dissimilarity,S2=disease_name,meth="cosine"))
   
 }
 rownames(dissimilarity_matrix_cosine) <- df_tumor_names
