@@ -94,6 +94,8 @@ colnames(dissimilarity_matrix_lv) <- df_tumor_names
 
 # Jarro Winkler Distance
 dissimilarity_matrix_jw <- as.data.frame(matrix(nrow=length(df_tumor_names),ncol=length(df_tumor_names)))
+rownames(dissimilarity_matrix_jw) <- df_tumor_names
+colnames(dissimilarity_matrix_jw) <- df_tumor_names
 
 dissimilarity_matrix_jw<-foreach(iter=1:length(df_tumor_names),.combine=rbind) %dopar% {
   print(iter)
@@ -103,4 +105,18 @@ dissimilarity_matrix_jw<-foreach(iter=1:length(df_tumor_names),.combine=rbind) %
 }
 rownames(dissimilarity_matrix_jw) <- df_tumor_names
 colnames(dissimilarity_matrix_jw) <- df_tumor_names
+
+# Cosine Distance
+dissimilarity_matrix_cosine <- as.data.frame(matrix(nrow=length(df_tumor_names),ncol=length(df_tumor_names)))
+rownames(dissimilarity_matrix_cosine) <- df_tumor_names
+colnames(dissimilarity_matrix_cosine) <- df_tumor_names
+
+dissimilarity_matrix_cosine<-foreach(iter=1:length(df_tumor_names),.combine=rbind) %dopar% {
+  print(iter)
+  disease_name <- colnames(dissimilarity_matrix_cosine)[iter]
+  distances<-unlist(lapply(df_tumor_names,string_dissimilarity,S2=disease_name,meth="jw"))
+  
+}
+rownames(dissimilarity_matrix_cosine) <- df_tumor_names
+colnames(dissimilarity_matrix_cosine) <- df_tumor_names
 
