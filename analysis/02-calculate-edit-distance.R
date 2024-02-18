@@ -120,3 +120,8 @@ dissimilarity_matrix_cosine<-foreach(iter=1:length(df_tumor_names),.combine=rbin
 rownames(dissimilarity_matrix_cosine) <- df_tumor_names
 colnames(dissimilarity_matrix_cosine) <- df_tumor_names
 
+
+
+lower_bound <- quantile(dissimilarity_matrix_lv[1,], 0.0005)
+outlier_ind <- which((dissimilarity_matrix_lv[1,]< lower_bound))
+
