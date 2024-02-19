@@ -252,6 +252,10 @@ benchmark_tumors<- as.data.frame(benchmark_tumors)
 colnames(benchmark_tumors)<-"Tumors"
 display_table_benchmark <- benchmark_tumors %>% dplyr::left_join(display_table_benchmark,by="Tumors")
 
+# Stop the cluster
+stopCluster(cl)
+
+
 # Write Results of Clusters
 write.csv(cluster_results_lv,paste(results_dir,"/cluster_lv.csv",sep=""))
 write.csv(cluster_results_jw,paste(results_dir,"/cluster_jw.csv",sep=""))

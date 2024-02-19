@@ -26,6 +26,13 @@ intermediate_dir <- file.path(analysis_dir,"intermediate")
 embedding_df <- read.csv(paste(data_dir,"/disease_embeddings.csv",sep=""))
 embedding_df<-embedding_df[order(embedding_df$Disease),]
 
+
+# Read the annotated file
+#ct_disease_df <- read.csv(paste(input_dir,"/CT-Aug22-2023-Disease-File - clinical_trial_disease_aug_22_2023.csv",sep=""))
+#ct_tumor_df<- ct_disease_df %>% filter(validated_cancer_tumor=="Yes") %>%dplyr::select(diseases)
+ct_tumor_df
+
+
 # Read missing CT embeddings 
 CT_missing_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/missed_CT_result_embeddings.csv",sep=""))
 
