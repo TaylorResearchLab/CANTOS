@@ -121,7 +121,54 @@ rownames(dissimilarity_matrix_cosine) <- df_tumor_names
 colnames(dissimilarity_matrix_cosine) <- df_tumor_names
 
 
+# Find clusters of 
+cluster_results_lv<-foreach(iter=1:length(df_tumor_names),.combine=rbind) %do% {
+  print(iter)
+  distance_clusters(dissimilarity_matrix_lv[iter,],cutoff = 0.0005,df_tumor_names)
+}
 
-lower_bound <- quantile(dissimilarity_matrix_lv[1,], 0.0005)
-outlier_ind <- which((dissimilarity_matrix_lv[1,]< lower_bound))
+cluster_results_lv<-as.data.frame(cluster_results_lv)
+rownames(cluster_results_lv)<-NULL
+cluster_results_lv <-cbind(cluster_results_lv,df_tumor_names)
 
+
+colnames(cluster_results_lv) <- c("cluster_lv","Tumors")
+cluster_results_lv <- cluster_results_lv %>% select(Tumors,cluster_lv)
+
+### JW
+
+cluster_results_jw<-foreach(iter=1:length(df_tumor_names),.combine=rbind) %do% {
+  print(iter)
+  distance_clusters(dissimilarity_matrix_jw[iter,],cutoff = 0.0005,df_tumor_names)
+}
+
+cluster_results_jw<-as.data.frame(cluster_results_jw)
+rownames(cluster_results_jw)<-NULL
+cluster_results_jw <-cbind(cluster_results_jw,df_tumor_names)
+
+
+colnames(cluster_results_jw) <- c("cluster_jw","Tumors")
+cluster_results_jw <- cluster_results_jw %>% select(Tumors,cluster_jw)
+
+# Cosine
+
+cluster_results_cosine<-foreach(iter=1:length(df_tumor_names),.combine=rbind) %do% {
+  print(iter)
+  distance_clusters(dissimilarity_matrix_cosine[iter,],cutoff = 0.0005,df_tumor_names)
+}
+
+cluster_results_cosine<-as.data.frame(cluster_results_cosine)
+rownames(cluster_results_cosine)<-NULL
+cluster_results_cosine <-cbind(cluster_results_cosine,df_tumor_names)
+
+
+colnames(cluster_results_cosine) <- c("cluster_cosine","Tumors")
+cluster_results_cosine <- cluster_results_cosine %>% select(Tumors,cluster_cosine)
+
+
+# Number of clusters
+cluster_results_lv<-cluster_results_lv %>% mutate(cluster_members = str_count(cluster_lv, ";")+1)
+cluster_results_jw<-cluster_results_jw %>% mutate(cluster_members = str_count(cluster_jw, ";")+1)
+cluster_results_cosine<-cluster_results_cosine %>% mutate(cluster_members = str_count(cluster_cosine, ";")+1)  
+  
+# Write Results of Clusters
