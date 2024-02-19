@@ -223,6 +223,16 @@ cluster_results_lv<-cluster_results_lv %>% mutate(cluster_members = str_count(cl
 cluster_results_jw<-cluster_results_jw %>% mutate(cluster_members = str_count(cluster_jw, ";")+1)
 cluster_results_cosine<-cluster_results_cosine %>% mutate(cluster_members = str_count(cluster_cosine, ";")+1)  
 
+# organize by alphabetical order
+cluster_results_lv <- cluster_results_lv[order(cluster_results_lv$Tumors),]
+cluster_results_jw <- cluster_results_jw[order(cluster_results_jw$Tumors),]
+cluster_results_cosine <- cluster_results_cosine[order(cluster_results_cosine$Tumors),]
+
+# Null the row names
+rownames(cluster_results_lv)<-NULL
+rownames(cluster_results_jw)<-NULL
+rownames(cluster_results_cosine)<-NULL
+
 # Write Results of Clusters
 write.csv(cluster_results_lv,paste(results_dir,"/cluster_lv.csv",sep=""))
 write.csv(cluster_results_jw,paste(results_dir,"/cluster_jw.csv",sep=""))
