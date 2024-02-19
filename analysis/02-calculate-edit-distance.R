@@ -233,7 +233,27 @@ rownames(cluster_results_lv)<-NULL
 rownames(cluster_results_jw)<-NULL
 rownames(cluster_results_cosine)<-NULL
 
+
+# Show results with following tumors 
+benchmark_tumors <- c("b cell lymphoma", "neuroblastoma", "triple negative breast cancer",
+                      "unresectable lung carcinoma", "liposarcoma","cancer of the liver",
+                      "smoldering myeloma")
+
+display_table_benchmark <- cbind(cluster_results_lv %>% filter(Tumors %in% benchmark_tumors) %>% dplyr::select(Tumors,cluster_lv),
+                                 cluster_results_jw %>% filter(Tumors %in%  benchmark_tumors) %>% dplyr::select(cluster_jw),
+                                 cluster_results_cosine %>% filter(Tumors %in% benchmark_tumors) %>% dplyr::select(cluster_cosine)
+                                 )
+                                 
+
+display_table_benchmark <- display_table_benchmark %>% dplyr::select(Tumors,cluster_lv,cluster_jw,cluster_cosine)
+
+# To organize from good to worse
+benchmark_tumors<- as.data.frame(benchmark_tumors)
+colnames(benchmark_tumors)<-"Tumors"
+display_table_benchmark <- benchmark_tumors %>% dplyr::left_join(display_table_benchmark,by="Tumors")
+
 # Write Results of Clusters
 write.csv(cluster_results_lv,paste(results_dir,"/cluster_lv.csv",sep=""))
 write.csv(cluster_results_jw,paste(results_dir,"/cluster_jw.csv",sep=""))
 write.csv(cluster_results_cosine,paste(results_dir,"/cluster_cosine.csv",sep=""))
+write.csv(display_table_benchmark,paste(results_dir,"/edit_distance_bench_mark.csv",sep=""))
