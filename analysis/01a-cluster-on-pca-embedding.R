@@ -10,6 +10,7 @@ suppressPackageStartupMessages({
   library(biomaRt)
   library(ghql)
   library(readxl)
+  library(factoextra)
 })
 
 # Set the directories
@@ -21,6 +22,8 @@ input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
 
+source(paste(util_dir,"/fviz_nbclust_verbose.R",sep=""))
+
 # Load PCA Embeddings of CT , WHO, NCIT
 disease_transform<- read.csv(paste(intermediate_dir,"/disease_transform_pca.csv",sep="") )
 colnames(disease_transform)[1]<-"Diseases"
@@ -28,9 +31,21 @@ rownames(disease_transform)<-disease_transform$Diseases # Needed for AP Clust
 
 # Peform Clustering 
 
+silhouette_score <- function(k){
+  km <- kmeans(disease_transform[,2:137], centers = k, nstart=25)
+  ss <- silhouette(km$cluster, dist(disease_transform[,2:137]))
+  return(mean(ss[, 3]))
+}
+
+k <- c(10,100,500,1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,11000,12000,13000,14000,15000,16000)
+avg_sil <- sapply(k, silhouette_score)#11:04
+plot(k, type='b', avg_sil, xlab='Number of clusters', ylab='Average Silhouette Scores', frame=FALSE)
+
+
+
+
 # Find optimal number of Clusters using KMeans Silhouette 
-cluster_results<-fviz_nbclust(disease_transform, kmeans, method = 'silhouette',  k.max = 5000,iter.max=50)
-cluster_results_verbose<-fviz_nbclust_verbose(disease_transform, kmeans, method = 'silhouette',  k.max = 13433,iter.max=50)
+cluster_results<-fviz_nbclust(disease_transform[,2:137], kmeans, method = 'silhouette',  k.max = 5000,iter.max=50)
 index_opt_clust<- which(cluster_results$data$y==max(cluster_results$data$y))
 opt_clust_size<- as.integer(cluster_results$data$clusters[index_opt_clust]) # 4800
 kmeans_disease = kmeans(disease_transform, centers = opt_clust_size, nstart = 100)
