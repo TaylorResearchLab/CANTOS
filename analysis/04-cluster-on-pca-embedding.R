@@ -38,8 +38,32 @@ silhouette_score <- function(k){
 }
 
 k <- c(10,100,500,1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,11000,12000,13000,14000,15000,16000)
-avg_sil <- sapply(k, silhouette_score)#11:04
+avg_sil <- sapply(k, silhouette_score)#11:04-12:18
+
+Kmeans_silhouette<-as.data.frame(cbind(k,avg_sil))
+colnames(Kmeans_silhouette) <- c("k","mean_silhouette_score")
+
+Kmeans_silhouette_Max <- Kmeans_silhouette[ which(max(Kmeans_silhouette$mean_silhouette_score) == Kmeans_silhouette$mean_silhouette_score), ]
+
+
+p1<-ggplot(Kmeans_silhouette, aes(x =k, y = mean_silhouette_score)) + geom_point() +
+  geom_point(data = Kmeans_silhouette[which.max(Kmeans_silhouette$mean_silhouette_score), ], color="red")+
+  scale_x_continuous("k", labels = as.character(k), breaks = k) + ggtitle("Kmean Silhouette Score vs Clusters")
+
+
+# mark the max point on the plot
+plot(Kmeans_silhouette$k, Kmeans_silhouette$avg_sil,xlab='Number of clusters', ylab='Average Silhouette Scores',
+     ,main="K Means Clusters",ylim = c(min(Kmeans_silhouette$avg_sil),max(Kmeans_silhouette$avg_sil)+0.1),
+     cex.names = 1)
+
 plot(k, type='b', avg_sil, xlab='Number of clusters', ylab='Average Silhouette Scores', frame=FALSE)
+points(Kmeans_silhouette_Max$k, Kmeans_silhouette_Max$avg_sil, col = "red", pch = 19)
+
+# add vertical line
+abline(v = Kmeans_silhouette_Max$k,col = "blue", lty = "dashed")
+
+
+
 
 
 
