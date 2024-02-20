@@ -11,6 +11,8 @@ suppressPackageStartupMessages({
   library(ghql)
   library(readxl)
   library(factoextra)
+  library(cluster)
+  library(apcluster)
 })
 
 # Set the directories
@@ -22,7 +24,6 @@ input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
 
-source(paste(util_dir,"/fviz_nbclust_verbose.R",sep=""))
 
 # Load PCA Embeddings of CT , WHO, NCIT
 disease_transform<- read.csv(paste(intermediate_dir,"/disease_transform_pca.csv",sep="") )
@@ -51,20 +52,37 @@ p1<-ggplot(Kmeans_silhouette, aes(x =k, y = mean_silhouette_score)) + geom_point
   scale_x_continuous("k", labels = as.character(k), breaks = k) + ggtitle("Kmean Silhouette Score vs Clusters")
 
 
-# mark the max point on the plot
-plot(Kmeans_silhouette$k, Kmeans_silhouette$avg_sil,xlab='Number of clusters', ylab='Average Silhouette Scores',
-     ,main="K Means Clusters",ylim = c(min(Kmeans_silhouette$avg_sil),max(Kmeans_silhouette$avg_sil)+0.1),
-     cex.names = 1)
-
-plot(k, type='b', avg_sil, xlab='Number of clusters', ylab='Average Silhouette Scores', frame=FALSE)
-points(Kmeans_silhouette_Max$k, Kmeans_silhouette_Max$avg_sil, col = "red", pch = 19)
-
-# add vertical line
-abline(v = Kmeans_silhouette_Max$k,col = "blue", lty = "dashed")
+# Average Silhouette Score Maxed at 6000, so we will search in this neighborhood 5000 <= K <=7000
+k2<- c(5000,5200,5500,5800,5900,5950,6000,6050,6100,6200,6500,6800,7000)
+avg_sil2 <- sapply(k2, silhouette_score)#1:07
 
 
+Kmeans_silhouette_Zoomed<-as.data.frame(cbind(k2,avg_sil2))
+colnames(Kmeans_silhouette_Zoomed) <- c("k","mean_silhouette_score")
+Kmeans_silhouette_Zoomed<- Kmeans_silhouette_Zoomed[order(Kmeans_silhouette_Zoomed$k),]
+Kmeans_silhouette_Max_Zoomed <- Kmeans_silhouette_Zoomed[ which(max(Kmeans_silhouette_Zoomed$mean_silhouette_score) == Kmeans_silhouette_Zoomed$mean_silhouette_score), ]
 
 
+p2<-ggplot(Kmeans_silhouette_Zoomed, aes(x =k, y = mean_silhouette_score)) + geom_point() +
+  geom_point(data = Kmeans_silhouette_Zoomed[which.max(Kmeans_silhouette_Zoomed$mean_silhouette_score), ], color="red")+
+  scale_x_continuous("k", labels = as.character(k2), breaks = k2) + ggtitle("Kmean Silhouette Score vs Clusters")
+
+
+# Kmeans optimal cluster is 6000
+km.res <- eclust(disease_transform[,2:137], "kmeans", k = Kmeans_silhouette_Max_Zoomed$k,nstart = 25, graph = FALSE)
+kmeans_clust_result <- as.data.frame(km.res$cluster)
+kmeans_clust_result$Tumors<-rownames(kmeans_clust_result)
+colnames(kmeans_clust_result)[1]<-"cluster"
+kmeans_clust_result <- kmeans_clust_result %>% dplyr::select(Tumors,cluster)
+
+sil <- silhouette(km.res$cluster, dist(disease_transform[,2:137]))
+sil<-as.data.frame(sil)
+sil$Tumors<-names(km.res$cluster)
+  
+kmeans_clust_result <- kmeans_clust_result %>% dplyr::left_join(sil,by=c("cluster", "Tumors"))
+
+kmeans_clust_result<-kmeans_clust_result[order(kmeans_clust_result$Cluster),]
+rownames(kmeans_clust_result)<-NULL
 
 
 
