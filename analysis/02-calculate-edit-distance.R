@@ -24,6 +24,14 @@ source(paste(util_dir,"/distance_clusters.R",sep=""))
 ct_disease_df <- read.csv(paste(input_dir,"/CT-Aug22-2023-Disease-File - clinical_trial_disease_aug_22_2023.csv",sep=""))
 ct_tumor_df<- ct_disease_df %>% filter(validated_cancer_tumor=="Yes")
 
+# Add NCIT and WHO Tumors 
+# Read NCIT Terms and WHO Terms with embedding and join them to the rest of the embedding list 
+NCIT_Terms <-read.csv(paste(data_dir,"/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv",sep=""))[,1]
+WHO_Terms <-read.csv(paste(data_dir,"/dt_input_file_6_dec/WHO_Only_terms_text-embedding-ada-002_embeddings.csv",sep=""))[,1]
+
+NCIT_Terms<-tolower(NCIT_Terms[c(-1)])
+WHO_Terms<-tolower(WHO_Terms[c(-1)])
+
 # show which were removed due to excessive typos ct_tumor_df$diseases[which(! ct_tumor_df$diseases %in% CT_embedding_agg_df$DISEASE_NAMES)]
 # [1] "diffuse large b cell lymphomaÔºådlbcl"                                                                                      
 # [2] "kaposi¬¥s sarcoma"                                                                                                          
@@ -62,11 +70,11 @@ ct_tumor_df<- ct_disease_df %>% filter(validated_cancer_tumor=="Yes")
 # [35] "relapsedÔºèrefractory b-cell lymphoma"   
 
 # Levenstein distance between tumors 
-df_tumor_leven<-as.data.frame(unique(ct_tumor_df$diseases))
-colnames(df_tumor_leven)[1]<-"Tumor"
+df_tumor_combined<-as.data.frame(unique(c(ct_tumor_df$diseases,NCIT_Terms,WHO_Terms)))
+colnames(df_tumor_combined)[1]<-"Tumor"
 
 
-df_tumor_names<-unique(df_tumor_leven$Tumor)
+df_tumor_names<-unique(df_tumor_combined$Tumor)
 
 dissimilarity_matrix_lv <- as.data.frame(matrix(nrow=length(df_tumor_names),ncol=length(df_tumor_names)))
 rownames(dissimilarity_matrix_lv)<-df_tumor_names
