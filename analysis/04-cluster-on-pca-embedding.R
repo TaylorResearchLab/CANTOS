@@ -23,7 +23,7 @@ data_dir <- file.path(root_dir,"data")
 input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
-
+result_dir <-file.path(analysis_dir,"results")
 
 # Load PCA Embeddings of CT , WHO, NCIT
 disease_transform<- read.csv(paste(intermediate_dir,"/disease_transform_pca.csv",sep="") )
@@ -85,6 +85,16 @@ kmeans_clust_result<-kmeans_clust_result[order(kmeans_clust_result$Cluster),]
 rownames(kmeans_clust_result)<-NULL
 
 
+# Show results with following tumors 
+benchmark_tumors <- c("b cell lymphoma", "neuroblastoma", "triple negative breast cancer",
+                      "unresectable lung carcinoma", "liposarcoma","cancer of the liver",
+                      "smoldering myeloma")
+
+cluster_ind_benchmark_tumor <- kmeans_clust_result$cluster[kmeans_clust_result$Tumors %in% benchmark_tumors]
+
+display_table_benchmark <- kmeans_clust_result %>% filter(cluster %in% cluster_ind_benchmark_tumor)
+display_table_benchmark<- display_table_benchmark[order(display_table_benchmark$cluster),]
+rownames(display_table_benchmark)<-NULL
 
 # Find optimal number of Clusters using KMeans Silhouette 
 cluster_results<-fviz_nbclust(disease_transform[,2:137], kmeans, method = 'silhouette',  k.max = 5000,iter.max=50)
@@ -94,6 +104,10 @@ kmeans_disease = kmeans(disease_transform, centers = opt_clust_size, nstart = 10
 diseases_cluster_kmeans <- as.data.frame(kmeans_disease$cluster)
 diseases_cluster_kmeans<-cbind(disease_transform$Diseases,diseases_cluster_kmeans)
 rownames(diseases_cluster_kmeans)<-NULL
+
+
+
+
 
 
 ## CHI Index

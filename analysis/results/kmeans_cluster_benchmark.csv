@@ -1,0 +1,32 @@
+"","Tumors","cluster","neighbor","sil_width"
+"1","smoldering multiple myeloma",987,4819,0.275451335155052
+"2","smoldering multiple myeloma (smm)",987,4819,0.20651396412027
+"3","smoldering myeloma",987,4819,0.284433218816836
+"4","smouldering myeloma",987,4819,0.224167987871349
+"5","breast cancer triple negative",1879,4420,0.0906617228802379
+"6","g. breast cancer (triple negative type)",1879,4836,0.118542040976528
+"7","triple -negative breast cancer",1879,4420,0.0547076462957495
+"8","triple negative breast cancer",1879,4420,-0.0556848822129134
+"9","triple negative breast cancer (part f)",1879,4420,0.0465583098275863
+"10","triple-negative breast cancer",1879,4836,-0.0357704354676069
+"11","cancer of liver",3710,2715,0.522904760607185
+"12","cancer of the liver",3710,2715,0.51773328355981
+"13","liver cancer",3710,1298,0.19236453891994
+"14","Liposarcoma",3848,67,0.162135529765503
+"15","adult liposarcoma",3848,1465,0.126701276666953
+"16","liposarcoma",3848,2471,0.27623661937432
+"17","liposarcomas",3848,2471,0.204423074792809
+"18","unresectable lung carcinoma",4159,5871,0.0739497764301185
+"19","unresectable lung small cell carcinoma",4159,5871,0.0325132699307414
+"20","Neuroblastoma",4238,5977,0.127844672409797
+"21","neuroblastoma",4238,5977,0.274711390403853
+"22","neuroblastoma (measurable disease)",4238,770,0.1399816004073
+"23","neuroblastoma (nb)",4238,5977,0.224837386332627
+"24","neuroblastoma in children",4238,5977,0.148600530965976
+"25","neuroblastomas",4238,5977,0.197325851400934
+"26","b cell lymphoma",5151,823,0.172658709801975
+"27","b cell lymphoma (bcl)",5151,2070,0.096397222952291
+"28","b cell lymphomas",5151,823,0.279672103018627
+"29","b-cell lymphoid cancer",5151,823,0.15586066225689
+"30","b-cell lymphoma",5151,823,0.184274048160932
+"31","b-cell lymphomas",5151,823,0.282150299543576
