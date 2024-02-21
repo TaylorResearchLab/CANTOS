@@ -219,3 +219,9 @@ write.csv(cluster_results_lv,paste(results_dir,"/cluster_lv.csv",sep=""))
 write.csv(cluster_results_jw,paste(results_dir,"/cluster_jw.csv",sep=""))
 write.csv(cluster_results_cosine,paste(results_dir,"/cluster_cosine.csv",sep=""))
 write.csv(display_table_benchmark,paste(results_dir,"/edit_distance_bench_mark.csv",sep=""))
+
+
+save(dissimilarity_matrix_lv,file=paste(intermediate_dir,"/dissimilarity_matrix_lv.RData",sep=""))
+save(dissimilarity_matrix_jw,file=paste(intermediate_dir,"/dissimilarity_matrix_jw.RData",sep=""))
+save(dissimilarity_matrix_cosine,file=paste(intermediate_dir,"/dissimilarity_matrix_cosine.RData",sep=""))
+ 
