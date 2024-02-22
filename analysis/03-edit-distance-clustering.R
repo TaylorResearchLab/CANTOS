@@ -111,3 +111,6 @@ nested_affinity_cluster_cosine <- nested_clust_edit_dist(n=3,affinity_cluster_df
 ## Write workspace
 save.image(file = "editdistancecluster.RData")
 
+write.csv(nested_affinity_cluster_lv,paste(results_dir,"/nested_affinity_cluster_lv.csv",sep=""))
+write.csv(nested_affinity_cluster_jw,paste(results_dir,"/nested_affinity_cluster_jwcsv",sep=""))
+write.csv(nested_affinity_cluster_cosine,paste(results_dir,"/nested_affinity_cluster_cosine.csv",sep=""))

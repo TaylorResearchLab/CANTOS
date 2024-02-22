@@ -7,7 +7,7 @@ nested_clust_edit_dist <- function(n,affinity_cluster_df,dist_mat){
   for(iter_nest in 1:n){
     affinity_cluster_df$SubsetCluster_IDs <- as.character(affinity_cluster_df$SubsetCluster_IDs)
     affinity_subcluster_labels <- unique(affinity_cluster_df$SubsetCluster_IDs)
-    
+    print(iter_nest)
     for(iter in 1:length(affinity_subcluster_labels)){
       nested_dist_df <- as.data.frame(affinity_cluster_df$Tumor_Names[affinity_cluster_df$SubsetCluster_IDs==affinity_subcluster_labels[iter]])
       
@@ -21,8 +21,6 @@ nested_clust_edit_dist <- function(n,affinity_cluster_df,dist_mat){
       if(dim(nested_dist_df)[1]>2){
         
         affinity_subset <- apcluster(nested_dist_df)
-        cat("affinity propogation optimal number of clusters:", length(affinity_subset@clusters), "\n")
-        
         nested_subset_affinity_df<-as.data.frame(affinity_subset@idx)
         nested_subset_affinity_df<-as.data.frame(matrix(nrow=1,ncol=2))
         colnames(nested_subset_affinity_df)<-c("Tumor_Names","SubCluster_ID")
