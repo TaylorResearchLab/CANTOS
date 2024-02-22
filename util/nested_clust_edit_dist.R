@@ -1,6 +1,7 @@
 nested_clust_edit_dist <- function(n,affinity_cluster_df,dist_mat){
 
   affinity_cluster_df$SubsetCluster_IDs<-affinity_cluster_df$Cluster_ID
+  dist_mat<-as.data.frame(dist_mat)
   dist_mat$Tumor_Name <- rownames(dist_mat)
   
   for(iter_nest in 1:n){
@@ -15,6 +16,7 @@ nested_clust_edit_dist <- function(n,affinity_cluster_df,dist_mat){
       nested_dist_df<- nested_dist_df %>% dplyr::left_join(dist_mat,by="Tumor_Name")
       rownames(nested_dist_df)<-nested_dist_df$Tumor_Name
       nested_dist_df <- nested_dist_df %>% dplyr::select(any_of(rownames(nested_dist_df)))
+      nested_dist_df<-as.matrix(nested_dist_df)
 
       if(dim(nested_dist_df)[1]>2){
         
@@ -32,8 +34,8 @@ nested_clust_edit_dist <- function(n,affinity_cluster_df,dist_mat){
         nested_subset_affinity_df <- nested_subset_affinity_df %>% mutate(SubCluster_ID= paste(affinity_subcluster_labels[iter],SubCluster_ID,sep="."))
         
         for (iter_nested_affinity_cluser in 1: dim(nested_subset_affinity_df)[1]){
-          ind_location <- which (affinity_cluster_nested$Tumor_Names==nested_subset_affinity_df$Tumor_Names[iter_nested_affinity_cluser])
-          affinity_cluster_nested$SubsetCluster_IDs[ind_location]<-nested_subset_affinity_df$SubCluster_ID[iter_nested_affinity_cluser]
+          ind_location <- which (affinity_cluster_df$Tumor_Names==nested_subset_affinity_df$Tumor_Names[iter_nested_affinity_cluser])
+          affinity_cluster_df$SubsetCluster_IDs[ind_location]<-nested_subset_affinity_df$SubCluster_ID[iter_nested_affinity_cluser]
         }
       }
       

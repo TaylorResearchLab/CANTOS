@@ -20,6 +20,7 @@ intermediate_dir <- file.path(analysis_dir,"intermediate")
 results_dir <- file.path(analysis_dir,"results")
 
 source(paste(util_dir,"/string_normalizing.R",sep=""))
+source(paste(util_dir,"/nested_clust_edit_dist.R",sep=""))
 
 
 
@@ -83,7 +84,7 @@ for (iter in 1: length(apclust_jw@clusters)){
 affinity_cluster_jw_df<- affinity_cluster_jw_df %>% separate_rows(Tumor_Names, sep = '@')
 
 ######### Cluster with cosine ########
-apclust_cosine <- apcluster(simmilarity_matrix_cosine)
+apclust_cosine <- apcluster(simmilarity_matrix_cosine)#11:07 am - 1:56 pm
 affinity_cluster_cosine_df<-as.data.frame(matrix(nrow=1,ncol=2))
 colnames(affinity_cluster_cosine_df)<-c("Tumor_Names","Cluster_ID")
 for (iter in 1: length(apclust_cosine@clusters)){
@@ -92,6 +93,21 @@ for (iter in 1: length(apclust_cosine@clusters)){
 }
 affinity_cluster_cosine_df<- affinity_cluster_cosine_df %>% separate_rows(Tumor_Names, sep = '@')
 
+save.image(file = "editdistancecluster.RData")
 
+### Nested LV Clustering
 
+nested_affinity_cluster_lv <- nested_clust_edit_dist(n=3,affinity_cluster_df = affinity_cluster_lv_df,
+                                                     dist_mat = simmilarity_matrix_lv)
+
+### Nested JW Clustering
+
+nested_affinity_cluster_jw <- nested_clust_edit_dist(n=3,affinity_cluster_df = affinity_cluster_jw_df,
+                                                     dist_mat = simmilarity_matrix_jw)
+### Nested Cosine Clustering
+
+nested_affinity_cluster_cosine <- nested_clust_edit_dist(n=3,affinity_cluster_df = affinity_cluster_cosine_df,
+                                                     dist_mat = simmilarity_matrix_cosine)
+## Write workspace
+save.image(file = "editdistancecluster.RData")
 
