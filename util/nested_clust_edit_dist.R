@@ -1,8 +1,9 @@
 nested_clust_edit_dist <- function(n,affinity_cluster_df,dist_mat){
-  affinity_cluster_df$SubsetCluster_IDs<-affinity_cluster_df$Cluster_IDs
+
+  affinity_cluster_df$SubsetCluster_IDs<-affinity_cluster_df$Cluster_ID
   dist_mat$Tumor_Name <- rownames(dist_mat)
   
-  for(iter_nest 1:n){
+  for(iter_nest in 1:n){
     affinity_cluster_df$SubsetCluster_IDs <- as.character(affinity_cluster_df$SubsetCluster_IDs)
     affinity_subcluster_labels <- unique(affinity_cluster_df$SubsetCluster_IDs)
     
@@ -13,11 +14,11 @@ nested_clust_edit_dist <- function(n,affinity_cluster_df,dist_mat){
       rownames(nested_dist_df)<-nested_dist_df$Tumor_Name
       nested_dist_df<- nested_dist_df %>% dplyr::left_join(dist_mat,by="Tumor_Name")
       rownames(nested_dist_df)<-nested_dist_df$Tumor_Name
-      nested_dist_df<-nested_dist_df[,c(-1)]
-      
+      nested_dist_df <- nested_dist_df %>% dplyr::select(any_of(rownames(nested_dist_df)))
+
       if(dim(nested_dist_df)[1]>2){
         
-        affinity_subset <- apcluster(dist_mat, nested_dist_df)
+        affinity_subset <- apcluster(nested_dist_df)
         cat("affinity propogation optimal number of clusters:", length(affinity_subset@clusters), "\n")
         
         nested_subset_affinity_df<-as.data.frame(affinity_subset@idx)
