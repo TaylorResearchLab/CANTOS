@@ -5,6 +5,8 @@ suppressPackageStartupMessages({
   library(foreach)
   library(apcluster)
   library(stringdist)
+  library(tidyverse)
+  
 })
 
 # Set the directories
@@ -18,6 +20,9 @@ intermediate_dir <- file.path(analysis_dir,"intermediate")
 results_dir <- file.path(analysis_dir,"results")
 
 source(paste(util_dir,"/string_normalizing.R",sep=""))
+
+
+
 # Load data
 
 load(paste(intermediate_dir,"/dissimilarity_matrix_lv.RData",sep=""))
@@ -30,8 +35,7 @@ cluster_results_jw<- read.csv(paste(results_dir,"/cluster_jw.csv",sep=""))
 cluster_results_cosine<- read.csv(paste(results_dir,"/cluster_cosine.csv",sep=""))
 
 
-# Kmeans 
-
+# Compute Simmilarity matrix for each edit distance
 simmilarity_matrix_cosine = 1 - dissimilarity_matrix_cosine
 simmilarity_matrix_jw = 1-dissimilarity_matrix_jw
 
@@ -56,15 +60,40 @@ colnames(normalizing_matrix_lv) <- df_tumor_names
 simmilarity_matrix_lv <- 1- (dissimilarity_matrix_lv/normalizing_matrix_lv)
 
 
+stopCluster(cl)
 
-
-
-
-apres1b <- apcluster(1-dissimilarity_matrix_jw[1:100,1:100])
-affinity_cluster_df<-as.data.frame(matrix(nrow=1,ncol=2))
-colnames(affinity_cluster_df)<-c("Tumor_Names","Cluster_ID")
-for (iter in 1: length(apres1b@clusters)){
-  affinity_cluster_df[iter,1] <- paste(names(unlist(apres1b@clusters[iter])),collapse = "@")
-  affinity_cluster_df[iter,2] <- iter
+######### Cluster with LV ########
+apclust_lv <- apcluster(simmilarity_matrix_lv[1:100,1:100])
+affinity_cluster_lv_df<-as.data.frame(matrix(nrow=1,ncol=2))
+colnames(affinity_cluster_lv_df)<-c("Tumor_Names","Cluster_ID")
+for (iter in 1: length(apclust_lv@clusters)){
+  affinity_cluster_lv_df[iter,1] <- paste(names(unlist(apclust_lv@clusters[iter])),collapse = "@")
+  affinity_cluster_lv_df[iter,2] <- iter
 }
-affinity_cluster_df<- affinity_cluster_df %>% separate_rows(Tumor_Names, sep = '@')
+affinity_cluster_lv_df<- affinity_cluster_lv_df %>% separate_rows(Tumor_Names, sep = '@')
+
+
+
+######### Cluster with jw ########
+apclust_jw <- apcluster(simmilarity_matrix_jw[1:100,1:100])
+affinity_cluster_jw_df<-as.data.frame(matrix(nrow=1,ncol=2))
+colnames(affinity_cluster_jw_df)<-c("Tumor_Names","Cluster_ID")
+for (iter in 1: length(apclust_jw@clusters)){
+  affinity_cluster_jw_df[iter,1] <- paste(names(unlist(apclust_jw@clusters[iter])),collapse = "@")
+  affinity_cluster_jw_df[iter,2] <- iter
+}
+affinity_cluster_jw_df<- affinity_cluster_jw_df %>% separate_rows(Tumor_Names, sep = '@')
+
+######### Cluster with cosine ########
+apclust_cosine <- apcluster(simmilarity_matrix_cosine[1:100,1:100])
+affinity_cluster_cosine_df<-as.data.frame(matrix(nrow=1,ncol=2))
+colnames(affinity_cluster_cosine_df)<-c("Tumor_Names","Cluster_ID")
+for (iter in 1: length(apclust_cosine@clusters)){
+  affinity_cluster_cosine_df[iter,1] <- paste(names(unlist(apclust_cosine@clusters[iter])),collapse = "@")
+  affinity_cluster_cosine_df[iter,2] <- iter
+}
+affinity_cluster_cosine_df<- affinity_cluster_cosine_df %>% separate_rows(Tumor_Names, sep = '@')
+
+
+
+
