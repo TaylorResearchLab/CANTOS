@@ -3,6 +3,7 @@ compute_silhouette <- function (cluster_df,dist_mat){
   cluster_df<-cluster_df[order(cluster_df$SubsetCluster_IDs),]
   dist_mat<-as.data.frame(dist_mat)
   dist_mat$Tumor_Name <- rownames(dist_mat)
+  cluster_df$silhouette_score<-NA
   
   for (iter in 1:dim(cluster_df)[1]){
     disease_name <- cluster_df$Tumor_Names[iter]
@@ -20,8 +21,17 @@ compute_silhouette <- function (cluster_df,dist_mat){
     subset_other_clust <- cluster_df %>% dplyr::filter(SubsetCluster_IDs != cluster_label)
     subset_other_clust<-subset_other_clust[order(subset_other_clust$SubsetCluster_IDs),]
     
+    other_clust_dist <- dist_mat %>% dplyr::filter(Tumor_Name %in% disease_name)
+    other_clust_dist<-t(other_clust_dist)
+    colnames(other_clust_dist)<- "dx"
+    other_clust_dist<-as.data.frame(other_clust_dist)
+    other_clust_dist$dx<-as.double(other_clust_dist$dx)
+    other_clust_dist$Tumor_Names <- rownames(other_clust_dist)
+    subset_other_clust <- subset_other_clust %>% dplyr::left_join(other_clust_dist,by="Tumor_Names")
+    d_clust=aggregate( dx ~ SubsetCluster_IDs,subset_other_clust, mean )
+    b= min(d_clust$dx)
     
-
+    silo= (b-a)/max(a,b)
   }
   
 
