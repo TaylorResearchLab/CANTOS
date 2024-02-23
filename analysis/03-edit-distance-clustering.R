@@ -6,7 +6,7 @@ suppressPackageStartupMessages({
   library(apcluster)
   library(stringdist)
   library(tidyverse)
-  
+  library(magrittr)
 })
 
 # Set the directories
