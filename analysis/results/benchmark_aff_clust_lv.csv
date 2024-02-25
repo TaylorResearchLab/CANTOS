@@ -1,0 +1,30 @@
+"","Tumor_Names","Cluster_ID","SubsetCluster_IDs","silhouette_score"
+"1","prostate carcinoma",1003,"1003.1.1.1",-0.41747572815534
+"2","unresectable melanoma",1003,"1003.1.1.1",-0.113924050632911
+"3","unresectable nut carcinoma",1003,"1003.1.1.1",-0.230769230769231
+"4","unresectable lung carcinoma",1003,"1003.1.1.1",-0.310344827586207
+"5","unresectable paraganglioma",1003,"1003.1.1.1",-0.1
+"6","resectable carcinoma",1003,"1003.1.1.1",-0.0163934426229508
+"7","unresectable carcinoma",1003,"1003.1.1.1",0.32
+"8","resectable sarcoma",1003,"1003.1.1.1",-0.315068493150685
+"9","unresectable sarcoma",1003,"1003.1.1.1",-0.206349206349206
+"10","unresectable cancer",1003,"1003.1.1.1",-0.222222222222222
+"11","intraductal carcinoma",1003,"1003.1.1.1",-0.532710280373832
+"12","neuroblastoma",19,"19.1.1.1",0.5
+"13","nephroblastoma",19,"19.1.1.1",0.375
+"14","neuroblastomas",19,"19.1.1.1",0.5
+"15","liposarcoma",26,"26.1.2.1",0.4375
+"16","fibrosarcoma",26,"26.1.2.1",0.25
+"17","gliosarcoma",26,"26.1.2.1",0.4
+"18","myosarcoma",26,"26.1.2.1",0.125
+"19","liposarcomas",26,"26.1.2.1",0.4
+"20","b-cell lymphomas",318,"318.4.1.1",0.0476190476190476
+"21","b cell lymphoma",318,"318.4.1.1",0.0476190476190476
+"22","b cell lymphomas",318,"318.4.1.1",0.555555555555556
+"23","t cell lymphomas",318,"318.4.1.1",0.0476190476190476
+"24","cancer of the liver",361,"361.1.1.2",0.272727272727273
+"25","cancer of the ureter",361,"361.1.1.2",-0.185185185185185
+"26","cancer of the kidney",361,"361.1.1.2",0.205882352941177
+"27","smoldering myeloma",726,"726.1",0.88235294117647
+"28","smouldering myeloma",726,"726.1",0.88235294117647
+"29","triple negative breast cancer",857,"857.2.1",0

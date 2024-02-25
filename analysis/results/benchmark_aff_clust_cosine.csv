@@ -1,0 +1,53 @@
+"","Tumor_Names","Cluster_ID","SubsetCluster_IDs","silhouette_score"
+"1","b cell lymphoma",135,"135.1.2.1",0.577329248721002
+"2","b cell lymphomas",135,"135.1.2.1",0.247548783981961
+"3","lymphoma, b cell",135,"135.1.2.1",0.413515070714494
+"4","cancer of cervix",142,"142.2.1.1",-0.484069719453006
+"5","cancer of the liver",142,"142.2.1.1",-0.325034588889005
+"6","cancer of the rectum",142,"142.2.1.1",-0.653442163933057
+"7","cancer of the cervix",142,"142.2.1.1",0.350901601902411
+"8","stage iv cancer of the cervix",142,"142.2.1.1",-0.510391547200316
+"9","triple-negative breast cancer",273,"273.5.1.1",0.323315961262083
+"10","triple negative breast cancer",273,"273.5.1.1",-0.195976198349766
+"11","tnbc - triple-negative breast cancer",273,"273.5.1.1",-0.542615356648065
+"12","pr-negative breast cancer",273,"273.5.1.1",0.0281008837294832
+"13","unresectable triple-negative breast carcinoma",273,"273.5.1.1",-0.124879783382814
+"14","triple -negative breast cancer",273,"273.5.1.1",0.239054478978276
+"15","breast cancer triple negative",273,"273.5.1.1",-0.195976198349766
+"16","recurrent triple-negative breast carcinoma",273,"273.5.1.1",-0.000895630823993581
+"17","early triple negative breast cancer",273,"273.5.1.1",-0.000986125767834103
+"18","smoldering myeloma",404,"404.2.1",0.787766170415311
+"19","smouldering myeloma",404,"404.2.1",0.782642084053608
+"20","unresectable lung carcinoma",458,"458.2.1",0
+"21","liposarcoma",644,"644.1.1.1",-0.823802856730624
+"22","synovial sarcoma",644,"644.1.1.1",-0.871815191885022
+"23","choroidal melanoma",644,"644.1.1.1",-0.445896844758444
+"24","myeloid sarcoma",644,"644.1.1.1",-0.436782293667346
+"25","advanced leiomyosarcoma",644,"644.1.1.1",-0.351964935051472
+"26","leiomyosarcoma of ovary",644,"644.1.1.1",-0.30926790209443
+"27","adenocarcinoma of ovary",644,"644.1.1.1",-0.700805195736974
+"28","solid alveolar rhabdomyosarcoma",644,"644.1.1.1",-0.702821271386215
+"29","rhabdomyosarcoma, pelvic",644,"644.1.1.1",-0.385555604088367
+"30","sarcoma, myeloid",644,"644.1.1.1",-0.450786346620263
+"31","localized osteosarcoma",644,"644.1.1.1",-0.519026996219154
+"32","advanced liposarcoma or leiomyosarcoma",644,"644.1.1.1",-0.349765257533024
+"33","locally advanced myxofibrosarcoma",644,"644.1.1.1",-0.522379354713472
+"34","leiomyosarcoma or carcinosarcoma",644,"644.1.1.1",-0.231713213736232
+"35","advanced or metastatic liposarcoma or leiomyosarcoma",644,"644.1.1.1",-0.480563990746748
+"36","fusion-negative alveolar rhabdomyosarcoma",644,"644.1.1.1",-0.380253266794546
+"37","cardiac leiomyosarcoma",644,"644.1.1.1",-0.192315025903716
+"38","pleomorphic dermal sarcoma",644,"644.1.1.1",-0.435775598979733
+"39","polymorphous adenocarcinoma",644,"644.1.1.1",-0.570309510560398
+"40","neuroblastoma",713,"713.1.1.1",-0.423777646867913
+"41","olfactory neuroblastoma",713,"713.1.1.1",-0.299879665505861
+"42","adult extraskeletal osteosarcoma",713,"713.1.1.1",-0.553523629312798
+"43","recurrent hepatoblastoma",713,"713.1.1.1",-0.455307008644889
+"44","refractory hepatoblastoma",713,"713.1.1.1",-0.256961484091318
+"45","supratentorial gliosarcoma",713,"713.1.1.1",-0.662967888585658
+"46","intraocular retinoblastoma",713,"713.1.1.1",-0.451197667469666
+"47","retinoblastoma, extraocular",713,"713.1.1.1",-0.10007246344018
+"48","extraocular retinoblastoma",713,"713.1.1.1",-0.139367337878845
+"49","extracranial neuroblastoma",713,"713.1.1.1",-0.397830979781354
+"50","hereditary retinoblastoma",713,"713.1.1.1",-0.397116287751959
+"51","astroblastoma, mn1-altered",713,"713.1.1.1",-0.327915938047788
+"52","extragonadal teratoma",713,"713.1.1.1",-0.397135454665981
