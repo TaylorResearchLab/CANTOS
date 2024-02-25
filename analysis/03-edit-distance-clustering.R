@@ -115,10 +115,32 @@ nested_affinity_cluster_lv<-compute_silhouette(cluster_df = nested_affinity_clus
 nested_affinity_cluster_jw<-compute_silhouette(cluster_df = nested_affinity_cluster_jw,dist_mat = dissimilarity_matrix_jw)
 nested_affinity_cluster_cosine<-compute_silhouette(cluster_df = nested_affinity_cluster_cosine,dist_mat = dissimilarity_matrix_cosine)
 
+# Select benchmarks 
+benchmark_tumors <- c("b cell lymphoma", "neuroblastoma", "triple negative breast cancer",
+                      "unresectable lung carcinoma", "liposarcoma","cancer of the liver",
+                      "smoldering myeloma")
+
+subcluster_lv <- nested_affinity_cluster_lv$SubsetCluster_IDs[nested_affinity_cluster_lv$Tumor_Names %in% benchmark_tumors]
+benchmark_aff_clust_lv <- nested_affinity_cluster_lv %>% dplyr::filter(SubsetCluster_IDs %in% subcluster_lv)
+
+subcluster_jw <- nested_affinity_cluster_jw$SubsetCluster_IDs[nested_affinity_cluster_jw$Tumor_Names %in% benchmark_tumors]
+benchmark_aff_clust_jw <- nested_affinity_cluster_jw %>% dplyr::filter(SubsetCluster_IDs %in% subcluster_jw)
+
+subcluster_cosine <- nested_affinity_cluster_cosine$SubsetCluster_IDs[nested_affinity_cluster_cosine$Tumor_Names %in% benchmark_tumors]
+benchmark_aff_clust_cosine <- nested_affinity_cluster_cosine %>% dplyr::filter(SubsetCluster_IDs %in% subcluster_cosine)
+
+
+display_table_benchmark <- display_table_benchmark %>% dplyr::select(Tumors,cluster_lv,cluster_jw,cluster_cosine)
+
 
 
 ## Write workspace
 save.image(file = "editdistancecluster.RData")
+
+write.csv(benchmark_aff_clust_lv,paste(results_dir,"/benchmark_aff_clust_lv.csv",sep=""))
+write.csv(benchmark_aff_clust_jw,paste(results_dir,"/benchmark_aff_clust_jw.csv",sep=""))
+write.csv(benchmark_aff_clust_cosine,paste(results_dir,"/benchmark_aff_clust_cosine.csv",sep=""))
+
 
 write.csv(nested_affinity_cluster_lv,paste(results_dir,"/nested_affinity_cluster_lv.csv",sep=""))
 write.csv(nested_affinity_cluster_jw,paste(results_dir,"/nested_affinity_cluster_jw.csv",sep=""))

@@ -1,0 +1,39 @@
+"","Tumor_Names","Cluster_ID","SubsetCluster_IDs","silhouette_score"
+"1","unresectable nut carcinoma",1044,"1044.1.1.1",0.190693555218342
+"2","unresectable vaginal carcinoma",1044,"1044.1.1.1",-0.0225189089370044
+"3","unresectable lung carcinoma",1044,"1044.1.1.1",0.435477334468532
+"4","unresectable lung carcinoid tumor",1044,"1044.1.1.1",0.159315838894194
+"5","neuroblastoma",26,"26.1.1.1",0.493899233482567
+"6","pineoblastoma",26,"26.1.1.1",0.108780108780109
+"7","retinoblastoma",26,"26.1.1.1",0.265451506232058
+"8","nephroblastoma",26,"26.1.1.1",0.453953912466843
+"9","neuroblastoma. cns",26,"26.1.1.1",0.168625925523374
+"10","neuroblastomas",26,"26.1.1.1",0.369033744033744
+"11","neuroblastoma (nb)",26,"26.1.1.1",0.163369963369963
+"12","b cell lymphoma",317,"317.2.1",0.615384615384615
+"13","b cell lymphomas",317,"317.2.1",0.605263157894736
+"14","liposarcoma",40,"40.1.1.1",0.0786076671504203
+"15","gliosarcoma",40,"40.1.1.1",0.186187451440324
+"16","myosarcoma",40,"40.1.1.1",-0.511552465893319
+"17","liposarcoma, round cell",40,"40.1.1.1",-0.280243839223687
+"18","gliosarcoma, adult",40,"40.1.1.1",-0.0809929598340269
+"19","mixed liposarcoma",40,"40.1.1.1",-0.40553731259201
+"20","liposarcomas",40,"40.1.1.1",0.106564388080384
+"21","cancer of the ovary",400,"400.1.1.1",0.0740149485885918
+"22","cancer of the larynx",400,"400.1.1.1",0.0845253304200667
+"23","cancer of the salivary gland",400,"400.1.1.1",0.0115155243793011
+"24","cancer of the oral cavity",400,"400.1.1.1",0.108324956798861
+"25","cancer of the liver",400,"400.1.1.1",-0.236840633954407
+"26","cancer of head",400,"400.1.1.1",-0.557351741563887
+"27","cancer, other",400,"400.1.1.1",-0.120001777398416
+"28","cancer of ovary",400,"400.1.1.1",-0.237582903697541
+"29","cancer of the pharynx",400,"400.1.1.1",-0.221973683689679
+"30","cancer of the biliary tract",400,"400.1.1.1",-0.0259780536841114
+"31","triple negative breast cancer",497,"497.1.1.2",0.0927206166931829
+"32","triple negative breast cancer (part f)",497,"497.1.1.2",-0.0988863854805697
+"33","triple -negative breast cancer",497,"497.1.1.2",0.133851938857733
+"34","triple negative breast carcinoma",497,"497.1.1.2",0.180973126084929
+"35","smoldering myeloma",772,"772.2.1.1",-0.90159534814373
+"36","smoldering multiple myeloma",772,"772.2.1.1",0.276410234989701
+"37","smoldering plasma cell myeloma",772,"772.2.1.1",0.0240048572734538
+"38","smoldering multiple myeloma (smm)",772,"772.2.1.1",0.352896287141191
