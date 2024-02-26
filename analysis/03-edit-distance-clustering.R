@@ -115,6 +115,15 @@ nested_affinity_cluster_lv<-compute_silhouette(cluster_df = nested_affinity_clus
 nested_affinity_cluster_jw<-compute_silhouette(cluster_df = nested_affinity_cluster_jw,dist_mat = dissimilarity_matrix_jw)
 nested_affinity_cluster_cosine<-compute_silhouette(cluster_df = nested_affinity_cluster_cosine,dist_mat = dissimilarity_matrix_cosine)
 
+mean_freq_lv <- nested_affinity_cluster_lv %>% dplyr::select(SubsetCluster_IDs, silhouette_score) %>% dplyr::group_by(SubsetCluster_IDs) %>% dplyr::summarise(mean_silo=mean(silhouette_score),member_count =dplyr::n()) 
+mean_freq_jw <- nested_affinity_cluster_jw %>% dplyr::select(SubsetCluster_IDs, silhouette_score) %>% dplyr::group_by(SubsetCluster_IDs) %>% dplyr::summarise(mean_silo=mean(silhouette_score),member_count =dplyr::n())
+mean_freq_cosine <- nested_affinity_cluster_cosine %>% dplyr::select(SubsetCluster_IDs, silhouette_score) %>% dplyr::group_by(SubsetCluster_IDs) %>% dplyr::summarise(mean_silo=mean(silhouette_score),member_count =dplyr::n())
+
+
+nested_affinity_cluster_lv<- nested_affinity_cluster_lv %>% dplyr::left_join(mean_freq_lv,by="SubsetCluster_IDs")
+nested_affinity_cluster_jw<- nested_affinity_cluster_jw %>% dplyr::left_join(mean_freq_jw,by="SubsetCluster_IDs")
+nested_affinity_cluster_cosine<- nested_affinity_cluster_cosine %>% dplyr::left_join(mean_freq_cosine,by="SubsetCluster_IDs")
+
 # Select benchmarks 
 benchmark_tumors <- c("b cell lymphoma", "neuroblastoma", "triple negative breast cancer",
                       "unresectable lung carcinoma", "liposarcoma","cancer of the liver",
