@@ -139,10 +139,6 @@ subcluster_cosine <- nested_affinity_cluster_cosine$SubsetCluster_IDs[nested_aff
 benchmark_aff_clust_cosine <- nested_affinity_cluster_cosine %>% dplyr::filter(SubsetCluster_IDs %in% subcluster_cosine)
 
 
-display_table_benchmark <- display_table_benchmark %>% dplyr::select(Tumors,cluster_lv,cluster_jw,cluster_cosine)
-
-
-
 ## Write workspace
 save.image(file = "editdistancecluster.RData")
 
