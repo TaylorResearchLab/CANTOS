@@ -1,4 +1,4 @@
-"","Tumor_Names","Cluster_ID","SubsetCluster_IDs","silhouette_score","mean_silo","cluster_member_count"
+"","Tumor_Names","Cluster_ID","SubsetCluster_IDs","silhouette_score","mean_silo_score","cluster_member_count"
 "1","prostate carcinoma",1003,"1003.1.1.1",-0.41747572815534,-0.195023407442053,11
 "2","unresectable melanoma",1003,"1003.1.1.1",-0.113924050632911,-0.195023407442053,11
 "3","unresectable nut carcinoma",1003,"1003.1.1.1",-0.230769230769231,-0.195023407442053,11
