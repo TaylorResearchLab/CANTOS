@@ -1,4 +1,4 @@
-"","Tumor_Names","Cluster_ID","SubsetCluster_IDs","silhouette_score","mean_silo","cluster_member_count"
+"","Tumor_Names","Cluster_ID","SubsetCluster_IDs","silhouette_score","mean_silo_score","cluster_member_count"
 "1","unresectable nut carcinoma",1044,"1044.1.1.1",0.190693555218342,0.190741954911016,4
 "2","unresectable vaginal carcinoma",1044,"1044.1.1.1",-0.0225189089370044,0.190741954911016,4
 "3","unresectable lung carcinoma",1044,"1044.1.1.1",0.435477334468532,0.190741954911016,4
