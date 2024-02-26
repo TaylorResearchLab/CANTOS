@@ -18,7 +18,7 @@ input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
 results_dir <- file.path(analysis_dir,"results")
-
+plots_dir <- file.path(root_dir,"plots")
 source(paste(util_dir,"/string_normalizing.R",sep=""))
 source(paste(util_dir,"/nested_clust_edit_dist.R",sep=""))
 source(paste(util_dir,"/compute_silhouette.R",sep=""))
@@ -157,6 +157,29 @@ clust_plot_cosine <- benchmark_aff_clust_cosine %>% dplyr::select(SubsetCluster_
 clust_plot_cosine<-unique(clust_plot_cosine)
 p_cosine <- ggplot(clust_plot_cosine, aes(x=cluster_member_count, y=mean_silo_score)) +geom_point() +
   geom_text(label=clust_plot_cosine$SubsetCluster_IDs,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05)+labs(title = "Cosine distance clusters")
+
+
+
+# Global Plot
+global_clust_plot_lv <- nested_affinity_cluster_lv %>% dplyr::select(SubsetCluster_IDs,mean_silo_score,cluster_member_count) %>% dplyr::distinct()
+global_clust_plot_jw <- nested_affinity_cluster_jw %>% dplyr::select(SubsetCluster_IDs,mean_silo_score,cluster_member_count) %>% dplyr::distinct()
+global_clust_plot_cosine <- nested_affinity_cluster_cosine %>% dplyr::select(SubsetCluster_IDs,mean_silo_score,cluster_member_count) %>% dplyr::distinct()
+
+plt_global_lv <- ggplot(global_clust_plot_lv, aes(x=cluster_member_count, y=mean_silo_score)) +geom_point() +
+  geom_text(label=global_clust_plot_lv$SubsetCluster_IDs,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) + labs(title = "Levenshtein distance clusters")
+
+plt_global_jw <- ggplot(global_clust_plot_jw, aes(x=cluster_member_count, y=mean_silo_score)) +geom_point() +
+  geom_text(label=global_clust_plot_jw$SubsetCluster_IDs,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) + labs(title = "Jarro Winkler distance clusters")
+
+plt_global_cosine <- ggplot(global_clust_plot_cosine, aes(x=cluster_member_count, y=mean_silo_score)) +geom_point() +
+  geom_text(label=global_clust_plot_cosine$SubsetCluster_IDs,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) + labs(title = "Cosine distance clusters")
+
+# Save plot
+ggsave(plt_global_lv, filename = paste(plots_dir,"/plt_global_lv.pdf",sep=""), height = 30, width = 21, units = "cm")
+ggsave(plt_global_jw, filename = paste(plots_dir,"/plt_global_jw.pdf",sep=""), height = 30, width = 21, units = "cm")
+ggsave(plt_global_cosine, filename = paste(plots_dir,"/plt_global_cosine.pdf",sep=""), height = 30, width = 21, units = "cm")
+
+
 
 
 ## Write workspace
