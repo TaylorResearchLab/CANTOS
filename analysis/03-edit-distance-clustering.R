@@ -144,19 +144,19 @@ benchmark_aff_clust_cosine <- nested_affinity_cluster_cosine %>% dplyr::filter(S
 clust_plot_lv <- benchmark_aff_clust_lv %>% dplyr::select(SubsetCluster_IDs,mean_silo,cluster_member_count) 
 clust_plot_lv<-unique(clust_plot_lv)
 p_lv <- ggplot(clust_plot_lv, aes(x=cluster_member_count, y=mean_silo)) +geom_point() +
-  geom_text(label=clust_plot_lv$SubsetCluster_IDs,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05)
+  geom_text(label=clust_plot_lv$SubsetCluster_IDs,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) + labs(title = "Levenshtein distance clusters")
 
 
 clust_plot_jw <- benchmark_aff_clust_jw %>% dplyr::select(SubsetCluster_IDs,mean_silo,cluster_member_count) 
 clust_plot_jw<-unique(clust_plot_jw)
 p_jw <- ggplot(clust_plot_jw, aes(x=cluster_member_count, y=mean_silo)) +geom_point() +
-  geom_text(label=clust_plot_jw$SubsetCluster_IDs,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05)
+  geom_text(label=clust_plot_jw$SubsetCluster_IDs,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) +labs(title = "Jarro Winkler distance clusters")
 
 
 clust_plot_cosine <- benchmark_aff_clust_cosine %>% dplyr::select(SubsetCluster_IDs,mean_silo,cluster_member_count) 
 clust_plot_cosine<-unique(clust_plot_cosine)
 p_cosine <- ggplot(clust_plot_cosine, aes(x=cluster_member_count, y=mean_silo)) +geom_point() +
-  geom_text(label=clust_plot_cosine$SubsetCluster_IDs,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05)
+  geom_text(label=clust_plot_cosine$SubsetCluster_IDs,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05)+labs(title = "Cosine distance clusters")
 
 
 ## Write workspace
