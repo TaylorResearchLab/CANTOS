@@ -1,4 +1,4 @@
-"","Tumor_Names","Cluster_ID","SubsetCluster_IDs","silhouette_score","mean_silo","member_count"
+"","Tumor_Names","Cluster_ID","SubsetCluster_IDs","silhouette_score","mean_silo","cluster_member_count"
 "1","non-hodgkin lymphoma",1,"1.1.1.1",0.055067657352308,0.0411610670583334,4
 "2","t-non-hodgkin lymphoma",1,"1.1.1.1",-0.138361339028153,0.0411610670583334,4
 "3","lymphoma non-hodgkin",1,"1.1.1.1",0.055067657352308,0.0411610670583334,4
