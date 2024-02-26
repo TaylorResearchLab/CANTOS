@@ -1,4 +1,4 @@
-"","Tumor_Names","Cluster_ID","SubsetCluster_IDs","silhouette_score","mean_silo","member_count"
+"","Tumor_Names","Cluster_ID","SubsetCluster_IDs","silhouette_score","mean_silo","cluster_member_count"
 "1","b cell lymphoma",135,"135.1.2.1",0.577329248721002,0.412797701139152,3
 "2","b cell lymphomas",135,"135.1.2.1",0.247548783981961,0.412797701139152,3
 "3","lymphoma, b cell",135,"135.1.2.1",0.413515070714494,0.412797701139152,3
