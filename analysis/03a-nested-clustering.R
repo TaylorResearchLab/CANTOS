@@ -41,6 +41,9 @@ affinity_cluster_nested <- affinity_cluster_annotation %>% dplyr::select(Tumor_N
 affinity_cluster_nested <- nested_affinity_cluster(n=3,affinity_cluster_nested,disease_transform)
 
 
+# Silos scores Affinity Cluster
+
+
 affinity_cluster_nested<- affinity_cluster_nested %>% dplyr::left_join(ncit_match_df,by="Tumor_Names")
 affinity_cluster_nested <- affinity_cluster_nested %>%dplyr::left_join(who_match_df,by="Tumor_Names")
 
