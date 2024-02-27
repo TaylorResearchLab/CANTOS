@@ -117,11 +117,11 @@ rownames(WHO_embedding_df)<-NULL
 # Combined Embedding File for PC and Cluster Analysis
 colnames(CT_embedding_agg_df)<-colnames(NCIT_embedding_df) # CT embedding columns need to be fixed
 combined_embedding_df <- rbind(CT_embedding_agg_df,NCIT_embedding_df,WHO_embedding_df)
+combined_embedding_df$Disease<- tolower(combined_embedding_df$Disease)
 combined_embedding_df <- as.data.frame(combined_embedding_df %>% group_by(Disease) %>% summarise(across(everything(), list(mean))))
 colnames(combined_embedding_df)<-colnames(NCIT_embedding_df)
 rownames(combined_embedding_df)<-combined_embedding_df$Disease
 combined_embedding_df<-combined_embedding_df[,c(-1)]
-
 
 # Now perform PCA 
 results <- prcomp(combined_embedding_df, scale = TRUE)
@@ -130,10 +130,10 @@ ff<-rbind(SD = sqrt(eigs),Proportion = eigs/sum(eigs), Cumulative = cumsum(eigs)
 
 # Check the number of components needed to capture 80% variance at least
 
-print(sum(ff[2,1:136]))
+print(sum(ff[2,1:135]))
 
-# Select the top 136 PCs
-disease_transform = as.data.frame(-results$x[,1:136])
+# Select the top 135 PCs
+disease_transform = as.data.frame(-results$x[,1:135])
 
 # Save this file "
 write.csv(disease_transform,file =paste(intermediate_dir,"/disease_transform_pca.csv",sep="") )
