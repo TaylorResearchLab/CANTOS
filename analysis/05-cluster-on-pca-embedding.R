@@ -25,16 +25,19 @@ analysis_dir <- file.path(root_dir,"analysis")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
 result_dir <-file.path(analysis_dir,"results")
 
+
+
 # Load PCA Embeddings of CT , WHO, NCIT
 disease_transform<- read.csv(paste(intermediate_dir,"/disease_transform_pca.csv",sep="") )
 colnames(disease_transform)[1]<-"Diseases"
 rownames(disease_transform)<-disease_transform$Diseases # Needed for AP Clust
 
+
 # Peform Clustering 
 
 silhouette_score <- function(k){
-  km <- kmeans(disease_transform[,2:137], centers = k, nstart=25)
-  ss <- silhouette(km$cluster, dist(disease_transform[,2:137]))
+  km <- kmeans(disease_transform[,2:136], centers = k, nstart=25)
+  ss <- silhouette(km$cluster, dist(disease_transform[,2:136]))
   return(mean(ss[, 3]))
 }
 
@@ -42,7 +45,7 @@ k <- c(10,100,500,1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,11000,12000
 avg_sil <- sapply(k, silhouette_score)#11:04-12:18
 
 Kmeans_silhouette<-as.data.frame(cbind(k,avg_sil))
-colnames(Kmeans_silhouette) <- c("k","mean_silhouette_score")
+colnames(Kmeans_silhouette) <- c("k","mean_silhouette_score") #6000
 
 Kmeans_silhouette_Max <- Kmeans_silhouette[ which(max(Kmeans_silhouette$mean_silhouette_score) == Kmeans_silhouette$mean_silhouette_score), ]
 
@@ -69,20 +72,24 @@ p2<-ggplot(Kmeans_silhouette_Zoomed, aes(x =k, y = mean_silhouette_score)) + geo
 
 
 # Kmeans optimal cluster is 6000
-km.res <- eclust(disease_transform[,2:137], "kmeans", k = Kmeans_silhouette_Max_Zoomed$k,nstart = 25, graph = FALSE)
+km.res <- eclust(disease_transform[,2:136], "kmeans", k = Kmeans_silhouette_Max_Zoomed$k,nstart = 25, graph = FALSE)
 kmeans_clust_result <- as.data.frame(km.res$cluster)
 kmeans_clust_result$Tumors<-rownames(kmeans_clust_result)
 colnames(kmeans_clust_result)[1]<-"cluster"
 kmeans_clust_result <- kmeans_clust_result %>% dplyr::select(Tumors,cluster)
 
-sil <- silhouette(km.res$cluster, dist(disease_transform[,2:137]))
+sil <- silhouette(km.res$cluster, dist(disease_transform[,2:136])) # Verify this 
 sil<-as.data.frame(sil)
 sil$Tumors<-names(km.res$cluster)
   
 kmeans_clust_result <- kmeans_clust_result %>% dplyr::left_join(sil,by=c("cluster", "Tumors"))
 
-kmeans_clust_result<-kmeans_clust_result[order(kmeans_clust_result$Cluster),]
+kmeans_clust_result<-kmeans_clust_result[order(kmeans_clust_result$cluster),]
 rownames(kmeans_clust_result)<-NULL
+
+mean_freq_kmeans <- kmeans_clust_result %>% dplyr::select(cluster, sil_width) %>% dplyr::group_by(cluster) %>% dplyr::summarise(mean_silo_score=mean(sil_width),cluster_member_count =dplyr::n()) 
+kmeans_clust_result<- kmeans_clust_result %>% dplyr::left_join(mean_freq_kmeans,by="cluster")
+
 
 
 # Show results with following tumors 
@@ -92,9 +99,16 @@ benchmark_tumors <- c("b cell lymphoma", "neuroblastoma", "triple negative breas
 
 cluster_ind_benchmark_tumor <- kmeans_clust_result$cluster[kmeans_clust_result$Tumors %in% benchmark_tumors]
 
-display_table_benchmark <- kmeans_clust_result %>% filter(cluster %in% cluster_ind_benchmark_tumor)
-display_table_benchmark<- display_table_benchmark[order(display_table_benchmark$cluster),]
-rownames(display_table_benchmark)<-NULL
+display_table_benchmark_kmeans <- kmeans_clust_result %>% filter(cluster %in% cluster_ind_benchmark_tumor)
+display_table_benchmark_kmeans<- display_table_benchmark_kmeans[order(display_table_benchmark_kmeans$cluster),]
+rownames(display_table_benchmark_kmeans)<-NULL
+
+
+
+write.csv(kmeans_clust_result,paste(result_dir,"/kmeans_clust_result_embedding.csv",sep=""))
+write.csv(display_table_benchmark_kmeans,paste(result_dir,"/display_table_benchmark_kmeans.csv",sep=""))
+
+
 
 # Find optimal number of Clusters using KMeans Silhouette 
 cluster_results<-fviz_nbclust(disease_transform[,2:137], kmeans, method = 'silhouette',  k.max = 5000,iter.max=50)
