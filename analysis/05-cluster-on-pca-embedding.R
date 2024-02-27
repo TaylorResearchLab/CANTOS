@@ -149,7 +149,7 @@ CH_Results<-CHCriterion(disease_transform_pca_scaled, kmax=13434,clustermethod="
 #affinity cluster
 set.seed(13)
 d.apclus2 <- apcluster(negDistMat(r=2), disease_transform) # 1 hr 28 mins
-cat("affinity propogation optimal number of clusters:", length(d.apclus2@clusters), "\n") #1255 , 1254 in new run 
+cat("affinity propogation optimal number of clusters:", length(d.apclus2@clusters), "\n") #1113 clusters 
 
 affinity_cluster_df<-as.data.frame(matrix(nrow=1,ncol=2))
 colnames(affinity_cluster_df)<-c("Tumor_Names","Cluster_ID")
@@ -282,9 +282,9 @@ affinity_cluster_annotation$NCIT_Tumor<-"No"
 affinity_cluster_annotation$WHO_Tumor<-"No"
 
 for (iter in 1:dim(affinity_cluster_annotation)[1]){
-  if(affinity_cluster_annotation$Tumor_Names[iter] %in% NCIT_embedding_df$Disease){
+  if(affinity_cluster_annotation$Tumor_Names[iter] %in% tolower(NCIT_embedding_df$Disease)){
     affinity_cluster_annotation$NCIT_Tumor[iter] <- "Yes"
-  }else if(affinity_cluster_annotation$Tumor_Names[iter] %in% WHO_embedding_df$Disease){
+  }else if(affinity_cluster_annotation$Tumor_Names[iter] %in% tolower(WHO_embedding_df$Disease)){
     affinity_cluster_annotation$WHO_Tumor[iter] <- "Yes"
   }
 }
