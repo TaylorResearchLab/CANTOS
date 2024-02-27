@@ -20,7 +20,6 @@ results_dir <- file.path(analysis_dir,"results")
 
 #Load Functions
 source(paste(util_dir,"/string_dissimilarity.R",sep = ""))
-source(paste(util_dir,"/string_dissimilarity_norm.R",sep=""))
 source(paste(util_dir,"/distance_clusters.R",sep=""))
 # Read the annotated file
 ct_disease_df <- read.csv(paste(input_dir,"/CT-Aug22-2023-Disease-File - clinical_trial_disease_aug_22_2023.csv",sep=""))
@@ -98,7 +97,7 @@ registerDoParallel(cl)
 dissimilarity_matrix_lv<-foreach(iter=1:length(df_tumor_names),.combine=rbind) %dopar% {
   print(iter)
   disease_name <- colnames(dissimilarity_matrix_lv)[iter]
-  distances<-unlist(lapply(df_tumor_names,string_dissimilarity_norm,S2=disease_name,meth="lv"))
+  distances<-unlist(lapply(df_tumor_names,string_dissimilarity,S2=disease_name,meth="lv"))
 }
 rownames(dissimilarity_matrix_lv) <- df_tumor_names
 colnames(dissimilarity_matrix_lv) <- df_tumor_names
