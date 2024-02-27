@@ -180,6 +180,29 @@ ggsave(plt_global_jw, filename = paste(plots_dir,"/plt_global_jw.pdf",sep=""), h
 ggsave(plt_global_cosine, filename = paste(plots_dir,"/plt_global_cosine.pdf",sep=""), height = 30, width = 21, units = "cm")
 
 
+# Sillohoutte plot
+benchmark_aff_clust_lv <- benchmark_aff_clust_lv[order(benchmark_aff_clust_lv$SubsetCluster_IDs,-benchmark_aff_clust_lv$silhouette_score),]
+benchmark_aff_clust_jw <- benchmark_aff_clust_jw[order(benchmark_aff_clust_jw$SubsetCluster_IDs,-benchmark_aff_clust_jw$silhouette_score),]
+benchmark_aff_clust_cosine <- benchmark_aff_clust_cosine[order(benchmark_aff_clust_cosine$SubsetCluster_IDs,-benchmark_aff_clust_cosine$silhouette_score),]
+
+color_density_df <- as.data.frame(cbind(unique(benchmark_aff_clust_lv$SubsetCluster_IDs),c(1,10,30,50,70,90,120)))
+colnames(color_density_df)<- c("SubsetCluster_IDs","color_density")
+benchmark_aff_clust_lv<- benchmark_aff_clust_lv %>% dplyr::left_join(color_density_df,by="SubsetCluster_IDs")
+benchmark_aff_clust_lv$color_density<- as.double(benchmark_aff_clust_lv$color_density)
+
+color_density_df <- as.data.frame(cbind(unique(benchmark_aff_clust_jw$SubsetCluster_IDs),c(1,10,30,50,70,90,120)))
+colnames(color_density_df)<- c("SubsetCluster_IDs","color_density")
+benchmark_aff_clust_jw<- benchmark_aff_clust_jw %>% dplyr::left_join(color_density_df,by="SubsetCluster_IDs")
+benchmark_aff_clust_jw$color_density<- as.double(benchmark_aff_clust_jw$color_density)
+
+color_density_df <- as.data.frame(cbind(unique(benchmark_aff_clust_cosine$SubsetCluster_IDs),c(1,10,30,50,70,90,120)))
+colnames(color_density_df)<- c("SubsetCluster_IDs","color_density")
+benchmark_aff_clust_cosine<- benchmark_aff_clust_cosine %>% dplyr::left_join(color_density_df,by="SubsetCluster_IDs")
+benchmark_aff_clust_cosine$color_density<- as.double(benchmark_aff_clust_cosine$color_density)
+
+barplot(height=benchmark_aff_clust_lv$silhouette_score,names=benchmark_aff_clust_lv$SubsetCluster_IDs,ylim =c(-1,1),density=benchmark_aff_clust_lv$color_density,main="Levenshtein")
+barplot(height=benchmark_aff_clust_jw$silhouette_score,names=benchmark_aff_clust_jw$SubsetCluster_IDs,ylim =c(-1,1),density=benchmark_aff_clust_jw$color_density, main="Jarro Winkler")
+barplot(height=benchmark_aff_clust_cosine$silhouette_score,names=benchmark_aff_clust_cosine$SubsetCluster_IDs,ylim =c(-1,1),density=benchmark_aff_clust_cosine$color_density,main="Cosine")
 
 
 ## Write workspace
