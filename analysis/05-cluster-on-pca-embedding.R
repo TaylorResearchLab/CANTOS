@@ -24,7 +24,7 @@ input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
 result_dir <-file.path(analysis_dir,"results")
-
+plots_dir<-file.path(root_dir,"plots")
 
 
 # Load PCA Embeddings of CT , WHO, NCIT
@@ -107,6 +107,21 @@ rownames(display_table_benchmark_kmeans)<-NULL
 
 write.csv(kmeans_clust_result,paste(result_dir,"/kmeans_clust_result_embedding.csv",sep=""))
 write.csv(display_table_benchmark_kmeans,paste(result_dir,"/display_table_benchmark_kmeans.csv",sep=""))
+
+
+# Plot for Kmeans
+clust_plot_kmeans <- display_table_benchmark_kmeans %>% dplyr::select(cluster,mean_silo_score,cluster_member_count) 
+clust_plot_kmeans<-unique(clust_plot_kmeans)
+p_kmeans_benchmark <- ggplot(clust_plot_kmeans, aes(x=cluster_member_count, y=mean_silo_score)) +geom_point() +
+  geom_text(label=clust_plot_kmeans$cluster,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.005) + labs(title = "Kmeans clusters, K=6000")
+
+# Global Plot kmeans
+global_clust_plot_kmeans <- kmeans_clust_result %>% dplyr::select(cluster,mean_silo_score,cluster_member_count) %>% dplyr::distinct()
+plt_global_kmeans <- ggplot(global_clust_plot_kmeans, aes(x=cluster_member_count, y=mean_silo_score)) +geom_point() +
+  geom_text(label=global_clust_plot_kmeans$cluster,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) + labs(title = "Kmeans clusters, K=6000")
+ggsave(plt_global_kmeans, filename = paste(plots_dir,"/plt_global_kmeans_embedding.pdf",sep=""), height = 30, width = 21, units = "cm")
+
+
 
 
 
