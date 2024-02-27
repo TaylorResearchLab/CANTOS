@@ -33,6 +33,10 @@ colnames(disease_transform)[1]<-"Diseases"
 rownames(disease_transform)<-disease_transform$Diseases # Needed for AP Clust
 
 
+# Set Seed
+set.seed(13)
+
+
 # Peform Clustering 
 
 silhouette_score <- function(k){
@@ -41,7 +45,10 @@ silhouette_score <- function(k){
   return(mean(ss[, 3]))
 }
 
-k <- c(10,100,500,1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,11000,12000,13000,14000,15000,16000)
+k <- c(10,100,500,1000,2000,3000,4000,5000,
+       5500,5900, 6000,6050,6100,6200,6500,
+       7000,8000,9000,10000,11000,12000,13000,
+       14000,15000,16000)
 avg_sil <- sapply(k, silhouette_score)#11:04-12:18
 
 Kmeans_silhouette<-as.data.frame(cbind(k,avg_sil))
@@ -55,24 +62,8 @@ p1<-ggplot(Kmeans_silhouette, aes(x =k, y = mean_silhouette_score)) + geom_point
   scale_x_continuous("k", labels = as.character(k), breaks = k) + ggtitle("Kmean Silhouette Score vs Clusters")
 
 
-# Average Silhouette Score Maxed at 6000, so we will search in this neighborhood 5000 <= K <=7000
-k2<- c(5000,5200,5500,5800,5900,5950,6000,6050,6100,6200,6500,6800,7000)
-avg_sil2 <- sapply(k2, silhouette_score)#1:07
-
-
-Kmeans_silhouette_Zoomed<-as.data.frame(cbind(k2,avg_sil2))
-colnames(Kmeans_silhouette_Zoomed) <- c("k","mean_silhouette_score")
-Kmeans_silhouette_Zoomed<- Kmeans_silhouette_Zoomed[order(Kmeans_silhouette_Zoomed$k),]
-Kmeans_silhouette_Max_Zoomed <- Kmeans_silhouette_Zoomed[ which(max(Kmeans_silhouette_Zoomed$mean_silhouette_score) == Kmeans_silhouette_Zoomed$mean_silhouette_score), ]
-
-
-p2<-ggplot(Kmeans_silhouette_Zoomed, aes(x =k, y = mean_silhouette_score)) + geom_point() +
-  geom_point(data = Kmeans_silhouette_Zoomed[which.max(Kmeans_silhouette_Zoomed$mean_silhouette_score), ], color="red")+
-  scale_x_continuous("k", labels = as.character(k2), breaks = k2) + ggtitle("Kmean Silhouette Score vs Clusters")
-
-
 # Kmeans optimal cluster is 6000
-km.res <- eclust(disease_transform[,2:136], "kmeans", k = Kmeans_silhouette_Max_Zoomed$k,nstart = 25, graph = FALSE)
+km.res <- eclust(disease_transform[,2:136], "kmeans", k = Kmeans_silhouette_Max$k,nstart = 25, graph = FALSE)
 kmeans_clust_result <- as.data.frame(km.res$cluster)
 kmeans_clust_result$Tumors<-rownames(kmeans_clust_result)
 colnames(kmeans_clust_result)[1]<-"cluster"
@@ -147,7 +138,6 @@ CH_Results<-CHCriterion(disease_transform_pca_scaled, kmax=13434,clustermethod="
 
 
 #affinity cluster
-set.seed(13)
 d.apclus2 <- apcluster(negDistMat(r=2), disease_transform) # 1 hr 28 mins
 cat("affinity propogation optimal number of clusters:", length(d.apclus2@clusters), "\n") #1113 clusters 
 
@@ -294,3 +284,5 @@ for (iter in 1:dim(affinity_cluster_annotation)[1]){
 #save(d.apclus2,file = paste(intermediate_dir,"/d.apclus2.RData",sep=""))
 save(affinity_cluster_df,file = paste(intermediate_dir,"/affinity_cluster_df.RData",sep=""))
 save(affinity_cluster_annotation,file = paste(intermediate_dir,"/affinity_cluster_annotation.RData",sep=""))
+
+save.image(file = "script5_affinitycluster.RData")
