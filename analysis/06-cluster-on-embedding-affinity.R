@@ -38,7 +38,14 @@ rownames(disease_transform)<-disease_transform$Tumor_Name # Needed for AP Clust
 # Set Seed
 set.seed(13)
 #affinity cluster
-d.apclus2 <- apcluster(negDistMat(r=2), disease_transform) # 1 hr 28 mins 5:24 pm - 7:00 pm
+d.apclus2 <- apcluster(negDistMat(r=2), disease_transform) # 1 hr 28 mins 11:28 pm - 12:08 pm
+
+dist_euclidean<- dist(disease_transform,method = "euclidean")
+dist_euclidean<-as.matrix(dist_euclidean)
+simmilarity_euclidean<- 1/(1+dist_euclidean)
+af_clust_euclidean <- apcluster(simmilarity_euclidean) # 1:24 am - 2:55 am still going....
+cat("affinity propogation optimal number of clusters:", length(af_clust_euclidean@clusters), "\n")
+
 cat("affinity propogation optimal number of clusters:", length(d.apclus2@clusters), "\n") #1113 clusters 
 
 affinity_cluster_df<-as.data.frame(matrix(nrow=1,ncol=2))
@@ -50,19 +57,39 @@ for (iter in 1: length(d.apclus2@clusters)){
 affinity_cluster_df<- affinity_cluster_df %>% separate_rows(Tumor_Names, sep = '@')
 affinity_cluster_df$Cluster_ID<-as.character(affinity_cluster_df$Cluster_ID)
 
+
+affinity_cluster_df<-as.data.frame(matrix(nrow=1,ncol=2))
+colnames(affinity_cluster_df)<-c("Tumor_Names","Cluster_ID")
+for (iter in 1: length(af_clust_euclidean@clusters)){
+  affinity_cluster_df[iter,1] <- paste(names(unlist(af_clust_euclidean@clusters[iter])),collapse = "@")
+  affinity_cluster_df[iter,2] <- iter
+}
+affinity_cluster_df<- affinity_cluster_df %>% separate_rows(Tumor_Names, sep = '@')
+affinity_cluster_df$Cluster_ID<-as.character(affinity_cluster_df$Cluster_ID)
+
+
+
 # Find cluster membership frequencies 
 #affinity_cluster_df$Cluster_Total_Members <- NA
 cluster_frequency_table <- as.data.frame(table(affinity_cluster_df$Cluster_ID))
 colnames(cluster_frequency_table)<- c("Cluster_ID","Primary_Cluster_Frequency")
 cluster_frequency_table$Cluster_ID<-as.character(cluster_frequency_table$Cluster_ID)
+z_scores<- (cluster_frequency_table$Primary_Cluster_Frequency-mean(cluster_frequency_table$Primary_Cluster_Frequency))/sd(cluster_frequency_table$Primary_Cluster_Frequency)
+cluster_frequency_table$z_scores<-z_scores
 
-median_cluster_frequency <- median(cluster_frequency_table$Primary_Cluster_Frequency)
+ind_min_zscore<- which(cluster_frequency_table$z_scores < 2.5)
+max_cluster_member <- max(cluster_frequency_table$Primary_Cluster_Frequency[ind_min_zscore])
 
-large_cluster_labels<- cluster_frequency_table$Cluster_ID[which(cluster_frequency_table$Primary_Cluster_Frequency>median_cluster_frequency)]
+#median_cluster_frequency <- median(cluster_frequency_table$Primary_Cluster_Frequency)
+
+#large_cluster_labels<- cluster_frequency_table$Cluster_ID[which(cluster_frequency_table$Primary_Cluster_Frequency>median_cluster_frequency)]
+large_cluster_labels<- cluster_frequency_table$Cluster_ID[which(cluster_frequency_table$Primary_Cluster_Frequency>max_cluster_member)]
+
+converge_list<-list()
 
 while(length(large_cluster_labels)>0){
+  print(length(large_cluster_labels))
 for(iter in 1:length(large_cluster_labels)){
-  print(iter)
   Clusters_Names=large_cluster_labels[iter]
   subset_embedding_df <- as.data.frame(affinity_cluster_df$Tumor_Names[affinity_cluster_df$Cluster_ID==Clusters_Names])
   colnames(subset_embedding_df)<-"Tumor_Name"
@@ -71,24 +98,37 @@ for(iter in 1:length(large_cluster_labels)){
   rownames(subset_embedding_df)<-subset_embedding_df$Tumor_Name
   subset_embedding_df<-subset_embedding_df[,c(-1)]
   
-  subset_affinity_df<-run_affinity_clustering(Clusters_Names,subset_embedding_df)
+  result_run_aff<-run_affinity_clustering(Clusters_Names,subset_embedding_df)
   
+  flag_converge <- result_run_aff[[1]]
+  subset_affinity_df<-result_run_aff[[2]]
+  
+  if(flag_converge=="No"){
   for (iter_nested_affinity_cluser in 1: dim(subset_affinity_df)[1]){
       ind_location <- which (affinity_cluster_df$Tumor_Names==subset_affinity_df$Tumor_Names[iter_nested_affinity_cluser])
       affinity_cluster_df$Cluster_ID[ind_location]<-subset_affinity_df$SubCluster_ID[iter_nested_affinity_cluser]
-    }
+   }
+  }else if(flag_converge=="Yes"){
+    converge_list<-append(Clusters_Names,converge_list)
+  }
 
-}
+
+ }
   cluster_frequency_table <- as.data.frame(table(affinity_cluster_df$Cluster_ID))
   colnames(cluster_frequency_table)<- c("Cluster_ID","Primary_Cluster_Frequency")
   cluster_frequency_table$Cluster_ID<-as.character(cluster_frequency_table$Cluster_ID)
-  large_cluster_labels<- cluster_frequency_table$Cluster_ID[which(cluster_frequency_table$Primary_Cluster_Frequency>median_cluster_frequency)]
-  print(length(large_cluster_labels))
-
+  large_cluster_labels<- cluster_frequency_table$Cluster_ID[which(cluster_frequency_table$Primary_Cluster_Frequency>max_cluster_member)]
+  large_cluster_labels<-setdiff(large_cluster_labels, unlist(converge_list))
 }
   
-  
-  
+lymphoma_leukemia_strings <- c("leukemia", "lymphoma", "leukemias", "lymphomas", "leukaemia", "leukaemias",
+                               "leuk")
+
+Lymphoma_Lukemia_Clusters <- affinity_cluster_df %>% dplyr::filter(str_detect(Tumor_Names,paste(strings, collapse = "|")))
+
+Lymphoma_Lukemia_Clusters_Labels <- unique(Lymphoma_Lukemia_Clusters$Cluster_ID)
+
+Lymphoma_Lukemia_Clusters <- affinity_cluster_df %>% dplyr::filter(Cluster_ID %in% Lymphoma_Lukemia_Clusters_Labels )
   
   
   # largest_cluster_id <- max(subset_affinity_df$SubCluster_ID)
@@ -276,3 +316,6 @@ disease_affinity_cluster_table<- affinity_cluster_nested %>% dplyr::select(Tumor
 
 # Write
 write.csv(affinity_cluster_nested,paste(intermediate_dir,"/affinity_cluster_nested.csv",sep=""))
+
+save.image(file = "script6_affinitycluster.RData")
+
