@@ -267,11 +267,6 @@ for (iter in 1:dim(affinity_cluster_annotation)[1]){
 }
 
 
-# write files 
-#save(d.apclus2,file = paste(intermediate_dir,"/d.apclus2.RData",sep=""))
-save(affinity_cluster_df,file = paste(intermediate_dir,"/affinity_cluster_df.RData",sep=""))
-save(affinity_cluster_annotation,file = paste(intermediate_dir,"/affinity_cluster_annotation.RData",sep=""))
-
 
 
 
@@ -318,4 +313,9 @@ disease_affinity_cluster_table<- affinity_cluster_nested %>% dplyr::select(Tumor
 write.csv(affinity_cluster_nested,paste(intermediate_dir,"/affinity_cluster_nested.csv",sep=""))
 
 save.image(file = "script6_affinitycluster.RData")
+# write files 
+#save(d.apclus2,file = paste(intermediate_dir,"/d.apclus2.RData",sep=""))
+save(affinity_cluster_df,file = paste(intermediate_dir,"/affinity_cluster_df.RData",sep=""))
+save(affinity_cluster_annotation,file = paste(intermediate_dir,"/affinity_cluster_annotation.RData",sep=""))
+
 
