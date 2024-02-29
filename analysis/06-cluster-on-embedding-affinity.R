@@ -38,7 +38,7 @@ rownames(disease_transform)<-disease_transform$Diseases # Needed for AP Clust
 # Set Seed
 set.seed(13)
 #affinity cluster
-d.apclus2 <- apcluster(negDistMat(r=2), disease_transform) # 1 hr 28 mins
+d.apclus2 <- apcluster(negDistMat(r=2), disease_transform) # 1 hr 28 mins 5:24 pm - 7:00 pm
 cat("affinity propogation optimal number of clusters:", length(d.apclus2@clusters), "\n") #1113 clusters 
 
 affinity_cluster_df<-as.data.frame(matrix(nrow=1,ncol=2))
@@ -58,21 +58,21 @@ count_table$Cluster_ID<- as.numeric(count_table$Cluster_ID)
 affinity_cluster_df <- affinity_cluster_df %>% dplyr::left_join(count_table,by="Cluster_ID")
 
 
-# Find if tumor has children and pediatric terms in their tumor names and make a seperate column for pediatric cluster
-ind_ped <- c(which(str_detect(affinity_cluster_df$Tumor_Names, "childhood")),
-             which(str_detect(affinity_cluster_df$Tumor_Names, "children")),
-             which(str_detect(affinity_cluster_df$Tumor_Names, "child")),
-             which(str_detect(affinity_cluster_df$Tumor_Names, "pediatric")),
-             which(str_detect(affinity_cluster_df$Tumor_Names, "paediatric")))
-
-affinity_cluster_df$contains_pediatric_string <- "No"
-
-affinity_cluster_df$contains_pediatric_string[ind_ped]<-"Yes"
-
-pediatric_cluster_ID<-0
-
-affinity_cluster_df$Pediatric_SubsetCluster_ID <- NA  
-affinity_cluster_df$Pediatric_SubsetCluster_ID[ind_ped]<-pediatric_cluster_ID
+# # Find if tumor has children and pediatric terms in their tumor names and make a seperate column for pediatric cluster
+# ind_ped <- c(which(str_detect(affinity_cluster_df$Tumor_Names, "childhood")),
+#              which(str_detect(affinity_cluster_df$Tumor_Names, "children")),
+#              which(str_detect(affinity_cluster_df$Tumor_Names, "child")),
+#              which(str_detect(affinity_cluster_df$Tumor_Names, "pediatric")),
+#              which(str_detect(affinity_cluster_df$Tumor_Names, "paediatric")))
+# 
+# affinity_cluster_df$contains_pediatric_string <- "No"
+# 
+# affinity_cluster_df$contains_pediatric_string[ind_ped]<-"Yes"
+# 
+# pediatric_cluster_ID<-0
+# 
+# affinity_cluster_df$Pediatric_SubsetCluster_ID <- NA  
+# affinity_cluster_df$Pediatric_SubsetCluster_ID[ind_ped]<-pediatric_cluster_ID
 
 
 #Nested affinity clusters
