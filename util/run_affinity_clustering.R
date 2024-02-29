@@ -1,7 +1,7 @@
-run_affinity_clustering <- function(subset_embedding_df){
+run_affinity_clustering <- function(Clusters_Names,subset_embedding_df){
   
   affinity_subset <- apcluster(negDistMat(r=2), subset_embedding_df)
-  cat("affinity propogation optimal number of clusters:", length(affinity_subset@clusters), "\n")
+  #cat("affinity propogation optimal number of clusters:", length(affinity_subset@clusters), "\n")
   
   subset_affinity_df<-as.data.frame(affinity_subset@idx)
   subset_affinity_df<-as.data.frame(matrix(nrow=1,ncol=2))
@@ -13,8 +13,8 @@ run_affinity_clustering <- function(subset_embedding_df){
   }
   subset_affinity_df<- subset_affinity_df %>% separate_rows(Tumor_Names, sep = '@')
   subset_affinity_df <- subset_affinity_df %>% mutate(SubCluster_ID= paste(Clusters_Names,SubCluster_ID,sep="."))
-  sub_affinity_table<- as.data.frame(table(subset_affinity_df$SubCluster_ID))
   
-  
-  return(affinity_cluster_df)
+#  l1<- list(length(affinity_subset@clusters),subset_affinity_df)
+#  return(l1)  
+  return(subset_affinity_df)
 }

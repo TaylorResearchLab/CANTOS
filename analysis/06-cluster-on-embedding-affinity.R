@@ -31,8 +31,8 @@ source(paste(util_dir,"/cluster_label_assignment.R",sep=""))
 ########################################*************************************###########
 # Load PCA Embeddings of CT , WHO, NCIT
 disease_transform<- read.csv(paste(intermediate_dir,"/disease_transform_pca.csv",sep="") )
-colnames(disease_transform)[1]<-"Diseases"
-rownames(disease_transform)<-disease_transform$Diseases # Needed for AP Clust
+colnames(disease_transform)[1]<-"Tumor_Name"
+rownames(disease_transform)<-disease_transform$Tumor_Name # Needed for AP Clust
 
 
 # Set Seed
@@ -48,14 +48,61 @@ for (iter in 1: length(d.apclus2@clusters)){
   affinity_cluster_df[iter,2] <- iter
 }
 affinity_cluster_df<- affinity_cluster_df %>% separate_rows(Tumor_Names, sep = '@')
-
+affinity_cluster_df$Cluster_ID<-as.character(affinity_cluster_df$Cluster_ID)
 
 # Find cluster membership frequencies 
 #affinity_cluster_df$Cluster_Total_Members <- NA
-count_table <- as.data.frame(table(affinity_cluster_df$Cluster_ID))
-colnames(count_table)<- c("Cluster_ID","Primary_Cluster_Frequency")
-count_table$Cluster_ID<- as.numeric(count_table$Cluster_ID)
-affinity_cluster_df <- affinity_cluster_df %>% dplyr::left_join(count_table,by="Cluster_ID")
+cluster_frequency_table <- as.data.frame(table(affinity_cluster_df$Cluster_ID))
+colnames(cluster_frequency_table)<- c("Cluster_ID","Primary_Cluster_Frequency")
+cluster_frequency_table$Cluster_ID<-as.character(cluster_frequency_table$Cluster_ID)
+
+median_cluster_frequency <- median(cluster_frequency_table$Primary_Cluster_Frequency)
+
+large_cluster_labels<- cluster_frequency_table$Cluster_ID[which(cluster_frequency_table$Primary_Cluster_Frequency>median_cluster_frequency)]
+
+while(length(large_cluster_labels)>0){
+for(iter in 1:length(large_cluster_labels)){
+  print(iter)
+  Clusters_Names=large_cluster_labels[iter]
+  subset_embedding_df <- as.data.frame(affinity_cluster_df$Tumor_Names[affinity_cluster_df$Cluster_ID==Clusters_Names])
+  colnames(subset_embedding_df)<-"Tumor_Name"
+  rownames(subset_embedding_df)<-subset_embedding_df$Tumor_Name
+  subset_embedding_df<- subset_embedding_df %>% dplyr::left_join(disease_transform,by="Tumor_Name")
+  rownames(subset_embedding_df)<-subset_embedding_df$Tumor_Name
+  subset_embedding_df<-subset_embedding_df[,c(-1)]
+  
+  subset_affinity_df<-run_affinity_clustering(Clusters_Names,subset_embedding_df)
+  
+  for (iter_nested_affinity_cluser in 1: dim(subset_affinity_df)[1]){
+      ind_location <- which (affinity_cluster_df$Tumor_Names==subset_affinity_df$Tumor_Names[iter_nested_affinity_cluser])
+      affinity_cluster_df$Cluster_ID[ind_location]<-subset_affinity_df$SubCluster_ID[iter_nested_affinity_cluser]
+    }
+
+}
+  cluster_frequency_table <- as.data.frame(table(affinity_cluster_df$Cluster_ID))
+  colnames(cluster_frequency_table)<- c("Cluster_ID","Primary_Cluster_Frequency")
+  cluster_frequency_table$Cluster_ID<-as.character(cluster_frequency_table$Cluster_ID)
+  large_cluster_labels<- cluster_frequency_table$Cluster_ID[which(cluster_frequency_table$Primary_Cluster_Frequency>median_cluster_frequency)]
+  print(length(large_cluster_labels))
+
+}
+  
+  
+  
+  
+  
+  # largest_cluster_id <- max(subset_affinity_df$SubCluster_ID)
+  # power_of_ten <- floor(log10(largest_cluster_id)) + 1
+  # subset_affinity_df$SubCluster_ID<-subset_affinity_df$SubCluster_ID/(10^power_of_ten)+Clusters_Names[iter]
+  
+  for (iter_affinity_cluser in 1: dim(subset_affinity_df)[1]){
+    ind_location <- which (affinity_cluster_df$Tumor_Names==subset_affinity_df$Tumor_Names[iter_affinity_cluser])
+    affinity_cluster_df$SubsetCluster_IDs[ind_location]<-subset_affinity_df$SubCluster_ID[iter_affinity_cluser]
+  }
+  
+  
+  
+
 
 
 # # Find if tumor has children and pediatric terms in their tumor names and make a seperate column for pediatric cluster
@@ -76,12 +123,12 @@ affinity_cluster_df <- affinity_cluster_df %>% dplyr::left_join(count_table,by="
 
 
 #Nested affinity clusters
-barplot(height=affinity_cluster_df$Primary_Cluster_Frequency, names=affinity_cluster_df$Cluster_ID, 
-        xlab="cluster_id", 
-        ylab="frequency", 
-        main="Cluster_Frequency", 
-        ylim=c(0,50)
-)
+# barplot(height=affinity_cluster_df$Primary_Cluster_Frequency, names=affinity_cluster_df$Cluster_ID, 
+#         xlab="cluster_id", 
+#         ylab="frequency", 
+#         main="Cluster_Frequency", 
+#         ylim=c(0,50)
+# )
 
 large_cluster_index <- which(affinity_cluster_df$Primary_Cluster_Frequency > median(affinity_cluster_df$Primary_Cluster_Frequency))
 
