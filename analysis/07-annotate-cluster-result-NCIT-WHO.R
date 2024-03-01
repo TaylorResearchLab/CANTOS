@@ -85,7 +85,7 @@ print(identical(t3[['Freq.x']],t3[['Freq.y']]))
 combined_embedding_hema_df <- combined_embedding_df %>% filter(rownames(combined_embedding_df) %in% affinity_cluster_hema_df$Tumor_Names)
 
 
-outer_who_final_hema<-foreach(i = 1:dim(combined_embedding_hema_df)[1], .combine = rbind) %dopar% { #03:53pm -
+outer_who_final_hema<-foreach(i = 1:dim(combined_embedding_hema_df)[1], .combine = rbind) %dopar% { #03:53pm - 6:58 pm
   print(i)
   #s <- apply(WHO_embedding_df[,2:1537],1,CalculateEuclideanDistance,vect2=combined_embedding_df[i,])
   embedding_pairwise<- as.matrix(rbind(combined_embedding_hema_df[i,],WHO_embedding_df[,2:1537]))
@@ -96,12 +96,56 @@ colnames(outer_who_final_hema)<-(WHO_embedding_df$Disease)
 rownames(outer_who_final_hema)<-rownames(combined_embedding_hema_df)
 
 
-outer_who_final_NCIT<-foreach(i = 1:dim(combined_embedding_hema_df)[1], .combine = rbind) %dopar% { #12:10pm -
+index_min_who_hema <- as.matrix(apply(outer_who_final_hema, 1, which.min))
+
+who_match_hema_df <- cbind(rownames(outer_who_final_hema))
+
+colnames(who_match_hema_df)<-"Tumor_Names"
+who_match_hema_df <-as.data.frame(who_match_hema_df)
+
+who_match_hema_df$WHO_Matches<- NA
+who_match_hema_df$WHO_distance<-NA
+
+
+for (iter in 1: dim(who_match_hema_df)[1]){
+  
+  who_match_hema_df$WHO_Matches[iter] <- colnames(outer_who_final_hema)[index_min_who_hema[iter]]
+  who_match_hema_df$WHO_distance[iter]<-outer_who_final_hema[iter,index_min_who_hema[iter]]
+  
+}
+############ NCIT 
+
+outer_NCIT_final_hema<-foreach(i = 1:dim(combined_embedding_hema_df)[1], .combine = rbind) %dopar% { #7:20pm - 
   print(i)
-  #s <- apply(WHO_embedding_df[,2:1537],1,CalculateEuclideanDistance,vect2=combined_embedding_df[i,])
   embedding_pairwise<- as.matrix(rbind(combined_embedding_hema_df[i,],NCIT_embedding_df[,2:1537]))
   euclidean_dist <- as.matrix(dist(embedding_pairwise,method = "euclidean"))
   d<-as.double(euclidean_dist[1,c(-1)])
 }
-colnames(outer_who_final_NCIT)<-(WHO_embedding_df$Disease)
-rownames(outer_who_final_NCIT)<-rownames(combined_embedding_hema_df)
+colnames(outer_NCIT_final_hema)<-(NCIT_embedding_df$Disease)
+rownames(outer_NCIT_final_hema)<-rownames(combined_embedding_hema_df)
+
+
+index_min_NCIT_hema <- as.matrix(apply(outer_NCIT_final_hema, 1, which.min))
+
+NCIT_match_hema_df <- cbind(rownames(outer_NCIT_final_hema))
+
+colnames(NCIT_match_hema_df)<-"Tumor_Names"
+NCIT_match_hema_df <-as.data.frame(NCIT_match_hema_df)
+
+NCIT_match_hema_df$NCIT_Matches<- NA
+NCIT_match_hema_df$NCIT_distance<-NA
+
+for (iter in 1: dim(NCIT_match_hema_df)[1]){
+  
+  NCIT_match_hema_df$NCIT_Matches[iter] <- colnames(outer_NCIT_final_hema)[index_min_NCIT_hema[iter]]
+  NCIT_match_hema_df$NCIT_distance[iter]<-outer_NCIT_final_hema[iter,index_min_NCIT_hema[iter]]
+  
+}
+NCIT_match_hema_df$NCIT_Matches<-tolower(NCIT_match_hema_df$NCIT_Matches)
+
+
+affinity_cluster_hema_df<- affinity_cluster_hema_df %>% dplyr::left_join(who_match_hema_df,by="Tumor_Names")
+affinity_cluster_hema_df<- affinity_cluster_hema_df %>% dplyr::left_join(NCIT_match_hema_df,by="Tumor_Names")
+
+
+save.image("script07.RData")
