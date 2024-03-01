@@ -22,6 +22,7 @@ data_dir <- file.path(root_dir,"data")
 input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
+source(paste(util_dir,"/cluster_label_assignment.R",sep=""))
 
 
 # 
@@ -147,5 +148,15 @@ NCIT_match_hema_df$NCIT_Matches<-tolower(NCIT_match_hema_df$NCIT_Matches)
 affinity_cluster_hema_df<- affinity_cluster_hema_df %>% dplyr::left_join(who_match_hema_df,by="Tumor_Names")
 affinity_cluster_hema_df<- affinity_cluster_hema_df %>% dplyr::left_join(NCIT_match_hema_df,by="Tumor_Names")
 
+affinity_cluster_hema_df <- affinity_cluster_hema_df %>% dplyr::mutate(assigned_class = case_when(NCIT_distance < WHO_distance ~ NCIT_Matches,
+                                                                                                  NCIT_distance > WHO_distance ~ WHO_Matches,
+                                                                                                  TRUE ~ "Both"))
 
+affinity_cluster_hema_df<- cluster_label_assignment(affinity_cluster_hema_df)
+
+affinity_cluster_hema_df <- affinity_cluster_hema_df %>% dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,NCIT_Matches,suggested_cluster_label)
+
+write.csv(affinity_cluster_hema_df,"hemato_tumor.csv")
+
+stopCluster(cl)
 save.image("script07.RData")
