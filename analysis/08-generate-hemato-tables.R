@@ -62,16 +62,6 @@ colnames(outer_who_final)<-(WHO_embedding_df$Disease)
 rownames(outer_who_final)<-rownames(combined_embedding_df)
 
 
-outer_NCIT_final<-foreach(i = 1:dim(combined_embedding_df)[1], .combine = rbind) %dopar% { #7:20pm - 
-  print(i)
-  embedding_pairwise<- as.matrix(rbind(combined_embedding_df[i,],NCIT_embedding_df[,2:1537]))
-  euclidean_dist <- as.matrix(dist(embedding_pairwise,method = "euclidean"))
-  d<-as.double(euclidean_dist[1,c(-1)])
-}
-
-
-
-
 
 
 ###### Lymphoma Luek analysis
