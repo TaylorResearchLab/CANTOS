@@ -169,4 +169,4 @@ affinity_cluster_hema_df <- affinity_cluster_hema_df %>% dplyr::select(Tumor_Nam
 write.csv(affinity_cluster_hema_df,"hemato_tumor.csv")
 
 stopCluster(cl)
-save.image("script07.RData")
+save.image("script-NCIT-WHO.RData")
