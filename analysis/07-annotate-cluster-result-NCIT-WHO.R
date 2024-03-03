@@ -75,6 +75,57 @@ rownames(outer_NCIT_final)<-rownames(combined_embedding_df)
 
 
 
+index_min_who <- as.matrix(apply(outer_who_final, 1, which.min))
+
+who_match_df <- cbind(rownames(outer_who_final))
+
+colnames(who_match_df)<-"Tumor_Names"
+who_match_df <-as.data.frame(who_match_df)
+
+who_match_df$WHO_Matches<- NA
+who_match_df$WHO_distance<-NA
+
+for (iter in 1: dim(who_match_df)[1]){
+  
+  who_match_df$WHO_Matches[iter] <- colnames(outer_who_final)[index_min_who[iter]]
+  who_match_df$WHO_distance[iter]<-outer_who_final[iter,index_min_who[iter]]
+  
+}
+
+
+
+
+index_min_NCIT <- as.matrix(apply(outer_NCIT_final, 1, which.min))
+
+NCIT_match_df <- cbind(rownames(outer_NCIT_final))
+
+colnames(NCIT_match_df)<-"Tumor_Names"
+NCIT_match_df <-as.data.frame(NCIT_match_df)
+
+NCIT_match_df$NCIT_Matches<- NA
+NCIT_match_df$NCIT_distance<-NA
+
+for (iter in 1: dim(NCIT_match_df)[1]){
+  
+  NCIT_match_df$NCIT_Matches[iter] <- colnames(outer_NCIT_final)[index_min_NCIT[iter]]
+  NCIT_match_df$NCIT_distance[iter]<-outer_NCIT_final[iter,index_min_NCIT[iter]]
+  
+}
+##########################
+affinity_cluster_df<- affinity_cluster_df %>% dplyr::left_join(who_match_df,by="Tumor_Names")
+affinity_cluster_df<- affinity_cluster_df %>% dplyr::left_join(NCIT_match_df,by="Tumor_Names")
+
+affinity_cluster_df <- affinity_cluster_df %>% dplyr::mutate(assigned_class = case_when(NCIT_distance < WHO_distance ~ NCIT_Matches,
+                                                                                                  NCIT_distance > WHO_distance ~ WHO_Matches,
+                                                                                                  TRUE ~ "Both"))
+
+affinity_cluster_df<- cluster_label_assignment(affinity_cluster_df)
+
+
+write.csv(affinity_cluster_df,"affinity_cluster_assignment.csv")
+
+
+
 ###### Lymphoma Luek analysis
 
 lymphoma_leukemia_strings <- c("leukemia", "lymphoma", "leukemias", "lymphomas", "leukaemia", "leukaemias",
