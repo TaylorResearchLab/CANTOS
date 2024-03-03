@@ -69,7 +69,8 @@ outer_NCIT_final<-foreach(i = 1:dim(combined_embedding_df)[1], .combine = rbind)
   d<-as.double(euclidean_dist[1,c(-1)])
 }
 
-
+colnames(outer_NCIT_final)<-(tolower(NCIT_embedding_df$Disease))
+rownames(outer_NCIT_final)<-rownames(combined_embedding_df)
 
 
 
