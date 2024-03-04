@@ -156,6 +156,36 @@ affinity_cluster_hema_df<- cluster_label_assignment(affinity_cluster_hema_df)
 
 affinity_cluster_hema_df <- affinity_cluster_hema_df %>% dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,NCIT_Matches,suggested_cluster_label)
 
+
+#### ISOLATION
+affinity_cluster_outlier<-affinity_cluster_hema_df%>%dplyr::select(Tumor_Names,Cluster_ID)
+
+disease_transform<- read.csv(paste(intermediate_dir,"/disease_transform_pca.csv",sep="") )
+colnames(disease_transform)[1]<-"Tumor_Names"
+rownames(disease_transform)<-disease_transform$Tumor_Names 
+
+
+hemato_embedding<-affinity_cluster_outlier %>% dplyr::left_join(disease_transform,by="Tumor_Names")
+
+affinity_cluster_outlier$outlier_score<-NA
+
+hemato_cluster_labels <- unique(hemato_embedding$Cluster_ID)
+for(iter in 1:length(hemato_cluster_labels)){
+  cluster_label_current <- hemato_cluster_labels[iter]
+  set.seed(13)
+  hemato_embedding_subset <- hemato_embedding %>% dplyr::filter(Cluster_ID==cluster_label_current)
+  if(dim(hemato_embedding_subset)[1]>2){ # Need at least 2 data points to run isolation forest
+  model <- isolation.forest(hemato_embedding_subset[1:nrow(hemato_embedding_subset),3:ncol(hemato_embedding_subset)], ndim=3, ntrees=50, nthreads=1)
+  scores <- predict(model, hemato_embedding_subset[1:nrow(hemato_embedding_subset),3:ncol(hemato_embedding_subset)], type="score")
+  ind_clust <- which(affinity_cluster_outlier$Cluster_ID==cluster_label_current)
+  affinity_cluster_outlier$outlier_score[ind_clust]<-scores
+  }else{
+    ind_clust <- which(affinity_cluster_outlier$Cluster_ID==cluster_label_current)
+    affinity_cluster_outlier$outlier_score[ind_clust]<-0
+  }
+}
+affinity_cluster_outlier<- affinity_cluster_outlier %>% dplyr::mutate(Outlier = case_when(outlier_score>0.5 ~ "Yes", TRUE ~ "No"))
+
 write.csv(affinity_cluster_hema_df,"hemato_tumor.csv")
 
 stopCluster(cl)
