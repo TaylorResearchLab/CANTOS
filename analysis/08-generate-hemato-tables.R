@@ -268,11 +268,50 @@ for(iter in 1:length(hemato_cluster_labels)){
   
 }
 
+
 affinity_cluster_outlier2<- affinity_cluster_outlier2 %>% dplyr::mutate(LOF_Outlier = case_when(LOF_Scores>1 ~ "Yes", TRUE ~ "No"))
 
+ind_both <- which(affinity_cluster_outlier2$assigned_class=="Both")
+for(iter in ind_both){
+  affinity_cluster_outlier2$assigned_class[ind_both]<-affinity_cluster_outlier2$Tumor_Names[ind_both]
+}
+
+ind_both <- which(hemato_embedding$assigned_class=="Both")
+for(iter in ind_both){
+  hemato_embedding$assigned_class[ind_both]<-hemato_embedding$Tumor_Names[ind_both]
+}
 
 
 
+hemato_cluster_labels<-unique(affinity_cluster_outlier2$assigned_class)
+affinity_cluster_outlier2$Z_score<-NA
+
+for(iter in 1:length(hemato_cluster_labels)){
+  cluster_label_current <- hemato_cluster_labels[iter]
+  ind_clust <- which(affinity_cluster_outlier2$assigned_class==cluster_label_current)
+
+  hemato_embedding_subset <- hemato_embedding %>% dplyr::filter(assigned_class==cluster_label_current)
+  
+  if(dim(hemato_embedding_subset)[1]>1){
+  current_cluster_label_embedding<- current_cluster_label_embedding<- disease_transform[which(rownames(disease_transform)==cluster_label_current),]
+  current_cluster_label_embedding<-current_cluster_label_embedding[,c(-1)]
+  distance_matrix <- rbind(current_cluster_label_embedding,hemato_embedding_subset[,3:ncol(hemato_embedding_subset)])
+  rownames(distance_matrix)<-NULL
+  distance_matrix <- as.matrix(dist(distance_matrix,method = "euclidean",diag = TRUE,upper = TRUE))
+  distance_matrix<-distance_matrix[c(-1),c(1)]
+  distance_matrix<- (distance_matrix-mean(distance_matrix))/sd(distance_matrix)
+  affinity_cluster_outlier2$Z_score[ind_clust]<-distance_matrix
+  }
+  else{
+    affinity_cluster_outlier2$Z_score[ind_clust]<-0
+    
+  }
+  }
+  
+  
+affinity_cluster_outlier2<-affinity_cluster_outlier2 %>% dplyr::mutate(Z_score_outlier =case_when(Z_score>2.5 ~ "Yes", TRUE~
+                                                                                                    "No"))
+affinity_cluster_outlier3<-affinity_cluster_outlier2 %>% dplyr::select(Tumor_Names,assigned_class,Z_score_outlier,Isolation_Outlier,LOF_Outlier)
 
 write.csv(affinity_cluster_hema_df,"hemato_tumor.csv")
 
