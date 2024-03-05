@@ -241,16 +241,16 @@ for(iter in 1:length(hemato_cluster_labels)){
 affinity_cluster_outlier2<- affinity_cluster_outlier2 %>% dplyr::mutate(Isolation_Outlier = case_when(isolation_outlier_score>0.5 ~ "Yes", TRUE ~ "No"))
 
 
-affinity_cluster_outlier$LOF_Scores<-NA
+affinity_cluster_outlier2$LOF_Scores<-NA
 lof_scores_minpts_list<-list()
 
 for(iter in 1:length(hemato_cluster_labels)){
   cluster_label_current <- hemato_cluster_labels[iter]
-  ind_clust <- which(affinity_cluster_outlier$Cluster_ID==cluster_label_current)
+  ind_clust <- which(affinity_cluster_outlier2$assigned_class==cluster_label_current)
   lof_scores_minpts_list<-list()
   
   set.seed(13)
-  hemato_embedding_subset <- hemato_embedding %>% dplyr::filter(Cluster_ID==cluster_label_current)
+  hemato_embedding_subset <- hemato_embedding %>% dplyr::filter(assigned_class==cluster_label_current)
   if(dim(hemato_embedding_subset)[1]>2){ # Need at least 2 data points to run isolation forest
     min_pts<- 2:(dim(hemato_embedding_subset)[1]-1)
     for(iter_pts in min_pts){
@@ -259,15 +259,16 @@ for(iter in 1:length(hemato_cluster_labels)){
     }
     lof_scores_minpts_list<- t(as.data.frame(lof_scores_minpts_list))
     lof_scores_minpts_list_median<-apply(lof_scores_minpts_list,2,median)
-    affinity_cluster_outlier$LOF_Scores[ind_clust]<-lof_scores_minpts_list_median
+    affinity_cluster_outlier2$LOF_Scores[ind_clust]<-lof_scores_minpts_list_median
     
   }else{
-    affinity_cluster_outlier$LOF_Scores[ind_clust]<-0
+    affinity_cluster_outlier2$LOF_Scores[ind_clust]<-0
   }
   
   
 }
 
+affinity_cluster_outlier2<- affinity_cluster_outlier2 %>% dplyr::mutate(LOF_Outlier = case_when(LOF_Scores>1 ~ "Yes", TRUE ~ "No"))
 
 
 
