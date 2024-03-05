@@ -206,7 +206,7 @@ for(iter in 1:length(hemato_cluster_labels)){
 affinity_cluster_outlier<- affinity_cluster_outlier %>% dplyr::mutate(LOF_Outlier = case_when(LOF_Scores>1 ~ "Yes", TRUE ~ "No"))
 
 affinity_cluster_hema_df2<- affinity_cluster_hema_df %>% dplyr::select(Tumor_Names,assigned_class,Cluster_ID)
-affinity_cluster_hema_df2 <- affinity_cluster_hema_df2 %>% filter(!Tumor_Names %in% unique(c(NCIT_embedding_df$Disease,WHO_embedding_df$Disease)))
+#affinity_cluster_hema_df2 <- affinity_cluster_hema_df2 %>% filter(!Tumor_Names %in% unique(c(NCIT_embedding_df$Disease,WHO_embedding_df$Disease)))
 affinity_cluster_hema_df2 <- affinity_cluster_hema_df2 %>% dplyr::left_join(affinity_cluster_outlier[,c(1)],by="Tumor_Names")
 
 
@@ -221,20 +221,20 @@ affinity_cluster_outlier2<-affinity_cluster_hema_df2%>%dplyr::select(Tumor_Names
 
 hemato_embedding<-affinity_cluster_outlier2 %>% dplyr::left_join(disease_transform,by="Tumor_Names")
 
-affinity_cluster_hema_df2$isolation_outlier_score<-NA
+affinity_cluster_outlier2$isolation_outlier_score<-NA
 
-hemato_cluster_labels <- unique(hemato_embedding$Cluster_ID)
+hemato_cluster_labels <- unique(hemato_embedding$assigned_class)
 for(iter in 1:length(hemato_cluster_labels)){
   cluster_label_current <- hemato_cluster_labels[iter]
   set.seed(13)
-  hemato_embedding_subset <- hemato_embedding %>% dplyr::filter(Cluster_ID==cluster_label_current)
+  hemato_embedding_subset <- hemato_embedding %>% dplyr::filter(assigned_class==cluster_label_current)
   if(dim(hemato_embedding_subset)[1]>2){ # Need at least 2 data points to run isolation forest
     model <- isolation.forest(hemato_embedding_subset[1:nrow(hemato_embedding_subset),3:ncol(hemato_embedding_subset)], ndim=3, ntrees=50, nthreads=1)
     scores <- predict(model, hemato_embedding_subset[1:nrow(hemato_embedding_subset),3:ncol(hemato_embedding_subset)], type="score")
-    ind_clust <- which(affinity_cluster_hema_df2$Cluster_ID==cluster_label_current)
-    affinity_cluster_hema_df2$isolation_outlier_score[ind_clust]<-scores
+    ind_clust <- which(affinity_cluster_hema_df2$assigned_class==cluster_label_current)
+    affinity_cluster_outlier2$isolation_outlier_score[ind_clust]<-scores
   }else{
-    ind_clust <- which(affinity_cluster_hema_df2$Cluster_ID==cluster_label_current)
+    ind_clust <- which(affinity_cluster_hema_df2$assigned_class==cluster_label_current)
     affinity_cluster_outlier2$isolation_outlier_score[ind_clust]<-0
   }
 }
