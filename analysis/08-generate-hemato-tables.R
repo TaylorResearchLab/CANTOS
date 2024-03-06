@@ -39,10 +39,6 @@ rownames(WHO_embedding_df)<-NULL
 #combined_embedding_df$Tumor_Names <- rownames(combined_embedding_df)
 #CT_embedding<- combined_embedding_df %>% filter(!(Tumor_Names %in% unique(c(tolower(NCIT_embedding_df$Disease),tolower(WHO_embedding_df$Disease)) ) ))
 #
-tumor_distances_df <- as.data.frame(matrix(nrow=dim(combined_embedding_df)[1],ncol = 5))
-colnames(tumor_distances_df)<- c("Tumor_Names","NCIT_Match","NCIT_Distance","WHO_Match","WHO_Distance")
-tumor_distances_df$Tumor_Names<- rownames(combined_embedding_df)
-
 
 #
 cl <- makeCluster(6, outfile="")
