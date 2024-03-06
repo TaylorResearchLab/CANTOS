@@ -139,7 +139,7 @@ affinity_cluster_hema_df <- affinity_cluster_hema_df %>% dplyr::mutate(assigned_
 
 affinity_cluster_hema_df<- cluster_label_assignment(affinity_cluster_hema_df)
 
-affinity_cluster_hema_df <- affinity_cluster_hema_df %>% dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,NCIT_Matches,suggested_cluster_label)
+#affinity_cluster_hema_df <- affinity_cluster_hema_df %>% dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,NCIT_Matches,suggested_cluster_label)
 
 
 #### ISOLATION
@@ -312,4 +312,4 @@ affinity_cluster_outlier3<-affinity_cluster_outlier2 %>% dplyr::select(Tumor_Nam
 write.csv(affinity_cluster_hema_df,"hemato_tumor.csv")
 
 stopCluster(cl)
-save.image("script07.RData")
+save.image("script08.RData")
