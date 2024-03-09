@@ -318,4 +318,7 @@ save.image(file = "script6_affinitycluster.RData")
 save(affinity_cluster_df,file = paste(intermediate_dir,"/affinity_cluster_df.RData",sep=""))
 save(affinity_cluster_annotation,file = paste(intermediate_dir,"/affinity_cluster_annotation.RData",sep=""))
 
-
+# Silos not computed
+affinity_cluster_df2<-affinity_cluster_df
+colnames(affinity_cluster_df2)[2]<-"SubsetCluster_IDs"
+affinity_cluster_df2<-compute_silhouette(affinity_cluster_df2,dist_euclidean) # Change colname to sublu
