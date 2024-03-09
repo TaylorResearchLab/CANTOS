@@ -1,11 +1,21 @@
 compute_silhouette <- function (cluster_df,dist_mat){
-  
+ # library(doParallel)
+  #library(foreach)
+  #library(magrittr)
+  #library(dplyr)
   cluster_df<-cluster_df[order(cluster_df$SubsetCluster_IDs),]
   dist_mat<-as.data.frame(dist_mat)
   dist_mat$Tumor_Name <- rownames(dist_mat)
   cluster_df$silhouette_score<-NA
   
+  #cl <- makeCluster(4, outfile="")
+  #registerDoParallel(cl)
+  
+  
   for (iter in 1:dim(cluster_df)[1]){
+  
+# values<-foreach(iter=1:dim(cluster_df)[1],.combine=rbind) %dopar% {    
+    
     print(iter)
     disease_name <- cluster_df$Tumor_Names[iter]
     cluster_label <- cluster_df$SubsetCluster_IDs[iter]
