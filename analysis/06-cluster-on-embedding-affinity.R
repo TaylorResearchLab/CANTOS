@@ -20,7 +20,7 @@ data_dir <- file.path(root_dir,"data")
 input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
-
+results_dir <- file.path(analysis_dir,"results")
 # Load affinity Cluster
 #load(paste(intermediate_dir,"/affinity_cluster_annotation.RData",sep=""))
 source(paste(util_dir,"/nested_affinity_cluster.R",sep=""))
@@ -319,6 +319,22 @@ save(affinity_cluster_df,file = paste(intermediate_dir,"/affinity_cluster_df.RDa
 save(affinity_cluster_annotation,file = paste(intermediate_dir,"/affinity_cluster_annotation.RData",sep=""))
 
 # Silos not computed
+source("~/Desktop/MTP_Paper/CT-Embedding-Paper/util/compute_silhouette.R")
 affinity_cluster_df2<-affinity_cluster_df
 colnames(affinity_cluster_df2)[2]<-"SubsetCluster_IDs"
 affinity_cluster_df2<-compute_silhouette(affinity_cluster_df2,dist_euclidean) # Change colname to sublu
+save.image(file = "script6_affinitycluster.RData")
+mean_freq_af <- affinity_cluster_df2 %>%dplyr::group_by(SubsetCluster_IDs) %>% dplyr::summarise(mean_silo_score=mean(silhouette_score),cluster_member_count =dplyr::n()) 
+affinity_cluster_df2<- affinity_cluster_df2 %>% dplyr::left_join(mean_freq_af,by="SubsetCluster_IDs")
+
+benchmark_tumors <- c("b cell lymphoma", "neuroblastoma", "triple negative breast cancer",
+                      "unresectable lung carcinoma", "liposarcoma","cancer of the liver",
+                      "smoldering myeloma")
+
+cluster_ind_benchmark_tumor <- affinity_cluster_df2$SubsetCluster_IDs[affinity_cluster_df2$Tumor_Names %in% benchmark_tumors]
+
+display_table_benchmark_af <- affinity_cluster_df2 %>% filter(SubsetCluster_IDs %in% cluster_ind_benchmark_tumor)
+display_table_benchmark_af<- display_table_benchmark_af[order(display_table_benchmark_af$SubsetCluster_IDs),]
+rownames(display_table_benchmark_af)<-NULL
+
+write.csv(display_table_benchmark_af,paste(results_dir,"/display_table_benchmark_embedding_af.csv",sep=""))
