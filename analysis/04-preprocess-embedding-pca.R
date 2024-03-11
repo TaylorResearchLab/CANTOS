@@ -26,6 +26,8 @@ intermediate_dir <- file.path(analysis_dir,"intermediate")
 embedding_df <- read.csv(paste(data_dir,"/disease_embeddings.csv",sep=""))
 embedding_df<-embedding_df[order(embedding_df$Disease),]
 
+embedding_v3_large <- read.csv(paste(data_dir,"/embedding_tumor_names_text-embedding-3-large_embeddings.csv",sep=""))
+colnames(embedding_v3_large)[1]<-"Tumor_Names"
 
 # Read the annotated file
 ct_disease_df <- read.csv(paste(input_dir,"/CT-Aug22-2023-Disease-File - clinical_trial_disease_aug_22_2023.csv",sep=""))
@@ -131,10 +133,17 @@ ff<-rbind(SD = sqrt(eigs),Proportion = eigs/sum(eigs), Cumulative = cumsum(eigs)
 # Check the number of components needed to capture 80% variance at least
 
 print(sum(ff[2,1:135]))
-
 # Select the top 135 PCs
 disease_transform = as.data.frame(-results$x[,1:135])
 
+# PCA for v3 
+results_v3 <- prcomp(embedding_v3_large[,c(-1)], scale = TRUE)
+eigs_v3 <- results_v3$sdev^2
+ff_v3<-rbind(SD = sqrt(eigs_v3),Proportion = eigs_v3/sum(eigs_v3), Cumulative = cumsum(eigs_v3)/sum(eigs_v3))
+# Check the number of components needed to capture 80% variance at least
+print(sum(ff_v3[2,1:177]))
+disease_transform_v3<-as.data.frame(-results_v3$x[,1:176])
 # Save this file "
 write.csv(disease_transform,file =paste(intermediate_dir,"/disease_transform_pca.csv",sep="") )
 save(combined_embedding_df,file = paste(intermediate_dir,"/combined_embedding_df.RData",sep=""))
+write.csv(disease_transform_v3,file =paste(intermediate_dir,"/disease_transform_pca_v3.csv",sep="") )

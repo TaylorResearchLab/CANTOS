@@ -25,6 +25,9 @@ source(paste(util_dir,"/distance_clusters.R",sep=""))
 ct_disease_df <- read.csv(paste(input_dir,"/CT-Aug22-2023-Disease-File - clinical_trial_disease_aug_22_2023.csv",sep=""))
 ct_tumor_df<- ct_disease_df %>% filter(validated_cancer_tumor=="Yes")
 
+
+
+
 # Add NCIT and WHO Tumors 
 # Read NCIT Terms and WHO Terms with embedding and join them to the rest of the embedding list 
 NCIT_Terms <-read.csv(paste(data_dir,"/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv",sep=""))[,1]
@@ -82,6 +85,8 @@ rownames(dissimilarity_matrix_lv)<-df_tumor_names
 colnames(dissimilarity_matrix_lv)<-df_tumor_names
 
 
+
+
 # for (iter in 1:dim(dissimilarity_matrix_lv)[1]){
 #   print(iter)
 #   disease_name <- colnames(dissimilarity_matrix_lv)[iter]
@@ -90,7 +95,7 @@ colnames(dissimilarity_matrix_lv)<-df_tumor_names
 # }
 
 
-cl <- makeCluster(5, outfile="")
+cl <- makeCluster(6, outfile="")
 registerDoParallel(cl)
 
 
@@ -101,6 +106,12 @@ dissimilarity_matrix_lv<-foreach(iter=1:length(df_tumor_names),.combine=rbind) %
 }
 rownames(dissimilarity_matrix_lv) <- df_tumor_names
 colnames(dissimilarity_matrix_lv) <- df_tumor_names
+
+
+
+
+
+
 
 # Jarro Winkler Distance
 dissimilarity_matrix_jw <- as.data.frame(matrix(nrow=length(df_tumor_names),ncol=length(df_tumor_names)))
