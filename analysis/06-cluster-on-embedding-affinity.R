@@ -35,6 +35,14 @@ colnames(disease_transform)[1]<-"Tumor_Name"
 rownames(disease_transform)<-disease_transform$Tumor_Name # Needed for AP Clust
 
 
+embedding_v3_large <- read.csv(paste(data_dir,"/embedding_tumor_names_text-embedding-3-large_embeddings.csv",sep=""))
+colnames(embedding_v3_large)[1]<-"Tumor_Names"
+
+disease_transform_v3<- read.csv(paste(intermediate_dir,"/disease_transform_pca_v3.csv",sep="") )
+disease_transform_v3<-disease_transform_v3[,c(-1)]
+rownames(disease_transform_v3)<-embedding_v3_large$Tumor_Name # Needed for AP Clust
+
+
 # Set Seed
 set.seed(13)
 #affinity cluster
@@ -47,6 +55,20 @@ af_clust_euclidean <- apcluster(simmilarity_euclidean) # 1:24 am - 2:55 am still
 cat("affinity propogation optimal number of clusters:", length(af_clust_euclidean@clusters), "\n")
 
 cat("affinity propogation optimal number of clusters:", length(d.apclus2@clusters), "\n") #1113 clusters 
+
+
+#######V3
+
+dist_euclidean_v3<- dist(disease_transform_v3,method = "euclidean")
+dist_euclidean_v3<-as.matrix(dist_euclidean_v3)
+simmilarity_euclidean_v3<- 1/(1+dist_euclidean_v3)
+af_clust_euclidean_v3 <- apcluster(simmilarity_euclidean_v3)#5:11 pm start
+
+
+####v3
+
+
+
 
 affinity_cluster_df<-as.data.frame(matrix(nrow=1,ncol=2))
 colnames(affinity_cluster_df)<-c("Tumor_Names","Cluster_ID")
