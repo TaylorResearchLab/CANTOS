@@ -23,7 +23,7 @@ intermediate_dir <- file.path(analysis_dir,"intermediate")
 results_dir <- file.path(analysis_dir,"results")
 # Load affinity Cluster
 #load(paste(intermediate_dir,"/affinity_cluster_annotation.RData",sep=""))
-source(paste(util_dir,"/nested_affinity_cluster.R",sep=""))
+#source(paste(util_dir,"/nested_affinity_cluster.R",sep=""))
 source(paste(util_dir,"/cluster_label_assignment.R",sep=""))
 
 
@@ -50,7 +50,7 @@ dist_euclidean<- dist(disease_transform,method = "euclidean")
 dist_euclidean<-as.matrix(dist_euclidean)
 simmilarity_euclidean<- 1/(1+dist_euclidean)
 af_clust_euclidean <- apcluster(simmilarity_euclidean) # 1:24 am - 2:55 am still going....
-cat("affinity propogation optimal number of clusters:", length(af_clust_euclidean@clusters), "\n")
+cat("affinity propogation optimal number of clusters:", length(af_clust_euclidean@clusters), "\n")#3071 clusters
 
 #d.apclus2 <- apcluster(negDistMat(r=2), disease_transform) # 1 hr 28 mins 11:28 pm - 12:08 pm
 #cat("affinity propogation optimal number of clusters:", length(d.apclus2@clusters), "\n") #1113 clusters 
@@ -193,9 +193,18 @@ while(length(large_cluster_labels_v3)>0){
 
 
 #################
+ncit_match_df <- read.csv(paste(intermediate_dir,"/ncit_match_df.csv",sep=""))
+who_match_df <- read.csv(paste(intermediate_dir,"/who_ct_distance_mat.csv",sep=""))
 
+ncit_match_df<-ncit_match_df[,c(-1)]
+who_match_df<-who_match_df[,c(-1)]
 
+affinity_cluster_df<- affinity_cluster_df %>% dplyr::left_join(ncit_match_df,by="Tumor_Names")
+affinity_cluster_df <- affinity_cluster_df %>%dplyr::left_join(who_match_df,by="Tumor_Names")
 
+affinity_cluster_df <- affinity_cluster_df %>% dplyr::mutate(assigned_class = case_when(ncit_distance < WHO_distance ~ NCIT_Matches,
+                                                                                                ncit_distance > WHO_distance ~ WHO_Matches,
+                                                                                                TRUE ~ "Both"))
 
 
 
@@ -203,7 +212,7 @@ while(length(large_cluster_labels_v3)>0){
 
 
 # Cluster voting
-affinity_cluster_nested<- cluster_label_assignment(affinity_cluster_nested)
+affinity_cluster_df<- cluster_label_assignment(affinity_cluster_df)
 
 disease_affinity_cluster_table<- affinity_cluster_nested %>% dplyr::select(Tumor_Names,cluster_label)
 
