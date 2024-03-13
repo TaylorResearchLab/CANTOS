@@ -105,5 +105,5 @@ while(length(large_cluster_labels_v3)>0){
   large_cluster_labels_v3<- cluster_frequency_v3_table$Cluster_ID[which(cluster_frequency_v3_table$Primary_Cluster_Frequency>max_cluster_member)]
   large_cluster_labels_v3<-setdiff(large_cluster_labels_v3, unlist(converge_list_v3))
 }
-
-
+save(affinity_cluster_v3_df,file = paste(intermediate_dir,"/affinity_cluster_v3_df.RData",sep=""))
+#save.image(file = "script6B_affinitycluster_v3.RData")
