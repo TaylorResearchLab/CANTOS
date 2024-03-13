@@ -193,11 +193,13 @@ while(length(large_cluster_labels_v3)>0){
 
 
 #################
-ncit_match_df <- read.csv(paste(intermediate_dir,"/ncit_match_df.csv",sep=""))
-who_match_df <- read.csv(paste(intermediate_dir,"/who_ct_distance_mat.csv",sep=""))
+cl <- makeCluster(6, outfile="")
+registerDoParallel(cl)
 
-ncit_match_df<-ncit_match_df[,c(-1)]
-who_match_df<-who_match_df[,c(-1)]
+
+
+
+
 
 affinity_cluster_df<- affinity_cluster_df %>% dplyr::left_join(ncit_match_df,by="Tumor_Names")
 affinity_cluster_df <- affinity_cluster_df %>%dplyr::left_join(who_match_df,by="Tumor_Names")
@@ -208,44 +210,55 @@ affinity_cluster_df <- affinity_cluster_df %>% dplyr::mutate(assigned_class = ca
 
 
 
+################### END ####################
 
 
-
-# Cluster voting
-affinity_cluster_df<- cluster_label_assignment(affinity_cluster_df)
-
-disease_affinity_cluster_table<- affinity_cluster_nested %>% dplyr::select(Tumor_Names,cluster_label)
-
-# Write
-write.csv(affinity_cluster_nested,paste(intermediate_dir,"/affinity_cluster_nested.csv",sep=""))
-
-save.image(file = "script6_affinitycluster.RData")
-# write files 
-#save(d.apclus2,file = paste(intermediate_dir,"/d.apclus2.RData",sep=""))
-save(affinity_cluster_df,file = paste(intermediate_dir,"/affinity_cluster_df.RData",sep=""))
-save(affinity_cluster_annotation,file = paste(intermediate_dir,"/affinity_cluster_annotation.RData",sep=""))
-
-# Silos not computed
-source("~/Desktop/MTP_Paper/CT-Embedding-Paper/util/compute_silhouette.R")
-affinity_cluster_df2<-affinity_cluster_df
-colnames(affinity_cluster_df2)[2]<-"SubsetCluster_IDs"
-affinity_cluster_df2<-compute_silhouette(affinity_cluster_df2,dist_euclidean) # Change colname to sublu
-save.image(file = "script6_affinitycluster.RData")
-save.image(file = "script6_affinitycluster_v3.RData")
-
-
-
-mean_freq_af <- affinity_cluster_df2 %>%dplyr::group_by(SubsetCluster_IDs) %>% dplyr::summarise(mean_silo_score=mean(silhouette_score),cluster_member_count =dplyr::n()) 
-affinity_cluster_df2<- affinity_cluster_df2 %>% dplyr::left_join(mean_freq_af,by="SubsetCluster_IDs")
-
-benchmark_tumors <- c("b cell lymphoma", "neuroblastoma", "triple negative breast cancer",
-                      "unresectable lung carcinoma", "liposarcoma","cancer of the liver",
-                      "smoldering myeloma")
-
-cluster_ind_benchmark_tumor <- affinity_cluster_df2$SubsetCluster_IDs[affinity_cluster_df2$Tumor_Names %in% benchmark_tumors]
-
-display_table_benchmark_af <- affinity_cluster_df2 %>% filter(SubsetCluster_IDs %in% cluster_ind_benchmark_tumor)
-display_table_benchmark_af<- display_table_benchmark_af[order(display_table_benchmark_af$SubsetCluster_IDs),]
-rownames(display_table_benchmark_af)<-NULL
-
-write.csv(display_table_benchmark_af,paste(results_dir,"/display_table_benchmark_embedding_af.csv",sep=""))
+# # Cluster voting
+# affinity_cluster_df<- cluster_label_assignment(affinity_cluster_df)
+# 
+# disease_affinity_cluster_table<- affinity_cluster_nested %>% dplyr::select(Tumor_Names,cluster_label)
+# 
+# 
+# affinity_cluster_df<-compute_silhouette(affinity_cluster_df,dist_euclidean) 
+# 
+# 
+# mean_freq_af <- affinity_cluster_df%>%dplyr::select(Cluster_ID,silhouette_score)%>%dplyr::group_by(Cluster_ID) %>% dplyr::summarise(mean_silo_score=mean(silhouette_score),cluster_member_count =dplyr::n()) 
+# affinity_cluster_df<- affinity_cluster_df %>% dplyr::left_join(mean_freq_af,by="Cluster_ID")
+# 
+# benchmark_tumors <- c("b cell lymphoma", "neuroblastoma", "triple negative breast cancer",
+#                       "unresectable lung carcinoma", "liposarcoma","cancer of the liver",
+#                       "smoldering myeloma")
+# 
+# cluster_ind_benchmark_tumor <- affinity_cluster_df$Cluster_ID[affinity_cluster_df$Tumor_Names %in% benchmark_tumors]
+# 
+# display_table_benchmark_af <- affinity_cluster_df %>% filter(Cluster_ID %in% cluster_ind_benchmark_tumor)
+# display_table_benchmark_af<- display_table_benchmark_af[order(display_table_benchmark_af$Cluster_ID),]
+# rownames(display_table_benchmark_af)<-NULL
+# 
+# 
+# 
+# 
+# 
+# 
+# # Write
+# write.csv(affinity_cluster_nested,paste(intermediate_dir,"/affinity_cluster_nested.csv",sep=""))
+# 
+# save.image(file = "script6_affinitycluster.RData")
+# # write files 
+# #save(d.apclus2,file = paste(intermediate_dir,"/d.apclus2.RData",sep=""))
+# save(affinity_cluster_df,file = paste(intermediate_dir,"/affinity_cluster_df.RData",sep=""))
+# save(affinity_cluster_annotation,file = paste(intermediate_dir,"/affinity_cluster_annotation.RData",sep=""))
+# 
+# # Silos not computed
+# source("~/Desktop/MTP_Paper/CT-Embedding-Paper/util/compute_silhouette.R")
+# affinity_cluster_df2<-affinity_cluster_df
+# colnames(affinity_cluster_df2)[2]<-"SubsetCluster_IDs"
+# affinity_cluster_df2<-compute_silhouette(affinity_cluster_df2,dist_euclidean) # Change colname to sublu
+# save.image(file = "script6_affinitycluster.RData")
+# save.image(file = "script6_affinitycluster_v3.RData")
+# 
+# 
+# 
+# 
+# 
+# write.csv(display_table_benchmark_af,paste(results_dir,"/display_table_benchmark_embedding_af.csv",sep=""))
