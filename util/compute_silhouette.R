@@ -3,7 +3,7 @@ compute_silhouette <- function (cluster_df,dist_mat){
   #library(foreach)
   #library(magrittr)
   #library(dplyr)
-  cluster_df<-cluster_df[order(cluster_df$SubsetCluster_IDs),]
+  cluster_df<-cluster_df[order(cluster_df$Cluster_ID),]
   dist_mat<-as.data.frame(dist_mat)
   dist_mat$Tumor_Name <- rownames(dist_mat)
   cluster_df$silhouette_score<-NA
@@ -18,8 +18,8 @@ compute_silhouette <- function (cluster_df,dist_mat){
     
     print(iter)
     disease_name <- cluster_df$Tumor_Names[iter]
-    cluster_label <- cluster_df$SubsetCluster_IDs[iter]
-    cluster_member_names <- cluster_df$Tumor_Names[which(cluster_df$SubsetCluster_IDs==cluster_label)]
+    cluster_label <- cluster_df$Cluster_ID[iter]
+    cluster_member_names <- cluster_df$Tumor_Names[which(cluster_df$Cluster_ID==cluster_label)]
       
     subset_dist_mat <- dist_mat %>% dplyr::filter(Tumor_Name %in% cluster_member_names) %>% dplyr::select(any_of(cluster_member_names))
     
@@ -31,8 +31,8 @@ compute_silhouette <- function (cluster_df,dist_mat){
     a=a[c(-delete_self_ind)]
     a=mean(as.matrix(a))
     
-    subset_other_clust <- cluster_df %>% dplyr::filter(SubsetCluster_IDs != cluster_label)
-    subset_other_clust<-subset_other_clust[order(subset_other_clust$SubsetCluster_IDs),]
+    subset_other_clust <- cluster_df %>% dplyr::filter(Cluster_ID != cluster_label)
+    subset_other_clust<-subset_other_clust[order(subset_other_clust$Cluster_ID),]
     
     other_clust_dist <- dist_mat %>% dplyr::filter(Tumor_Name %in% disease_name)
     other_clust_dist<- other_clust_dist[,c(-dim(other_clust_dist)[2])]
@@ -42,7 +42,7 @@ compute_silhouette <- function (cluster_df,dist_mat){
     other_clust_dist$dx<-as.double(other_clust_dist$dx)
     other_clust_dist$Tumor_Names <- rownames(other_clust_dist)
     subset_other_clust <- subset_other_clust %>% dplyr::left_join(other_clust_dist,by="Tumor_Names")
-    d_clust=aggregate( dx ~ SubsetCluster_IDs,subset_other_clust, mean )
+    d_clust=aggregate( dx ~ Cluster_ID,subset_other_clust, mean )
     b= min(d_clust$dx)
     
     silo= (b-a)/max(a,b)

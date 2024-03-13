@@ -108,7 +108,7 @@ while(length(large_cluster_labels)>0){
 }
 
 
-
+save(affinity_cluster_df,file = paste(intermediate_dir,"/affinity_cluster_df.RData",sep=""))
 
 
 
