@@ -56,7 +56,7 @@ registerDoParallel(cl)
 
 CalculateEuclideanDistance <- function(vect1, vect2) sqrt(sum((vect1 - vect2)^2)) 
 
-outer_who_final<-foreach(i = 1:dim(embedding_v3_large)[1], .combine = rbind) %dopar% { #3:34 pm -
+outer_who_final<-foreach(i = 1:dim(embedding_v3_large)[1], .combine = rbind) %dopar% { #Two days
   print(i)
   embedding_pairwise<- as.matrix(rbind(embedding_v3_large[i,],WHO_embedding_df[,2:3073]))
   euclidean_dist <- as.matrix(dist(embedding_pairwise,method = "euclidean"))
@@ -67,7 +67,7 @@ rownames(outer_who_final)<-rownames(embedding_v3_large)
 
 
 
-outer_NCIT_final<-foreach(i = 1:dim(embedding_v3_large)[1], .combine = rbind) %dopar% { #3:34 pm -
+outer_NCIT_final<-foreach(i = 1:dim(embedding_v3_large)[1], .combine = rbind) %dopar% { #2:03 pm Friday
   print(i)
   embedding_pairwise<- as.matrix(rbind(embedding_v3_large[i,],NCIT_embedding_df[,2:3073]))
   euclidean_dist <- as.matrix(dist(embedding_pairwise,method = "euclidean"))
@@ -119,6 +119,15 @@ for (iter in 1: dim(NCIT_match_df)[1]){
 }
 
 
+########
+affinity_cluster_v3_df<- affinity_cluster_v3_df %>% dplyr::left_join(who_match_df,by="Tumor_Names")
+affinity_cluster_v3_df<- affinity_cluster_v3_df %>% dplyr::left_join(NCIT_match_df,by="Tumor_Names")
+
+affinity_cluster_v3_df <- affinity_cluster_v3_df %>% dplyr::mutate(assigned_class = case_when(NCIT_distance < WHO_distance ~ NCIT_Matches,
+                                                                                        NCIT_distance > WHO_distance ~ WHO_Matches,
+                                                                                        TRUE ~ "Both"))
+
+affinity_cluster_v3_df<- cluster_label_assignment(affinity_cluster_v3_df)
 
 
 
