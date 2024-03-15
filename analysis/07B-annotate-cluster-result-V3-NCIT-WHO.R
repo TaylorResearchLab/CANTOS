@@ -78,6 +78,50 @@ rownames(outer_NCIT_final)<-rownames(embedding_v3_large)
 
 stopCluster(cl)
 
+
+
+
+######################
+index_min_who <- as.matrix(apply(outer_who_final, 1, which.min))
+
+who_match_df <- cbind(rownames(outer_who_final))
+
+colnames(who_match_df)<-"Tumor_Names"
+who_match_df <-as.data.frame(who_match_df)
+
+who_match_df$WHO_Matches<- NA
+who_match_df$WHO_distance<-NA
+
+for (iter in 1: dim(who_match_df)[1]){
+  
+  who_match_df$WHO_Matches[iter] <- colnames(outer_who_final)[index_min_who[iter]]
+  who_match_df$WHO_distance[iter]<-outer_who_final[iter,index_min_who[iter]]
+  
+}
+
+
+
+index_min_NCIT <- as.matrix(apply(outer_NCIT_final, 1, which.min))
+
+NCIT_match_df <- cbind(rownames(outer_NCIT_final))
+
+colnames(NCIT_match_df)<-"Tumor_Names"
+NCIT_match_df <-as.data.frame(NCIT_match_df)
+
+NCIT_match_df$NCIT_Matches<- NA
+NCIT_match_df$NCIT_distance<-NA
+
+for (iter in 1: dim(NCIT_match_df)[1]){
+  
+  NCIT_match_df$NCIT_Matches[iter] <- colnames(outer_NCIT_final)[index_min_NCIT[iter]]
+  NCIT_match_df$NCIT_distance[iter]<-outer_NCIT_final[iter,index_min_NCIT[iter]]
+  
+}
+
+
+
+
+
 save.image("script-7B.RData")
 
 
