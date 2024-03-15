@@ -65,6 +65,17 @@ outer_who_final<-foreach(i = 1:dim(embedding_v3_large)[1], .combine = rbind) %do
 colnames(outer_who_final)<-(WHO_embedding_df$Disease)
 rownames(outer_who_final)<-rownames(embedding_v3_large)
 
+
+
+outer_NCIT_final<-foreach(i = 1:dim(embedding_v3_large)[1], .combine = rbind) %dopar% { #3:34 pm -
+  print(i)
+  embedding_pairwise<- as.matrix(rbind(embedding_v3_large[i,],NCIT_embedding_df[,2:3073]))
+  euclidean_dist <- as.matrix(dist(embedding_pairwise,method = "euclidean"))
+  d<-as.double(euclidean_dist[1,c(-1)])
+}
+colnames(outer_NCIT_final)<-(NCIT_embedding_df$Disease)
+rownames(outer_NCIT_final)<-rownames(embedding_v3_large)
+
 stopCluster(cl)
 
 save.image("script-7B.RData")
