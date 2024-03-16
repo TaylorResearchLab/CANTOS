@@ -125,7 +125,8 @@ affinity_cluster_v3_df<- affinity_cluster_v3_df %>% dplyr::left_join(NCIT_match_
 
 affinity_cluster_v3_df <- affinity_cluster_v3_df %>% dplyr::mutate(assigned_class = case_when(NCIT_distance < WHO_distance ~ NCIT_Matches,
                                                                                         NCIT_distance > WHO_distance ~ WHO_Matches,
-                                                                                        TRUE ~ "Both"))
+                                                                                        NCIT_distance==WHO_distance ~ WHO_Matches,
+                                                                                        TRUE~NA))
 
 affinity_cluster_v3_df<- cluster_label_assignment(affinity_cluster_v3_df)
 
