@@ -123,7 +123,7 @@ affinity_cluster_df <- affinity_cluster_df %>% plyr::mutate(assigned_class = cas
 affinity_cluster_df<- cluster_label_assignment(affinity_cluster_df)
 
 
-write.csv(affinity_cluster_df,"affinity_cluster_assignment.csv")
+write.csv(affinity_cluster_df,paste(intermediate_dir,"/affinity_cluster_ADA2_df.csv",sep=""))
 
 
 
