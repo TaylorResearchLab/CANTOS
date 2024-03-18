@@ -48,7 +48,7 @@ affinity_cluster_hema_V3_df <- affinity_cluster_V3_df %>% dplyr::filter(Cluster_
 
 
 #### ISOLATION
-affinity_cluster_outlier<-affinity_cluster_hema_df%>%dplyr::select(Tumor_Names,Cluster_ID)
+affinity_cluster_outlier<-affinity_cluster_hema_ADA2_df%>%dplyr::select(Tumor_Names,Cluster_ID)
 
 disease_transform<- read.csv(paste(intermediate_dir,"/disease_transform_pca.csv",sep="") )
 colnames(disease_transform)[1]<-"Tumor_Names"
