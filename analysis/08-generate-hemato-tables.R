@@ -26,8 +26,16 @@ source(paste(util_dir,"/cluster_label_assignment.R",sep=""))
 
 
 # 
-load(paste(intermediate_dir,"/affinity_cluster_df.RData",sep=""))
+#load(paste(intermediate_dir,"/affinity_cluster_df.RData",sep=""))
+affinity_cluster_ADA2_df <- read.csv(paste(intermediate_dir,"/affinity_cluster_ADA2_df.csv",sep=""))
+affinity_cluster_V3_df <- read.csv(paste(intermediate_dir,"/affinity_cluster_v3_df.csv",sep=""))
+
 load(paste(intermediate_dir,"/combined_embedding_df.RData",sep=""))
+
+
+
+
+
 NCIT_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv",sep=""))
 WHO_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/WHO_Only_terms_text-embedding-ada-002_embeddings.csv",sep=""))
 NCIT_embedding_df<-NCIT_embedding_df[c(-1),] # Remove the header (column name) embedding
