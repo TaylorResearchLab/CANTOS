@@ -53,21 +53,18 @@ for(iter in 1:dim(outlier_cluster_ada2)[1]){
   
   cluster_subset<-cluster_subset%>%dplyr::select(Tumor_Names,Cluster_ID,assigned_class,suggested_cluster_label)
   
-  for(iter_subset in 1:dim(cluster_subset)[1]){
-      cluster_subset$suggested_cluster_label[iter_subset]<-cluster_subset$assigned_class[iter_subset]
-  }
-  
-  table_frequency_assigned_class<- as.data.frame(table(cluster_subset$assigned_class))
+  table_frequency_assigned_class<- as.data.frame(table(cluster_subset$Cluster_ID))
   table_frequency_assigned_class$Var1<-as.character(table_frequency_assigned_class$Var1)
   high_frequency_assigned_class<- table_frequency_assigned_class$Var1[which(table_frequency_assigned_class$Freq>1)]
   
-  if(length(high_frequency_assigned_class)>0){
-    for(iter_high_frequency in 1:length(high_frequency_assigned_class)){
-      ind_matches_sub <- which(cluster_subset$assigned_class==high_frequency_assigned_class[iter_high_frequency]) 
-      cluster_subset$Cluster_ID[ind_matches_sub]<-cluster_subset$Cluster_ID[ind_matches_sub[1]]
-      cluster_subset$suggested_cluster_label[ind_matches_sub]<-cluster_subset$suggested_cluster_label[ind_matches_sub[1]]
-    }
+  
+  
+  for(iter_subset in 1:dim(cluster_subset)[1]){
+     if(!(cluster_subset$Cluster_ID[iter_subset] %in% high_frequency_assigned_class)){
+      cluster_subset$suggested_cluster_label[iter_subset]<-cluster_subset$assigned_class[iter_subset]
+     }
   }
+
   affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_reassigned_df %>% rows_update(cluster_subset,by="Tumor_Names")
 }
 
@@ -75,13 +72,9 @@ cluster_labels<-unique(affinity_cluster_ADA2_reassigned_df$Cluster_ID)
 cluster_labels<- as.data.frame(cbind(cluster_labels,c(1:length(cluster_labels))))
 colnames(cluster_labels)<-c("Cluster_ID","updated_ID")
 affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_reassigned_df %>% dplyr::left_join(cluster_labels,by="Cluster_ID")
-for(iter in 1:length(cluster_labels)){
-  ind_location_label_ADA2 <- which(affinity_cluster_ADA2_reassigned_df$Cluster_ID==cluster_labels[iter])
-  affinity_cluster_ADA2_reassigned_df$Cluster_ID[ind_location_label_ADA2]<-iter
-}
+affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_reassigned_df[,c(1,5,3,4,2)]
 
-
-
+affinity_cluster_ADA2_reassigned_df$updated_ID<-as.numeric(affinity_cluster_ADA2_reassigned_df$updated_ID)
 
 
 
