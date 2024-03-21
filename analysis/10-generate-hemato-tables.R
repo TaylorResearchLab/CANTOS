@@ -25,9 +25,11 @@ intermediate_dir <- file.path(analysis_dir,"intermediate")
 affinity_cluster_ADA2_df <- read.csv(paste(intermediate_dir,"/affinity_cluster_ADA2_df.csv",sep=""))
 affinity_cluster_V3_df <- read.csv(paste(intermediate_dir,"/affinity_cluster_v3_df.csv",sep=""))
 
-affinity_cluster_ADA2_df<-affinity_cluster_ADA2_df[,c(-1)]
-affinity_cluster_V3_df<-affinity_cluster_V3_df[,c(-1)]
+affinity_cluster_ADA2_df<-affinity_cluster_ADA2_df[,c(-1,-6)]
+affinity_cluster_V3_df<-affinity_cluster_V3_df[,c(-1,-6)]
 
+colnames(affinity_cluster_ADA2_df)[2]<-"Cluster_ID"
+colnames(affinity_cluster_V3_df)[2]<-"Cluster_ID"
 
 ###### Lymphoma Luek analysis
 
@@ -43,9 +45,6 @@ affinity_cluster_hema_V3_df <- affinity_cluster_V3_df %>% dplyr::filter(str_dete
 hema_label <- unique(affinity_cluster_hema_V3_df$Cluster_ID)
 affinity_cluster_hema_V3_df <- affinity_cluster_V3_df %>% dplyr::filter(Cluster_ID %in% hema_label )
 
-
-affinity_cluster_hema_ADA2_df_short <- affinity_cluster_hema_ADA2_df %>% dplyr::select(Tumor_Names,Cluster_ID,Isolation_Outlier,LOF_Outlier,assigned_class,suggested_cluster_label)
-affinity_cluster_hema_V3_df_short <- affinity_cluster_hema_V3_df %>% dplyr::select(Tumor_Names,Cluster_ID,Isolation_Outlier,LOF_Outlier,assigned_class,suggested_cluster_label)
 
 
 write.csv(affinity_cluster_hema_ADA2_df,paste(intermediate_dir,"/hemato_tumor_ADA2.csv",sep=""))
