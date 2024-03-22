@@ -37,13 +37,13 @@ lymphoma_leukemia_strings <- c("leukemia", "lymphoma", "leukemias", "lymphomas",
                                "leuk","hematologic tumors","hemato")
 
 affinity_cluster_hema_ADA2_df <- affinity_cluster_ADA2_df %>% dplyr::filter(str_detect(Tumor_Names,paste(lymphoma_leukemia_strings, collapse = "|")))
-hema_label <- unique(affinity_cluster_hema_ADA2_df$Cluster_ID)
-affinity_cluster_hema_ADA2_df <- affinity_cluster_ADA2_df %>% dplyr::filter(Cluster_ID %in% hema_label )
+hema_label_ADA2 <- unique(affinity_cluster_hema_ADA2_df$Cluster_ID)
+affinity_cluster_hema_ADA2_df <- affinity_cluster_ADA2_df %>% dplyr::filter(Cluster_ID %in% hema_label_ADA2 )
 
 
 affinity_cluster_hema_V3_df <- affinity_cluster_V3_df %>% dplyr::filter(str_detect(Tumor_Names,paste(lymphoma_leukemia_strings, collapse = "|")))
-hema_label <- unique(affinity_cluster_hema_V3_df$Cluster_ID)
-affinity_cluster_hema_V3_df <- affinity_cluster_V3_df %>% dplyr::filter(Cluster_ID %in% hema_label )
+hema_label_V3 <- unique(affinity_cluster_hema_V3_df$Cluster_ID)
+affinity_cluster_hema_V3_df <- affinity_cluster_V3_df %>% dplyr::filter(Cluster_ID %in% hema_label_V3 )
 
 
 
