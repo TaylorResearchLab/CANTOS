@@ -143,6 +143,7 @@ ff_v3<-rbind(SD = sqrt(eigs_v3),Proportion = eigs_v3/sum(eigs_v3), Cumulative = 
 # Check the number of components needed to capture 80% variance at least
 print(sum(ff_v3[2,1:177]))
 disease_transform_v3<-as.data.frame(-results_v3$x[,1:176])
+rownames(disease_transform_v3)<-embedding_v3_large$Tumor_Names
 # Save this file "
 write.csv(disease_transform,file =paste(intermediate_dir,"/disease_transform_pca.csv",sep="") )
 save(combined_embedding_df,file = paste(intermediate_dir,"/combined_embedding_df.RData",sep=""))
