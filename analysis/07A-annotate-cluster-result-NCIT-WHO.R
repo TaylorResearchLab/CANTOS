@@ -116,10 +116,10 @@ for (iter in 1: dim(NCIT_match_df)[1]){
 affinity_cluster_df<- affinity_cluster_df %>% dplyr::left_join(who_match_df,by="Tumor_Names")
 affinity_cluster_df<- affinity_cluster_df %>% dplyr::left_join(NCIT_match_df,by="Tumor_Names")
 
-affinity_cluster_df <- affinity_cluster_df %>% plyr::mutate(assigned_class = case_when(NCIT_distance < WHO_distance ~ NCIT_Matches,
-                                                                                       NCIT_distance > WHO_distance ~ WHO_Matches,
-                                                                                       NCIT_distance==WHO_distance ~ WHO_Matches,
-                                                                                       TRUE~NA))
+# affinity_cluster_df <- affinity_cluster_df %>% plyr::mutate(assigned_class = case_when(NCIT_distance < WHO_distance ~ NCIT_Matches,
+#                                                                                        NCIT_distance > WHO_distance ~ WHO_Matches,
+#                                                                                        NCIT_distance==WHO_distance ~ WHO_Matches,
+#                                                                                        TRUE~NA))
 affinity_cluster_df<- cluster_label_assignment(affinity_cluster_df)
 
 
