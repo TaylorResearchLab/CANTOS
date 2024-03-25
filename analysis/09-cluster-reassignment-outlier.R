@@ -26,16 +26,16 @@ affinity_cluster_ADA2_df<-affinity_cluster_ADA2_df[,c(-1)]
 affinity_cluster_v3_df<- affinity_cluster_v3_df[,c(-1)]
 
 
-affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_df %>% dplyr::select(Tumor_Names,Cluster_ID,assigned_class,suggested_cluster_label)
-affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_df %>% dplyr::select(Tumor_Names,Cluster_ID,assigned_class,suggested_cluster_label)
+affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_df %>% dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,NCIT_Matches,who_cluster_label,ncit_cluster_label)
+affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_df %>% dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,NCIT_Matches,who_cluster_label,ncit_cluster_label)
 
 # Find all the tumors with outlier
 # outlier_tumor_ada2 <- affinity_cluster_ADA2_df%>%filter(Isolation_Outlier=="Yes" | LOF_Outlier=="Yes")%>%dplyr::select(Tumor_Names)
 # outlier_tumor_v3 <- affinity_cluster_v3_df%>%filter(Isolation_Outlier=="Yes" | LOF_Outlier=="Yes")%>%dplyr::select(Tumor_Names)
 
 
-outlier_cluster_ada2 <- affinity_cluster_ADA2_df%>%filter(Isolation_Outlier=="Yes" | LOF_Outlier=="Yes")%>%dplyr::select(Cluster_ID)%>%distinct()
-outlier_cluster_v3 <- affinity_cluster_v3_df%>%filter(Isolation_Outlier=="Yes" | LOF_Outlier=="Yes")%>%dplyr::select(Cluster_ID)%>%distinct()
+outlier_cluster_ada2 <- affinity_cluster_ADA2_df%>%filter(Isolation_Outlier=="Yes" & LOF_Outlier=="Yes")%>%dplyr::select(Cluster_ID)%>%distinct()
+outlier_cluster_v3 <- affinity_cluster_v3_df%>%filter(Isolation_Outlier=="Yes" & LOF_Outlier=="Yes")%>%dplyr::select(Cluster_ID)%>%distinct()
 
 
 
@@ -45,29 +45,35 @@ for(iter in 1:dim(outlier_cluster_ada2)[1]){
   
   cluster_subset <- affinity_cluster_ADA2_df%>%filter(Cluster_ID==current_cluster_id)
   
-  ind_outliers<- which(cluster_subset$Isolation_Outlier=="Yes" | cluster_subset$LOF_Outlier=="Yes")
+  ind_outliers<- which(cluster_subset$Isolation_Outlier=="Yes" & cluster_subset$LOF_Outlier=="Yes")
   
   new_suffix_cluster_id <-1:length(ind_outliers)
   new_cluster_id<- paste(current_cluster_id,new_suffix_cluster_id,sep=";")
   cluster_subset$Cluster_ID[ind_outliers]<-new_cluster_id
   
-  cluster_subset<-cluster_subset%>%dplyr::select(Tumor_Names,Cluster_ID,assigned_class,suggested_cluster_label)
+  cluster_subset<-cluster_subset%>%dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,NCIT_Matches,who_cluster_label,ncit_cluster_label)
   
   table_frequency_cluster_id<- as.data.frame(table(cluster_subset$Cluster_ID))
   table_frequency_cluster_id$Var1<-as.character(table_frequency_cluster_id$Var1)
   high_frequency_cluster_id<- table_frequency_cluster_id$Var1[which(table_frequency_cluster_id$Freq>1)]
   
-  low_frequency_cluster_id<-table_frequency_cluster_id$Var1[which(table_frequency_cluster_id$Freq==1)]
-  low_frequency_assigned_class <- cluster_subset %>% filter(Cluster_ID %in% low_frequency_cluster_id) %>% dplyr::select(assigned_class)
+  #low_frequency_cluster_id<-table_frequency_cluster_id$Var1[which(table_frequency_cluster_id$Freq==1)]
+  #low_frequency_assigned_class <- cluster_subset %>% filter(Cluster_ID %in% low_frequency_cluster_id) %>% dplyr::select(assigned_class)
   
   for(iter_subset in 1:dim(cluster_subset)[1]){
     if(!(cluster_subset$Cluster_ID[iter_subset] %in% high_frequency_cluster_id)){
-      cluster_subset$suggested_cluster_label[iter_subset]<-cluster_subset$assigned_class[iter_subset]
+      cluster_subset$who_cluster_label[iter_subset]<-cluster_subset$WHO_Matches[iter_subset]
+      cluster_subset$ncit_cluster_label[iter_subset]<-cluster_subset$NCIT_Matches[iter_subset]
+      
     }else{
       indx_ammend<- which(cluster_subset$Cluster_ID==cluster_subset$Cluster_ID[iter_subset])
-      all_assigned_class<- unique(cluster_subset$assigned_class[indx_ammend])
-      all_assigned_class<-paste(all_assigned_class,collapse=";")
-      cluster_subset$suggested_cluster_label[iter_subset]<-all_assigned_class
+      all_who_class<- unique(cluster_subset$WHO_Matches[indx_ammend])
+      all_who_class<-paste(all_who_class,collapse=";")
+      cluster_subset$who_cluster_label[iter_subset]<-all_who_class
+      
+      all_ncit_class<- unique(cluster_subset$NCIT_Matches[indx_ammend])
+      all_ncit_class<-paste(all_ncit_class,collapse=";")
+      cluster_subset$ncit_cluster_label[iter_subset]<-all_ncit_class
     }
   }
   
@@ -80,7 +86,7 @@ cluster_labels<-unique(affinity_cluster_ADA2_reassigned_df$Cluster_ID)
 cluster_labels<- as.data.frame(cbind(cluster_labels,c(1:length(cluster_labels))))
 colnames(cluster_labels)<-c("Cluster_ID","updated_ID")
 affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_reassigned_df %>% dplyr::left_join(cluster_labels,by="Cluster_ID")
-affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_reassigned_df[,c(1,5,3,4,2)]
+affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_reassigned_df[,c(1,7,3,4,5,6,2)]
 
 affinity_cluster_ADA2_reassigned_df$updated_ID<-as.numeric(affinity_cluster_ADA2_reassigned_df$updated_ID)
 
@@ -93,29 +99,35 @@ for(iter in 1:dim(outlier_cluster_v3)[1]){
   
   cluster_subset <- affinity_cluster_v3_df%>%filter(Cluster_ID==current_cluster_id)
   
-  ind_outliers<- which(cluster_subset$Isolation_Outlier=="Yes" | cluster_subset$LOF_Outlier=="Yes")
+  ind_outliers<- which(cluster_subset$Isolation_Outlier=="Yes" & cluster_subset$LOF_Outlier=="Yes")
   
   new_suffix_cluster_id <-1:length(ind_outliers)
   new_cluster_id<- paste(current_cluster_id,new_suffix_cluster_id,sep=";")
   cluster_subset$Cluster_ID[ind_outliers]<-new_cluster_id
   
-  cluster_subset<-cluster_subset%>%dplyr::select(Tumor_Names,Cluster_ID,assigned_class,suggested_cluster_label)
+  cluster_subset<-cluster_subset%>%dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,NCIT_Matches,who_cluster_label,ncit_cluster_label)
   
   table_frequency_cluster_id<- as.data.frame(table(cluster_subset$Cluster_ID))
   table_frequency_cluster_id$Var1<-as.character(table_frequency_cluster_id$Var1)
   high_frequency_cluster_id<- table_frequency_cluster_id$Var1[which(table_frequency_cluster_id$Freq>1)]
   
-  low_frequency_cluster_id<-table_frequency_cluster_id$Var1[which(table_frequency_cluster_id$Freq==1)]
-  low_frequency_assigned_class <- cluster_subset %>% filter(Cluster_ID %in% low_frequency_cluster_id) %>% dplyr::select(assigned_class)
+  #low_frequency_cluster_id<-table_frequency_cluster_id$Var1[which(table_frequency_cluster_id$Freq==1)]
+  #low_frequency_assigned_class <- cluster_subset %>% filter(Cluster_ID %in% low_frequency_cluster_id) %>% dplyr::select(assigned_class)
 
-  for(iter_subset in 1:dim(cluster_subset)[1]){
+ for(iter_subset in 1:dim(cluster_subset)[1]){
     if(!(cluster_subset$Cluster_ID[iter_subset] %in% high_frequency_cluster_id)){
-      cluster_subset$suggested_cluster_label[iter_subset]<-cluster_subset$assigned_class[iter_subset]
+      cluster_subset$who_cluster_label[iter_subset]<-cluster_subset$WHO_Matches[iter_subset]
+      cluster_subset$ncit_cluster_label[iter_subset]<-cluster_subset$NCIT_Matches[iter_subset]
+      
     }else{
       indx_ammend<- which(cluster_subset$Cluster_ID==cluster_subset$Cluster_ID[iter_subset])
-      all_assigned_class<- unique(cluster_subset$assigned_class[indx_ammend])
-      all_assigned_class<-paste(all_assigned_class,collapse=";")
-      cluster_subset$suggested_cluster_label[iter_subset]<-all_assigned_class
+      all_who_class<- unique(cluster_subset$WHO_Matches[indx_ammend])
+      all_who_class<-paste(all_who_class,collapse=";")
+      cluster_subset$who_cluster_label[iter_subset]<-all_who_class
+      
+      all_ncit_class<- unique(cluster_subset$NCIT_Matches[indx_ammend])
+      all_ncit_class<-paste(all_ncit_class,collapse=";")
+      cluster_subset$ncit_cluster_label[iter_subset]<-all_ncit_class
     }
   }
   
@@ -126,7 +138,7 @@ cluster_labels<-unique(affinity_cluster_v3_reassigned_df$Cluster_ID)
 cluster_labels<- as.data.frame(cbind(cluster_labels,c(1:length(cluster_labels))))
 colnames(cluster_labels)<-c("Cluster_ID","updated_ID")
 affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_reassigned_df %>% dplyr::left_join(cluster_labels,by="Cluster_ID")
-affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_reassigned_df[,c(1,5,3,4,2)]
+affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_reassigned_df[,c(1,7,3,4,5,6,2)]
 
 affinity_cluster_v3_reassigned_df$updated_ID<-as.numeric(affinity_cluster_v3_reassigned_df$updated_ID)
 
