@@ -12,6 +12,8 @@ suppressPackageStartupMessages({
   library(readxl)
   library(doParallel)
   library(foreach)
+  library(isotree)
+  library(dbscan)
 })
 
 # Set the directories
@@ -39,7 +41,7 @@ rownames(disease_transform_ADA2)<-disease_transform_ADA2$Tumor_Names
 
 disease_transform_V3<- read.csv(paste(intermediate_dir,"/disease_transform_pca_v3.csv",sep="") )
 colnames(disease_transform_V3)[1]<-"Tumor_Names"
-rownames(disease_transform_V3)<-disease_transform_ADA2$Tumor_Names 
+rownames(disease_transform_V3)<-disease_transform_V3$Tumor_Names 
 
 
 # Compute isolation forest
@@ -97,9 +99,8 @@ affinity_cluster_ADA2_df<- affinity_cluster_ADA2_df %>% dplyr::mutate(LOF_Outlie
 
 
 # Compute isolation forest
-set.seed(13)
 
-embedding_V3<-affinity_cluster_v3_df %>% dplyr::left_join(disease_transform_ADA2,by="Tumor_Names")
+embedding_V3<-affinity_cluster_v3_df %>% dplyr::left_join(disease_transform_V3,by="Tumor_Names")
 affinity_cluster_v3_df$isolation_outlier_score<-NA
 
 cluster_labels_V3 <- unique(embedding_V3$Cluster_ID)
