@@ -144,5 +144,5 @@ affinity_cluster_v3_reassigned_df$updated_ID<-as.numeric(affinity_cluster_v3_rea
 
 #####
 write.csv(affinity_cluster_ADA2_reassigned_df,paste(intermediate_dir,"/affinity_cluster_ADA2_reassigned_df.csv",sep=""))
-write.csv(affinity_cluster_v3_reassigned_df,paste(intermediate_dir,"/affinity_cluster_ADA2_reassigned_dfcsv",sep=""))
+write.csv(affinity_cluster_v3_reassigned_df,paste(intermediate_dir,"/affinity_cluster_v3_reassigned_df.csv",sep=""))
 
