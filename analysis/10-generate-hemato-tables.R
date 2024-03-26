@@ -25,8 +25,8 @@ intermediate_dir <- file.path(analysis_dir,"intermediate")
 affinity_cluster_ADA2_df <- read.csv(paste(intermediate_dir,"/affinity_cluster_ADA2_df.csv",sep=""))
 affinity_cluster_V3_df <- read.csv(paste(intermediate_dir,"/affinity_cluster_v3_df.csv",sep=""))
 
-affinity_cluster_ADA2_df<-affinity_cluster_ADA2_df[,c(-1,-6)]
-affinity_cluster_V3_df<-affinity_cluster_V3_df[,c(-1,-6)]
+affinity_cluster_ADA2_df<-affinity_cluster_ADA2_df[,c(-1,-4,-5,-8)]
+affinity_cluster_V3_df<-affinity_cluster_V3_df[,c(-1,-4,-5,-8)]
 
 colnames(affinity_cluster_ADA2_df)[2]<-"Cluster_ID"
 colnames(affinity_cluster_V3_df)[2]<-"Cluster_ID"
