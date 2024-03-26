@@ -34,8 +34,7 @@ affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_df %>% dplyr::select(Tumo
 # outlier_tumor_v3 <- affinity_cluster_v3_df%>%filter(Isolation_Outlier=="Yes" | LOF_Outlier=="Yes")%>%dplyr::select(Tumor_Names)
 
 
-outlier_cluster_ada2 <- affinity_cluster_ADA2_df%>%filter(Isolation_Outlier=="Yes" & LOF_Outlier=="Yes")%>%dplyr::select(Cluster_ID)%>%distinct()
-outlier_cluster_v3 <- affinity_cluster_v3_df%>%filter(Isolation_Outlier=="Yes" & LOF_Outlier=="Yes")%>%dplyr::select(Cluster_ID)%>%distinct()
+outlier_cluster_ada2 <- affinity_cluster_ADA2_df%>%filter(Isolation_Outlier=="Yes" | LOF_Outlier=="Yes")%>%dplyr::select(Cluster_ID)%>%distinct()
 
 
 
@@ -45,7 +44,7 @@ for(iter in 1:dim(outlier_cluster_ada2)[1]){
   
   cluster_subset <- affinity_cluster_ADA2_df%>%filter(Cluster_ID==current_cluster_id)
   
-  ind_outliers<- which(cluster_subset$Isolation_Outlier=="Yes" & cluster_subset$LOF_Outlier=="Yes")
+  ind_outliers<- which(cluster_subset$Isolation_Outlier=="Yes" | cluster_subset$LOF_Outlier=="Yes")
   
   new_suffix_cluster_id <-1:length(ind_outliers)
   new_cluster_id<- paste(current_cluster_id,new_suffix_cluster_id,sep=";")
@@ -93,13 +92,14 @@ affinity_cluster_ADA2_reassigned_df$updated_ID<-as.numeric(affinity_cluster_ADA2
 
 #########
 
+outlier_cluster_v3 <- affinity_cluster_v3_df%>%filter(Isolation_Outlier=="Yes" | LOF_Outlier=="Yes")%>%dplyr::select(Cluster_ID)%>%distinct()
 
 for(iter in 1:dim(outlier_cluster_v3)[1]){
   current_cluster_id <- outlier_cluster_v3$Cluster_ID[iter]
   
   cluster_subset <- affinity_cluster_v3_df%>%filter(Cluster_ID==current_cluster_id)
   
-  ind_outliers<- which(cluster_subset$Isolation_Outlier=="Yes" & cluster_subset$LOF_Outlier=="Yes")
+  ind_outliers<- which(cluster_subset$Isolation_Outlier=="Yes" | cluster_subset$LOF_Outlier=="Yes")
   
   new_suffix_cluster_id <-1:length(ind_outliers)
   new_cluster_id<- paste(current_cluster_id,new_suffix_cluster_id,sep=";")
