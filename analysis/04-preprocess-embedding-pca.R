@@ -29,6 +29,13 @@ embedding_df<-embedding_df[order(embedding_df$Disease),]
 embedding_v3_large <- read.csv(paste(data_dir,"/embedding_tumor_names_text-embedding-3-large_embeddings.csv",sep=""))
 colnames(embedding_v3_large)[1]<-"Tumor_Names"
 
+missing_v3_tumors <- read.csv(paste(data_dir,"/missing_V3_tumors.csv",sep=""))
+colnames(missing_v3_tumors)[1]<-"Tumor_Names"
+
+embedding_v3_large<-rbind(embedding_v3_large,missing_v3_tumors)
+
+
+
 # Read the annotated file
 ct_disease_df <- read.csv(paste(input_dir,"/CT-Aug22-2023-Disease-File - clinical_trial_disease_aug_22_2023.csv",sep=""))
 ct_tumor_df<- ct_disease_df %>% filter(validated_cancer_tumor=="Yes") %>%dplyr::select(diseases)
