@@ -23,7 +23,7 @@ analysis_dir <- file.path(root_dir,"analysis")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
 results_dir <- file.path(analysis_dir,"results")
 
-
+source(paste(util_dir,"/run_affinity_clustering.R",sep=""))
 
 
 disease_transform_v3<- read.csv(paste(intermediate_dir,"/disease_transform_pca_v3.csv",sep="") )
@@ -71,7 +71,7 @@ max_cluster_member <- max(cluster_frequency_v3_table$Primary_Cluster_Frequency[i
 large_cluster_labels_v3<- cluster_frequency_v3_table$Cluster_ID[which(cluster_frequency_v3_table$Primary_Cluster_Frequency>max_cluster_member)]
 
 converge_list_v3<-list()
-disease_transform_v3$Tumor_Names<-rownames(disease_transform_v3)
+
 while(length(large_cluster_labels_v3)>0){
   print(length(large_cluster_labels_v3))
   for(iter in 1:length(large_cluster_labels_v3)){
@@ -83,7 +83,7 @@ while(length(large_cluster_labels_v3)>0){
     rownames(subset_embedding_v3_df)<-subset_embedding_v3_df$Tumor_Names
     subset_embedding_v3_df<-subset_embedding_v3_df[,c(-1)]
     
-    result_run_v3_aff<-run_affinity_clustering(Clusters_Names,subset_embedding_v3_df)
+    result_run_v3_aff<-run_affinity_clustering(Clusters_Names,subset_embedding_v3_df[,c(-1)])
     
     flag_converge_v3 <- result_run_v3_aff[[1]]
     subset_affinity_v3_df<-result_run_v3_aff[[2]]
@@ -106,4 +106,4 @@ while(length(large_cluster_labels_v3)>0){
   large_cluster_labels_v3<-setdiff(large_cluster_labels_v3, unlist(converge_list_v3))
 }
 save(affinity_cluster_v3_df,file = paste(intermediate_dir,"/affinity_cluster_v3_df.RData",sep=""))
-#save.image(file = "script6B_affinitycluster_v3.RData")
+save.image(file = "script6B_affinitycluster_v3.RData")
