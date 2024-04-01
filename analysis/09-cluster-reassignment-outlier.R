@@ -26,8 +26,8 @@ affinity_cluster_ADA2_df<-affinity_cluster_ADA2_df[,c(-1)]
 affinity_cluster_v3_df<- affinity_cluster_v3_df[,c(-1)]
 
 
-affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_df %>% dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,NCIT_Matches,who_cluster_label,ncit_cluster_label)
-affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_df %>% dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,NCIT_Matches,who_cluster_label,ncit_cluster_label)
+affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_df %>% dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,WHO_distance,NCIT_Matches,NCIT_distance,who_cluster_label,ncit_cluster_label)
+affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_df %>% dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,WHO_distance,NCIT_Matches,NCIT_distance,who_cluster_label,ncit_cluster_label)
 
 # Find all the tumors with outlier
 # outlier_tumor_ada2 <- affinity_cluster_ADA2_df%>%filter(Isolation_Outlier=="Yes" | LOF_Outlier=="Yes")%>%dplyr::select(Tumor_Names)
@@ -50,7 +50,7 @@ for(iter in 1:dim(outlier_cluster_ada2)[1]){
   new_cluster_id<- paste(current_cluster_id,new_suffix_cluster_id,sep=";")
   cluster_subset$Cluster_ID[ind_outliers]<-new_cluster_id
   
-  cluster_subset<-cluster_subset%>%dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,NCIT_Matches,who_cluster_label,ncit_cluster_label)
+  cluster_subset<-cluster_subset%>%dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,WHO_distance,NCIT_Matches,NCIT_distance,who_cluster_label,ncit_cluster_label)
   
   table_frequency_cluster_id<- as.data.frame(table(cluster_subset$Cluster_ID))
   table_frequency_cluster_id$Var1<-as.character(table_frequency_cluster_id$Var1)
@@ -85,7 +85,7 @@ cluster_labels<-unique(affinity_cluster_ADA2_reassigned_df$Cluster_ID)
 cluster_labels<- as.data.frame(cbind(cluster_labels,c(1:length(cluster_labels))))
 colnames(cluster_labels)<-c("Cluster_ID","updated_ID")
 affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_reassigned_df %>% dplyr::left_join(cluster_labels,by="Cluster_ID")
-affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_reassigned_df[,c(1,7,3,4,5,6,2)]
+affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_reassigned_df[,c(1,9,3:8,2)]
 
 affinity_cluster_ADA2_reassigned_df$updated_ID<-as.numeric(affinity_cluster_ADA2_reassigned_df$updated_ID)
 
@@ -105,7 +105,7 @@ for(iter in 1:dim(outlier_cluster_v3)[1]){
   new_cluster_id<- paste(current_cluster_id,new_suffix_cluster_id,sep=";")
   cluster_subset$Cluster_ID[ind_outliers]<-new_cluster_id
   
-  cluster_subset<-cluster_subset%>%dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,NCIT_Matches,who_cluster_label,ncit_cluster_label)
+  cluster_subset<-cluster_subset%>%dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,WHO_distance,NCIT_Matches,NCIT_distance,who_cluster_label,ncit_cluster_label)
   
   table_frequency_cluster_id<- as.data.frame(table(cluster_subset$Cluster_ID))
   table_frequency_cluster_id$Var1<-as.character(table_frequency_cluster_id$Var1)
@@ -138,7 +138,7 @@ cluster_labels<-unique(affinity_cluster_v3_reassigned_df$Cluster_ID)
 cluster_labels<- as.data.frame(cbind(cluster_labels,c(1:length(cluster_labels))))
 colnames(cluster_labels)<-c("Cluster_ID","updated_ID")
 affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_reassigned_df %>% dplyr::left_join(cluster_labels,by="Cluster_ID")
-affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_reassigned_df[,c(1,7,3,4,5,6,2)]
+affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_reassigned_df[,c(1,9,3:8,2)]
 
 affinity_cluster_v3_reassigned_df$updated_ID<-as.numeric(affinity_cluster_v3_reassigned_df$updated_ID)
 
