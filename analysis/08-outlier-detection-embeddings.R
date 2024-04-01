@@ -27,8 +27,8 @@ intermediate_dir <- file.path(analysis_dir,"intermediate")
 
 
 # Load affinity clusters for ADA2 and V3
-affinity_cluster_ADA2_df <- read.csv(paste(intermediate_dir,"/affinity_cluster_ADA2_df.csv",sep=""))
-affinity_cluster_v3_df <- read.csv(paste(intermediate_dir,"/affinity_cluster_v3_df.csv",sep=""))
+affinity_cluster_ADA2_df <- read.csv(paste(intermediate_dir,"/affinity_cluster_ADA2_df.csv",sep="")) # 8 cols
+affinity_cluster_v3_df <- read.csv(paste(intermediate_dir,"/affinity_cluster_v3_df.csv",sep="")) # 8 cols
 
 affinity_cluster_ADA2_df<-affinity_cluster_ADA2_df[,c(-1)]
 affinity_cluster_v3_df<- affinity_cluster_v3_df[,c(-1)]
@@ -55,7 +55,7 @@ for(iter in 1:length(cluster_labels_ADA2)){
   cluster_label_current <- cluster_labels_ADA2[iter]
   embedding_subset <- embedding_ADA2 %>% dplyr::filter(Cluster_ID==cluster_label_current)
   if(dim(embedding_subset)[1]>2){ # Need at least 2 data points to run isolation forest
-    model <- isolation.forest(embedding_subset[1:nrow(embedding_subset),9:ncol(embedding_subset)], ndim=3, ntrees=50, nthreads=1)
+    model <- isolation.forest(embedding_subset[1:nrow(embedding_subset),9:ncol(embedding_subset)], ndim=3, ntrees=100, nthreads=1) # ntrees 50 initially
     scores <- predict(model, embedding_subset[1:nrow(embedding_subset),9:ncol(embedding_subset)], type="score")
     ind_clust <- which(affinity_cluster_ADA2_df$Cluster_ID==cluster_label_current)
     affinity_cluster_ADA2_df$isolation_outlier_score[ind_clust]<-scores
@@ -108,7 +108,7 @@ for(iter in 1:length(cluster_labels_V3)){
   cluster_label_current <- cluster_labels_V3[iter]
   embedding_subset <- embedding_V3 %>% dplyr::filter(Cluster_ID==cluster_label_current)
   if(dim(embedding_subset)[1]>2){ # Need at least 2 data points to run isolation forest
-    model <- isolation.forest(embedding_subset[1:nrow(embedding_subset),9:ncol(embedding_subset)], ndim=3, ntrees=50, nthreads=1)
+    model <- isolation.forest(embedding_subset[1:nrow(embedding_subset),9:ncol(embedding_subset)], ndim=3, ntrees=100, nthreads=1) # ntrees 50 initially
     scores <- predict(model, embedding_subset[1:nrow(embedding_subset),9:ncol(embedding_subset)], type="score")
     ind_clust <- which(affinity_cluster_v3_df$Cluster_ID==cluster_label_current)
     affinity_cluster_v3_df$isolation_outlier_score[ind_clust]<-scores
