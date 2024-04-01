@@ -36,3 +36,7 @@ affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_reassigned_df %>% dplyr::
 affinity_cluster_v3_manual_annotation <- affinity_cluster_v3_reassigned_df %>% filter(exact_match=="No")
 
 affinity_cluster_v3_manual_annotation_short <- affinity_cluster_v3_manual_annotation %>% dplyr::select(ID, Tumor_Names,Updated_Cluster_ID,who_cluster_label,ncit_cluster_label)
+
+
+# write to gdrive
+write.csv(affinity_cluster_v3_manual_annotation_short,paste(intermediate_dir,"/affinity_cluster_v3_manual_annotation_short.csv",sep=""))
