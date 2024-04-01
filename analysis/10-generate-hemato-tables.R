@@ -25,11 +25,11 @@ intermediate_dir <- file.path(analysis_dir,"intermediate")
 affinity_cluster_ADA2_df <- read.csv(paste(intermediate_dir,"/affinity_cluster_ADA2_reassigned_df.csv",sep=""))
 affinity_cluster_V3_df <- read.csv(paste(intermediate_dir,"/affinity_cluster_v3_reassigned_df.csv",sep=""))
 
-affinity_cluster_ADA2_df<-affinity_cluster_ADA2_df[,c(-1,-4,-5,-8)]
-affinity_cluster_V3_df<-affinity_cluster_V3_df[,c(-1,-4,-5,-8)]
+affinity_cluster_ADA2_df<-affinity_cluster_ADA2_df%>% dplyr::select(Tumor_Names,updated_ID,who_cluster_label,ncit_cluster_label)
+affinity_cluster_V3_df<-affinity_cluster_V3_df%>% dplyr::select(Tumor_Names,updated_ID,who_cluster_label,ncit_cluster_label)
 
-colnames(affinity_cluster_ADA2_df)[2]<-"Cluster_ID"
-colnames(affinity_cluster_V3_df)[2]<-"Cluster_ID"
+colnames(affinity_cluster_ADA2_df)[2]<-"Updated_Cluster_ID"
+colnames(affinity_cluster_V3_df)[2]<-"Updated_Cluster_ID"
 
 ###### Lymphoma Luek analysis
 
@@ -37,13 +37,13 @@ lymphoma_leukemia_strings <- c("leukemia", "lymphoma", "leukemias", "lymphomas",
                                "leuk","hematologic tumors","hemato")
 
 affinity_cluster_hema_ADA2_df <- affinity_cluster_ADA2_df %>% dplyr::filter(str_detect(Tumor_Names,paste(lymphoma_leukemia_strings, collapse = "|")))
-hema_label_ADA2 <- unique(affinity_cluster_hema_ADA2_df$Cluster_ID)
-affinity_cluster_hema_ADA2_df <- affinity_cluster_ADA2_df %>% dplyr::filter(Cluster_ID %in% hema_label_ADA2 )
+hema_label_ADA2 <- unique(affinity_cluster_hema_ADA2_df$Updated_Cluster_ID)
+affinity_cluster_hema_ADA2_df <- affinity_cluster_ADA2_df %>% dplyr::filter(Updated_Cluster_ID %in% hema_label_ADA2 )
 
 
 affinity_cluster_hema_V3_df <- affinity_cluster_V3_df %>% dplyr::filter(str_detect(Tumor_Names,paste(lymphoma_leukemia_strings, collapse = "|")))
-hema_label_V3 <- unique(affinity_cluster_hema_V3_df$Cluster_ID)
-affinity_cluster_hema_V3_df <- affinity_cluster_V3_df %>% dplyr::filter(Cluster_ID %in% hema_label_V3 )
+hema_label_V3 <- unique(affinity_cluster_hema_V3_df$Updated_Cluster_ID)
+affinity_cluster_hema_V3_df <- affinity_cluster_V3_df %>% dplyr::filter(Updated_Cluster_ID %in% hema_label_V3 )
 
 
 
