@@ -58,3 +58,26 @@ colnames(Kmeans_silhouette) <- c("k","mean_silhouette_score") #6000
 
 Kmeans_silhouette_Max <- Kmeans_silhouette[ which(max(Kmeans_silhouette$mean_silhouette_score) == Kmeans_silhouette$mean_silhouette_score), ]
 
+p1<-ggplot(Kmeans_silhouette, aes(x =k, y = mean_silhouette_score)) + geom_point() +
+  geom_point(data = Kmeans_silhouette[which.max(Kmeans_silhouette$mean_silhouette_score), ], color="red")+
+  scale_x_continuous("k", labels = as.character(k), breaks = k) + ggtitle("Kmean Silhouette Score vs Clusters")
+
+
+# Kmeans optimal cluster is 6000
+km.res <- eclust(disease_transform[,2:136], "kmeans", k = Kmeans_silhouette_Max$k,nstart = 25, graph = FALSE)
+kmeans_clust_result <- as.data.frame(km.res$cluster)
+kmeans_clust_result$Tumors<-rownames(kmeans_clust_result)
+colnames(kmeans_clust_result)[1]<-"cluster"
+kmeans_clust_result <- kmeans_clust_result %>% dplyr::select(Tumors,cluster)
+
+sil <- silhouette(km.res$cluster, dist(disease_transform[,2:136])) # Verify this 
+sil<-as.data.frame(sil)
+sil$Tumors<-names(km.res$cluster)
+
+kmeans_clust_result <- kmeans_clust_result %>% dplyr::left_join(sil,by=c("cluster", "Tumors"))
+
+kmeans_clust_result<-kmeans_clust_result[order(kmeans_clust_result$cluster),]
+rownames(kmeans_clust_result)<-NULL
+
+mean_freq_kmeans <- kmeans_clust_result %>% dplyr::select(cluster, sil_width) %>% dplyr::group_by(cluster) %>% dplyr::summarise(mean_silo_score=mean(sil_width),cluster_member_count =dplyr::n()) 
+kmeans_clust_result<- kmeans_clust_result %>% dplyr::left_join(mean_freq_kmeans,by="cluster")
