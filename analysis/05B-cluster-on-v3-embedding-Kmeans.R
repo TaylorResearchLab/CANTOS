@@ -46,8 +46,12 @@ silhouette_score <- function(k){
   return(mean(ss[, 3]))
 }
 
-k <- c(10,500,1000,3000,5000,6000,8000,10000,13000,15000,16000)
-avg_sil <- sapply(k, silhouette_score)#11:04-12:18
+k <- c(10,100,500,1000,2000,3000,4000,5000,
+       5500,5900, 6000,6050,6100,6200,6500,
+       7000,8000,9000,10000,11000,12000,13000,
+       14000,15000,16000)
+
+avg_sil <- sapply(k, silhouette_score)
 
 Kmeans_silhouette<-as.data.frame(cbind(k,avg_sil))
 colnames(Kmeans_silhouette) <- c("k","mean_silhouette_score") #6000
