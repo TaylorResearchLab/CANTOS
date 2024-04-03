@@ -24,8 +24,8 @@ affinity_cluster_v3_reassigned_df<-read.csv(paste(intermediate_dir,"/affinity_cl
 affinity_cluster_ADA2_reassigned_df<-read.csv(paste(intermediate_dir,"/affinity_cluster_ADA2_reassigned_df.csv",sep=""))
 
 #Read Kmeans 
-kmeans_clust_result_embedding <- read_csv("analysis/results/kmeans_clust_result_embedding.csv")
-kmeans_clust_result <- read_csv("analysis/results/kmeans_clust_result.csv")
+kmeans_clust_result_embedding_ADA2 <- read_csv("analysis/results/kmeans_clust_result_embedding.csv")
+kmeans_clust_result_embedding_V3 <- read_csv("analysis/results/kmeans_clust_result_embedding_v3.csv")
 
 
 # Read edit distance cluster
