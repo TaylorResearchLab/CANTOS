@@ -113,3 +113,4 @@ plt_global_kmeans <- ggplot(global_clust_plot_kmeans, aes(x=cluster_member_count
   geom_text(label=global_clust_plot_kmeans$cluster,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) + labs(title = "Kmeans clusters, K=5400")
 ggsave(plt_global_kmeans, filename = paste(plots_dir,"/plt_global_kmeans_embedding_v3.pdf",sep=""), height = 30, width = 21, units = "cm")
 
+save.image("script-5B.RData")
