@@ -63,4 +63,41 @@ nested_affinity_cluster_cosine<-nested_affinity_cluster_cosine %>% dplyr::select
 nested_affinity_cluster_jw<-nested_affinity_cluster_jw %>% dplyr::select(Tumor_Names,Cluster_ID)
 nested_affinity_cluster_lv<-nested_affinity_cluster_lv %>% dplyr::select(Tumor_Names,Cluster_ID)
 
-nested_affinity_cluster_cosine<-nested_affinity_cluster_cosine %>% dplyr::
+dissimilarity_matrix_cosine<-read.csv(paste(intermediate_dir,"/dissimilarity_matrix_cosine.csv",sep=""))
+dissimilarity_matrix_jw<-read.csv(paste(intermediate_dir,"/dissimilarity_matrix_jw.csv",sep=""))
+dissimilarity_matrix_lv<-read.csv(paste(intermediate_dir,"/dissimilarity_matrix_lv.csv",sep=""))
+
+dissimilarity_matrix_cosine<-as.data.frame(dissimilarity_matrix_cosine)
+dissimilarity_matrix_jw<-as.data.frame(dissimilarity_matrix_jw)
+dissimilarity_matrix_lv<-as.data.frame(dissimilarity_matrix_lv)
+
+colnames(dissimilarity_matrix_cosine)[1]<-"Tumor_Names"
+colnames(dissimilarity_matrix_jw)[1]<-"Tumor_Names"
+colnames(dissimilarity_matrix_lv)[1]<-"Tumor_Names"
+
+colnames(dissimilarity_matrix_cosine)[2:16197]<-dissimilarity_matrix_cosine$Tumor_Names
+colnames(dissimilarity_matrix_jw)[2:16197]<-dissimilarity_matrix_jw$Tumor_Names
+colnames(dissimilarity_matrix_lv)[2:16197]<-dissimilarity_matrix_lv$Tumor_Names
+
+NCIT_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv",sep=""))
+WHO_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/WHO_Only_terms_text-embedding-ada-002_embeddings.csv",sep=""))
+NCIT_embedding_df<-NCIT_embedding_df[c(-1),] # Remove the header (column name) embedding
+WHO_embedding_df<-WHO_embedding_df[c(-1),] # Remove the header (column name) embedding
+
+rownames(NCIT_embedding_df)<-NULL
+rownames(WHO_embedding_df)<-NULL
+
+NCIT_Tumors<-tolower(NCIT_embedding_df$Disease)
+WHO_Tumors<-tolower(WHO_embedding_df$Disease)
+rm(NCIT_embedding_df,WHO_embedding_df)
+
+dissimilarity_matrix_cosine_who <- dissimilarity_matrix_cosine %>% dplyr::select(.dots = c("Tumor_Names",WHO_Tumors))
+dissimilarity_matrix_jw_who <- dissimilarity_matrix_jw %>% dplyr::select(.dots = c("Tumor_Names",WHO_Tumors))
+dissimilarity_matrix_lv_who <- dissimilarity_matrix_lv %>% dplyr::select(.dots = c("Tumor_Names",WHO_Tumors))
+
+
+dissimilarity_matrix_cosine_ncit <- dissimilarity_matrix_cosine %>% dplyr::select(.dots = c("Tumor_Names",NCIT_Tumors))
+dissimilarity_matrix_jw_ncit <- dissimilarity_matrix_jw %>% dplyr::select(.dots = c("Tumor_Names",NCIT_Tumors))
+dissimilarity_matrix_lv_ncit <- dissimilarity_matrix_lv %>% dplyr::select(.dots = c("Tumor_Names",NCIT_Tumors))
+
+
