@@ -7,6 +7,9 @@ suppressPackageStartupMessages({
   library(qdapRegex)
   library(ghql)
   library(readxl)
+  library(dbscan)
+  library(isotree)
+  
 })
 
 # Set the directories
@@ -209,4 +212,122 @@ nested_affinity_cluster_lv<- nested_affinity_cluster_lv %>% dplyr::left_join(nci
 nested_affinity_cluster_cosine<- cluster_label_assignment(nested_affinity_cluster_cosine)
 nested_affinity_cluster_jw<- cluster_label_assignment(nested_affinity_cluster_jw)
 nested_affinity_cluster_lv<- cluster_label_assignment(nested_affinity_cluster_lv)
+
+
+# Compute isolation forest for embedding based Kmeans
+
+# Load embeddings 
+disease_transform_ADA2<- read.csv(paste(intermediate_dir,"/disease_transform_pca.csv",sep="") )
+colnames(disease_transform_ADA2)[1]<-"Tumor_Names"
+rownames(disease_transform_ADA2)<-disease_transform_ADA2$Tumor_Names 
+
+
+disease_transform_V3<- read.csv(paste(intermediate_dir,"/disease_transform_pca_v3.csv",sep="") )
+colnames(disease_transform_V3)[1]<-"Tumor_Names"
+rownames(disease_transform_V3)<-disease_transform_V3$Tumor_Names 
+
+
+set.seed(13)
+
+embedding_ADA2<-kmeans_clust_result_embedding_ADA2 %>% dplyr::left_join(disease_transform_ADA2,by="Tumor_Names")
+kmeans_clust_result_embedding_ADA2$isolation_outlier_score<-NA
+
+
+cluster_labels_ADA2 <- unique(embedding_ADA2$Cluster_ID)
+for(iter in 1:length(cluster_labels_ADA2)){
+  cluster_label_current <- cluster_labels_ADA2[iter]
+  embedding_subset <- embedding_ADA2 %>% dplyr::filter(Cluster_ID==cluster_label_current)
+  if(dim(embedding_subset)[1]>2){ # Need at least 2 data points to run isolation forest
+    model <- isolation.forest(embedding_subset[1:nrow(embedding_subset),9:ncol(embedding_subset)], ndim=3, ntrees=100, nthreads=1) # ntrees 50 initially
+    scores <- predict(model, embedding_subset[1:nrow(embedding_subset),9:ncol(embedding_subset)], type="score")
+    ind_clust <- which(kmeans_clust_result_embedding_ADA2$Cluster_ID==cluster_label_current)
+    kmeans_clust_result_embedding_ADA2$isolation_outlier_score[ind_clust]<-scores
+  }else{
+    ind_clust <- which(kmeans_clust_result_embedding_ADA2$Cluster_ID==cluster_label_current)
+    kmeans_clust_result_embedding_ADA2$isolation_outlier_score[ind_clust]<-0
+  }
+}
+kmeans_clust_result_embedding_ADA2<- kmeans_clust_result_embedding_ADA2 %>% dplyr::mutate(Isolation_Outlier = case_when(isolation_outlier_score>0.5 ~ "Yes", TRUE ~ "No"))
+# LOF 
+kmeans_clust_result_embedding_ADA2$LOF_Scores<-NA
+lof_scores_minpts_list<-list()
+
+for(iter in 1:length(cluster_labels_ADA2)){
+  cluster_label_current <- cluster_labels_ADA2[iter]
+  ind_clust <- which(kmeans_clust_result_embedding_ADA2$Cluster_ID==cluster_label_current)
+  lof_scores_minpts_list<-list()
+  
+  embedding_subset <- embedding_ADA2 %>% dplyr::filter(Cluster_ID==cluster_label_current)
+  if(dim(embedding_subset)[1]>2){ # Need at least 2 data points to run isolation forest
+    min_pts<- 2:(dim(embedding_subset)[1]-1)
+    for(iter_pts in min_pts){
+      lof_scores_minpts <- lof(embedding_subset[,9:ncol(embedding_subset)],iter_pts)
+      lof_scores_minpts_list[[as.character(iter_pts)]]<-lof_scores_minpts
+    }
+    lof_scores_minpts_list<- t(as.data.frame(lof_scores_minpts_list))
+    lof_scores_minpts_list_median<-apply(lof_scores_minpts_list,2,median)
+    kmeans_clust_result_embedding_ADA2$LOF_Scores[ind_clust]<-lof_scores_minpts_list_median
+    
+  }else{
+    kmeans_clust_result_embedding_ADA2$LOF_Scores[ind_clust]<-0
+  }
+  
+  
+}
+
+kmeans_clust_result_embedding_ADA2<- kmeans_clust_result_embedding_ADA2 %>% dplyr::mutate(LOF_Outlier = case_when(LOF_Scores>1 ~ "Yes", TRUE ~ "No"))
+
+
+### Compute isolation forest for V3 embedding Kmeans
+
+# Compute isolation forest
+
+embedding_V3<-kmeans_clust_result_embedding_V3 %>% dplyr::left_join(disease_transform_V3,by="Tumor_Names")
+kmeans_clust_result_embedding_V3$isolation_outlier_score<-NA
+
+cluster_labels_V3 <- unique(embedding_V3$Cluster_ID)
+for(iter in 1:length(cluster_labels_V3)){
+  cluster_label_current <- cluster_labels_V3[iter]
+  embedding_subset <- embedding_V3 %>% dplyr::filter(Cluster_ID==cluster_label_current)
+  if(dim(embedding_subset)[1]>2){ # Need at least 2 data points to run isolation forest
+    model <- isolation.forest(embedding_subset[1:nrow(embedding_subset),9:ncol(embedding_subset)], ndim=3, ntrees=100, nthreads=1) # ntrees 50 initially
+    scores <- predict(model, embedding_subset[1:nrow(embedding_subset),9:ncol(embedding_subset)], type="score")
+    ind_clust <- which(kmeans_clust_result_embedding_V3$Cluster_ID==cluster_label_current)
+    kmeans_clust_result_embedding_V3$isolation_outlier_score[ind_clust]<-scores
+  }else{
+    ind_clust <- which(kmeans_clust_result_embedding_V3$Cluster_ID==cluster_label_current)
+    kmeans_clust_result_embedding_V3$isolation_outlier_score[ind_clust]<-0
+  }
+}
+kmeans_clust_result_embedding_V3<- kmeans_clust_result_embedding_V3 %>% dplyr::mutate(Isolation_Outlier = case_when(isolation_outlier_score>0.5 ~ "Yes", TRUE ~ "No"))
+
+
+# Compute LOF 
+kmeans_clust_result_embedding_V3$LOF_Scores<-NA
+lof_scores_minpts_list<-list()
+
+for(iter in 1:length(cluster_labels_V3)){
+  cluster_label_current <- cluster_labels_V3[iter]
+  ind_clust <- which(kmeans_clust_result_embedding_V3$Cluster_ID==cluster_label_current)
+  lof_scores_minpts_list<-list()
+  
+  embedding_subset <- embedding_V3 %>% dplyr::filter(Cluster_ID==cluster_label_current)
+  if(dim(embedding_subset)[1]>2){ # Need at least 2 data points to run isolation forest
+    min_pts<- 2:(dim(embedding_subset)[1]-1)
+    for(iter_pts in min_pts){
+      lof_scores_minpts <- lof(embedding_subset[,9:ncol(embedding_subset)],iter_pts)
+      lof_scores_minpts_list[[as.character(iter_pts)]]<-lof_scores_minpts
+    }
+    lof_scores_minpts_list<- t(as.data.frame(lof_scores_minpts_list))
+    lof_scores_minpts_list_median<-apply(lof_scores_minpts_list,2,median)
+    kmeans_clust_result_embedding_V3$LOF_Scores[ind_clust]<-lof_scores_minpts_list_median
+    
+  }else{
+    kmeans_clust_result_embedding_V3$LOF_Scores[ind_clust]<-0
+  }
+  
+  
+}
+
+kmeans_clust_result_embedding_V3<- kmeans_clust_result_embedding_V3 %>% dplyr::mutate(LOF_Outlier = case_when(LOF_Scores>1 ~ "Yes", TRUE ~ "No"))
 
