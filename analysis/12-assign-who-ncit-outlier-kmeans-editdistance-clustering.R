@@ -331,3 +331,65 @@ for(iter in 1:length(cluster_labels_V3)){
 
 kmeans_clust_result_embedding_V3<- kmeans_clust_result_embedding_V3 %>% dplyr::mutate(LOF_Outlier = case_when(LOF_Scores>1 ~ "Yes", TRUE ~ "No"))
 
+
+# 
+cluster_label_cosine <- unique(nested_affinity_cluster_cosine$Cluster_ID)
+dissimilarity_matrix_cosine<- as.data.frame(dissimilarity_matrix_cosine)
+nested_affinity_cluster_cosine$isolation_outlier_score<-NA
+for(iter in 1:length(cluster_label_cosine)){
+  current_cluster_label <- cluster_label_cosine[iter]
+  subset_cosine <- nested_affinity_cluster_cosine %>% filter(Cluster_ID==current_cluster_label) %>% dplyr::select(Tumor_Names,Cluster_ID)
+  if(dim(subset_cosine)[1]>2){
+  subset_distance_cosine <- dissimilarity_matrix_cosine %>% dplyr::select(one_of(subset_cosine$Tumor_Names))
+  subset_distance_cosine$Tumor_Names<-rownames(subset_distance_cosine)
+  subset_distance_cosine <- subset_distance_cosine %>% filter(Tumor_Names %in% colnames(subset_distance_cosine))
+  subset_cosine<-subset_cosine %>% dplyr::left_join(subset_distance_cosine,by="Tumor_Names")
+  
+  model <- isolation.forest(subset_cosine[1:nrow(subset_cosine),3:ncol(subset_cosine)], ndim=3, ntrees=ceiling(sqrt(ncol(subset_cosine)-2)), nthreads=1) # ntrees 50 initially
+  scores <- predict(model, subset_cosine[1:nrow(subset_cosine),3:ncol(subset_cosine)], type="score")
+  ind_clust <- which(nested_affinity_cluster_cosine$Cluster_ID==current_cluster_label)
+  nested_affinity_cluster_cosine$isolation_outlier_score[ind_clust]<-scores
+  }else{
+    ind_clust <- which(nested_affinity_cluster_cosine$Cluster_ID==current_cluster_label)
+    nested_affinity_cluster_cosine$isolation_outlier_score[ind_clust]<-0
+  }
+  
+  
+}
+nested_affinity_cluster_cosine<- nested_affinity_cluster_cosine %>% dplyr::mutate(Isolation_Outlier = case_when(isolation_outlier_score>0.5 ~ "Yes", TRUE ~ "No"))
+
+nested_affinity_cluster_cosine$LOF_Scores<-NA
+lof_scores_minpts_list<-list()
+
+for(iter in 1:length(cluster_label_cosine)){
+  current_cluster_label <- cluster_label_cosine[iter]
+  ind_clust <- which(nested_affinity_cluster_cosine$Cluster_ID==current_cluster_label)
+  lof_scores_minpts_list<-list()
+  
+  subset_cosine <- nested_affinity_cluster_cosine %>% filter(Cluster_ID==current_cluster_label) %>% dplyr::select(Tumor_Names,Cluster_ID)
+  
+  subset_distance_cosine <- dissimilarity_matrix_cosine %>% dplyr::select(one_of(subset_cosine$Tumor_Names))
+  subset_distance_cosine$Tumor_Names<-rownames(subset_distance_cosine)
+  subset_distance_cosine <- subset_distance_cosine %>% filter(Tumor_Names %in% colnames(subset_distance_cosine))
+  subset_cosine<-subset_cosine %>% dplyr::left_join(subset_distance_cosine,by="Tumor_Names")
+  
+  
+  if(dim(subset_cosine)[1]>2){ # Need at least 2 data points to run isolation forest
+    
+    min_pts<- 2:(dim(subset_cosine)[1]-1)
+    for(iter_pts in min_pts){
+      lof_scores_minpts <- lof(subset_cosine[,3:ncol(subset_cosine)],iter_pts)
+      lof_scores_minpts_list[[as.character(iter_pts)]]<-lof_scores_minpts
+    }
+    lof_scores_minpts_list<- t(as.data.frame(lof_scores_minpts_list))
+    lof_scores_minpts_list_median<-apply(lof_scores_minpts_list,2,median)
+    nested_affinity_cluster_cosine$LOF_Scores[ind_clust]<-lof_scores_minpts_list_median
+    
+  }else{
+    nested_affinity_cluster_cosine$LOF_Scores[ind_clust]<-0
+  }
+  
+  
+}
+nested_affinity_cluster_cosine<- nested_affinity_cluster_cosine %>% dplyr::mutate(LOF_Outlier = case_when(LOF_Scores>1 ~ "Yes", TRUE ~ "No"))
+
