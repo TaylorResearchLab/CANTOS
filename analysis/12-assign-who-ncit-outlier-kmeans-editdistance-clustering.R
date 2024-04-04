@@ -22,6 +22,7 @@ analysis_dir <- file.path(root_dir,"analysis")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
 source(paste(util_dir,"/cluster_label_assignment.R",sep=""))
 source(paste(util_dir,"/outlier_detection_edit_dist.R",sep=""))
+source(paste(util_dir,"/edit_distance_cluster_reassignment.R",sep=""))
 
 
 # Read file v3
@@ -334,9 +335,12 @@ for(iter in 1:length(cluster_labels_V3)){
 kmeans_clust_result_embedding_V3<- kmeans_clust_result_embedding_V3 %>% dplyr::mutate(LOF_Outlier = case_when(LOF_Scores>1 ~ "Yes", TRUE ~ "No"))
 
 
-#  Isolation forest cosine
+#  Isolation forest and LOF analysis
 nested_affinity_cluster_cosine<-outlier_detection_edit_dist(nested_affinity_cluster_cosine,dissimilarity_matrix_cosine)
 nested_affinity_cluster_jw<-outlier_detection_edit_dist(nested_affinity_cluster_jw,dissimilarity_matrix_jw)
 nested_affinity_cluster_lv<-outlier_detection_edit_dist(nested_affinity_cluster_lv,dissimilarity_matrix_lv)
 
-# 
+# Cluster Reassignment 
+nested_affinity_cluster_cosine_reassigned<-edit_distance_cluster_reassignment(nested_affinity_cluster_cosine)
+nested_affinity_cluster_jw_reassigned<-edit_distance_cluster_reassignment(nested_affinity_cluster_jw)
+nested_affinity_cluster_lv_reassigned<-edit_distance_cluster_reassignment(nested_affinity_cluster_lv)
