@@ -22,7 +22,7 @@ data_dir <- file.path(root_dir,"data")
 input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
-source(paste(util_dir,"/cluster_label_assignment.R",sep=""))
+source(paste(util_dir,"/cluster_label_assignment_refined.R",sep=""))
 
 
 load(paste(intermediate_dir,"/affinity_cluster_v3_df.RData",sep=""))
@@ -137,7 +137,7 @@ affinity_cluster_v3_df<- affinity_cluster_v3_df %>% dplyr::left_join(NCIT_match_
 #                                                                                         NCIT_distance==WHO_distance ~ WHO_Matches,
 #                                                                                         TRUE~NA))
 
-affinity_cluster_v3_df<- cluster_label_assignment(affinity_cluster_v3_df)
+affinity_cluster_v3_df<- cluster_label_assignment_refined(affinity_cluster_v3_df)
 
 
 
