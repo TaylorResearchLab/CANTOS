@@ -20,7 +20,7 @@ data_dir <- file.path(root_dir,"data")
 input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
-source(paste(util_dir,"/cluster_label_assignment.R",sep=""))
+source(paste(util_dir,"/cluster_label_assignment_refined.R",sep=""))
 source(paste(util_dir,"/outlier_detection_edit_dist.R",sep=""))
 source(paste(util_dir,"/edit_distance_cluster_reassignment.R",sep=""))
 
