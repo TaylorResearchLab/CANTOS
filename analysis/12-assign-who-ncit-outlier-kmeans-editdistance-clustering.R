@@ -60,8 +60,8 @@ colnames(kmeans_clust_result_embedding_V3)<-c("Tumor_Names","Cluster_ID")
 kmeans_clust_result_embedding_ADA2<-kmeans_clust_result_embedding_ADA2 %>% dplyr::left_join(who_ncit_match_ADA2,by="Tumor_Names")
 kmeans_clust_result_embedding_V3<-kmeans_clust_result_embedding_V3 %>% dplyr::left_join(who_ncit_match_v3,by="Tumor_Names")
 
-kmeans_clust_result_embedding_ADA2<- cluster_label_assignment(kmeans_clust_result_embedding_ADA2)
-kmeans_clust_result_embedding_V3<- cluster_label_assignment(kmeans_clust_result_embedding_V3)
+kmeans_clust_result_embedding_ADA2<- cluster_label_assignment_refined(kmeans_clust_result_embedding_ADA2)
+kmeans_clust_result_embedding_V3<- cluster_label_assignment_refined(kmeans_clust_result_embedding_V3)
 
 
 # Join the matches to affinity
@@ -212,9 +212,9 @@ nested_affinity_cluster_lv<- nested_affinity_cluster_lv %>% dplyr::left_join(nci
 
 
 ## Cluster Label assignment
-nested_affinity_cluster_cosine<- cluster_label_assignment(nested_affinity_cluster_cosine)
-nested_affinity_cluster_jw<- cluster_label_assignment(nested_affinity_cluster_jw)
-nested_affinity_cluster_lv<- cluster_label_assignment(nested_affinity_cluster_lv)
+nested_affinity_cluster_cosine<- cluster_label_assignment_refined(nested_affinity_cluster_cosine)
+nested_affinity_cluster_jw<- cluster_label_assignment_refined(nested_affinity_cluster_jw)
+nested_affinity_cluster_lv<- cluster_label_assignment_refined(nested_affinity_cluster_lv)
 
 
 # Compute isolation forest for embedding based Kmeans

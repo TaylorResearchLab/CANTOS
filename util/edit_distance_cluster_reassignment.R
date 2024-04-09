@@ -20,30 +20,35 @@ edit_distance_cluster_reassignment <- function (nested_affinity_cluster){
     
     cluster_subset<-cluster_subset%>%dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,WHO_distance,NCIT_Matches,NCIT_distance,who_cluster_label,ncit_cluster_label)
     
-    table_frequency_cluster_id<- as.data.frame(table(cluster_subset$Cluster_ID))
-    table_frequency_cluster_id$Var1<-as.character(table_frequency_cluster_id$Var1)
-    high_frequency_cluster_id<- table_frequency_cluster_id$Var1[which(table_frequency_cluster_id$Freq>1)]
-    
-    #low_frequency_cluster_id<-table_frequency_cluster_id$Var1[which(table_frequency_cluster_id$Freq==1)]
-    #low_frequency_assigned_class <- cluster_subset %>% filter(Cluster_ID %in% low_frequency_cluster_id) %>% dplyr::select(assigned_class)
-    
-    for(iter_subset in 1:dim(cluster_subset)[1]){
-      if(!(cluster_subset$Cluster_ID[iter_subset] %in% high_frequency_cluster_id)){
-        cluster_subset$who_cluster_label[iter_subset]<-cluster_subset$WHO_Matches[iter_subset]
-        cluster_subset$ncit_cluster_label[iter_subset]<-cluster_subset$NCIT_Matches[iter_subset]
-        
-      }else{
-        indx_ammend<- which(cluster_subset$Cluster_ID==cluster_subset$Cluster_ID[iter_subset])
-        all_who_class<- unique(cluster_subset$WHO_Matches[indx_ammend])
-        all_who_class<-paste(all_who_class,collapse=";")
-        cluster_subset$who_cluster_label[iter_subset]<-all_who_class
-        
-        all_ncit_class<- unique(cluster_subset$NCIT_Matches[indx_ammend])
-        all_ncit_class<-paste(all_ncit_class,collapse=";")
-        cluster_subset$ncit_cluster_label[iter_subset]<-all_ncit_class
-      }
+    for(iter_subset in ind_outliers){
+      cluster_subset$who_cluster_label[iter_subset]<-cluster_subset$WHO_Matches[iter_subset]
+      cluster_subset$ncit_cluster_label[iter_subset]<-cluster_subset$NCIT_Matches[iter_subset]
     }
     
+    # table_frequency_cluster_id<- as.data.frame(table(cluster_subset$Cluster_ID))
+    # table_frequency_cluster_id$Var1<-as.character(table_frequency_cluster_id$Var1)
+    # high_frequency_cluster_id<- table_frequency_cluster_id$Var1[which(table_frequency_cluster_id$Freq>1)]
+    # 
+    # #low_frequency_cluster_id<-table_frequency_cluster_id$Var1[which(table_frequency_cluster_id$Freq==1)]
+    # #low_frequency_assigned_class <- cluster_subset %>% filter(Cluster_ID %in% low_frequency_cluster_id) %>% dplyr::select(assigned_class)
+    # 
+    # for(iter_subset in 1:dim(cluster_subset)[1]){
+    #   if(!(cluster_subset$Cluster_ID[iter_subset] %in% high_frequency_cluster_id)){
+    #     cluster_subset$who_cluster_label[iter_subset]<-cluster_subset$WHO_Matches[iter_subset]
+    #     cluster_subset$ncit_cluster_label[iter_subset]<-cluster_subset$NCIT_Matches[iter_subset]
+    #     
+    #   }else{
+    #     indx_ammend<- which(cluster_subset$Cluster_ID==cluster_subset$Cluster_ID[iter_subset])
+    #     all_who_class<- unique(cluster_subset$WHO_Matches[indx_ammend])
+    #     all_who_class<-paste(all_who_class,collapse=";")
+    #     cluster_subset$who_cluster_label[iter_subset]<-all_who_class
+    #     
+    #     all_ncit_class<- unique(cluster_subset$NCIT_Matches[indx_ammend])
+    #     all_ncit_class<-paste(all_ncit_class,collapse=";")
+    #     cluster_subset$ncit_cluster_label[iter_subset]<-all_ncit_class
+    #   }
+    # }
+    # 
     
     
     nested_affinity_cluster_reassigned_df<-nested_affinity_cluster_reassigned_df %>% rows_update(cluster_subset,by="Tumor_Names")
