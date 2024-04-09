@@ -25,12 +25,12 @@ colnames(affinity_cluster_v3_reassigned_df)[2]<-"Updated_Cluster_ID"
 affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_reassigned_df[order(affinity_cluster_v3_reassigned_df$Updated_Cluster_ID),]
 # 
 affinity_cluster_v3_reassigned_df$ID <- seq.int(nrow(affinity_cluster_v3_reassigned_df))
-affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_reassigned_df[,c(9,1:8)]
 
 # match location
 affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_reassigned_df %>% dplyr::mutate(exact_match=case_when(NCIT_distance==0~"Yes",
                                                                                                              WHO_distance==0~"Yes",
                                                                                                              TRUE~"No"))
+affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_reassigned_df[,c(9,1:8)]
 
 # annotate file
 affinity_cluster_v3_manual_annotation <- affinity_cluster_v3_reassigned_df %>% filter(exact_match=="No")
