@@ -372,6 +372,36 @@ colnames(nested_affinity_cluster_lv_reassigned_short)[2]<-"af_lv"
 colnames(affinity_cluster_v3_dist_short)[2]<-"euclidean_dist_v3"
 colnames(affinity_cluster_ADA2_dist_short)[2]<-"euclidean_dist_ada2"
 
+# Closest Cosine , LV, JW
+min_dist_matches<- as.data.frame(affinity_cluster_ADA2_reassigned_df$Tumor_Names)
+min_dist_matches$cosine_match<-NA
+min_dist_matches$jw_match<-NA
+min_dist_matches$lv_match<-NA
+
+colnames(min_dist_matches)[1]<-"Tumor_Names"
+for (iter in 1: dim(min_dist_matches)[1]){
+  ind_row_cosine <- which(rownames(dissimilarity_matrix_cosine_who)==min_dist_matches$Tumor_Names[iter])
+  ind_col_cosine <- which(dissimilarity_matrix_cosine_who[ind_row_cosine,]==min(dissimilarity_matrix_cosine_who[ind_row_cosine,]))
+
+  
+  
+  ind_row_jw <- which(rownames(dissimilarity_matrix_jw_who)==min_dist_matches$Tumor_Names[iter])
+  ind_col_jw <- which(dissimilarity_matrix_jw_who[ind_row_jw,]==min(dissimilarity_matrix_jw_who[ind_row_jw,]))
+  
+  ind_row_lv <- which(rownames(dissimilarity_matrix_lv_who)==min_dist_matches$Tumor_Names[iter])
+  ind_col_lv<- which(dissimilarity_matrix_lv_who[ind_row_lv,]==min(dissimilarity_matrix_lv_who[ind_row_lv,]))
+  
+  if(length(ind_col_cosine)>1 | length(ind_col_jw)>1 | length(ind_col_lv)>1 ){
+    print(iter)
+  }
+  
+  min_dist_matches$cosine_match[iter]<- colnames(dissimilarity_matrix_cosine_who)[ind_col_cosine]
+  min_dist_matches$jw_match[iter]<- colnames(dissimilarity_matrix_jw_who)[ind_col_jw]
+  min_dist_matches$lv_match[iter]<- colnames(dissimilarity_matrix_lv_who)[ind_col_lv]
+  
+
+}
+
 # Random samples
 set.seed(13)
 tumor_sample_df<-sample_n(affinity_cluster_v3_reassigned_df_short, 1000)
