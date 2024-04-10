@@ -380,6 +380,7 @@ min_dist_matches$lv_match<-NA
 
 colnames(min_dist_matches)[1]<-"Tumor_Names"
 for (iter in 1: dim(min_dist_matches)[1]){
+  print(iter)
   ind_row_cosine <- which(rownames(dissimilarity_matrix_cosine_who)==min_dist_matches$Tumor_Names[iter])
   ind_col_cosine <- which(dissimilarity_matrix_cosine_who[ind_row_cosine,]==min(dissimilarity_matrix_cosine_who[ind_row_cosine,]))
 
@@ -391,13 +392,30 @@ for (iter in 1: dim(min_dist_matches)[1]){
   ind_row_lv <- which(rownames(dissimilarity_matrix_lv_who)==min_dist_matches$Tumor_Names[iter])
   ind_col_lv<- which(dissimilarity_matrix_lv_who[ind_row_lv,]==min(dissimilarity_matrix_lv_who[ind_row_lv,]))
   
-  if(length(ind_col_cosine)>1 | length(ind_col_jw)>1 | length(ind_col_lv)>1 ){
-    print(iter)
+  if(length(ind_col_cosine)>1){
+    min_dist_matches$cosine_match[iter]<- paste(unique(colnames(dissimilarity_matrix_cosine_who)[ind_col_cosine]), collapse =";") 
+    
+  }else{
+    min_dist_matches$cosine_match[iter]<- colnames(dissimilarity_matrix_cosine_who)[ind_col_cosine]
+    
   }
   
-  min_dist_matches$cosine_match[iter]<- colnames(dissimilarity_matrix_cosine_who)[ind_col_cosine]
-  min_dist_matches$jw_match[iter]<- colnames(dissimilarity_matrix_jw_who)[ind_col_jw]
-  min_dist_matches$lv_match[iter]<- colnames(dissimilarity_matrix_lv_who)[ind_col_lv]
+  if(length(ind_col_jw)>1){
+    min_dist_matches$jw_match[iter]<- paste(unique(colnames(dissimilarity_matrix_jw_who)[ind_col_jw]), collapse =";") 
+    
+  }else{
+    min_dist_matches$jw_match[iter]<- colnames(dissimilarity_matrix_jw_who)[ind_col_jw]
+    
+  }
+  
+  if(length(ind_col_lv)>1){
+    min_dist_matches$lv_match[iter]<- paste(unique(colnames(dissimilarity_matrix_lv_who)[ind_col_lv]), collapse =";") 
+    
+  }else{
+    min_dist_matches$lv_match[iter]<- colnames(dissimilarity_matrix_lv_who)[ind_col_lv]
+    
+  }
+  
   
 
 }
@@ -412,7 +430,8 @@ tumor_sample_df<-tumor_sample_df %>% dplyr::left_join(affinity_cluster_ADA2_reas
   dplyr::left_join(nested_affinity_cluster_jw_reassigned_short,by="Tumor_Names") %>%
   dplyr::left_join(nested_affinity_cluster_lv_reassigned_short,by="Tumor_Names") %>%
   dplyr::left_join(affinity_cluster_v3_dist_short,by="Tumor_Names") %>%
-  dplyr::left_join(affinity_cluster_ADA2_dist_short,by="Tumor_Names")
+  dplyr::left_join(affinity_cluster_ADA2_dist_short,by="Tumor_Names")%>%
+  dplyr::left_join(min_dist_matches,by="Tumor_Names")
   
 
 # 
