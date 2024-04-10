@@ -5,6 +5,7 @@ suppressPackageStartupMessages({
   library(foreach)
   library(stringdist)
   library(DescTools)
+  library(stringr)
 })
 
 
