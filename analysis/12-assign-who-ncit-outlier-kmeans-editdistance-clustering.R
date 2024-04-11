@@ -420,6 +420,16 @@ for (iter in 1: dim(min_dist_matches)[1]){
 
 }
 
+
+# 
+load(paste(input_dir,"/conditions_data.RData",sep=""))
+conditions_data<-conditions_data[,c(2,4)]
+colnames(conditions_data)[2]<-"Tumor_Names"
+named_df<-tumor_sample_df %>% left_join(conditions_data,by="Tumor_Names") %>% dplyr::select(Tumor_Names,nct_id)
+named_df<-named_df %>%group_by(Tumor_Names) %>%summarise(nct_id=paste(nct_id, collapse=";"))
+
+tumor_sample_df<-tumor_sample_df %>% left_join(named_df,by="Tumor_Names")
+
 # Random samples
 set.seed(13)
 tumor_sample_df<-sample_n(affinity_cluster_v3_reassigned_df_short, 1000)
@@ -434,11 +444,3 @@ tumor_sample_df<-tumor_sample_df %>% dplyr::left_join(affinity_cluster_ADA2_reas
   dplyr::left_join(min_dist_matches,by="Tumor_Names")
   
 
-# 
-load(paste(input_dir,"/conditions_data.RData",sep=""))
-conditions_data<-conditions_data[,c(2,4)]
-colnames(conditions_data)[2]<-"Tumor_Names"
-named_df<-tumor_sample_df %>% left_join(conditions_data,by="Tumor_Names") %>% dplyr::select(Tumor_Names,nct_id)
-named_df<-named_df %>%group_by(Tumor_Names) %>%summarise(nct_id=paste(nct_id, collapse=";"))
-
-tumor_sample_df<-tumor_sample_df %>% left_join(named_df,by="Tumor_Names")
