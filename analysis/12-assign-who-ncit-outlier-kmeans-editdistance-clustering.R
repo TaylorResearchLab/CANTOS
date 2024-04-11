@@ -20,6 +20,8 @@ data_dir <- file.path(root_dir,"data")
 input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
+result_dir <- file.path(analysis_dir,"results")
+
 source(paste(util_dir,"/cluster_label_assignment_refined.R",sep=""))
 source(paste(util_dir,"/outlier_detection_edit_dist.R",sep=""))
 source(paste(util_dir,"/edit_distance_cluster_reassignment.R",sep=""))
@@ -425,13 +427,14 @@ for (iter in 1: dim(min_dist_matches)[1]){
 load(paste(input_dir,"/conditions_data.RData",sep=""))
 conditions_data<-conditions_data[,c(2,4)]
 colnames(conditions_data)[2]<-"Tumor_Names"
-named_df<-tumor_sample_df %>% left_join(conditions_data,by="Tumor_Names") %>% dplyr::select(Tumor_Names,nct_id)
-named_df<-named_df %>%group_by(Tumor_Names) %>%summarise(nct_id=paste(nct_id, collapse=";"))
 
-tumor_sample_df<-tumor_sample_df %>% left_join(named_df,by="Tumor_Names")
 
 # Random samples
 set.seed(13)
+affinity_cluster_v3_reassigned_df_short<- affinity_cluster_v3_reassigned_df_short %>% dplyr::left_join(conditions_data,by="Tumor_Names")
+affinity_cluster_v3_reassigned_df_short<-affinity_cluster_v3_reassigned_df_short %>%group_by(Tumor_Names) %>%summarise(nct_id=paste(nct_id, collapse=";"))
+affinity_cluster_v3_reassigned_df_short<-affinity_cluster_v3_reassigned_df_short%>%dplyr::filter(nct_id!="NA")
+
 tumor_sample_df<-sample_n(affinity_cluster_v3_reassigned_df_short, 1000)
 tumor_sample_df<-tumor_sample_df %>% dplyr::left_join(affinity_cluster_ADA2_reassigned_df_short,by="Tumor_Names")%>%
   dplyr::left_join(kmeans_clust_result_embedding_V3_short,by="Tumor_Names") %>%
@@ -442,5 +445,9 @@ tumor_sample_df<-tumor_sample_df %>% dplyr::left_join(affinity_cluster_ADA2_reas
   dplyr::left_join(affinity_cluster_v3_dist_short,by="Tumor_Names") %>%
   dplyr::left_join(affinity_cluster_ADA2_dist_short,by="Tumor_Names")%>%
   dplyr::left_join(min_dist_matches,by="Tumor_Names")
-  
 
+tumor_sample_df<-tumor_sample_df[,c(2,1,3:13)]
+
+
+# Write samples
+write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df.csv",sep = ""))
