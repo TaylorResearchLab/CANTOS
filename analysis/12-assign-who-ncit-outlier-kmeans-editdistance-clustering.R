@@ -374,6 +374,10 @@ colnames(nested_affinity_cluster_lv_reassigned_short)[2]<-"af_lv"
 colnames(affinity_cluster_v3_dist_short)[2]<-"euclidean_dist_v3"
 colnames(affinity_cluster_ADA2_dist_short)[2]<-"euclidean_dist_ada2"
 
+
+
+
+
 # Closest Cosine , LV, JW
 min_dist_matches<- as.data.frame(affinity_cluster_ADA2_reassigned_df$Tumor_Names)
 min_dist_matches$cosine_match<-NA
@@ -431,7 +435,7 @@ colnames(conditions_data)[2]<-"Tumor_Names"
 
 # Random samples
 affinity_cluster_v3_reassigned_df_short<- affinity_cluster_v3_reassigned_df_short %>% dplyr::left_join(conditions_data,by="Tumor_Names")
-affinity_cluster_v3_reassigned_df_short<-affinity_cluster_v3_reassigned_df_short %>%group_by(Tumor_Names) %>%summarise(nct_id=paste(nct_id, collapse=";"))
+affinity_cluster_v3_reassigned_df_short<-affinity_cluster_v3_reassigned_df_short %>%group_by(Tumor_Names) %>%summarise(nct_id=paste(nct_id, collapse=";"),af_v3=unique(af_v3))
 affinity_cluster_v3_reassigned_df_short<-affinity_cluster_v3_reassigned_df_short%>%dplyr::filter(nct_id!="NA")
 
 set.seed(13)
@@ -446,8 +450,20 @@ tumor_sample_df<-tumor_sample_df %>% dplyr::left_join(affinity_cluster_ADA2_reas
   dplyr::left_join(affinity_cluster_ADA2_dist_short,by="Tumor_Names")%>%
   dplyr::left_join(min_dist_matches,by="Tumor_Names")
 
-tumor_sample_df<-tumor_sample_df[,c(2,1,3:13)]
+tumor_sample_df<-tumor_sample_df[,c(2,1,3:14)]
 
+tumor_sample_df<- add_column(tumor_sample_df,valid_af_v3="", .after = "af_v3")
+tumor_sample_df<- add_column(tumor_sample_df,valid_af_ad2="", .after = "af_ada2")
+tumor_sample_df<- add_column(tumor_sample_df,valid_kmeans_v3="", .after = "kmeans_v3")
+tumor_sample_df<- add_column(tumor_sample_df,valid_kmeans_ad2="", .after = "kmeans_ad2")
+tumor_sample_df<- add_column(tumor_sample_df,valid_af_cosine="", .after = "af_cosine")
+tumor_sample_df<- add_column(tumor_sample_df,valid_af_jw="", .after = "af_jw")
+tumor_sample_df<- add_column(tumor_sample_df,valid_af_lv="", .after = "af_lv")
+tumor_sample_df<- add_column(tumor_sample_df,valid_euclidean_dist_v3="", .after = "euclidean_dist_v3")
+tumor_sample_df<- add_column(tumor_sample_df,valid_euclidean_dist_ada2="", .after = "euclidean_dist_ada2")
+tumor_sample_df<- add_column(tumor_sample_df,valid_cosine_match="", .after = "cosine_match")
+tumor_sample_df<- add_column(tumor_sample_df,valid_jw_match="", .after = "jw_match")
+tumor_sample_df<- add_column(tumor_sample_df,valid_lv_match="", .after = "lv_match")
 
 # Write samples
 write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df.csv",sep = ""))
