@@ -50,4 +50,4 @@ affinity_cluster_hema_V3_df <- affinity_cluster_V3_df %>% dplyr::filter(Updated_
 write.csv(affinity_cluster_hema_ADA2_df,paste(intermediate_dir,"/hemato_tumor_ADA2.csv",sep=""))
 write.csv(affinity_cluster_hema_V3_df,paste(intermediate_dir,"/hemato_tumor_V3.csv",sep=""))
 
-save.image("script08.RData")
+#save.image("script08.RData")

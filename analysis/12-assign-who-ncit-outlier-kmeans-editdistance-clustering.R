@@ -365,7 +365,7 @@ colnames(affinity_cluster_v3_reassigned_df_short)[2]<-"af_v3"
 colnames(affinity_cluster_ADA2_reassigned_df_short)[2]<-"af_ada2"
 
 colnames(kmeans_clust_result_embedding_V3_short)[2]<-"kmeans_v3"
-colnames(kmeans_clust_result_embedding_ADA2_short)[2]<-"kmeans_ad2"
+colnames(kmeans_clust_result_embedding_ADA2_short)[2]<-"kmeans_ada2"
 
 colnames(nested_affinity_cluster_cosine_reassigned_short)[2]<-"af_cosine"
 colnames(nested_affinity_cluster_jw_reassigned_short)[2]<-"af_jw"
@@ -455,7 +455,7 @@ tumor_sample_df<-tumor_sample_df[,c(2,1,3:14)]
 tumor_sample_df<- add_column(tumor_sample_df,valid_af_v3="", .after = "af_v3")
 tumor_sample_df<- add_column(tumor_sample_df,valid_af_ad2="", .after = "af_ada2")
 tumor_sample_df<- add_column(tumor_sample_df,valid_kmeans_v3="", .after = "kmeans_v3")
-tumor_sample_df<- add_column(tumor_sample_df,valid_kmeans_ad2="", .after = "kmeans_ad2")
+tumor_sample_df<- add_column(tumor_sample_df,valid_kmeans_ada2="", .after = "kmeans_ada2")
 tumor_sample_df<- add_column(tumor_sample_df,valid_af_cosine="", .after = "af_cosine")
 tumor_sample_df<- add_column(tumor_sample_df,valid_af_jw="", .after = "af_jw")
 tumor_sample_df<- add_column(tumor_sample_df,valid_af_lv="", .after = "af_lv")

@@ -33,7 +33,7 @@ cluster_label_assignment_refined <- function(affinity_cluster_nested){
            index_locator_high <- intersect(index_locator_high,index_affinity)
            affinity_cluster_nested$who_cluster_label[index_locator_high]<-high_freq_labels[iter_high_freq]
          }
-         if(length(other_freq_label)>1){
+         if(length(other_freq_label)>=1){
            for(iter_other_freq in 1:length(other_freq_label)){
              index_locator_other<-which(affinity_cluster_nested$WHO_Matches==other_freq_label[iter_other_freq])
              index_locator_other <- intersect(index_locator_other,index_affinity)
@@ -58,7 +58,7 @@ cluster_label_assignment_refined <- function(affinity_cluster_nested){
         index_locator_high <- intersect(index_locator_high,index_affinity)
         affinity_cluster_nested$ncit_cluster_label[index_locator_high]<-high_freq_labels_ncit[iter_high_freq]
       }
-      if(length(other_freq_label_ncit)>1){
+      if(length(other_freq_label_ncit)>=1){
         for(iter_other_freq in 1:length(other_freq_label_ncit)){
           index_locator_other<-which(affinity_cluster_nested$NCIT_Matches==other_freq_label_ncit[iter_other_freq])
           index_locator_other <- intersect(index_locator_other,index_affinity)
