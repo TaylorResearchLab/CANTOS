@@ -32,12 +32,26 @@ tumor_sample_df<-tumor_sample_df %>% filter(valid_af_v3==1|valid_af_ad2==1|valid
                                               valid_af_lv==1|valid_euclidean_dist_v3==1| valid_euclidean_dist_ada2==1|
                                               valid_cosine_match==1|valid_jw_match==1|valid_jw_match==1)
 
-tumor_sample_df<-tumor_sample_df[,c(1:21)]
 tumor_sample_df$ground_truth <- NA
-
+tumor_sample_df$ground_truth_val <- NA
+tumor_sample_df$ID<-as.character(tumor_sample_df$ID)
 for (iter in 1:dim(tumor_sample_df)[1]){
-  ind<- which(tumor_sample_df[iter,]==1)
-  tumor_names <- unique(tumor_sample_df[iter,ind-1])
+  ind<- which(tumor_sample_df[iter,seq(5,27,2)]==1)
+  actual_ind<- seq(5,27,2)[ind]-1
+  tumor_names <- unique(unlist(tumor_sample_df[iter,actual_ind]))
+  if(length(ind)>0){
+  if(length(tumor_names)>1){
+    tumor_sample_df$ground_truth[iter]<-"MG"
+    tumor_sample_df$ground_truth_val[iter]<-paste(tumor_names,collapse = ";")
+    
+  }else{
+    tumor_sample_df$ground_truth[iter]<-"G"
+    tumor_sample_df$ground_truth_val[iter]<-paste(tumor_names,collapse = ";")
+  }
+  }else{
+    tumor_sample_df$ground_truth[iter]<-"U"
+    tumor_sample_df$ground_truth_val[iter]<-"Unknown"
+    }
 }
 
 
