@@ -439,7 +439,7 @@ affinity_cluster_v3_reassigned_df_short<-affinity_cluster_v3_reassigned_df_short
 affinity_cluster_v3_reassigned_df_short<-affinity_cluster_v3_reassigned_df_short%>%dplyr::filter(nct_id!="NA")
 
 set.seed(13)
-tumor_sample_df<-sample_n(affinity_cluster_v3_reassigned_df_short, 1000)
+tumor_sample_df<-sample_n(affinity_cluster_v3_reassigned_df_short, 1600)
 tumor_sample_df<-tumor_sample_df %>% dplyr::left_join(affinity_cluster_ADA2_reassigned_df_short,by="Tumor_Names")%>%
   dplyr::left_join(kmeans_clust_result_embedding_V3_short,by="Tumor_Names") %>%
   dplyr::left_join(kmeans_clust_result_embedding_ADA2_short,by="Tumor_Names") %>%

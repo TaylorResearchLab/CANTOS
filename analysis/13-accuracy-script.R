@@ -54,8 +54,10 @@ for (iter in 1:dim(tumor_sample_df)[1]){
     }
 }
 
+tumor_sample_df <- tumor_sample_df %>% filter(ground_truth=="G")
 
-accuracy_df<- tumor_sample_df[,c(seq(5,27,2))]
-print(colSums(accuracy_df)/dim(accuracy_df)[1])
+
+#accuracy_df<- tumor_sample_df[,c(seq(5,27,2))]
+#print(colSums(accuracy_df)/dim(accuracy_df)[1])
 
 lv_df<-tumor_sample_df%>% dplyr::select(ID,nct_id,Tumor_Names,lv_match,valid_lv_match)
