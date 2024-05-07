@@ -24,13 +24,13 @@ result_dir <- file.path(analysis_dir,"results")
 
 
 tumor_sample_df<-read.csv(paste(result_dir,"/tumor_sample_df.csv",sep = ""))
-
-tumor_sample_df<-tumor_sample_df %>% filter(!is.na(valid_af_v3))
-
-tumor_sample_df<-tumor_sample_df %>% filter(valid_af_v3==1|valid_af_ad2==1|valid_kmeans_v3==1|
-                                              valid_kmeans_ad2==1| valid_af_cosine==1| valid_af_jw==1|
-                                              valid_af_lv==1|valid_euclidean_dist_v3==1| valid_euclidean_dist_ada2==1|
-                                              valid_cosine_match==1|valid_jw_match==1|valid_jw_match==1)
+tumor_sample_df<-tumor_sample_df[,1:27]
+# tumor_sample_df<-tumor_sample_df %>% filter(!is.na(valid_af_v3))
+# 
+# tumor_sample_df<-tumor_sample_df %>% filter(valid_af_v3==1|valid_af_ad2==1|valid_kmeans_v3==1|
+#                                               valid_kmeans_ad2==1| valid_af_cosine==1| valid_af_jw==1|
+#                                               valid_af_lv==1|valid_euclidean_dist_v3==1| valid_euclidean_dist_ada2==1|
+#                                               valid_cosine_match==1|valid_jw_match==1|valid_jw_match==1)
 
 tumor_sample_df$ground_truth <- NA
 tumor_sample_df$ground_truth_val <- NA
@@ -54,11 +54,15 @@ for (iter in 1:dim(tumor_sample_df)[1]){
     }
 }
 
-tumor_sample_df <- tumor_sample_df %>% filter(ground_truth=="G")
+tumor_sample_df <- tumor_sample_df[order_by(tumor_sample_df$ground_truth),]
+write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df.csv",sep = ""))
 
-
-#accuracy_df<- tumor_sample_df[,c(seq(5,27,2))]
-#print(colSums(accuracy_df)/dim(accuracy_df)[1])
-print(round(colSums(accuracy_df)/dim(accuracy_df)[1],2))
-
-lv_df<-tumor_sample_df%>% dplyr::select(ID,nct_id,Tumor_Names,lv_match,valid_lv_match)
+# 
+# tumor_sample_df <- tumor_sample_df %>% filter(ground_truth=="G")
+# 
+# 
+# #accuracy_df<- tumor_sample_df[,c(seq(5,27,2))]
+# #print(colSums(accuracy_df)/dim(accuracy_df)[1])
+# print(round(colSums(accuracy_df)/dim(accuracy_df)[1],2))
+# 
+# lv_df<-tumor_sample_df%>% dplyr::select(ID,nct_id,Tumor_Names,lv_match,valid_lv_match)
