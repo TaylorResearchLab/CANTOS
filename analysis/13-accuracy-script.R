@@ -55,7 +55,7 @@ for (iter in 1:dim(tumor_sample_df)[1]){
 }
 
 tumor_sample_df <- tumor_sample_df[order_by(tumor_sample_df$ground_truth),]
-write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df.csv",sep = ""))
+write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df_ground_truth.csv",sep = ""))
 
 # 
 # tumor_sample_df <- tumor_sample_df %>% filter(ground_truth=="G")
