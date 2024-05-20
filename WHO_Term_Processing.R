@@ -56,6 +56,11 @@ df_3rd_edition$Tumor_Names<- str_trim(df_3rd_edition$Tumor_Names)
 df_4th_edition$Tumor_Names<- str_trim(df_4th_edition$Tumor_Names)
 df_5th_edition$Tumor_Names<- str_trim(df_5th_edition$Tumor_Names)
 
+# distinct
+df_3rd_edition<- distinct(df_3rd_edition)
+df_4th_edition<- distinct(df_4th_edition)
+df_5th_edition<- distinct(df_5th_edition)
+
 
 # and, /, "," in the text 
 df_3rd_edition <- df_3rd_edition %>% mutate(is_AND= case_when(str_detect(Tumor_Names,"and")~"Yes",TRUE~"No"))
@@ -75,9 +80,9 @@ df_5th_edition <- df_5th_edition %>% mutate(is_slash= case_when(str_detect(Tumor
 df_5th_edition <- df_5th_edition %>% mutate(is_comma= case_when(str_detect(Tumor_Names,",")~"Yes",TRUE~"No"))
 df_5th_edition<-df_5th_edition %>% arrange(is_AND, is_slash,is_comma) 
 # Write the csv
-write.csv(df_5th_edition,paste(data_dir,"/WHO_Tumors/intermediate/df_5th_edition_manual_edit.csv",sep=""))
-write.csv(df_4th_edition,paste(data_dir,"/WHO_Tumors/intermediate/df_4th_edition_manual_edit.csv",sep=""))
-write.csv(df_3rd_edition,paste(data_dir,"/WHO_Tumors/intermediate/df_3rd_edition_manual_edit.csv",sep=""))
+write.xlsx(df_5th_edition,paste(data_dir,"/WHO_Tumors/intermediate/df_5th_edition_manual_edit.xlsx",sep=""))
+write.xlsx(df_4th_edition,paste(data_dir,"/WHO_Tumors/intermediate/df_4th_edition_manual_edit.xlsx",sep=""))
+write.xlsx(df_3rd_edition,paste(data_dir,"/WHO_Tumors/intermediate/df_3rd_edition_manual_edit.xlsx",sep=""))
 
 # all who tumors combined
 
