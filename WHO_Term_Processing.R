@@ -56,7 +56,36 @@ df_3rd_edition$Tumor_Names<- str_trim(df_3rd_edition$Tumor_Names)
 df_4th_edition$Tumor_Names<- str_trim(df_4th_edition$Tumor_Names)
 df_5th_edition$Tumor_Names<- str_trim(df_5th_edition$Tumor_Names)
 
+
+# and, /, "," in the text 
+df_3rd_edition <- df_3rd_edition %>% mutate(is_AND= case_when(str_detect(Tumor_Names,"and")~"Yes",TRUE~"No"))
+df_3rd_edition <- df_3rd_edition %>% mutate(is_slash= case_when(str_detect(Tumor_Names,"/")~"Yes",TRUE~"No"))
+df_3rd_edition <- df_3rd_edition %>% mutate(is_comma= case_when(str_detect(Tumor_Names,",")~"Yes",TRUE~"No"))
+df_3rd_edition<-df_3rd_edition %>% arrange(is_AND, is_slash,is_comma) 
+
+# and, /, "," in the text 
+df_4th_edition <- df_4th_edition %>% mutate(is_AND= case_when(str_detect(Tumor_Names,"and")~"Yes",TRUE~"No"))
+df_4th_edition <- df_4th_edition %>% mutate(is_slash= case_when(str_detect(Tumor_Names,"/")~"Yes",TRUE~"No"))
+df_4th_edition <- df_4th_edition %>% mutate(is_comma= case_when(str_detect(Tumor_Names,",")~"Yes",TRUE~"No"))
+df_4th_edition<-df_4th_edition %>% arrange(is_AND, is_slash,is_comma) 
+
+# and, /, "," in the text 
+df_5th_edition <- df_5th_edition %>% mutate(is_AND= case_when(str_detect(Tumor_Names,"and")~"Yes",TRUE~"No"))
+df_5th_edition <- df_5th_edition %>% mutate(is_slash= case_when(str_detect(Tumor_Names,"/")~"Yes",TRUE~"No"))
+df_5th_edition <- df_5th_edition %>% mutate(is_comma= case_when(str_detect(Tumor_Names,",")~"Yes",TRUE~"No"))
+df_5th_edition<-df_5th_edition %>% arrange(is_AND, is_slash,is_comma) 
+# Write the csv
+write.csv(df_5th_edition,paste(data_dir,"/WHO_Tumors/intermediate/df_5th_edition_manual_edit.csv",sep=""))
+write.csv(df_4th_edition,paste(data_dir,"/WHO_Tumors/intermediate/df_4th_edition_manual_edit.csv",sep=""))
+write.csv(df_3rd_edition,paste(data_dir,"/WHO_Tumors/intermediate/df_3rd_edition_manual_edit.csv",sep=""))
+
 # all who tumors combined
 
 WHO_Tumors <- rbind(df_3rd_edition,df_4th_edition,df_5th_edition)
 WHO_Tumors<- distinct(WHO_Tumors)
+
+
+# Add editions to who tumors
+WHO_Tumors <- WHO_Tumors %>% mutate(edition_5th =case_when(Tumor_Names %in% df_5th_edition$Tumor_Names~"Yes", TRUE ~ "No"))
+WHO_Tumors <- WHO_Tumors %>% mutate(edition_4th =case_when(Tumor_Names %in% df_4th_edition$Tumor_Names~"Yes", TRUE ~ "No"))
+WHO_Tumors <- WHO_Tumors %>% mutate(edition_3rd =case_when(Tumor_Names %in% df_3rd_edition$Tumor_Names~"Yes", TRUE ~ "No"))
