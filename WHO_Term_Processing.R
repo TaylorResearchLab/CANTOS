@@ -118,3 +118,5 @@ WHO_Tumors <- WHO_Tumors %>% mutate(edition_3rd =case_when(Tumor_Names %in% WHO_
 # Write file for WHO Tumor
 write.xlsx(WHO_Tumors,paste(data_dir,"/WHO_Tumors/result/WHO_Tumor_all_edition.xlsx",sep=""))
 
+WHO_OLD<- WHO_Tumors[which(!(WHO_Tumors$Tumor_Names %in% WHO_embedding_df$Disease)),]
+write.csv(WHO_OLD,paste(data_dir,"/WHO_Tumors/result/WHO_OLD.csv",sep=""))
