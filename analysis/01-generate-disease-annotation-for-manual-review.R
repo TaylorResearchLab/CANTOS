@@ -29,6 +29,7 @@ who_ped_words<-  read_excel(paste(data_dir,"/who_cancer_key_words_paediatric.xls
 who_general_words$who_cancers<-tolower(who_general_words$who_cancers)
 who_ped_words$who_paediatric_cancers<-tolower(who_ped_words$who_paediatric_cancers)
 
+WHO_Terms_All <-read.xlsx(paste(data_dir,"/WHO_Tumors/result/WHO_Tumor_all_edition.xlsx",sep=""))
 
 
 
@@ -56,6 +57,7 @@ ct_disease_df$cancer_search_term[ind_cancer_search_term]<-"Yes"
 ct_disease_df$cancer_search_term[!ind_cancer_search_term]<-"No"
 
 
+#ct_disease_df<-is_cancer_who(ct_disease_df,who_general_words)
 ct_disease_df<-is_cancer_who(ct_disease_df,who_general_words)
 ct_disease_df<-ct_disease_df %>% dplyr::select(diseases,cancer_search_term,is_cancer_who)
 
