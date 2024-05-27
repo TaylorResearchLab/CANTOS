@@ -120,6 +120,7 @@ colnames(dissimilarity_matrix_lv) <- df_tumor_names
 
 stopCluster(cl)
 
+save(dissimilarity_matrix_lv,file=paste(intermediate_dir,"/dissimilarity_matrix_lv.RData",sep=""))
 
 
 
@@ -140,9 +141,10 @@ dissimilarity_matrix_jw<-foreach(iter=1:length(df_tumor_names),.combine=rbind) %
 rownames(dissimilarity_matrix_jw) <- df_tumor_names
 colnames(dissimilarity_matrix_jw) <- df_tumor_names
 stopCluster(cl)
+save(dissimilarity_matrix_jw,file=paste(intermediate_dir,"/dissimilarity_matrix_jw.RData",sep=""))
 
 # Cosine Distance
-cl <- makeCluster(6, outfile="")
+cl <- makeCluster(25, outfile="")
 registerDoParallel(cl)
 dissimilarity_matrix_cosine <- as.data.frame(matrix(nrow=length(df_tumor_names),ncol=length(df_tumor_names)))
 rownames(dissimilarity_matrix_cosine) <- df_tumor_names
@@ -158,8 +160,12 @@ rownames(dissimilarity_matrix_cosine) <- df_tumor_names
 colnames(dissimilarity_matrix_cosine) <- df_tumor_names
 stopCluster(cl)
 
+save(dissimilarity_matrix_cosine,file=paste(intermediate_dir,"/dissimilarity_matrix_cosine.RData",sep=""))
+
 
 # Find clusters of 
+cl <- makeCluster(25, outfile="")
+registerDoParallel(cl)
 cluster_results_lv<-foreach(iter=1:length(df_tumor_names),.combine=rbind) %do% {
   print(iter)
   distance_clusters(dissimilarity_matrix_lv[iter,],cutoff = 0.0005,df_tumor_names)
@@ -249,8 +255,4 @@ write.csv(cluster_results_jw,paste(results_dir,"/cluster_jw.csv",sep=""))
 write.csv(cluster_results_cosine,paste(results_dir,"/cluster_cosine.csv",sep=""))
 write.csv(display_table_benchmark,paste(results_dir,"/edit_distance_bench_mark.csv",sep=""))
 
-
-save(dissimilarity_matrix_lv,file=paste(intermediate_dir,"/dissimilarity_matrix_lv.RData",sep=""))
-save(dissimilarity_matrix_jw,file=paste(intermediate_dir,"/dissimilarity_matrix_jw.RData",sep=""))
-save(dissimilarity_matrix_cosine,file=paste(intermediate_dir,"/dissimilarity_matrix_cosine.RData",sep=""))
  
