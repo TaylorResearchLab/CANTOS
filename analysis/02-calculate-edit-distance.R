@@ -6,6 +6,7 @@ suppressPackageStartupMessages({
   library(stringdist)
   library(DescTools)
   library(stringr)
+  library(readxl)
 })
 
 
@@ -33,8 +34,7 @@ ct_tumor_df<- ct_disease_df %>% filter(validated_cancer_tumor=="Yes")
 # Read NCIT Terms and WHO Terms with embedding and join them to the rest of the embedding list 
 
 # NEW addition : 
-#Check line with correct email.
-WHO_Terms_All <-read.xlsx(paste(data_dir,"/WHO_Tumors/result/WHO_Tumor_all_edition.xlsx",sep=""))
+WHO_Terms_All <-readxl::read_xlsx(paste(data_dir,"/WHO_Tumors/result/WHO_Tumor_all_edition.xlsx",sep=""))
 
 
 NCIT_Terms <-read.csv(paste(data_dir,"/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv",sep=""))[,1]
@@ -105,7 +105,7 @@ colnames(dissimilarity_matrix_lv)<-df_tumor_names
 # }
 
 
-cl <- makeCluster(6, outfile="")
+cl <- makeCluster(25, outfile="")
 registerDoParallel(cl)
 
 
@@ -118,12 +118,15 @@ rownames(dissimilarity_matrix_lv) <- df_tumor_names
 colnames(dissimilarity_matrix_lv) <- df_tumor_names
 
 
+stopCluster(cl)
 
 
 
 
 
 # Jarro Winkler Distance
+cl <- makeCluster(25, outfile="")
+registerDoParallel(cl)
 dissimilarity_matrix_jw <- as.data.frame(matrix(nrow=length(df_tumor_names),ncol=length(df_tumor_names)))
 rownames(dissimilarity_matrix_jw) <- df_tumor_names
 colnames(dissimilarity_matrix_jw) <- df_tumor_names
@@ -136,8 +139,11 @@ dissimilarity_matrix_jw<-foreach(iter=1:length(df_tumor_names),.combine=rbind) %
 }
 rownames(dissimilarity_matrix_jw) <- df_tumor_names
 colnames(dissimilarity_matrix_jw) <- df_tumor_names
+stopCluster(cl)
 
 # Cosine Distance
+cl <- makeCluster(6, outfile="")
+registerDoParallel(cl)
 dissimilarity_matrix_cosine <- as.data.frame(matrix(nrow=length(df_tumor_names),ncol=length(df_tumor_names)))
 rownames(dissimilarity_matrix_cosine) <- df_tumor_names
 colnames(dissimilarity_matrix_cosine) <- df_tumor_names
@@ -150,6 +156,7 @@ dissimilarity_matrix_cosine<-foreach(iter=1:length(df_tumor_names),.combine=rbin
 }
 rownames(dissimilarity_matrix_cosine) <- df_tumor_names
 colnames(dissimilarity_matrix_cosine) <- df_tumor_names
+stopCluster(cl)
 
 
 # Find clusters of 
