@@ -29,10 +29,6 @@ who_ped_words<-  read_excel(paste(data_dir,"/who_cancer_key_words_paediatric.xls
 who_general_words$who_cancers<-tolower(who_general_words$who_cancers)
 who_ped_words$who_paediatric_cancers<-tolower(who_ped_words$who_paediatric_cancers)
 
-WHO_Terms_All <-read.xlsx(paste(data_dir,"/WHO_Tumors/result/WHO_Tumor_all_edition.xlsx",sep=""))
-
-
-
 
 # Load Pedcan Hisologies from STJude, ALS and Cancer.net
 pedcan_histology <- read_excel(paste(data_dir,"/pediatric_cancer_list.xlsx",sep="")) # PedCan list from St Jude, Cancer.net and ALS
