@@ -33,6 +33,7 @@ ct_tumor_df<- ct_disease_df %>% filter(validated_cancer_tumor=="Yes")
 # Read NCIT Terms and WHO Terms with embedding and join them to the rest of the embedding list 
 
 # NEW addition : 
+#Check line
 WHO_Terms_All <-read.xlsx(paste(data_dir,"/WHO_Tumors/result/WHO_Tumor_all_edition.xlsx",sep=""))
 
 
