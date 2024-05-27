@@ -82,7 +82,8 @@ WHO_Terms<-tolower(WHO_Terms[c(-1)])
 # [35] "relapsedÔºèrefractory b-cell lymphoma"   
 
 # Levenstein distance between tumors 
-df_tumor_combined<-as.data.frame(unique(c(ct_tumor_df$diseases,NCIT_Terms,WHO_Terms)))
+#df_tumor_combined<-as.data.frame(unique(c(ct_tumor_df$diseases,NCIT_Terms,WHO_Terms)))
+df_tumor_combined<-as.data.frame(unique(c(ct_tumor_df$diseases,NCIT_Terms,WHO_Terms_All$Tumor_Names)))
 colnames(df_tumor_combined)[1]<-"Tumor"
 
 
