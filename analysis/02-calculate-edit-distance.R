@@ -221,6 +221,9 @@ cluster_results_lv <- cluster_results_lv[order(cluster_results_lv$Tumors),]
 cluster_results_jw <- cluster_results_jw[order(cluster_results_jw$Tumors),]
 cluster_results_cosine <- cluster_results_cosine[order(cluster_results_cosine$Tumors),]
 
+stopCluster(cl)
+
+
 # Null the row names
 rownames(cluster_results_lv)<-NULL
 rownames(cluster_results_jw)<-NULL
