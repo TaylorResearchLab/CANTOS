@@ -43,7 +43,7 @@ simmilarity_matrix_jw = 1-dissimilarity_matrix_jw
 
 
 
-cl <- makeCluster(5, outfile="")
+cl <- makeCluster(25, outfile="")
 registerDoParallel(cl)
 df_tumor_names<- colnames(dissimilarity_matrix_lv)
 normalizing_matrix_lv <- as.data.frame(matrix(nrow=length(df_tumor_names),ncol=length(df_tumor_names)))
