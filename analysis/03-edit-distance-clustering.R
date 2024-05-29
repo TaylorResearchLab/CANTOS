@@ -60,12 +60,12 @@ rownames(normalizing_matrix_lv) <- df_tumor_names
 colnames(normalizing_matrix_lv) <- df_tumor_names
 
 simmilarity_matrix_lv <- 1- (dissimilarity_matrix_lv/normalizing_matrix_lv)
-
+save(simmilarity_matrix_lv, file=paste(intermediate_dir,"/simmilarity_matrix_lv.RData",sep=""))
 
 stopCluster(cl)
 
 ######### Cluster with LV ########
-apclust_lv <- apcluster(simmilarity_matrix_lv) #10:26pm -12:45 pm
+apclust_lv <- apcluster(simmilarity_matrix_lv) #10:26pm -12:45 pm #2:07 pm-8:00 pm
 affinity_cluster_lv_df<-as.data.frame(matrix(nrow=1,ncol=2))
 colnames(affinity_cluster_lv_df)<-c("Tumor_Names","Cluster_ID")
 for (iter in 1: length(apclust_lv@clusters)){
@@ -75,7 +75,7 @@ for (iter in 1: length(apclust_lv@clusters)){
 affinity_cluster_lv_df<- affinity_cluster_lv_df %>% separate_rows(Tumor_Names, sep = '@')
 
 ######### Cluster with jw ########
-apclust_jw <- apcluster(simmilarity_matrix_jw) #8:32 pm -10:06 pm
+apclust_jw <- apcluster(simmilarity_matrix_jw) #8:32 pm -10:06 pm. 8:00 pm 
 affinity_cluster_jw_df<-as.data.frame(matrix(nrow=1,ncol=2))
 colnames(affinity_cluster_jw_df)<-c("Tumor_Names","Cluster_ID")
 for (iter in 1: length(apclust_jw@clusters)){
@@ -206,7 +206,7 @@ barplot(height=benchmark_aff_clust_cosine$silhouette_score,names=benchmark_aff_c
 
 
 ## Write workspace
-save.image(file = "editdistancecluster.RData")
+save.image(file = "script3.RData")
 
 write.csv(benchmark_aff_clust_lv,paste(results_dir,"/benchmark_aff_clust_lv.csv",sep=""))
 write.csv(benchmark_aff_clust_jw,paste(results_dir,"/benchmark_aff_clust_jw.csv",sep=""))
