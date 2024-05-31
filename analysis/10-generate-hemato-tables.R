@@ -1,3 +1,4 @@
+# Script to generate hematology tumors table
 suppressPackageStartupMessages({
   library(dplyr)
   library(data.table)
