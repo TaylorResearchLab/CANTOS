@@ -1,3 +1,7 @@
+# 
+# Performs outlier detection and cluster label assignment for Kmeans V3 and ADA2
+# Assigns the closest matching label to edit distance affinity clusters
+# Samples 1600 tumors and generates file for validation
 suppressPackageStartupMessages({
   library(dplyr)
   library(data.table)
