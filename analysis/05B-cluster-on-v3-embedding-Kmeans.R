@@ -1,3 +1,4 @@
+# Computes Kmeans cluster of V3 data and also computes silhouette index
 suppressPackageStartupMessages({
   library(dplyr)
   library(data.table)

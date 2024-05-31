@@ -1,3 +1,4 @@
+#Detect if Affinity cluster members are outliers using LOF and Isolation Forest on ADA2 and V3 data
 suppressPackageStartupMessages({
   library(dplyr)
   library(data.table)

@@ -1,3 +1,4 @@
+# Annotate Affinity cluster results of ADA2
 suppressPackageStartupMessages({
   library(dplyr)
   library(data.table)

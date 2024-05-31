@@ -1,3 +1,4 @@
+# Computes Kmeans cluster of ADA2 data and also computes silhouette index
 suppressPackageStartupMessages({
   library(dplyr)
   library(data.table)
