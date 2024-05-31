@@ -1,3 +1,6 @@
+# Script computes edit distances between clinical trials tumors, WHO tumors, and NCIT tumors. 
+# Performs Affinity Cluster with 3 levels of nesting. 
+
 # Load libraries
 suppressPackageStartupMessages({
   library(dplyr)
