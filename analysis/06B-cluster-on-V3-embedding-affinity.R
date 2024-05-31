@@ -1,3 +1,5 @@
+# Computes affinity cluster of V3 data. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster memembership.
+
 suppressPackageStartupMessages({
   library(dplyr)
   library(data.table)

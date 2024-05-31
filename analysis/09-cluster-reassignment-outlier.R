@@ -1,3 +1,4 @@
+# Affinity cluster reassignment after outlier detection
 suppressPackageStartupMessages({
   library(dplyr)
   library(data.table)
