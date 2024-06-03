@@ -1,3 +1,5 @@
+# Annotate the 50K diseases automatically as cancer or not. 
+
 # Load libraries
 suppressPackageStartupMessages({
   library(dplyr)

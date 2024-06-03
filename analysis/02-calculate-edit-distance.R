@@ -1,3 +1,6 @@
+#Load the manually annotated disease file with pediatric and adult cancer annotation.
+
+
 # Load libraries
 suppressPackageStartupMessages({
   library(dplyr)
@@ -38,10 +41,10 @@ WHO_Terms_All <-readxl::read_xlsx(paste(data_dir,"/WHO_Tumors/result/WHO_Tumor_a
 
 
 NCIT_Terms <-read.csv(paste(data_dir,"/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv",sep=""))[,1]
-WHO_Terms <-read.csv(paste(data_dir,"/dt_input_file_6_dec/WHO_Only_terms_text-embedding-ada-002_embeddings.csv",sep=""))[,1]
-
+# WHO_Terms <-read.csv(paste(data_dir,"/dt_input_file_6_dec/WHO_Only_terms_text-embedding-ada-002_embeddings.csv",sep=""))[,1]
+# 
 NCIT_Terms<-tolower(NCIT_Terms[c(-1)])
-WHO_Terms<-tolower(WHO_Terms[c(-1)])
+# WHO_Terms<-tolower(WHO_Terms[c(-1)])
 
 
 
