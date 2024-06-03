@@ -1,3 +1,6 @@
+# Load data from clinical trials and select only the diseases with NCT ID , and associated with 
+# Intervention types of Drug, Biological,Combination Product,Genetic. Totally 50410 diseases are extracted. 
+
 # Load libraries
 suppressPackageStartupMessages({
   library(dplyr)
