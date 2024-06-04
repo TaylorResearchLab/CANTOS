@@ -9,14 +9,18 @@ This repository contains the code, tables, and plots associated with the CT Embe
 
 3. We compute the distance of each  13,329 clinical trials tumors, 4720 WHO tumors, and 1395 NCIT tumors.  Distance metrics used are Levenshtein, Cosine , and Jarro-Winkler. </br>
 
-4. We find the closest matching WHO term for each tumor for each distance metric and then also group the closest 0.05% matching group of tumors.
+4. We find the closest matching WHO term for each tumor for each distance metric and then also group the top 0.05% closest matching group of tumors. Each of the closest match terms are standardized to their closest matching WHO Term. </br>
+
+5. We also use the distance matrices computed to perform 3 levels of nested affinity clustering and group the tumors. After grouping the tumors they are standardized to their closest matching WHO Term. </br>
+
+6. We generate embeddings for each tumor terms (CT, WHO, NCIT) using Open AI's ADA2.0 and V-3 Large text-embedding models. We then compute the closest matching (Euclidean Distance) WHO terms for each tumor.  </br>
+
+7. We also perform PCA on each of the embedding types and then run K-means and Affinity Clustering to group the tumors together. We refine the clusters by filtering outliers using isolation forest and local outlier factor.  </br>
+
+8. After cluster refinement, each cluster is standardized to the WHO term that matches a majority of the members of that cluster.  
    
    
    
-2. Cluster tumor names using distance metrics and show it is not an effective method <br />
-3. Cluster tumor names using methods such as KNN and show it is not an effective method <br />
-4. Finally, use embeddings generated from OpenAI's ADA 2.0 and cluster using affinity propagation <br/>
-5. For each cluster find the closest matching NCIT or WHO Term. <br />
 
 The results of this study is used to standardize the tumor names in CT database, so they can be used in a meaningful way for further downstream analysis of relating drugs and targets to tumors.
 
