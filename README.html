@@ -372,16 +372,23 @@ diseases.<br /></p></li>
 4720 WHO tumors, and 1395 NCIT tumors. Distance metrics used are
 Levenshtein, Cosine , and Jarro-Winkler. </br></p></li>
 <li><p>We find the closest matching WHO term for each tumor for each
-distance metric and then also group the closest 0.05% matching group of
-tumors.</p></li>
-<li><p>Cluster tumor names using distance metrics and show it is not an
-effective method <br /></p></li>
-<li><p>Cluster tumor names using methods such as KNN and show it is not
-an effective method <br /></p></li>
-<li><p>Finally, use embeddings generated from OpenAI’s ADA 2.0 and
-cluster using affinity propagation <br /></p></li>
-<li><p>For each cluster find the closest matching NCIT or WHO Term.
-<br /></p></li>
+distance metric and then also group the top 0.05% closest matching group
+of tumors. Each of the closest match terms are standardized to their
+closest matching WHO Term. </br></p></li>
+<li><p>We also use the distance matrices computed to perform 3 levels of
+nested affinity clustering and group the tumors. After grouping the
+tumors they are standardized to their closest matching WHO Term.
+</br></p></li>
+<li><p>We generate embeddings for each tumor terms (CT, WHO, NCIT) using
+Open AI’s ADA2.0 and V-3 Large text-embedding models. We then compute
+the closest matching (Euclidean Distance) WHO terms for each tumor.
+</br></p></li>
+<li><p>We also perform PCA on each of the embedding types and then run
+K-means and Affinity Clustering to group the tumors together. We refine
+the clusters by filtering outliers using isolation forest and local
+outlier factor. </br></p></li>
+<li><p>After cluster refinement, each cluster is standardized to the WHO
+term that matches a majority of the members of that cluster.</p></li>
 </ol>
 <p>The results of this study is used to standardize the tumor names in
 CT database, so they can be used in a meaningful way for further
