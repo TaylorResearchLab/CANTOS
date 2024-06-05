@@ -24,4 +24,61 @@ This repository contains the code, tables, and plots associated with the CT Embe
 
 The results of this study is used to standardize the tumor names in CT database, so they can be used in a meaningful way for further downstream analysis of relating drugs and targets to tumors.
 
+## Scripts
+
+00-generate-ct-disease-file.R:  </br> 
+This script loads data from clinical trials and select only the diseases with NCT ID , and associated with Intervention types of Drug, Biological,Combination Product,Genetic. Totally 50410 diseases are extracted. </br> 
+
+
+01-generate-disease-annotation-for-manual-review.R </br>
+This script annotates the 50K diseases automatically as cancer or not. </br>
+
+02-calculate-edit-distance.R </br>
+This script loads the manually annotated disease file with pediatric and adult cancer annotation. <br/>
+
+03-edit-distance-clustering.R </br>
+This Script computes edit distances between clinical trials tumors, WHO tumors, and NCIT tumors.Performs Affinity Cluster with 3 levels of nesting. </br>
+
+04-preprocess-embedding-pca.R </br>
+This script loads embeddings V3 and ADA2 for CT, WHO, NCIT  Tumors and then performs PCA. </br>
+
+05A-cluster-on-ADA2-embedding-Kmeans.R </br>
+This script computes Kmeans cluster of ADA2 data and also computes silhouette index. </br>
+
+
+05B-cluster-on-v3-embedding-Kmeans.R </br>
+This script computes Kmeans cluster of V3 data and also computes silhouette index. </br>
+
+06A-cluster-on-ADA-embedding-affinity.R </br>
+This script computes affinity cluster of ADA2 data. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership. <br/>
+
+
+06B-cluster-on-V3-embedding-affinity.R </br>
+This script computes affinity cluster of V3 data. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.
+
+
+07A-annotate-cluster-result-NCIT-WHO.R </br>
+This script annotates Affinity cluster results of ADA2 embeddings. </br>
+
+07B-annotate-cluster-result-V3-NCIT-WHO.R </br>
+This script annotates Affinity cluster results of V3 embeddings. </br>
+
+
+08-outlier-detection-embeddings.R </br>
+This script is used to detect if Affinity cluster members are outliers using LOF and Isolation Forest on ADA2 and V3 embedding data </br>
+
+09-cluster-reassignment-outlier.R </br>
+This script performs Affinity cluster reassignment after outlier detection </br>
+
+10-generate-hemato-tables.R </br>
+This script to generate hematology tumors table </br>
+
+11-generate-records-annotation.R </br>
+This script is not in use </br>
+
+12-assign-who-ncit-outlier-kmeans-editdistance-clustering.R </br>
+This script performs outlier detection and cluster label assignment for Kmeans V3 and ADA2. Assigns the closest matching label to edit distance affinity clusters. Samples 1600 tumors and generates file for validation. </br>
+
+13-accuracy-script.R </br>
+This script is used evaluate the accuracy of each clustering+standardization methods. 
 
