@@ -97,7 +97,41 @@ for (iter in 1: length(apclust_cosine@clusters)){
 }
 affinity_cluster_cosine_df<- affinity_cluster_cosine_df %>% separate_rows(Tumor_Names, sep = '@')
 
-save.image(file = "editdistancecluster.RData")
+
+
+
+
+
+# Compute Cluster frequencies for each case
+cluster_frequency_table_cosine <- as.data.frame(table(affinity_cluster_cosine_df$Cluster_ID))
+colnames(cluster_frequency_table_cosine)<- c("Cluster_ID","Primary_Cluster_Frequency")
+cluster_frequency_table_cosine$Cluster_ID<-as.character(cluster_frequency_table_cosine$Cluster_ID)
+z_scores<- (cluster_frequency_table_cosine$Primary_Cluster_Frequency-mean(cluster_frequency_table_cosine$Primary_Cluster_Frequency))/sd(cluster_frequency_table_cosine$Primary_Cluster_Frequency)
+cluster_frequency_table_cosine$z_scores<-z_scores
+
+cluster_frequency_table_jw <- as.data.frame(table(affinity_cluster_jw_df$Cluster_ID))
+colnames(cluster_frequency_table_jw)<- c("Cluster_ID","Primary_Cluster_Frequency")
+cluster_frequency_table_jw$Cluster_ID<-as.character(cluster_frequency_table_jw$Cluster_ID)
+z_scores<- (cluster_frequency_table_jw$Primary_Cluster_Frequency-mean(cluster_frequency_table_jw$Primary_Cluster_Frequency))/sd(cluster_frequency_table_jw$Primary_Cluster_Frequency)
+cluster_frequency_table_jw$z_scores<-z_scores
+
+cluster_frequency_table_lv <- as.data.frame(table(affinity_cluster_lv_df$Cluster_ID))
+colnames(cluster_frequency_table_lv)<- c("Cluster_ID","Primary_Cluster_Frequency")
+cluster_frequency_table_lv$Cluster_ID<-as.character(cluster_frequency_table_lv$Cluster_ID)
+z_scores<- (cluster_frequency_table_lv$Primary_Cluster_Frequency-mean(cluster_frequency_table_lv$Primary_Cluster_Frequency))/sd(cluster_frequency_table_lv$Primary_Cluster_Frequency)
+cluster_frequency_table_lv$z_scores<-z_scores
+
+ind_min_zscore_cosine<- which(cluster_frequency_table_cosine$z_scores < 2.5)
+max_cluster_member_cosine <- max(cluster_frequency_table_cosine$Primary_Cluster_Frequency[ind_min_zscore_cosine])
+
+ind_min_zscore_jw<- which(cluster_frequency_table_jw$z_scores < 2.5)
+max_cluster_member_jw <- max(cluster_frequency_table_jw$Primary_Cluster_Frequency[ind_min_zscore_jw])
+
+
+ind_min_zscore_lv<- which(cluster_frequency_table_lv$z_scores < 2.5)
+max_cluster_member_lv <- max(cluster_frequency_table_lv$Primary_Cluster_Frequency[ind_min_zscore_lv])
+
+
 
 ### Nested LV Clustering
 
