@@ -1,3 +1,5 @@
+#This script is used evaluate the accuracy of each clustering+standardization methods. 
+
 suppressPackageStartupMessages({
   library(dplyr)
   library(data.table)
