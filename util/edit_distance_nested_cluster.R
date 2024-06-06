@@ -12,9 +12,11 @@ edit_distance_nested_cluster <- function(affinity_cluster_df,dist_mat){
   max_cluster_member<- median(cluster_frequency_table$Primary_Cluster_Frequency)
   
   large_cluster_labels<- cluster_frequency_table$Cluster_ID[which(cluster_frequency_table$Primary_Cluster_Frequency>max_cluster_member)]
-  
-  while(length(large_cluster_labels)>0){
+ 
+  flag=1
+  while(length(large_cluster_labels)>0 & flag !=0 ){
   print(length(large_cluster_labels))
+  previous_length_cluster <- length(large_cluster_labels)
   for (iter in 1:length(large_cluster_labels)){
     current_cluster_label <- large_cluster_labels[iter]
     nested_cluster_df<- affinity_cluster_df %>% dplyr::filter(Cluster_ID==current_cluster_label)%>%dplyr::select(Tumor_Names)
@@ -37,7 +39,7 @@ edit_distance_nested_cluster <- function(affinity_cluster_df,dist_mat){
       }
       
       nested_subset_affinity_df<- nested_subset_affinity_df %>% separate_rows(Tumor_Names, sep = '@')
-      nested_subset_affinity_df <- nested_subset_affinity_df %>% mutate(Cluster_ID= paste(affinity_subcluster_labels[iter],Cluster_ID,sep="."))
+      nested_subset_affinity_df <- nested_subset_affinity_df %>% mutate(Cluster_ID= paste(current_cluster_label,Cluster_ID,sep="."))
       
       for (iter_nested_affinity_cluser in 1: dim(nested_subset_affinity_df)[1]){
         ind_location <- which (affinity_cluster_df$Tumor_Names==nested_subset_affinity_df$Tumor_Names[iter_nested_affinity_cluser])
@@ -52,7 +54,10 @@ edit_distance_nested_cluster <- function(affinity_cluster_df,dist_mat){
     colnames(cluster_frequency_table)<- c("Cluster_ID","Primary_Cluster_Frequency")
     cluster_frequency_table$Cluster_ID<-as.character(cluster_frequency_table$Cluster_ID)
     large_cluster_labels<- cluster_frequency_table$Cluster_ID[which(cluster_frequency_table$Primary_Cluster_Frequency>max_cluster_member)]
-    
+    current_legnth_cluster <- length(large_cluster_labels)  
+    if(previous_length_cluster == current_cluster_label){
+      flag=0
+    }
 }
   
   return(affinity_cluster_df)
