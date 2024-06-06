@@ -55,7 +55,8 @@ edit_distance_nested_cluster <- function(affinity_cluster_df,dist_mat){
     cluster_frequency_table$Cluster_ID<-as.character(cluster_frequency_table$Cluster_ID)
     large_cluster_labels<- cluster_frequency_table$Cluster_ID[which(cluster_frequency_table$Primary_Cluster_Frequency>max_cluster_member)]
     current_legnth_cluster <- length(large_cluster_labels)  
-    if(previous_length_cluster == current_cluster_label){
+    print(previous_length_cluster-current_length_cluster)
+    if(previous_length_cluster == current_length_cluster){
       flag=0
     }
 }
