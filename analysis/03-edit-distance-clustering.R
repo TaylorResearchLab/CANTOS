@@ -25,6 +25,7 @@ plots_dir <- file.path(root_dir,"plots")
 source(paste(util_dir,"/string_normalizing.R",sep=""))
 source(paste(util_dir,"/nested_clust_edit_dist.R",sep=""))
 source(paste(util_dir,"/compute_silhouette.R",sep=""))
+source(paste(util_dir,"/edit_distance_nested_cluster.R",sep=""))
 
 
 
@@ -156,7 +157,10 @@ while(length(large_cluster_labels_cosine)>0){
   large_cluster_labels<-setdiff(large_cluster_labels, unlist(converge_list))
 }
 
-
+# nested clustering based on size of cluster
+nested_affinity_cluster_lv2<- edit_distance_nested_cluster(affinity_cluster_lv_df,simmilarity_matrix_lv)
+nested_affinity_cluster_jw2<- edit_distance_nested_cluster(affinity_cluster_jw_df,simmilarity_matrix_jw)
+nested_affinity_cluster_cosine2<- edit_distance_nested_cluster(affinity_cluster_cosine_df,simmilarity_matrix_cosine)
 
 
 ### Nested LV Clustering
