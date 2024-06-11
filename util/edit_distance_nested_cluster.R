@@ -13,8 +13,10 @@ edit_distance_nested_cluster <- function(affinity_cluster_df,dist_mat){
   
   large_cluster_labels<- cluster_frequency_table$Cluster_ID[which(cluster_frequency_table$Primary_Cluster_Frequency>max_cluster_member)]
  
+  flag=1
   while(length(large_cluster_labels)>0 & flag !=0 ){
   print(length(large_cluster_labels))
+  previous_length_cluster <- length(large_cluster_labels)
   for (iter in 1:length(large_cluster_labels)){
     current_cluster_label <- large_cluster_labels[iter]
     nested_cluster_df<- affinity_cluster_df %>% dplyr::filter(Cluster_ID==current_cluster_label)%>%dplyr::select(Tumor_Names)
@@ -52,7 +54,11 @@ edit_distance_nested_cluster <- function(affinity_cluster_df,dist_mat){
     colnames(cluster_frequency_table)<- c("Cluster_ID","Primary_Cluster_Frequency")
     cluster_frequency_table$Cluster_ID<-as.character(cluster_frequency_table$Cluster_ID)
     large_cluster_labels<- cluster_frequency_table$Cluster_ID[which(cluster_frequency_table$Primary_Cluster_Frequency>max_cluster_member)]
-
+    current_length_cluster <- length(large_cluster_labels)  
+    print(previous_length_cluster-current_length_cluster)
+    if(previous_length_cluster == current_length_cluster){
+      flag=0
+    }
 }
   
   return(affinity_cluster_df)
