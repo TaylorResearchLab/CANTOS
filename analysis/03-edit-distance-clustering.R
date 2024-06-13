@@ -101,62 +101,6 @@ affinity_cluster_cosine_df<- affinity_cluster_cosine_df %>% separate_rows(Tumor_
 
 
 
-
-
-# Compute Cluster frequencies for each case
-cluster_frequency_table_cosine <- as.data.frame(table(affinity_cluster_cosine_df$Cluster_ID))
-colnames(cluster_frequency_table_cosine)<- c("Cluster_ID","Primary_Cluster_Frequency")
-cluster_frequency_table_cosine$Cluster_ID<-as.character(cluster_frequency_table_cosine$Cluster_ID)
-
-cluster_frequency_table_jw <- as.data.frame(table(affinity_cluster_jw_df$Cluster_ID))
-colnames(cluster_frequency_table_jw)<- c("Cluster_ID","Primary_Cluster_Frequency")
-cluster_frequency_table_jw$Cluster_ID<-as.character(cluster_frequency_table_jw$Cluster_ID)
-
-cluster_frequency_table_lv <- as.data.frame(table(affinity_cluster_lv_df$Cluster_ID))
-colnames(cluster_frequency_table_lv)<- c("Cluster_ID","Primary_Cluster_Frequency")
-cluster_frequency_table_lv$Cluster_ID<-as.character(cluster_frequency_table_lv$Cluster_ID)
-
-
-large_cluster_labels_cosine<- cluster_frequency_table_cosine$Cluster_ID[which(cluster_frequency_table_cosine$Primary_Cluster_Frequency>median(cluster_frequency_table_cosine$Primary_Cluster_Frequency))]
-large_cluster_labels_jw<- cluster_frequency_table_jw$Cluster_ID[which(cluster_frequency_table_jw$Primary_Cluster_Frequency>median(cluster_frequency_table_jw$Primary_Cluster_Frequency))]
-large_cluster_labels_lv<- cluster_frequency_table_lv$Cluster_ID[which(cluster_frequency_table_lv$Primary_Cluster_Frequency>median(cluster_frequency_table_lv$Primary_Cluster_Frequency))]
-
-converge_list<-list()
-
-while(length(large_cluster_labels_cosine)>0){
-  print(length(large_cluster_labels_cosine))
-  for(iter in 1:length(large_cluster_labels_cosine)){
-    Clusters_Names=large_cluster_labels_cosine[iter]
-    subset_embedding_df <- as.data.frame(affinity_cluster_df$Tumor_Names[affinity_cluster_df$Cluster_ID==Clusters_Names])
-    colnames(subset_embedding_df)<-"Tumor_Name"
-    rownames(subset_embedding_df)<-subset_embedding_df$Tumor_Name
-    subset_embedding_df<- subset_embedding_df %>% dplyr::left_join(disease_transform,by="Tumor_Name")
-    rownames(subset_embedding_df)<-subset_embedding_df$Tumor_Name
-    subset_embedding_df<-subset_embedding_df[,c(-1)]
-    
-    result_run_aff<-run_affinity_clustering(Clusters_Names,subset_embedding_df)
-    
-    flag_converge <- result_run_aff[[1]]
-    subset_affinity_df<-result_run_aff[[2]]
-    
-    if(flag_converge=="No"){
-      for (iter_nested_affinity_cluser in 1: dim(subset_affinity_df)[1]){
-        ind_location <- which (affinity_cluster_df$Tumor_Names==subset_affinity_df$Tumor_Names[iter_nested_affinity_cluser])
-        affinity_cluster_df$Cluster_ID[ind_location]<-subset_affinity_df$SubCluster_ID[iter_nested_affinity_cluser]
-      }
-    }else if(flag_converge=="Yes"){
-      converge_list<-append(Clusters_Names,converge_list)
-    }
-    
-    
-  }
-  cluster_frequency_table <- as.data.frame(table(affinity_cluster_df$Cluster_ID))
-  colnames(cluster_frequency_table)<- c("Cluster_ID","Primary_Cluster_Frequency")
-  cluster_frequency_table$Cluster_ID<-as.character(cluster_frequency_table$Cluster_ID)
-  large_cluster_labels<- cluster_frequency_table$Cluster_ID[which(cluster_frequency_table$Primary_Cluster_Frequency>max_cluster_member)]
-  large_cluster_labels<-setdiff(large_cluster_labels, unlist(converge_list))
-}
-
 # nested clustering based on size of cluster
 nested_affinity_cluster_lv2<- edit_distance_nested_cluster(affinity_cluster_lv_df,simmilarity_matrix_lv)
 nested_affinity_cluster_jw2<- edit_distance_nested_cluster(affinity_cluster_jw_df,simmilarity_matrix_jw)
