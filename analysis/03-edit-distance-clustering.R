@@ -120,7 +120,6 @@ nested_affinity_cluster_jw <- nested_clust_edit_dist(n=3,affinity_cluster_df = a
 
 nested_affinity_cluster_cosine <- nested_clust_edit_dist(n=3,affinity_cluster_df = affinity_cluster_cosine_df,
                                                      dist_mat = simmilarity_matrix_cosine)
-# NEED TO FIX SILLOHUTE COMP
 # Compute Silo Dist
 nested_affinity_cluster_lv<-compute_silhouette(cluster_df = nested_affinity_cluster_lv,dist_mat = dissimilarity_matrix_lv)
 nested_affinity_cluster_jw<-compute_silhouette(cluster_df = nested_affinity_cluster_jw,dist_mat = dissimilarity_matrix_jw)
