@@ -102,42 +102,26 @@ affinity_cluster_cosine_df<- affinity_cluster_cosine_df %>% separate_rows(Tumor_
 
 
 # nested clustering based on size of cluster
-nested_affinity_cluster_lv2<- edit_distance_nested_cluster(affinity_cluster_lv_df,simmilarity_matrix_lv)
-nested_affinity_cluster_jw2<- edit_distance_nested_cluster(affinity_cluster_jw_df,simmilarity_matrix_jw)
-nested_affinity_cluster_cosine2<- edit_distance_nested_cluster(affinity_cluster_cosine_df,simmilarity_matrix_cosine)
+nested_affinity_cluster_lv<- edit_distance_nested_cluster(affinity_cluster_lv_df,simmilarity_matrix_lv)
+nested_affinity_cluster_jw<- edit_distance_nested_cluster(affinity_cluster_jw_df,simmilarity_matrix_jw)
+nested_affinity_cluster_cosine<- edit_distance_nested_cluster(affinity_cluster_cosine_df,simmilarity_matrix_cosine)
 
 
-### Nested LV Clustering
-
-nested_affinity_cluster_lv <- nested_clust_edit_dist(n=3,affinity_cluster_df = affinity_cluster_lv_df,
-                                                     dist_mat = simmilarity_matrix_lv)
-
-### Nested JW Clustering
-
-nested_affinity_cluster_jw <- nested_clust_edit_dist(n=3,affinity_cluster_df = affinity_cluster_jw_df,
-                                                     dist_mat = simmilarity_matrix_jw)
-### Nested Cosine Clustering
-
-nested_affinity_cluster_cosine <- nested_clust_edit_dist(n=3,affinity_cluster_df = affinity_cluster_cosine_df,
-                                                     dist_mat = simmilarity_matrix_cosine)
 # Compute Silo Dist
-#nested_affinity_cluster_lv<-compute_silhouette(cluster_df = nested_affinity_cluster_lv,dist_mat = dissimilarity_matrix_lv)
-#nested_affinity_cluster_jw<-compute_silhouette(cluster_df = nested_affinity_cluster_jw,dist_mat = dissimilarity_matrix_jw)
-#nested_affinity_cluster_cosine<-compute_silhouette(cluster_df = nested_affinity_cluster_cosine,dist_mat = dissimilarity_matrix_cosine)
 
-nested_affinity_cluster_lv2<-compute_silhouette(cluster_df = nested_affinity_cluster_lv2,dist_mat = dissimilarity_matrix_lv)
-nested_affinity_cluster_jw2<-compute_silhouette(cluster_df = nested_affinity_cluster_jw2,dist_mat = dissimilarity_matrix_jw)
-nested_affinity_cluster_cosine2<-compute_silhouette(cluster_df = nested_affinity_cluster_cosine2,dist_mat = dissimilarity_matrix_cosine)
+nested_affinity_cluster_lv<-compute_silhouette(cluster_df = nested_affinity_cluster_lv,dist_mat = dissimilarity_matrix_lv)
+nested_affinity_cluster_jw<-compute_silhouette(cluster_df = nested_affinity_cluster_jw,dist_mat = dissimilarity_matrix_jw)
+nested_affinity_cluster_cosine<-compute_silhouette(cluster_df = nested_affinity_cluster_cosine,dist_mat = dissimilarity_matrix_cosine)
 
 
-mean_freq_lv <- nested_affinity_cluster_lv %>% dplyr::select(SubsetCluster_IDs, silhouette_score) %>% dplyr::group_by(SubsetCluster_IDs) %>% dplyr::summarise(mean_silo_score=mean(silhouette_score),cluster_member_count =dplyr::n()) 
-mean_freq_jw <- nested_affinity_cluster_jw %>% dplyr::select(SubsetCluster_IDs, silhouette_score) %>% dplyr::group_by(SubsetCluster_IDs) %>% dplyr::summarise(mean_silo_score=mean(silhouette_score),cluster_member_count =dplyr::n())
-mean_freq_cosine <- nested_affinity_cluster_cosine %>% dplyr::select(SubsetCluster_IDs, silhouette_score) %>% dplyr::group_by(SubsetCluster_IDs) %>% dplyr::summarise(mean_silo_score=mean(silhouette_score),cluster_member_count =dplyr::n())
+mean_freq_lv <- nested_affinity_cluster_lv %>% dplyr::select(Cluster_ID, silhouette_score) %>% dplyr::group_by(Cluster_ID) %>% dplyr::summarise(mean_silo_score=mean(silhouette_score),cluster_member_count =dplyr::n()) 
+mean_freq_jw <- nested_affinity_cluster_jw %>% dplyr::select(Cluster_ID, silhouette_score) %>% dplyr::group_by(Cluster_ID) %>% dplyr::summarise(mean_silo_score=mean(silhouette_score),cluster_member_count =dplyr::n())
+mean_freq_cosine <- nested_affinity_cluster_cosine %>% dplyr::select(Cluster_ID, silhouette_score) %>% dplyr::group_by(Cluster_ID) %>% dplyr::summarise(mean_silo_score=mean(silhouette_score),cluster_member_count =dplyr::n())
 
 
-nested_affinity_cluster_lv<- nested_affinity_cluster_lv %>% dplyr::left_join(mean_freq_lv,by="SubsetCluster_IDs")
-nested_affinity_cluster_jw<- nested_affinity_cluster_jw %>% dplyr::left_join(mean_freq_jw,by="SubsetCluster_IDs")
-nested_affinity_cluster_cosine<- nested_affinity_cluster_cosine %>% dplyr::left_join(mean_freq_cosine,by="SubsetCluster_IDs")
+nested_affinity_cluster_lv<- nested_affinity_cluster_lv %>% dplyr::left_join(mean_freq_lv,by="Cluster_ID")
+nested_affinity_cluster_jw<- nested_affinity_cluster_jw %>% dplyr::left_join(mean_freq_jw,by="Cluster_ID")
+nested_affinity_cluster_cosine<- nested_affinity_cluster_cosine %>% dplyr::left_join(mean_freq_cosine,by="Cluster_ID")
 
 # Select benchmarks 
 benchmark_tumors <- c("b cell lymphoma", "neuroblastoma", "triple negative breast cancer",
