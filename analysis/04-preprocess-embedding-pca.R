@@ -35,6 +35,13 @@ colnames(missing_v3_tumors)[1]<-"Tumor_Names"
 
 embedding_v3_large<-rbind(embedding_v3_large,missing_v3_tumors)
 
+WHO_3rd_4th_5th_text_embedding_3_large_embeddings <- read_csv(paste(data_dir,"/WHO_3rd_4th_5th_text-embedding-3-large_embeddings.csv",sep=""))
+colnames(WHO_3rd_4th_5th_text_embedding_3_large_embeddings)<- colnames(embedding_v3_large)
+embedding_v3_large<-rbind(embedding_v3_large,WHO_3rd_4th_5th_text_embedding_3_large_embeddings)
+
+  
+
+
 
 
 # Read the annotated file
