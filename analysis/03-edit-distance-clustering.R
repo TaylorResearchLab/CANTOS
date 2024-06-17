@@ -128,50 +128,50 @@ benchmark_tumors <- c("b cell lymphoma", "neuroblastoma", "triple negative breas
                       "unresectable lung carcinoma", "liposarcoma","cancer of the liver",
                       "smoldering myeloma")
 
-subcluster_lv <- nested_affinity_cluster_lv$SubsetCluster_IDs[nested_affinity_cluster_lv$Tumor_Names %in% benchmark_tumors]
-benchmark_aff_clust_lv <- nested_affinity_cluster_lv %>% dplyr::filter(SubsetCluster_IDs %in% subcluster_lv)
+subcluster_lv <- nested_affinity_cluster_lv$Cluster_ID[nested_affinity_cluster_lv$Tumor_Names %in% benchmark_tumors]
+benchmark_aff_clust_lv <- nested_affinity_cluster_lv %>% dplyr::filter(Cluster_ID %in% subcluster_lv)
 
-subcluster_jw <- nested_affinity_cluster_jw$SubsetCluster_IDs[nested_affinity_cluster_jw$Tumor_Names %in% benchmark_tumors]
-benchmark_aff_clust_jw <- nested_affinity_cluster_jw %>% dplyr::filter(SubsetCluster_IDs %in% subcluster_jw)
+subcluster_jw <- nested_affinity_cluster_jw$Cluster_ID[nested_affinity_cluster_jw$Tumor_Names %in% benchmark_tumors]
+benchmark_aff_clust_jw <- nested_affinity_cluster_jw %>% dplyr::filter(Cluster_ID %in% subcluster_jw)
 
-subcluster_cosine <- nested_affinity_cluster_cosine$SubsetCluster_IDs[nested_affinity_cluster_cosine$Tumor_Names %in% benchmark_tumors]
-benchmark_aff_clust_cosine <- nested_affinity_cluster_cosine %>% dplyr::filter(SubsetCluster_IDs %in% subcluster_cosine)
+subcluster_cosine <- nested_affinity_cluster_cosine$Cluster_ID[nested_affinity_cluster_cosine$Tumor_Names %in% benchmark_tumors]
+benchmark_aff_clust_cosine <- nested_affinity_cluster_cosine %>% dplyr::filter(Cluster_ID %in% subcluster_cosine)
 
 
 # Plot 
 
-clust_plot_lv <- benchmark_aff_clust_lv %>% dplyr::select(SubsetCluster_IDs,mean_silo_score,cluster_member_count) 
+clust_plot_lv <- benchmark_aff_clust_lv %>% dplyr::select(Cluster_ID,mean_silo_score,cluster_member_count) 
 clust_plot_lv<-unique(clust_plot_lv)
 p_lv <- ggplot(clust_plot_lv, aes(x=cluster_member_count, y=mean_silo_score)) +geom_point() +
-  geom_text(label=clust_plot_lv$SubsetCluster_IDs,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) + labs(title = "Levenshtein distance clusters")
+  geom_text(label=clust_plot_lv$Cluster_ID,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) + labs(title = "Levenshtein distance clusters")
 
 
-clust_plot_jw <- benchmark_aff_clust_jw %>% dplyr::select(SubsetCluster_IDs,mean_silo_score,cluster_member_count) 
+clust_plot_jw <- benchmark_aff_clust_jw %>% dplyr::select(Cluster_ID,mean_silo_score,cluster_member_count) 
 clust_plot_jw<-unique(clust_plot_jw)
 p_jw <- ggplot(clust_plot_jw, aes(x=cluster_member_count, y=mean_silo_score)) +geom_point() +
-  geom_text(label=clust_plot_jw$SubsetCluster_IDs,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) +labs(title = "Jarro Winkler distance clusters")
+  geom_text(label=clust_plot_jw$Cluster_ID,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) +labs(title = "Jarro Winkler distance clusters")
 
 
-clust_plot_cosine <- benchmark_aff_clust_cosine %>% dplyr::select(SubsetCluster_IDs,mean_silo_score,cluster_member_count) 
+clust_plot_cosine <- benchmark_aff_clust_cosine %>% dplyr::select(Cluster_ID,mean_silo_score,cluster_member_count) 
 clust_plot_cosine<-unique(clust_plot_cosine)
 p_cosine <- ggplot(clust_plot_cosine, aes(x=cluster_member_count, y=mean_silo_score)) +geom_point() +
-  geom_text(label=clust_plot_cosine$SubsetCluster_IDs,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05)+labs(title = "Cosine distance clusters")
+  geom_text(label=clust_plot_cosine$Cluster_ID,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05)+labs(title = "Cosine distance clusters")
 
 
 
 # Global Plot
-global_clust_plot_lv <- nested_affinity_cluster_lv %>% dplyr::select(SubsetCluster_IDs,mean_silo_score,cluster_member_count) %>% dplyr::distinct()
-global_clust_plot_jw <- nested_affinity_cluster_jw %>% dplyr::select(SubsetCluster_IDs,mean_silo_score,cluster_member_count) %>% dplyr::distinct()
-global_clust_plot_cosine <- nested_affinity_cluster_cosine %>% dplyr::select(SubsetCluster_IDs,mean_silo_score,cluster_member_count) %>% dplyr::distinct()
+global_clust_plot_lv <- nested_affinity_cluster_lv %>% dplyr::select(Cluster_ID,mean_silo_score,cluster_member_count) %>% dplyr::distinct()
+global_clust_plot_jw <- nested_affinity_cluster_jw %>% dplyr::select(Cluster_ID,mean_silo_score,cluster_member_count) %>% dplyr::distinct()
+global_clust_plot_cosine <- nested_affinity_cluster_cosine %>% dplyr::select(Cluster_ID,mean_silo_score,cluster_member_count) %>% dplyr::distinct()
 
 plt_global_lv <- ggplot(global_clust_plot_lv, aes(x=cluster_member_count, y=mean_silo_score)) +geom_point() +
-  geom_text(label=global_clust_plot_lv$SubsetCluster_IDs,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) + labs(title = "Levenshtein distance clusters")
+  geom_text(label=global_clust_plot_lv$Cluster_ID,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) + labs(title = "Levenshtein distance clusters")
 
 plt_global_jw <- ggplot(global_clust_plot_jw, aes(x=cluster_member_count, y=mean_silo_score)) +geom_point() +
-  geom_text(label=global_clust_plot_jw$SubsetCluster_IDs,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) + labs(title = "Jarro Winkler distance clusters")
+  geom_text(label=global_clust_plot_jw$Cluster_ID,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) + labs(title = "Jarro Winkler distance clusters")
 
 plt_global_cosine <- ggplot(global_clust_plot_cosine, aes(x=cluster_member_count, y=mean_silo_score)) +geom_point() +
-  geom_text(label=global_clust_plot_cosine$SubsetCluster_IDs,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) + labs(title = "Cosine distance clusters")
+  geom_text(label=global_clust_plot_cosine$Cluster_ID,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) + labs(title = "Cosine distance clusters")
 
 # Save plot
 ggsave(plt_global_lv, filename = paste(plots_dir,"/plt_global_lv.pdf",sep=""), height = 30, width = 21, units = "cm")
@@ -180,28 +180,28 @@ ggsave(plt_global_cosine, filename = paste(plots_dir,"/plt_global_cosine.pdf",se
 
 
 # Sillohoutte plot
-benchmark_aff_clust_lv <- benchmark_aff_clust_lv[order(benchmark_aff_clust_lv$SubsetCluster_IDs,-benchmark_aff_clust_lv$silhouette_score),]
-benchmark_aff_clust_jw <- benchmark_aff_clust_jw[order(benchmark_aff_clust_jw$SubsetCluster_IDs,-benchmark_aff_clust_jw$silhouette_score),]
-benchmark_aff_clust_cosine <- benchmark_aff_clust_cosine[order(benchmark_aff_clust_cosine$SubsetCluster_IDs,-benchmark_aff_clust_cosine$silhouette_score),]
+benchmark_aff_clust_lv <- benchmark_aff_clust_lv[order(benchmark_aff_clust_lv$Cluster_ID,-benchmark_aff_clust_lv$silhouette_score),]
+benchmark_aff_clust_jw <- benchmark_aff_clust_jw[order(benchmark_aff_clust_jw$Cluster_ID,-benchmark_aff_clust_jw$silhouette_score),]
+benchmark_aff_clust_cosine <- benchmark_aff_clust_cosine[order(benchmark_aff_clust_cosine$Cluster_ID,-benchmark_aff_clust_cosine$silhouette_score),]
 
-color_density_df <- as.data.frame(cbind(unique(benchmark_aff_clust_lv$SubsetCluster_IDs),c(1,10,30,50,70,90,120)))
-colnames(color_density_df)<- c("SubsetCluster_IDs","color_density")
-benchmark_aff_clust_lv<- benchmark_aff_clust_lv %>% dplyr::left_join(color_density_df,by="SubsetCluster_IDs")
+color_density_df <- as.data.frame(cbind(unique(benchmark_aff_clust_lv$Cluster_ID),c(1,10,30,50,70,90,120)))
+colnames(color_density_df)<- c("Cluster_ID","color_density")
+benchmark_aff_clust_lv<- benchmark_aff_clust_lv %>% dplyr::left_join(color_density_df,by="Cluster_ID")
 benchmark_aff_clust_lv$color_density<- as.double(benchmark_aff_clust_lv$color_density)
 
-color_density_df <- as.data.frame(cbind(unique(benchmark_aff_clust_jw$SubsetCluster_IDs),c(1,10,30,50,70,90,120)))
-colnames(color_density_df)<- c("SubsetCluster_IDs","color_density")
-benchmark_aff_clust_jw<- benchmark_aff_clust_jw %>% dplyr::left_join(color_density_df,by="SubsetCluster_IDs")
+color_density_df <- as.data.frame(cbind(unique(benchmark_aff_clust_jw$Cluster_ID),c(1,10,30,50,70,90,120)))
+colnames(color_density_df)<- c("Cluster_ID","color_density")
+benchmark_aff_clust_jw<- benchmark_aff_clust_jw %>% dplyr::left_join(color_density_df,by="Cluster_ID")
 benchmark_aff_clust_jw$color_density<- as.double(benchmark_aff_clust_jw$color_density)
 
-color_density_df <- as.data.frame(cbind(unique(benchmark_aff_clust_cosine$SubsetCluster_IDs),c(1,10,30,50,70,90,120)))
-colnames(color_density_df)<- c("SubsetCluster_IDs","color_density")
-benchmark_aff_clust_cosine<- benchmark_aff_clust_cosine %>% dplyr::left_join(color_density_df,by="SubsetCluster_IDs")
+color_density_df <- as.data.frame(cbind(unique(benchmark_aff_clust_cosine$Cluster_ID),c(1,10,30,50,70,90,120)))
+colnames(color_density_df)<- c("Cluster_ID","color_density")
+benchmark_aff_clust_cosine<- benchmark_aff_clust_cosine %>% dplyr::left_join(color_density_df,by="Cluster_ID")
 benchmark_aff_clust_cosine$color_density<- as.double(benchmark_aff_clust_cosine$color_density)
 
-barplot(height=benchmark_aff_clust_lv$silhouette_score,names=benchmark_aff_clust_lv$SubsetCluster_IDs,ylim =c(-1,1),density=benchmark_aff_clust_lv$color_density,main="Levenshtein")
-barplot(height=benchmark_aff_clust_jw$silhouette_score,names=benchmark_aff_clust_jw$SubsetCluster_IDs,ylim =c(-1,1),density=benchmark_aff_clust_jw$color_density, main="Jarro Winkler")
-barplot(height=benchmark_aff_clust_cosine$silhouette_score,names=benchmark_aff_clust_cosine$SubsetCluster_IDs,ylim =c(-1,1),density=benchmark_aff_clust_cosine$color_density,main="Cosine")
+barplot(height=benchmark_aff_clust_lv$silhouette_score,names=benchmark_aff_clust_lv$Cluster_ID,ylim =c(-1,1),density=benchmark_aff_clust_lv$color_density,main="Levenshtein")
+barplot(height=benchmark_aff_clust_jw$silhouette_score,names=benchmark_aff_clust_jw$Cluster_ID,ylim =c(-1,1),density=benchmark_aff_clust_jw$color_density, main="Jarro Winkler")
+barplot(height=benchmark_aff_clust_cosine$silhouette_score,names=benchmark_aff_clust_cosine$Cluster_ID,ylim =c(-1,1),density=benchmark_aff_clust_cosine$color_density,main="Cosine")
 
 
 ## Write workspace
