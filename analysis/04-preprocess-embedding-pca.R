@@ -38,7 +38,7 @@ embedding_v3_large<-rbind(embedding_v3_large,missing_v3_tumors)
 WHO_3rd_4th_5th_text_embedding_3_large_embeddings <- read_csv(paste(data_dir,"/WHO_3rd_4th_5th_text-embedding-3-large_embeddings.csv",sep=""))
 colnames(WHO_3rd_4th_5th_text_embedding_3_large_embeddings)<- colnames(embedding_v3_large)
 embedding_v3_large<-rbind(embedding_v3_large,WHO_3rd_4th_5th_text_embedding_3_large_embeddings)
-
+embedding_v3_large <- embedding_v3_large%>%group_by(Tumor_Names) %>% summarise(across(everything(), list(mean)))
   
 
 
@@ -49,7 +49,7 @@ ct_disease_df <- read.csv(paste(input_dir,"/CT-Aug22-2023-Disease-File - clinica
 ct_tumor_df<- ct_disease_df %>% filter(validated_cancer_tumor=="Yes") %>%dplyr::select(diseases)
 
 
-
+#ADA2 embeddings 
 # Read missing CT embeddings 
 CT_missing_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/missed_CT_result_embeddings.csv",sep=""))
 
@@ -158,8 +158,8 @@ results_v3 <- prcomp(embedding_v3_large, scale = TRUE)
 eigs_v3 <- results_v3$sdev^2
 ff_v3<-rbind(SD = sqrt(eigs_v3),Proportion = eigs_v3/sum(eigs_v3), Cumulative = cumsum(eigs_v3)/sum(eigs_v3))
 # Check the number of components needed to capture 80% variance at least
-print(sum(ff_v3[2,1:177]))
-disease_transform_v3<-as.data.frame(-results_v3$x[,1:177])
+print(sum(ff_v3[2,1:187]))
+disease_transform_v3<-as.data.frame(-results_v3$x[,1:187])
 
 # Save this file "
 write.csv(disease_transform,file =paste(intermediate_dir,"/disease_transform_pca.csv",sep="") )
