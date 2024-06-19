@@ -28,9 +28,10 @@ source(paste(util_dir,"/string_dissimilarity.R",sep = ""))
 source(paste(util_dir,"/distance_clusters.R",sep=""))
 # Read the annotated file
 #ct_disease_df <- read.csv(paste(input_dir,"/CT-Aug22-2023-Disease-File - clinical_trial_disease_aug_22_2023.csv",sep=""))
-ct_disease_df <- read.csv(paste(input_dir,"/cancer_annotated_file_ammended.csv",sep=""))
+#ct_disease_df <- read.csv(paste(input_dir,"/cancer_annotated_file_ammended.csv",sep=""))
+#ct_tumor_df<- ct_disease_df %>% filter(validated_cancer_tumor=="Yes")
+ct_tumor_df<-read_xlsx(paste(input_dir,"/cancer_annotated_file_ammended.xlsx",sep=""))
 ct_tumor_df<- ct_disease_df %>% filter(validated_cancer_tumor=="Yes")
-
 
 
 
