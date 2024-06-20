@@ -26,7 +26,7 @@ source(paste(util_dir,"/cancer_fuzzy_match.R",sep = ""))
 
 # Read CT Diseases
 ct_disease_df <- read.csv(paste(intermediate_dir,"/ct_disease_df.csv",sep=""))
-ct_disease_df<-ct_disease_df %>% dplyr::select(diseases)
+ct_disease_df<-ct_disease_df %>% dplyr::select(nct_id,diseases)
   
 who_general_words <- read_excel(paste(data_dir,"/who_cancer_key_words_general.xlsx",sep="")) # WHO Tumour List general (ADULT + PED)
 who_ped_words<-  read_excel(paste(data_dir,"/who_cancer_key_words_paediatric.xlsx",sep="")) # WHO Tumour List PED
@@ -60,7 +60,7 @@ ct_disease_df$cancer_search_term[!ind_cancer_search_term]<-"No"
 
 #ct_disease_df<-is_cancer_who(ct_disease_df,who_general_words)
 ct_disease_df<-is_cancer_who(ct_disease_df,who_general_words)
-ct_disease_df<-ct_disease_df %>% dplyr::select(diseases,cancer_search_term,is_cancer_who)
+ct_disease_df<-ct_disease_df %>% dplyr::select(nct_id,diseases,cancer_search_term,is_cancer_who)
 
 # Write this file and manually annotate with a column for validated_cancer_tumor ,PedCanTumor,Ped_Evidence 
 write.csv(ct_disease_df,paste(intermediate_dir,"/ct_disease_df_manually_annotate.csv",sep="")) #16116 with either cancer_search_term =="Yes" or is_cancer_who=="Yes"
