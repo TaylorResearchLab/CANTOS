@@ -7,7 +7,7 @@ suppressPackageStartupMessages({
   library(doParallel)
   library(foreach)
   library(stringdist)
-  library(DescTools)
+  #library(DescTools)
   library(stringr)
   library(readxl)
 })
