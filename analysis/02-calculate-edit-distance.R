@@ -278,9 +278,9 @@ stopCluster(cl)
 
 
 # Write Results of Clusters
-write.csv(cluster_results_lv,paste(results_dir,"/cluster_lv.csv",sep=""))
-write.csv(cluster_results_jw,paste(results_dir,"/cluster_jw.csv",sep=""))
-write.csv(cluster_results_cosine,paste(results_dir,"/cluster_cosine.csv",sep=""))
+write.csv(cluster_results_lv_ct_filtered,paste(results_dir,"/cluster_lv.csv",sep=""))
+write.csv(cluster_results_jw_ct_filtered,paste(results_dir,"/cluster_jw.csv",sep=""))
+write.csv(cluster_results_cosine_ct_filtered,paste(results_dir,"/cluster_cosine.csv",sep=""))
 write.csv(display_table_benchmark,paste(results_dir,"/edit_distance_bench_mark.csv",sep=""))
 
- 
+save.image(file = "script2.RData")
