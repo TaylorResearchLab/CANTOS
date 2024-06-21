@@ -37,8 +37,11 @@ load(paste(intermediate_dir,"/dissimilarity_matrix_cosine.RData",sep=""))
 
 
 cluster_results_lv<- read.csv(paste(results_dir,"/cluster_lv.csv",sep=""))
+cluster_results_lv<-cluster_results_lv[,c(-1)]
 cluster_results_jw<- read.csv(paste(results_dir,"/cluster_jw.csv",sep=""))
+cluster_results_jw<-cluster_results_jw[,c(-1)]
 cluster_results_cosine<- read.csv(paste(results_dir,"/cluster_cosine.csv",sep=""))
+cluster_results_cosine<-cluster_results_cosine[,c(-1)]
 
 
 # Compute Simmilarity matrix for each edit distance
