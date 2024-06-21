@@ -220,19 +220,36 @@ cluster_results_lv<-cluster_results_lv %>% mutate(cluster_members = str_count(cl
 cluster_results_jw<-cluster_results_jw %>% mutate(cluster_members = str_count(cluster_jw, ";")+1)
 cluster_results_cosine<-cluster_results_cosine %>% mutate(cluster_members = str_count(cluster_cosine, ";")+1)  
   
+# filter by ct tumors
+cluster_results_lv_ct_filtered<- cluster_results_lv %>% filter(Tumors %in% ct_tumor_df$diseases)
+cluster_results_jw_ct_filtered<- cluster_results_jw %>% filter(Tumors %in% ct_tumor_df$diseases)
+cluster_results_cosine_ct_filtered<- cluster_results_cosine %>% filter(Tumors %in% ct_tumor_df$diseases)
+
+# add nct_id
+ct_tumor_df_disease_short <- ct_tumor_df %>% dplyr::select(nct_id,diseases)
+cluster_results_lv_ct_filtered <- cluster_results_lv_ct_filtered %>% left_join(ct_tumor_df_disease_short,by=c("Tumors"="diseases"))
+cluster_results_lv_ct_filtered <- cluster_results_lv_ct_filtered[,c(4,1:3)]
+
+
+cluster_results_jw_ct_filtered <- cluster_results_jw_ct_filtered %>% left_join(ct_tumor_df_disease_short,by=c("Tumors"="diseases"))
+cluster_results_jw_ct_filtered <- cluster_results_jw_ct_filtered[,c(4,1:3)]
+
+
+cluster_results_cosine_ct_filtered <- cluster_results_cosine_ct_filtered %>% left_join(ct_tumor_df_disease_short,by=c("Tumors"="diseases"))
+cluster_results_cosine_ct_filtered <- cluster_results_cosine_ct_filtered[,c(4,1:3)]
 
 # organize by alphabetical order
-cluster_results_lv <- cluster_results_lv[order(cluster_results_lv$Tumors),]
-cluster_results_jw <- cluster_results_jw[order(cluster_results_jw$Tumors),]
-cluster_results_cosine <- cluster_results_cosine[order(cluster_results_cosine$Tumors),]
+cluster_results_lv_ct_filtered <- cluster_results_lv_ct_filtered[order(cluster_results_lv_ct_filtered$Tumors),]
+cluster_results_jw_ct_filtered <- cluster_results_jw_ct_filtered[order(cluster_results_jw_ct_filtered$Tumors),]
+cluster_results_cosine_ct_filtered <- cluster_results_cosine_ct_filtered[order(cluster_results_cosine_ct_filtered$Tumors),]
 
 stopCluster(cl)
 
 
 # Null the row names
-rownames(cluster_results_lv)<-NULL
-rownames(cluster_results_jw)<-NULL
-rownames(cluster_results_cosine)<-NULL
+rownames(cluster_results_lv_ct_filtered)<-NULL
+rownames(cluster_results_jw_ct_filtered)<-NULL
+rownames(cluster_results_cosine_ct_filtered)<-NULL
 
 
 # Show results with following tumors 
@@ -240,18 +257,21 @@ benchmark_tumors <- c("b cell lymphoma", "neuroblastoma", "triple negative breas
                       "unresectable lung carcinoma", "liposarcoma","cancer of the liver",
                       "smoldering myeloma")
 
-display_table_benchmark <- cbind(cluster_results_lv %>% filter(Tumors %in% benchmark_tumors) %>% dplyr::select(Tumors,cluster_lv),
-                                 cluster_results_jw %>% filter(Tumors %in%  benchmark_tumors) %>% dplyr::select(cluster_jw),
-                                 cluster_results_cosine %>% filter(Tumors %in% benchmark_tumors) %>% dplyr::select(cluster_cosine)
+display_table_benchmark <- cbind(cluster_results_lv_ct_filtered %>% filter(Tumors %in% benchmark_tumors) %>% dplyr::select(nct_id,Tumors,cluster_lv),
+                                 cluster_results_jw_ct_filtered %>% filter(Tumors %in%  benchmark_tumors) %>% dplyr::select(cluster_jw),
+                                 cluster_results_cosine_ct_filtered %>% filter(Tumors %in% benchmark_tumors) %>% dplyr::select(cluster_cosine)
                                  )
                                  
 
-display_table_benchmark <- display_table_benchmark %>% dplyr::select(Tumors,cluster_lv,cluster_jw,cluster_cosine)
+display_table_benchmark <- display_table_benchmark %>% dplyr::select(nct_id,Tumors,cluster_lv,cluster_jw,cluster_cosine)
 
 # To organize from good to worse
 benchmark_tumors<- as.data.frame(benchmark_tumors)
 colnames(benchmark_tumors)<-"Tumors"
 display_table_benchmark <- benchmark_tumors %>% dplyr::left_join(display_table_benchmark,by="Tumors")
+
+display_table_benchmark <- display_table_benchmark %>% dplyr::select(nct_id,Tumors,cluster_lv,cluster_jw,cluster_cosine)
+
 
 # Stop the cluster
 stopCluster(cl)
