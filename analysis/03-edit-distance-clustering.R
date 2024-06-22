@@ -72,7 +72,7 @@ save(simmilarity_matrix_lv, file=paste(intermediate_dir,"/simmilarity_matrix_lv.
 stopCluster(cl)
 
 ######### Cluster with LV ########
-apclust_lv <- apcluster(simmilarity_matrix_lv) #10:26pm -12:45 pm #2:07 pm-8:00 pm
+apclust_lv <- apcluster(simmilarity_matrix_lv) #10:26pm -12:45 pm #2:07 pm-8:00 pm #6:01 pm
 affinity_cluster_lv_df<-as.data.frame(matrix(nrow=1,ncol=2))
 colnames(affinity_cluster_lv_df)<-c("Tumor_Names","Cluster_ID")
 for (iter in 1: length(apclust_lv@clusters)){
