@@ -126,6 +126,18 @@ nested_affinity_cluster_lv<- nested_affinity_cluster_lv %>% dplyr::left_join(mea
 nested_affinity_cluster_jw<- nested_affinity_cluster_jw %>% dplyr::left_join(mean_freq_jw,by="Cluster_ID")
 nested_affinity_cluster_cosine<- nested_affinity_cluster_cosine %>% dplyr::left_join(mean_freq_cosine,by="Cluster_ID")
 
+
+ct_disease_df <- read_csv(paste(intermediate_dir,"/ct_disease_df.csv",sep=""))
+
+#add NCT_IDs
+nested_affinity_cluster_lv<- nested_affinity_cluster_lv %>% left_join(ct_disease_df, by=c("Tumor_Names"="diseases"))
+nested_affinity_cluster_jw<- nested_affinity_cluster_jw %>%  left_join(ct_disease_df, by=c("Tumor_Names"="diseases"))
+nested_affinity_cluster_cosine<- nested_affinity_cluster_cosine %>%   left_join(ct_disease_df, by=c("Tumor_Names"="diseases"))
+
+nested_affinity_cluster_lv<-nested_affinity_cluster_lv[,c(7,1:6)]
+nested_affinity_cluster_jw<-nested_affinity_cluster_jw[,c(7,1:6)]
+nested_affinity_cluster_cosine<-nested_affinity_cluster_cosine[,c(7,1:6)]
+
 # Select benchmarks 
 benchmark_tumors <- c("b cell lymphoma", "neuroblastoma", "triple negative breast cancer",
                       "unresectable lung carcinoma", "liposarcoma","cancer of the liver",
