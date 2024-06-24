@@ -135,7 +135,7 @@ disease_transform = as.data.frame(-results$x[,1:135])
 
 
 # Save this file "
-write.csv(disease_transform,file =paste(intermediate_dir,"/disease_transform_pca.csv",sep="") )
+write.csv(disease_transform,file =paste(intermediate_dir,"/disease_transform_pca_ada2.csv",sep="") )
 save(combined_embedding_df,file = paste(intermediate_dir,"/combined_embedding_df.RData",sep=""))
 save.image(file = "script4a.RData")
 
