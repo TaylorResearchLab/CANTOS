@@ -26,6 +26,8 @@ results_dir <- file.path(analysis_dir,"results")
 #Load Functions
 source(paste(util_dir,"/string_dissimilarity.R",sep = ""))
 source(paste(util_dir,"/distance_clusters.R",sep=""))
+source(paste(util_dir,"/string_normalizing.R",sep=""))
+
 # Read the annotated file
 #ct_disease_df <- read.csv(paste(input_dir,"/CT-Aug22-2023-Disease-File - clinical_trial_disease_aug_22_2023.csv",sep=""))
 #ct_disease_df <- read.csv(paste(input_dir,"/cancer_annotated_file_ammended.csv",sep=""))
@@ -122,9 +124,6 @@ dissimilarity_matrix_lv<-foreach(iter=1:length(df_tumor_names),.combine=rbind) %
 rownames(dissimilarity_matrix_lv) <- df_tumor_names
 colnames(dissimilarity_matrix_lv) <- df_tumor_names
 
-
-stopCluster(cl)
-
 df_tumor_names<- colnames(dissimilarity_matrix_lv)
 normalizing_matrix_lv <- as.data.frame(matrix(nrow=length(df_tumor_names),ncol=length(df_tumor_names)))
 rownames(normalizing_matrix_lv)<-df_tumor_names
@@ -142,6 +141,7 @@ dissimilarity_matrix_lv<-dissimilarity_matrix_lv/normalizing_matrix_lv
 
 save(dissimilarity_matrix_lv,file=paste(intermediate_dir,"/dissimilarity_matrix_lv.RData",sep=""))
 
+stopCluster(cl)
 
 
 
@@ -258,7 +258,6 @@ cluster_results_lv_ct_filtered <- cluster_results_lv_ct_filtered[order(cluster_r
 cluster_results_jw_ct_filtered <- cluster_results_jw_ct_filtered[order(cluster_results_jw_ct_filtered$Tumors),]
 cluster_results_cosine_ct_filtered <- cluster_results_cosine_ct_filtered[order(cluster_results_cosine_ct_filtered$Tumors),]
 
-stopCluster(cl)
 
 
 # Null the row names
