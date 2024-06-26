@@ -22,7 +22,6 @@ analysis_dir <- file.path(root_dir,"analysis")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
 results_dir <- file.path(analysis_dir,"results")
 plots_dir <- file.path(root_dir,"plots")
-source(paste(util_dir,"/string_normalizing.R",sep=""))
 source(paste(util_dir,"/nested_clust_edit_dist.R",sep=""))
 source(paste(util_dir,"/compute_silhouette.R",sep=""))
 source(paste(util_dir,"/edit_distance_nested_cluster.R",sep=""))
@@ -47,29 +46,8 @@ cluster_results_cosine<-cluster_results_cosine[,c(-1)]
 # Compute Simmilarity matrix for each edit distance
 simmilarity_matrix_cosine = 1 - dissimilarity_matrix_cosine
 simmilarity_matrix_jw = 1-dissimilarity_matrix_jw
+simmilarity_matrix_lv <- 1- dissimilarity_matrix_lv
 
-
-
-cl <- makeCluster(25, outfile="")
-registerDoParallel(cl)
-df_tumor_names<- colnames(dissimilarity_matrix_lv)
-normalizing_matrix_lv <- as.data.frame(matrix(nrow=length(df_tumor_names),ncol=length(df_tumor_names)))
-rownames(normalizing_matrix_lv)<-df_tumor_names
-colnames(normalizing_matrix_lv)<-df_tumor_names
-
-
-normalizing_matrix_lv<-foreach(iter=1:length(df_tumor_names),.combine=rbind) %dopar% {
-  print(iter)
-  disease_name <- colnames(dissimilarity_matrix_lv)[iter]
-  norm_factors<-unlist(lapply(df_tumor_names,string_normalzing,S2=disease_name))
-}
-rownames(normalizing_matrix_lv) <- df_tumor_names
-colnames(normalizing_matrix_lv) <- df_tumor_names
-
-simmilarity_matrix_lv <- 1- (dissimilarity_matrix_lv/normalizing_matrix_lv)
-save(simmilarity_matrix_lv, file=paste(intermediate_dir,"/simmilarity_matrix_lv.RData",sep=""))
-
-stopCluster(cl)
 
 ######### Cluster with LV ########
 apclust_lv <- apcluster(simmilarity_matrix_lv) #10:26pm -12:45 pm #2:07 pm-8:00 pm #6:01 pm
