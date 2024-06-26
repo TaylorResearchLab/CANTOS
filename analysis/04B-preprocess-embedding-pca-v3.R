@@ -24,27 +24,8 @@ intermediate_dir <- file.path(analysis_dir,"intermediate")
 
 
 # Read CT embedding file 
-embedding_v3_large <- read.csv(paste(data_dir,"/embedding_tumor_names_text-embedding-3-large_embeddings.csv",sep="")) #16139
-colnames(embedding_v3_large)[1]<-"Tumor_Names"
-
-missing_v3_tumors <- read.csv(paste(data_dir,"/missing_V3_tumors.csv",sep="")) # 57
-colnames(missing_v3_tumors)[1]<-"Tumor_Names"
-
-embedding_v3_large<-rbind(embedding_v3_large,missing_v3_tumors)#16196
-
-
-
-
-
-
-
-
-# Read the annotated file
-ct_disease_df <- read.csv(paste(input_dir,"/CT-Aug22-2023-Disease-File - clinical_trial_disease_aug_22_2023.csv",sep=""))
-ct_tumor_df<- ct_disease_df %>% filter(validated_cancer_tumor=="Yes") %>%dplyr::select(diseases)
-colnames(ct_tumor_df)<-"Tumor_Names"
-ct_tumor_embeddings_df<- ct_tumor_df %>% left_join(embedding_v3_large,by="Tumor_Names")
-
+ct_tumor_embeddings_v3_df<-read.csv(paste(data_dir,"/CT_Embeddings_V3.csv",sep=""))
+ct_tumor_embeddings_v3_df<-ct_tumor_embeddings_v3_df[,c(-1)]
 
 WHO_3rd_4th_5th_text_embedding_3_large_embeddings <- read_csv(paste(data_dir,"/WHO_3rd_4th_5th_text-embedding-3-large_embeddings.csv",sep="")) #2330
 colnames(WHO_3rd_4th_5th_text_embedding_3_large_embeddings)<- colnames(embedding_v3_large)
