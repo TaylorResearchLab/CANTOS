@@ -53,5 +53,7 @@ ct_disease_df<-distinct(ct_disease_df)
 ct_disease_df<-ct_disease_df%>% left_join(conditions_data,by=c("diseases"="downcase_name"))
 ct_disease_df<-ct_disease_df%>%group_by(diseases)%>%summarise(nct_id=paste(nct_id,collapse  = ";"))
 ct_disease_df<-ct_disease_df%>%dplyr::select(nct_id,diseases)
+idx_na <- which(is.na(ct_disease_df$diseases))
+ct_disease_df<-ct_disease_df[-idx_na,]
 # Write disease file 
 write.csv(ct_disease_df,paste(intermediate_dir,"/ct_disease_df.csv",sep=""))
