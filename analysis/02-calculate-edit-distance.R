@@ -125,6 +125,21 @@ colnames(dissimilarity_matrix_lv) <- df_tumor_names
 
 stopCluster(cl)
 
+df_tumor_names<- colnames(dissimilarity_matrix_lv)
+normalizing_matrix_lv <- as.data.frame(matrix(nrow=length(df_tumor_names),ncol=length(df_tumor_names)))
+rownames(normalizing_matrix_lv)<-df_tumor_names
+colnames(normalizing_matrix_lv)<-df_tumor_names
+
+
+normalizing_matrix_lv<-foreach(iter=1:length(df_tumor_names),.combine=rbind) %dopar% {
+  print(iter)
+  disease_name <- colnames(dissimilarity_matrix_lv)[iter]
+  norm_factors<-unlist(lapply(df_tumor_names,string_normalzing,S2=disease_name))
+}
+rownames(normalizing_matrix_lv) <- df_tumor_names
+colnames(normalizing_matrix_lv) <- df_tumor_names
+dissimilarity_matrix_lv<-dissimilarity_matrix_lv/normalizing_matrix_lv
+
 save(dissimilarity_matrix_lv,file=paste(intermediate_dir,"/dissimilarity_matrix_lv.RData",sep=""))
 
 
