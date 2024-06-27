@@ -43,9 +43,9 @@ cluster_results_cosine<- read.csv(paste(results_dir,"/cluster_cosine.csv",sep=""
 cluster_results_cosine<-cluster_results_cosine[,c(-1)]
 
 
-# Compute Simmilarity matrix for each edit distance
-simmilarity_matrix_cosine = 1 - dissimilarity_matrix_cosine
-simmilarity_matrix_jw = 1-dissimilarity_matrix_jw
+# Compute Similarity matrix for each edit distance
+simmilarity_matrix_cosine <- 1 - dissimilarity_matrix_cosine
+simmilarity_matrix_jw <- 1-dissimilarity_matrix_jw
 simmilarity_matrix_lv <- 1- dissimilarity_matrix_lv
 
 
