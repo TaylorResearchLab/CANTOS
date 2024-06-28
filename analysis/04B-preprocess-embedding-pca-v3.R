@@ -27,17 +27,13 @@ intermediate_dir <- file.path(analysis_dir,"intermediate")
 ct_tumor_embeddings_v3_df<-read.csv(paste(data_dir,"/CT_Embeddings_V3.csv",sep=""))
 ct_tumor_embeddings_v3_df<-ct_tumor_embeddings_v3_df[,c(-1)]
 
-WHO_3rd_4th_5th_text_embedding_3_large_embeddings <- read_csv(paste(data_dir,"/WHO_3rd_4th_5th_text-embedding-3-large_embeddings.csv",sep="")) #2330
-colnames(WHO_3rd_4th_5th_text_embedding_3_large_embeddings)<- colnames(embedding_v3_large)
+WHO_3rd_4th_5th_text_embedding_3_large_embeddings <- read.csv(paste(data_dir,"/WHO_3rd_4th_5th_text-embedding-3-large_embeddings.csv",sep="")) #2330
+colnames(WHO_3rd_4th_5th_text_embedding_3_large_embeddings)[1]<-"Tumor_Names"
 
-NCIT_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv",sep=""))
-NCIT_embedding_df<-NCIT_embedding_df[c(-1),] # Remove the header (column name) embedding
-NCIT_embedding_v3 <- as.data.frame(NCIT_embedding_df$Disease)
-colnames(NCIT_embedding_v3)<-"Tumor_Names"
-NCIT_embedding_v3$Tumor_Names<-tolower(NCIT_embedding_v3$Tumor_Names)
-NCIT_embedding_v3<- NCIT_embedding_v3 %>% left_join(embedding_v3_large,by="Tumor_Names")
+NCIT_embedding_v3<-read.csv(paste(data_dir,"/NCIT_Embeddings_V3.csv",sep="")) #1395
+NCIT_embedding_v3<-NCIT_embedding_v3[,c(-1)]
 
-combined_embeddings_df<-rbind(ct_tumor_embeddings_df,WHO_3rd_4th_5th_text_embedding_3_large_embeddings,NCIT_embedding_v3)#17054
+combined_embeddings_df<-rbind(ct_tumor_embeddings_v3_df,WHO_3rd_4th_5th_text_embedding_3_large_embeddings,NCIT_embedding_v3)#17054
 combined_embeddings_df <- combined_embeddings_df%>%group_by(Tumor_Names) %>% summarise(across(everything(), list(mean)))#18284
 
 
