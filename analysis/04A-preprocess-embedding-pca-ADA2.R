@@ -28,16 +28,20 @@ CT_embedding_df <- read.csv(paste(data_dir,"/CT_Embeddings_ADA2.csv",sep=""))
 CT_embedding_df<-CT_embedding_df[,c(-1)]
 # Read NCIT Terms and WHO Terms with embedding and join them to the rest of the embedding list 
 NCIT_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv",sep=""))
-WHO_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/WHO_Only_terms_text-embedding-ada-002_embeddings.csv",sep=""))
+#WHO_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/WHO_Only_terms_text-embedding-ada-002_embeddings.csv",sep=""))
+WHO_embedding_df <- read.csv(paste(data_dir,"/WHO_Aggregate_ADA2.csv",sep="")) #
+WHO_embedding_df<-WHO_embedding_df[,c(-1)]
 
 NCIT_embedding_df<-NCIT_embedding_df[c(-1),] # Remove the header (column name) embedding
-WHO_embedding_df<-WHO_embedding_df[c(-1),] # Remove the header (column name) embedding
+#WHO_embedding_df<-WHO_embedding_df[c(-1),] # Remove the header (column name) embedding
 
 rownames(NCIT_embedding_df)<-NULL
 rownames(WHO_embedding_df)<-NULL
 
 # Combined Embedding File for PC and Cluster Analysis
 colnames(CT_embedding_df)<-colnames(NCIT_embedding_df) # CT embedding columns need to be fixed
+colnames(WHO_embedding_df)<-colnames(NCIT_embedding_df)
+
 combined_embedding_df <- rbind(CT_embedding_df,NCIT_embedding_df,WHO_embedding_df)
 combined_embedding_df$Disease<- tolower(combined_embedding_df$Disease)
 combined_embedding_df <- as.data.frame(combined_embedding_df %>% group_by(Disease) %>% summarise(across(everything(), list(mean))))
