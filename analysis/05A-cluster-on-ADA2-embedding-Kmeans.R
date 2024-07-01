@@ -29,7 +29,7 @@ plots_dir<-file.path(root_dir,"plots")
 
 
 # Load PCA Embeddings of CT , WHO, NCIT
-disease_transform<- read.csv(paste(intermediate_dir,"/disease_transform_pca.csv",sep="") )
+disease_transform<- read.csv(paste(intermediate_dir,"/disease_transform_pca_ada2.csv",sep="") )
 colnames(disease_transform)[1]<-"Diseases"
 rownames(disease_transform)<-disease_transform$Diseases # Needed for AP Clust
 
@@ -39,10 +39,10 @@ set.seed(13)
 
 
 # Peform Clustering 
-
+ncol= dim(disease_transform)[2]
 silhouette_score <- function(k){
-  km <- kmeans(disease_transform[,2:136], centers = k, nstart=25)
-  ss <- silhouette(km$cluster, dist(disease_transform[,2:136]))
+  km <- kmeans(disease_transform[,2:ncol], centers = k, nstart=25)
+  ss <- silhouette(km$cluster, dist(disease_transform[,2:ncol]))
   return(mean(ss[, 3]))
 }
 
@@ -50,10 +50,10 @@ k <- c(10,100,500,1000,2000,3000,4000,5000,
        5500,5900, 6000,6050,6100,6200,6500,
        7000,8000,9000,10000,11000,12000,13000,
        14000,15000,16000)
-avg_sil <- sapply(k, silhouette_score)#11:04-12:18
+avg_sil <- sapply(k, silhouette_score)#2:23pm-5:12
 
 Kmeans_silhouette<-as.data.frame(cbind(k,avg_sil))
-colnames(Kmeans_silhouette) <- c("k","mean_silhouette_score") #6000
+colnames(Kmeans_silhouette) <- c("k","mean_silhouette_score") #6200
 
 Kmeans_silhouette_Max <- Kmeans_silhouette[ which(max(Kmeans_silhouette$mean_silhouette_score) == Kmeans_silhouette$mean_silhouette_score), ]
 
@@ -64,13 +64,13 @@ p1<-ggplot(Kmeans_silhouette, aes(x =k, y = mean_silhouette_score)) + geom_point
 
 
 # Kmeans optimal cluster is 6000
-km.res <- eclust(disease_transform[,2:136], "kmeans", k = Kmeans_silhouette_Max$k,nstart = 25, graph = FALSE)
+km.res <- eclust(disease_transform[,2:ncol], "kmeans", k = Kmeans_silhouette_Max$k,nstart = 25, graph = FALSE)
 kmeans_clust_result <- as.data.frame(km.res$cluster)
 kmeans_clust_result$Tumors<-rownames(kmeans_clust_result)
 colnames(kmeans_clust_result)[1]<-"cluster"
 kmeans_clust_result <- kmeans_clust_result %>% dplyr::select(Tumors,cluster)
 
-sil <- silhouette(km.res$cluster, dist(disease_transform[,2:136])) # Verify this 
+sil <- silhouette(km.res$cluster, dist(disease_transform[,2:ncol])) # Verify this 
 sil<-as.data.frame(sil)
 sil$Tumors<-names(km.res$cluster)
   
@@ -95,7 +95,20 @@ display_table_benchmark_kmeans <- kmeans_clust_result %>% filter(cluster %in% cl
 display_table_benchmark_kmeans<- display_table_benchmark_kmeans[order(display_table_benchmark_kmeans$cluster),]
 rownames(display_table_benchmark_kmeans)<-NULL
 
+ct_disease_annot_adult_ped_df<-read.csv(paste(input_dir,"/tumor_annotated_adult_ped.csv",sep=""))
+ct_tumor_df<-ct_disease_annot_adult_ped_df%>%filter(validated_cancer_tumor=="Yes")
+ct_tumor_df<-ct_tumor_df[,c(-1)]
+ct_tumor_df<-ct_tumor_df[,c(1,2)]
 
+colnames(kmeans_clust_result)[1]<-"Tumor_Names"
+colnames(display_table_benchmark_kmeans)[1]<-"Tumor_Names"
+colnames(ct_tumor_df)[2]<-"Tumor_Names"
+
+kmeans_clust_result<-kmeans_clust_result%>%left_join(ct_tumor_df,by="Tumor_Names")
+display_table_benchmark_kmeans<-display_table_benchmark_kmeans%>%left_join(ct_tumor_df,by="Tumor_Names")
+
+kmeans_clust_result<-kmeans_clust_result[,c(7,1:6)]
+display_table_benchmark_kmeans<-display_table_benchmark_kmeans[,c(7,1:6)]
 
 write.csv(kmeans_clust_result,paste(result_dir,"/kmeans_clust_result_embedding.csv",sep=""))
 write.csv(display_table_benchmark_kmeans,paste(result_dir,"/display_table_benchmark_kmeans.csv",sep=""))
@@ -115,29 +128,4 @@ ggsave(plt_global_kmeans, filename = paste(plots_dir,"/plt_global_kmeans_embeddi
 
 
 
-
-
-# Find optimal number of Clusters using KMeans Silhouette 
-cluster_results<-fviz_nbclust(disease_transform[,2:137], kmeans, method = 'silhouette',  k.max = 5000,iter.max=50)
-index_opt_clust<- which(cluster_results$data$y==max(cluster_results$data$y))
-opt_clust_size<- as.integer(cluster_results$data$clusters[index_opt_clust]) # 4800
-kmeans_disease = kmeans(disease_transform, centers = opt_clust_size, nstart = 100)
-diseases_cluster_kmeans <- as.data.frame(kmeans_disease$cluster)
-diseases_cluster_kmeans<-cbind(disease_transform$Diseases,diseases_cluster_kmeans)
-rownames(diseases_cluster_kmeans)<-NULL
-
-
-
-
-
-
-## CHI Index
-CH_Results<-CHCriterion(disease_transform_pca_scaled, kmax=13434,clustermethod="hclust", method = "average")
-CH_scroes <- as.data.frame(CH_Results$data$CHIndex) # ratio of the between-cluster variance and the within-cluster variance
-WSS_scores<- as.data.frame(CH_Results$data$wss)
-CH_Results<-CHCriterion(disease_transform_pca_scaled, kmax=13434,clustermethod="hclust", method = "average")
-
-
-
-
-save.image(file = "script5_affinitycluster.RData")
+save.image(file = "script5a.RData")
