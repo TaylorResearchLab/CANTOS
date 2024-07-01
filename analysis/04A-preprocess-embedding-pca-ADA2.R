@@ -56,9 +56,9 @@ ff<-rbind(SD = sqrt(eigs),Proportion = eigs/sum(eigs), Cumulative = cumsum(eigs)
 
 # Check the number of components needed to capture 80% variance at least
 
-print(sum(ff[2,1:135]))
+print(sum(ff[2,1:141]))
 # Select the top 135 PCs
-disease_transform = as.data.frame(-results$x[,1:135])
+disease_transform = as.data.frame(-results$x[,1:141])
 
 
 # Save this file "
