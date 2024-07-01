@@ -44,8 +44,8 @@ results_v3 <- prcomp(combined_embeddings_df, scale = TRUE)
 eigs_v3 <- results_v3$sdev^2
 ff_v3<-rbind(SD = sqrt(eigs_v3),Proportion = eigs_v3/sum(eigs_v3), Cumulative = cumsum(eigs_v3)/sum(eigs_v3))
 # Check the number of components needed to capture 80% variance at least
-print(sum(ff_v3[2,1:178]))
-disease_transform_v3<-as.data.frame(-results_v3$x[,1:78])
+print(sum(ff_v3[2,1:185]))
+disease_transform_v3<-as.data.frame(-results_v3$x[,1:185])
 
 # Save this file "
 
