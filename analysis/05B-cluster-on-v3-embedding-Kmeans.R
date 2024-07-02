@@ -45,6 +45,7 @@ set.seed(13)
 silhouette_score <- function(k){
   km <- kmeans(disease_transform_v3[,2:ncol], centers = k, nstart=25)
   ss <- silhouette(km$cluster, dist(disease_transform_v3[,2:ncol]))
+  print(k)
   return(mean(ss[, 3]))
 }
 
