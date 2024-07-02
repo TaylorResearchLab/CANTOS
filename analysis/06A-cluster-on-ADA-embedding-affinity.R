@@ -11,6 +11,7 @@ suppressPackageStartupMessages({
   library(biomaRt)
   library(ghql)
   library(readxl)
+  library(apcluster)
 })
 
 # Set the directories
@@ -31,7 +32,7 @@ results_dir <- file.path(analysis_dir,"results")
 
 ########################################*************************************###########
 # Load PCA Embeddings of CT , WHO, NCIT
-disease_transform<- read.csv(paste(intermediate_dir,"/disease_transform_pca.csv",sep="") )
+disease_transform<- read.csv(paste(intermediate_dir,"/disease_transform_pca_ada2.csv",sep="") )
 colnames(disease_transform)[1]<-"Tumor_Name"
 rownames(disease_transform)<-disease_transform$Tumor_Name # Needed for AP Clust
 
@@ -42,7 +43,7 @@ set.seed(13)
 dist_euclidean<- dist(disease_transform,method = "euclidean")
 dist_euclidean<-as.matrix(dist_euclidean)
 simmilarity_euclidean<- 1/(1+dist_euclidean)
-af_clust_euclidean <- apcluster(simmilarity_euclidean) # 1:24 am - 2:55 am still going....
+af_clust_euclidean <- apcluster(simmilarity_euclidean) # 2:01 pm
 cat("affinity propogation optimal number of clusters:", length(af_clust_euclidean@clusters), "\n")#3071 clusters
 
 #d.apclus2 <- apcluster(negDistMat(r=2), disease_transform) # 1 hr 28 mins 11:28 pm - 12:08 pm
