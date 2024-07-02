@@ -57,7 +57,7 @@ k <- c(10,500,1000,2000,3000,4000,5000,5500,5800,6000,6100,6200,6300,6400,
 avg_sil <- sapply(k, silhouette_score)
 
 Kmeans_silhouette<-as.data.frame(cbind(k,avg_sil))
-colnames(Kmeans_silhouette) <- c("k","mean_silhouette_score") #5400
+colnames(Kmeans_silhouette) <- c("k","mean_silhouette_score") #6100
 
 Kmeans_silhouette_Max <- Kmeans_silhouette[ which(max(Kmeans_silhouette$mean_silhouette_score) == Kmeans_silhouette$mean_silhouette_score), ]
 
@@ -66,7 +66,7 @@ p1<-ggplot(Kmeans_silhouette, aes(x =k, y = mean_silhouette_score)) + geom_point
   scale_x_continuous("k", labels = as.character(k), breaks = k) + ggtitle("Kmean Silhouette Score vs Clusters with V3 embeddings")
 
 
-# Kmeans optimal cluster is 5000
+# Kmeans optimal cluster is 6100 from 5000
 km.res <- eclust(disease_transform_v3[,2:ncol(disease_transform_v3)], "kmeans", k = Kmeans_silhouette_Max$k,nstart = 25, graph = FALSE)
 kmeans_clust_result <- as.data.frame(km.res$cluster)
 kmeans_clust_result$Tumors<-rownames(kmeans_clust_result)
@@ -96,6 +96,22 @@ cluster_ind_benchmark_tumor <- kmeans_clust_result$cluster[kmeans_clust_result$T
 display_table_benchmark_kmeans <- kmeans_clust_result %>% filter(cluster %in% cluster_ind_benchmark_tumor)
 display_table_benchmark_kmeans<- display_table_benchmark_kmeans[order(display_table_benchmark_kmeans$cluster),]
 rownames(display_table_benchmark_kmeans)<-NULL
+
+ct_disease_annot_adult_ped_df<-read.csv(paste(input_dir,"/tumor_annotated_adult_ped.csv",sep=""))
+ct_tumor_df<-ct_disease_annot_adult_ped_df%>%filter(validated_cancer_tumor=="Yes")
+ct_tumor_df<-ct_tumor_df[,c(-1)]
+ct_tumor_df<-ct_tumor_df[,c(1,2)]
+
+colnames(kmeans_clust_result)[1]<-"Tumor_Names"
+colnames(display_table_benchmark_kmeans)[1]<-"Tumor_Names"
+colnames(ct_tumor_df)[2]<-"Tumor_Names"
+
+kmeans_clust_result<-kmeans_clust_result%>%left_join(ct_tumor_df,by="Tumor_Names")
+display_table_benchmark_kmeans<-display_table_benchmark_kmeans%>%left_join(ct_tumor_df,by="Tumor_Names")
+
+kmeans_clust_result<-kmeans_clust_result[,c(7,1:6)]
+display_table_benchmark_kmeans<-display_table_benchmark_kmeans[,c(7,1:6)]
+
 
 
 
