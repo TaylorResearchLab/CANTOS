@@ -29,7 +29,7 @@ source(paste(util_dir,"/run_affinity_clustering.R",sep=""))
 
 
 disease_transform_v3<- read.csv(paste(intermediate_dir,"/disease_transform_pca_v3.csv",sep="") )
-colnames(disease_transform_v3)[1]<-"Tumor_Name"
+colnames(disease_transform_v3)[1]<-"Tumor_Names"
 rownames(disease_transform_v3)<-disease_transform_v3$Tumor_Name # Needed for AP Clust
 
 
