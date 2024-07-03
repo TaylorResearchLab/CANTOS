@@ -47,7 +47,7 @@ tumor_distances_df$Tumor_Names<- rownames(combined_embedding_df)
 
 
 #
-cl <- makeCluster(6, outfile="")
+cl <- makeCluster(25, outfile="")
 registerDoParallel(cl)
 
 CalculateEuclideanDistance <- function(vect1, vect2) sqrt(sum((vect1 - vect2)^2)) 
@@ -56,7 +56,7 @@ CalculateEuclideanDistance <- function(vect1, vect2) sqrt(sum((vect1 - vect2)^2)
 outer_who_final<-foreach(i = 1:dim(combined_embedding_df)[1], .combine = rbind) %dopar% { #12:10pm -
   print(i)
   #s <- apply(WHO_embedding_df[,2:1537],1,CalculateEuclideanDistance,vect2=combined_embedding_df[i,])
-  embedding_pairwise<- as.matrix(rbind(combined_embedding_df[i,],WHO_embedding_df[,2:1537]))
+  embedding_pairwise<- as.matrix(rbind(combined_embedding_df[i,],WHO_embedding_df[,2:ncol(WHO_embedding_df)]))
   euclidean_dist <- as.matrix(dist(embedding_pairwise,method = "euclidean"))
   d<-as.double(euclidean_dist[1,c(-1)])
 }
@@ -66,7 +66,7 @@ rownames(outer_who_final)<-rownames(combined_embedding_df)
 
 outer_NCIT_final<-foreach(i = 1:dim(combined_embedding_df)[1], .combine = rbind) %dopar% { #7:20pm - 
   print(i)
-  embedding_pairwise<- as.matrix(rbind(combined_embedding_df[i,],NCIT_embedding_df[,2:1537]))
+  embedding_pairwise<- as.matrix(rbind(combined_embedding_df[i,],NCIT_embedding_df[,2:ncol(WHO_embedding_df)]))
   euclidean_dist <- as.matrix(dist(embedding_pairwise,method = "euclidean"))
   d<-as.double(euclidean_dist[1,c(-1)])
 }
