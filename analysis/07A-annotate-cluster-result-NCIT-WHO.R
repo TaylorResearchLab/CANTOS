@@ -27,8 +27,8 @@ source(paste(util_dir,"/cluster_label_assignment_refined.R",sep=""))
 
 
 # 
-load(paste(intermediate_dir,"/affinity_cluster_df.RData",sep=""))
-load(paste(intermediate_dir,"/combined_embedding_df.RData",sep=""))
+load(paste(intermediate_dir,"/affinity_cluster_df_ada2.RData",sep=""))
+load(paste(intermediate_dir,"/combined_embedding_ada2_df.RData",sep=""))
 
 NCIT_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv",sep=""))
 WHO_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/WHO_Only_terms_text-embedding-ada-002_embeddings.csv",sep=""))

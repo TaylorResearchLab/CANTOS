@@ -52,3 +52,4 @@ disease_transform_v3<-as.data.frame(-results_v3$x[,1:185])
 
 write.csv(disease_transform_v3,file =paste(intermediate_dir,"/disease_transform_pca_v3.csv",sep="") )
 save.image(file = "script4b.RData")
+save(combined_embeddings_df,file = paste(intermediate_dir,"/combined_embedding_v3_df.RData",sep=""))
