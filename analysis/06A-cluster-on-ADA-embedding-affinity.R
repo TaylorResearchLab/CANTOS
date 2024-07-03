@@ -28,7 +28,7 @@ results_dir <- file.path(analysis_dir,"results")
 #source(paste(util_dir,"/nested_affinity_cluster.R",sep=""))
 #source(paste(util_dir,"/cluster_label_assignment.R",sep=""))
 
-
+source(paste(util_dir,"/run_affinity_clustering.R",sep=""))
 
 ########################################*************************************###########
 # Load PCA Embeddings of CT , WHO, NCIT
@@ -44,7 +44,7 @@ dist_euclidean<- dist(disease_transform,method = "euclidean")
 dist_euclidean<-as.matrix(dist_euclidean)
 simmilarity_euclidean<- 1/(1+dist_euclidean)
 af_clust_euclidean <- apcluster(simmilarity_euclidean) # 2:01 pm
-cat("affinity propogation optimal number of clusters:", length(af_clust_euclidean@clusters), "\n")#3071 clusters
+cat("affinity propogation optimal number of clusters:", length(af_clust_euclidean@clusters), "\n")#3550 clusters
 
 #d.apclus2 <- apcluster(negDistMat(r=2), disease_transform) # 1 hr 28 mins 11:28 pm - 12:08 pm
 #cat("affinity propogation optimal number of clusters:", length(d.apclus2@clusters), "\n") #1113 clusters 
@@ -110,8 +110,9 @@ while(length(large_cluster_labels)>0){
 }
 
 
-save(affinity_cluster_df,file = paste(intermediate_dir,"/affinity_cluster_df.RData",sep=""))
+save(affinity_cluster_df,file = paste(intermediate_dir,"/affinity_cluster_df_ada2.RData",sep=""))
 
+save.image(file = "script6a.RData")
 
 
 
