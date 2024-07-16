@@ -25,14 +25,14 @@ intermediate_dir <- file.path(analysis_dir,"intermediate")
 
 
 # Load affinity clusters for ADA2 and V3
-affinity_cluster_ADA2_df <- read.csv(paste(intermediate_dir,"/affinity_cluster_ADA2_df.csv",sep="")) # 8 cols
-affinity_cluster_v3_df <- read.csv(paste(intermediate_dir,"/affinity_cluster_v3_df.csv",sep="")) # 8 cols
+affinity_cluster_ADA2_df <- read.csv(paste(intermediate_dir,"/affinity_cluster_ADA2_df.csv",sep="")) # 10 cols
+affinity_cluster_v3_df <- read.csv(paste(intermediate_dir,"/affinity_cluster_v3_df.csv",sep="")) # 10 cols
 
 affinity_cluster_ADA2_df<-affinity_cluster_ADA2_df[,c(-1)]
 affinity_cluster_v3_df<- affinity_cluster_v3_df[,c(-1)]
 
 # Load embeddings 
-disease_transform_ADA2<- read.csv(paste(intermediate_dir,"/disease_transform_pca.csv",sep="") )
+disease_transform_ADA2<- read.csv(paste(intermediate_dir,"/disease_transform_pca_ada2.csv",sep="") )
 colnames(disease_transform_ADA2)[1]<-"Tumor_Names"
 rownames(disease_transform_ADA2)<-disease_transform_ADA2$Tumor_Names 
 
@@ -150,4 +150,3 @@ affinity_cluster_v3_df<- affinity_cluster_v3_df %>% dplyr::mutate(LOF_Outlier = 
 ####
 write.csv(affinity_cluster_ADA2_df,paste(intermediate_dir,"/affinity_cluster_ADA2_df.csv",sep=""))
 write.csv(affinity_cluster_v3_df,paste(intermediate_dir,"/affinity_cluster_v3_df.csv",sep=""))
-
