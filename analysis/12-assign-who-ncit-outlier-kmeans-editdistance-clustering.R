@@ -57,11 +57,11 @@ who_ncit_match_ADA2 <- affinity_cluster_ADA2_reassigned_df %>% dplyr::select(Tum
 who_ncit_match_v3 <- affinity_cluster_v3_reassigned_df %>% dplyr::select(Tumor_Names,WHO_Matches,WHO_distance,NCIT_Matches,NCIT_distance) 
 
 # Join the matches to Kmeans 
-kmeans_clust_result_embedding_ADA2<-kmeans_clust_result_embedding_ADA2 %>% dplyr::select(Tumors,cluster)
-kmeans_clust_result_embedding_V3<-kmeans_clust_result_embedding_V3 %>% dplyr::select(Tumors,cluster)
+kmeans_clust_result_embedding_ADA2<-kmeans_clust_result_embedding_ADA2 %>% dplyr::select(nct_id,Tumor_Names,cluster)
+kmeans_clust_result_embedding_V3<-kmeans_clust_result_embedding_V3 %>% dplyr::select(nct_id,Tumor_Names,cluster)
 
-colnames(kmeans_clust_result_embedding_ADA2)<-c("Tumor_Names","Cluster_ID")
-colnames(kmeans_clust_result_embedding_V3)<-c("Tumor_Names","Cluster_ID")
+colnames(kmeans_clust_result_embedding_ADA2)[3]<-c("Cluster_ID")
+colnames(kmeans_clust_result_embedding_V3)[3]<-c("Cluster_ID")
 
 kmeans_clust_result_embedding_ADA2<-kmeans_clust_result_embedding_ADA2 %>% dplyr::left_join(who_ncit_match_ADA2,by="Tumor_Names")
 kmeans_clust_result_embedding_V3<-kmeans_clust_result_embedding_V3 %>% dplyr::left_join(who_ncit_match_v3,by="Tumor_Names")
@@ -71,25 +71,25 @@ kmeans_clust_result_embedding_V3<- cluster_label_assignment_refined(kmeans_clust
 
 
 # Join the matches to affinity
-nested_affinity_cluster_cosine<-nested_affinity_cluster_cosine %>% dplyr::select(Tumor_Names,Cluster_ID)
-nested_affinity_cluster_jw<-nested_affinity_cluster_jw %>% dplyr::select(Tumor_Names,Cluster_ID)
-nested_affinity_cluster_lv<-nested_affinity_cluster_lv %>% dplyr::select(Tumor_Names,Cluster_ID)
+nested_affinity_cluster_cosine<-nested_affinity_cluster_cosine %>% dplyr::select(nct_id,Tumor_Names,Cluster_ID)
+nested_affinity_cluster_jw<-nested_affinity_cluster_jw %>% dplyr::select(nct_id,Tumor_Names,Cluster_ID)
+nested_affinity_cluster_lv<-nested_affinity_cluster_lv %>% dplyr::select(nct_id,Tumor_Names,Cluster_ID)
 
-dissimilarity_matrix_cosine<-read.csv(paste(intermediate_dir,"/dissimilarity_matrix_cosine.csv",sep=""))
-dissimilarity_matrix_jw<-read.csv(paste(intermediate_dir,"/dissimilarity_matrix_jw.csv",sep=""))
-dissimilarity_matrix_lv<-read.csv(paste(intermediate_dir,"/dissimilarity_matrix_lv.csv",sep=""))
+dissimilarity_matrix_cosine<-load(paste(intermediate_dir,"/dissimilarity_matrix_cosine.RData",sep=""))
+dissimilarity_matrix_jw<-load(paste(intermediate_dir,"/dissimilarity_matrix_jw.RData",sep=""))
+dissimilarity_matrix_lv<-load(paste(intermediate_dir,"/dissimilarity_matrix_lv.RData",sep=""))
 
 dissimilarity_matrix_cosine<-as.data.frame(dissimilarity_matrix_cosine)
 dissimilarity_matrix_jw<-as.data.frame(dissimilarity_matrix_jw)
 dissimilarity_matrix_lv<-as.data.frame(dissimilarity_matrix_lv)
 
-colnames(dissimilarity_matrix_cosine)[1]<-"Tumor_Names"
-colnames(dissimilarity_matrix_jw)[1]<-"Tumor_Names"
-colnames(dissimilarity_matrix_lv)[1]<-"Tumor_Names"
-
-colnames(dissimilarity_matrix_cosine)[2:16197]<-dissimilarity_matrix_cosine$Tumor_Names
-colnames(dissimilarity_matrix_jw)[2:16197]<-dissimilarity_matrix_jw$Tumor_Names
-colnames(dissimilarity_matrix_lv)[2:16197]<-dissimilarity_matrix_lv$Tumor_Names
+# colnames(dissimilarity_matrix_cosine)[1]<-"Tumor_Names"
+# colnames(dissimilarity_matrix_jw)[1]<-"Tumor_Names"
+# colnames(dissimilarity_matrix_lv)[1]<-"Tumor_Names"
+# 
+# colnames(dissimilarity_matrix_cosine)[2:16197]<-dissimilarity_matrix_cosine$Tumor_Names
+# colnames(dissimilarity_matrix_jw)[2:16197]<-dissimilarity_matrix_jw$Tumor_Names
+# colnames(dissimilarity_matrix_lv)[2:16197]<-dissimilarity_matrix_lv$Tumor_Names
 
 NCIT_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv",sep=""))
 WHO_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/WHO_Only_terms_text-embedding-ada-002_embeddings.csv",sep=""))
