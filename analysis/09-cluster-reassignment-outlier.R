@@ -27,8 +27,8 @@ affinity_cluster_ADA2_df<-affinity_cluster_ADA2_df[,c(-1)]
 affinity_cluster_v3_df<- affinity_cluster_v3_df[,c(-1)]
 
 
-affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_df %>% dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,WHO_distance,NCIT_Matches,NCIT_distance,who_cluster_label,ncit_cluster_label)
-affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_df %>% dplyr::select(Tumor_Names,Cluster_ID,WHO_Matches,WHO_distance,NCIT_Matches,NCIT_distance,who_cluster_label,ncit_cluster_label)
+affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_df %>% dplyr::select(nct_id,Tumor_Names,Cluster_ID,WHO_Matches,WHO_distance,NCIT_Matches,NCIT_distance,who_cluster_label,ncit_cluster_label)
+affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_df %>% dplyr::select(nct_id,Tumor_Names,Cluster_ID,WHO_Matches,WHO_distance,NCIT_Matches,NCIT_distance,who_cluster_label,ncit_cluster_label)
 
 # Find all the tumors with outlier
 # outlier_tumor_ada2 <- affinity_cluster_ADA2_df%>%filter(Isolation_Outlier=="Yes" | LOF_Outlier=="Yes")%>%dplyr::select(Tumor_Names)
