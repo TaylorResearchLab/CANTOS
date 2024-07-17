@@ -67,7 +67,7 @@ cluster_labels<-unique(affinity_cluster_ADA2_reassigned_df$Cluster_ID)
 cluster_labels<- as.data.frame(cbind(cluster_labels,c(1:length(cluster_labels))))
 colnames(cluster_labels)<-c("Cluster_ID","updated_ID")
 affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_reassigned_df %>% dplyr::left_join(cluster_labels,by="Cluster_ID")
-affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_reassigned_df[,c(1,9,3:8,2)]
+affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_reassigned_df[,c(1,2,10,4:9,3)]
 
 affinity_cluster_ADA2_reassigned_df$updated_ID<-as.numeric(affinity_cluster_ADA2_reassigned_df$updated_ID)
 
@@ -101,7 +101,7 @@ cluster_labels<-unique(affinity_cluster_v3_reassigned_df$Cluster_ID)
 cluster_labels<- as.data.frame(cbind(cluster_labels,c(1:length(cluster_labels))))
 colnames(cluster_labels)<-c("Cluster_ID","updated_ID")
 affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_reassigned_df %>% dplyr::left_join(cluster_labels,by="Cluster_ID")
-affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_reassigned_df[,c(1,9,3:8,2)]
+affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_reassigned_df[,c(1,2,10,4:9,3)]
 
 affinity_cluster_v3_reassigned_df$updated_ID<-as.numeric(affinity_cluster_v3_reassigned_df$updated_ID)
 
