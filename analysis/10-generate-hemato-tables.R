@@ -24,13 +24,15 @@ intermediate_dir <- file.path(analysis_dir,"intermediate")
 # 
 #load(paste(intermediate_dir,"/affinity_cluster_df.RData",sep=""))
 affinity_cluster_ADA2_df <- read.csv(paste(intermediate_dir,"/affinity_cluster_ADA2_reassigned_df.csv",sep=""))
+affinity_cluster_ADA2_df<-affinity_cluster_ADA2_df[,c(-1)]
 affinity_cluster_V3_df <- read.csv(paste(intermediate_dir,"/affinity_cluster_v3_reassigned_df.csv",sep=""))
+affinity_cluster_V3_df<-affinity_cluster_V3_df[,c(-1)]
 
-affinity_cluster_ADA2_df<-affinity_cluster_ADA2_df%>% dplyr::select(Tumor_Names,updated_ID,who_cluster_label,ncit_cluster_label)
-affinity_cluster_V3_df<-affinity_cluster_V3_df%>% dplyr::select(Tumor_Names,updated_ID,who_cluster_label,ncit_cluster_label)
+affinity_cluster_ADA2_df<-affinity_cluster_ADA2_df%>% dplyr::select(nct_id,Tumor_Names,updated_ID,who_cluster_label,ncit_cluster_label)
+affinity_cluster_V3_df<-affinity_cluster_V3_df%>% dplyr::select(nct_id,Tumor_Names,updated_ID,who_cluster_label,ncit_cluster_label)
 
-colnames(affinity_cluster_ADA2_df)[2]<-"Updated_Cluster_ID"
-colnames(affinity_cluster_V3_df)[2]<-"Updated_Cluster_ID"
+colnames(affinity_cluster_ADA2_df)[3]<-"Updated_Cluster_ID"
+colnames(affinity_cluster_V3_df)[3]<-"Updated_Cluster_ID"
 
 ###### Lymphoma Luek analysis
 
