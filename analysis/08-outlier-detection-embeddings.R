@@ -47,14 +47,15 @@ set.seed(13)
 
 embedding_ADA2<-affinity_cluster_ADA2_df %>% dplyr::left_join(disease_transform_ADA2,by="Tumor_Names")
 affinity_cluster_ADA2_df$isolation_outlier_score<-NA
+idx_ada2<-which(colnames(embedding_ADA2)=="PC1")
 
 cluster_labels_ADA2 <- unique(embedding_ADA2$Cluster_ID)
 for(iter in 1:length(cluster_labels_ADA2)){
   cluster_label_current <- cluster_labels_ADA2[iter]
   embedding_subset <- embedding_ADA2 %>% dplyr::filter(Cluster_ID==cluster_label_current)
   if(dim(embedding_subset)[1]>2){ # Need at least 2 data points to run isolation forest
-    model <- isolation.forest(embedding_subset[1:nrow(embedding_subset),9:ncol(embedding_subset)], ndim=3, ntrees=100, nthreads=1) # ntrees 50 initially
-    scores <- predict(model, embedding_subset[1:nrow(embedding_subset),9:ncol(embedding_subset)], type="score")
+    model <- isolation.forest(embedding_subset[1:nrow(embedding_subset),idx_ada2:ncol(embedding_subset)], ndim=3, ntrees=100, nthreads=1) # ntrees 50 initially
+    scores <- predict(model, embedding_subset[1:nrow(embedding_subset),idx_ada2:ncol(embedding_subset)], type="score")
     ind_clust <- which(affinity_cluster_ADA2_df$Cluster_ID==cluster_label_current)
     affinity_cluster_ADA2_df$isolation_outlier_score[ind_clust]<-scores
   }else{
@@ -78,7 +79,7 @@ for(iter in 1:length(cluster_labels_ADA2)){
   if(dim(embedding_subset)[1]>2){ # Need at least 2 data points to run isolation forest
     min_pts<- 2:(dim(embedding_subset)[1]-1)
     for(iter_pts in min_pts){
-      lof_scores_minpts <- lof(embedding_subset[,9:ncol(embedding_subset)],iter_pts)
+      lof_scores_minpts <- lof(embedding_subset[,idx_ada2:ncol(embedding_subset)],iter_pts)
       lof_scores_minpts_list[[as.character(iter_pts)]]<-lof_scores_minpts
     }
     lof_scores_minpts_list<- t(as.data.frame(lof_scores_minpts_list))
@@ -100,14 +101,15 @@ affinity_cluster_ADA2_df<- affinity_cluster_ADA2_df %>% dplyr::mutate(LOF_Outlie
 
 embedding_V3<-affinity_cluster_v3_df %>% dplyr::left_join(disease_transform_V3,by="Tumor_Names")
 affinity_cluster_v3_df$isolation_outlier_score<-NA
+idx_v3<-which(colnames(embedding_V3)=="PC1")
 
 cluster_labels_V3 <- unique(embedding_V3$Cluster_ID)
 for(iter in 1:length(cluster_labels_V3)){
   cluster_label_current <- cluster_labels_V3[iter]
   embedding_subset <- embedding_V3 %>% dplyr::filter(Cluster_ID==cluster_label_current)
   if(dim(embedding_subset)[1]>2){ # Need at least 2 data points to run isolation forest
-    model <- isolation.forest(embedding_subset[1:nrow(embedding_subset),9:ncol(embedding_subset)], ndim=3, ntrees=100, nthreads=1) # ntrees 50 initially
-    scores <- predict(model, embedding_subset[1:nrow(embedding_subset),9:ncol(embedding_subset)], type="score")
+    model <- isolation.forest(embedding_subset[1:nrow(embedding_subset),idx_v3:ncol(embedding_subset)], ndim=3, ntrees=100, nthreads=1) # ntrees 50 initially
+    scores <- predict(model, embedding_subset[1:nrow(embedding_subset),idx_v3:ncol(embedding_subset)], type="score")
     ind_clust <- which(affinity_cluster_v3_df$Cluster_ID==cluster_label_current)
     affinity_cluster_v3_df$isolation_outlier_score[ind_clust]<-scores
   }else{
@@ -131,7 +133,7 @@ for(iter in 1:length(cluster_labels_V3)){
   if(dim(embedding_subset)[1]>2){ # Need at least 2 data points to run isolation forest
     min_pts<- 2:(dim(embedding_subset)[1]-1)
     for(iter_pts in min_pts){
-      lof_scores_minpts <- lof(embedding_subset[,9:ncol(embedding_subset)],iter_pts)
+      lof_scores_minpts <- lof(embedding_subset[,idx_v3:ncol(embedding_subset)],iter_pts)
       lof_scores_minpts_list[[as.character(iter_pts)]]<-lof_scores_minpts
     }
     lof_scores_minpts_list<- t(as.data.frame(lof_scores_minpts_list))
