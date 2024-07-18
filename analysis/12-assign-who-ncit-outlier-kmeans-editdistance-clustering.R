@@ -83,38 +83,24 @@ dissimilarity_matrix_cosine<-as.data.frame(dissimilarity_matrix_cosine)
 dissimilarity_matrix_jw<-as.data.frame(dissimilarity_matrix_jw)
 dissimilarity_matrix_lv<-as.data.frame(dissimilarity_matrix_lv)
 
-# colnames(dissimilarity_matrix_cosine)[1]<-"Tumor_Names"
-# colnames(dissimilarity_matrix_jw)[1]<-"Tumor_Names"
-# colnames(dissimilarity_matrix_lv)[1]<-"Tumor_Names"
-# 
-# colnames(dissimilarity_matrix_cosine)[2:16197]<-dissimilarity_matrix_cosine$Tumor_Names
-# colnames(dissimilarity_matrix_jw)[2:16197]<-dissimilarity_matrix_jw$Tumor_Names
-# colnames(dissimilarity_matrix_lv)[2:16197]<-dissimilarity_matrix_lv$Tumor_Names
+
 
 NCIT_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv",sep=""))
-WHO_embedding_df <-read.csv(paste(data_dir,"/dt_input_file_6_dec/WHO_Only_terms_text-embedding-ada-002_embeddings.csv",sep=""))
 NCIT_embedding_df<-NCIT_embedding_df[c(-1),] # Remove the header (column name) embedding
-WHO_embedding_df<-WHO_embedding_df[c(-1),] # Remove the header (column name) embedding
 
 rownames(NCIT_embedding_df)<-NULL
-rownames(WHO_embedding_df)<-NULL
 
 NCIT_Tumors<-tolower(NCIT_embedding_df$Disease)
-WHO_Tumors<-tolower(WHO_embedding_df$Disease)
-rm(NCIT_embedding_df,WHO_embedding_df)
+rm(NCIT_embedding_df)
 
-rownames(dissimilarity_matrix_cosine)<-dissimilarity_matrix_cosine$Tumor_Names
-rownames(dissimilarity_matrix_jw)<-dissimilarity_matrix_jw$Tumor_Names
-rownames(dissimilarity_matrix_lv)<-dissimilarity_matrix_lv$Tumor_Names
-
-dissimilarity_matrix_cosine<-dissimilarity_matrix_cosine[,c(-1)]
-dissimilarity_matrix_jw<-dissimilarity_matrix_jw[,c(-1)]
-dissimilarity_matrix_lv<-dissimilarity_matrix_lv[,c(-1)]
+WHO_Tumors<- read_excel(paste(data_dir,"/WHO_Tumors/result/WHO_Tumor_all_edition.xlsx",sep=""))
+WHO_Tumors<-WHO_Tumors[,c(1)]
 
 
-dissimilarity_matrix_cosine_who <- dissimilarity_matrix_cosine %>% dplyr::select(one_of(WHO_Tumors))
-dissimilarity_matrix_jw_who <- dissimilarity_matrix_jw %>% dplyr::select(one_of(WHO_Tumors))
-dissimilarity_matrix_lv_who <- dissimilarity_matrix_lv %>% dplyr::select(one_of(WHO_Tumors))
+
+dissimilarity_matrix_cosine_who <- dissimilarity_matrix_cosine %>% dplyr::select(one_of(WHO_Tumors$Tumor_Names))
+dissimilarity_matrix_jw_who <- dissimilarity_matrix_jw %>% dplyr::select(one_of(WHO_Tumors$Tumor_Names))
+dissimilarity_matrix_lv_who <- dissimilarity_matrix_lv %>% dplyr::select(one_of(WHO_Tumors$Tumor_Names))
 
 
 
@@ -226,7 +212,7 @@ nested_affinity_cluster_lv<- cluster_label_assignment_refined(nested_affinity_cl
 # Compute isolation forest for embedding based Kmeans
 
 # Load embeddings 
-disease_transform_ADA2<- read.csv(paste(intermediate_dir,"/disease_transform_pca.csv",sep="") )
+disease_transform_ADA2<- read.csv(paste(intermediate_dir,"/disease_transform_pca_ada2.csv",sep="") )
 colnames(disease_transform_ADA2)[1]<-"Tumor_Names"
 rownames(disease_transform_ADA2)<-disease_transform_ADA2$Tumor_Names 
 
@@ -240,6 +226,7 @@ set.seed(13)
 
 embedding_ADA2<-kmeans_clust_result_embedding_ADA2 %>% dplyr::left_join(disease_transform_ADA2,by="Tumor_Names")
 kmeans_clust_result_embedding_ADA2$isolation_outlier_score<-NA
+idx_ada2<-which(colnames(embedding_ADA2)=="PC1")
 
 
 cluster_labels_ADA2 <- unique(embedding_ADA2$Cluster_ID)
@@ -247,8 +234,8 @@ for(iter in 1:length(cluster_labels_ADA2)){
   cluster_label_current <- cluster_labels_ADA2[iter]
   embedding_subset <- embedding_ADA2 %>% dplyr::filter(Cluster_ID==cluster_label_current)
   if(dim(embedding_subset)[1]>2){ # Need at least 2 data points to run isolation forest
-    model <- isolation.forest(embedding_subset[1:nrow(embedding_subset),9:ncol(embedding_subset)], ndim=3, ntrees=100, nthreads=1) # ntrees 50 initially
-    scores <- predict(model, embedding_subset[1:nrow(embedding_subset),9:ncol(embedding_subset)], type="score")
+    model <- isolation.forest(embedding_subset[1:nrow(embedding_subset),idx_ada2:ncol(embedding_subset)], ndim=3, ntrees=100, nthreads=1) # ntrees 50 initially
+    scores <- predict(model, embedding_subset[1:nrow(embedding_subset),idx_ada2:ncol(embedding_subset)], type="score")
     ind_clust <- which(kmeans_clust_result_embedding_ADA2$Cluster_ID==cluster_label_current)
     kmeans_clust_result_embedding_ADA2$isolation_outlier_score[ind_clust]<-scores
   }else{
@@ -270,7 +257,7 @@ for(iter in 1:length(cluster_labels_ADA2)){
   if(dim(embedding_subset)[1]>2){ # Need at least 2 data points to run isolation forest
     min_pts<- 2:(dim(embedding_subset)[1]-1)
     for(iter_pts in min_pts){
-      lof_scores_minpts <- lof(embedding_subset[,9:ncol(embedding_subset)],iter_pts)
+      lof_scores_minpts <- lof(embedding_subset[,idx_ada2:ncol(embedding_subset)],iter_pts)
       lof_scores_minpts_list[[as.character(iter_pts)]]<-lof_scores_minpts
     }
     lof_scores_minpts_list<- t(as.data.frame(lof_scores_minpts_list))
@@ -293,14 +280,15 @@ kmeans_clust_result_embedding_ADA2<- kmeans_clust_result_embedding_ADA2 %>% dply
 
 embedding_V3<-kmeans_clust_result_embedding_V3 %>% dplyr::left_join(disease_transform_V3,by="Tumor_Names")
 kmeans_clust_result_embedding_V3$isolation_outlier_score<-NA
+idx_v3<-which(colnames(embedding_V3)=="PC1")
 
 cluster_labels_V3 <- unique(embedding_V3$Cluster_ID)
 for(iter in 1:length(cluster_labels_V3)){
   cluster_label_current <- cluster_labels_V3[iter]
   embedding_subset <- embedding_V3 %>% dplyr::filter(Cluster_ID==cluster_label_current)
   if(dim(embedding_subset)[1]>2){ # Need at least 2 data points to run isolation forest
-    model <- isolation.forest(embedding_subset[1:nrow(embedding_subset),9:ncol(embedding_subset)], ndim=3, ntrees=100, nthreads=1) # ntrees 50 initially
-    scores <- predict(model, embedding_subset[1:nrow(embedding_subset),9:ncol(embedding_subset)], type="score")
+    model <- isolation.forest(embedding_subset[1:nrow(embedding_subset),idx_v3:ncol(embedding_subset)], ndim=3, ntrees=100, nthreads=1) # ntrees 50 initially
+    scores <- predict(model, embedding_subset[1:nrow(embedding_subset),idx_v3:ncol(embedding_subset)], type="score")
     ind_clust <- which(kmeans_clust_result_embedding_V3$Cluster_ID==cluster_label_current)
     kmeans_clust_result_embedding_V3$isolation_outlier_score[ind_clust]<-scores
   }else{
@@ -324,7 +312,7 @@ for(iter in 1:length(cluster_labels_V3)){
   if(dim(embedding_subset)[1]>2){ # Need at least 2 data points to run isolation forest
     min_pts<- 2:(dim(embedding_subset)[1]-1)
     for(iter_pts in min_pts){
-      lof_scores_minpts <- lof(embedding_subset[,9:ncol(embedding_subset)],iter_pts)
+      lof_scores_minpts <- lof(embedding_subset[,idx_v3:ncol(embedding_subset)],iter_pts)
       lof_scores_minpts_list[[as.character(iter_pts)]]<-lof_scores_minpts
     }
     lof_scores_minpts_list<- t(as.data.frame(lof_scores_minpts_list))
@@ -353,16 +341,16 @@ nested_affinity_cluster_lv_reassigned<-edit_distance_cluster_reassignment(nested
 
 
 # Sample 
-affinity_cluster_ADA2_reassigned_df_short <- affinity_cluster_ADA2_reassigned_df %>% dplyr::select(Tumor_Names,who_cluster_label)
-affinity_cluster_v3_reassigned_df_short <- affinity_cluster_v3_reassigned_df %>% dplyr::select(Tumor_Names,who_cluster_label)
-kmeans_clust_result_embedding_ADA2_short <- kmeans_clust_result_embedding_ADA2 %>% dplyr::select(Tumor_Names,who_cluster_label)
-kmeans_clust_result_embedding_V3_short <- kmeans_clust_result_embedding_V3 %>% dplyr::select(Tumor_Names,who_cluster_label)
-nested_affinity_cluster_cosine_reassigned_short <- nested_affinity_cluster_cosine_reassigned %>% dplyr::select(Tumor_Names,who_cluster_label)
-nested_affinity_cluster_jw_reassigned_short <- nested_affinity_cluster_jw_reassigned %>% dplyr::select(Tumor_Names,who_cluster_label)
-nested_affinity_cluster_lv_reassigned_short <- nested_affinity_cluster_lv_reassigned %>% dplyr::select(Tumor_Names,who_cluster_label)
+affinity_cluster_ADA2_reassigned_df_short <- affinity_cluster_ADA2_reassigned_df %>% dplyr::select(nct_id,Tumor_Names,who_cluster_label)
+affinity_cluster_v3_reassigned_df_short <- affinity_cluster_v3_reassigned_df %>% dplyr::select(nct_id,Tumor_Names,who_cluster_label)
+kmeans_clust_result_embedding_ADA2_short <- kmeans_clust_result_embedding_ADA2 %>% dplyr::select(nct_id,Tumor_Names,who_cluster_label)
+kmeans_clust_result_embedding_V3_short <- kmeans_clust_result_embedding_V3 %>% dplyr::select(nct_id,Tumor_Names,who_cluster_label)
+nested_affinity_cluster_cosine_reassigned_short <- nested_affinity_cluster_cosine_reassigned %>% dplyr::select(nct_id,Tumor_Names,who_cluster_label)
+nested_affinity_cluster_jw_reassigned_short <- nested_affinity_cluster_jw_reassigned %>% dplyr::select(nct_id,Tumor_Names,who_cluster_label)
+nested_affinity_cluster_lv_reassigned_short <- nested_affinity_cluster_lv_reassigned %>% dplyr::select(nct_id,Tumor_Names,who_cluster_label)
 
-affinity_cluster_ADA2_dist_short<-affinity_cluster_ADA2_reassigned_df %>% dplyr::select(Tumor_Names,WHO_Matches)
-affinity_cluster_v3_dist_short<-affinity_cluster_v3_reassigned_df %>% dplyr::select(Tumor_Names,WHO_Matches)
+affinity_cluster_ADA2_dist_short<-affinity_cluster_ADA2_reassigned_df %>% dplyr::select(nct_id,Tumor_Names,WHO_Matches)
+affinity_cluster_v3_dist_short<-affinity_cluster_v3_reassigned_df %>% dplyr::select(nct_id,Tumor_Names,WHO_Matches)
 
 
 colnames(affinity_cluster_v3_reassigned_df_short)[2]<-"af_v3"
