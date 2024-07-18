@@ -438,7 +438,9 @@ tumor_sample_df<-tumor_sample_df %>% dplyr::left_join(affinity_cluster_ADA2_reas
   dplyr::left_join(nested_affinity_cluster_lv_reassigned_short,by="Tumor_Names") %>%
   dplyr::left_join(affinity_cluster_v3_dist_short,by="Tumor_Names") %>%
   dplyr::left_join(affinity_cluster_ADA2_dist_short,by="Tumor_Names")%>%
-  dplyr::left_join(min_dist_matches,by="Tumor_Names")
+  dplyr::left_join(min_dist_matches,by="Tumor_Names") %>% 
+  dplyr::select(nct_id,Tumor_Names,af_v3,af_ada2,kmeans_v3,kmeans_ada2,af_cosine,af_jw,af_lv,
+                euclidean_dist_v3,euclidean_dist_ada2,cosine_match,jw_match,lv_match)
 
 
 tumor_sample_df<- add_column(tumor_sample_df,valid_af_v3="", .after = "af_v3")
@@ -454,5 +456,7 @@ tumor_sample_df<- add_column(tumor_sample_df,valid_cosine_match="", .after = "co
 tumor_sample_df<- add_column(tumor_sample_df,valid_jw_match="", .after = "jw_match")
 tumor_sample_df<- add_column(tumor_sample_df,valid_lv_match="", .after = "lv_match")
 
+
 # Write samples
 write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df.csv",sep = ""))
+save.image("script10.RData")
