@@ -339,6 +339,13 @@ nested_affinity_cluster_cosine_reassigned<-edit_distance_cluster_reassignment(ne
 nested_affinity_cluster_jw_reassigned<-edit_distance_cluster_reassignment(nested_affinity_cluster_jw)
 nested_affinity_cluster_lv_reassigned<-edit_distance_cluster_reassignment(nested_affinity_cluster_lv)
 
+tumor_id<- read.csv(paste(data_dir,"/Tumor_NCT_ID.csv",sep=""))
+tumor_id<- tumor_id[,c(-1)]
+
+nested_affinity_cluster_cosine_reassigned <- nested_affinity_cluster_cosine_reassigned %>% left_join(tumor_id,by="Tumor_Names")
+nested_affinity_cluster_jw_reassigned <- nested_affinity_cluster_jw_reassigned %>% left_join(tumor_id,by="Tumor_Names")
+nested_affinity_cluster_lv_reassigned <- nested_affinity_cluster_lv_reassigned %>% left_join(tumor_id,by="Tumor_Names")
+
 
 # Sample 
 affinity_cluster_ADA2_reassigned_df_short <- affinity_cluster_ADA2_reassigned_df %>% dplyr::select(nct_id,Tumor_Names,who_cluster_label)
@@ -353,18 +360,18 @@ affinity_cluster_ADA2_dist_short<-affinity_cluster_ADA2_reassigned_df %>% dplyr:
 affinity_cluster_v3_dist_short<-affinity_cluster_v3_reassigned_df %>% dplyr::select(nct_id,Tumor_Names,WHO_Matches)
 
 
-colnames(affinity_cluster_v3_reassigned_df_short)[2]<-"af_v3"
-colnames(affinity_cluster_ADA2_reassigned_df_short)[2]<-"af_ada2"
+colnames(affinity_cluster_v3_reassigned_df_short)[3]<-"af_v3"
+colnames(affinity_cluster_ADA2_reassigned_df_short)[3]<-"af_ada2"
 
-colnames(kmeans_clust_result_embedding_V3_short)[2]<-"kmeans_v3"
-colnames(kmeans_clust_result_embedding_ADA2_short)[2]<-"kmeans_ada2"
+colnames(kmeans_clust_result_embedding_V3_short)[3]<-"kmeans_v3"
+colnames(kmeans_clust_result_embedding_ADA2_short)[3]<-"kmeans_ada2"
 
-colnames(nested_affinity_cluster_cosine_reassigned_short)[2]<-"af_cosine"
-colnames(nested_affinity_cluster_jw_reassigned_short)[2]<-"af_jw"
-colnames(nested_affinity_cluster_lv_reassigned_short)[2]<-"af_lv"
+colnames(nested_affinity_cluster_cosine_reassigned_short)[3]<-"af_cosine"
+colnames(nested_affinity_cluster_jw_reassigned_short)[3]<-"af_jw"
+colnames(nested_affinity_cluster_lv_reassigned_short)[3]<-"af_lv"
 
-colnames(affinity_cluster_v3_dist_short)[2]<-"euclidean_dist_v3"
-colnames(affinity_cluster_ADA2_dist_short)[2]<-"euclidean_dist_ada2"
+colnames(affinity_cluster_v3_dist_short)[3]<-"euclidean_dist_v3"
+colnames(affinity_cluster_ADA2_dist_short)[3]<-"euclidean_dist_ada2"
 
 
 
@@ -419,15 +426,6 @@ for (iter in 1: dim(min_dist_matches)[1]){
 }
 
 
-# 
-load(paste(input_dir,"/conditions_data.RData",sep=""))
-conditions_data<-conditions_data[,c(2,4)]
-colnames(conditions_data)[2]<-"Tumor_Names"
-
-
-# Random samples
-affinity_cluster_v3_reassigned_df_short<- affinity_cluster_v3_reassigned_df_short %>% dplyr::left_join(conditions_data,by="Tumor_Names")
-affinity_cluster_v3_reassigned_df_short<-affinity_cluster_v3_reassigned_df_short %>%group_by(Tumor_Names) %>%summarise(nct_id=paste(nct_id, collapse=";"),af_v3=unique(af_v3))
 affinity_cluster_v3_reassigned_df_short<-affinity_cluster_v3_reassigned_df_short%>%dplyr::filter(nct_id!="NA")
 
 set.seed(13)
@@ -442,7 +440,6 @@ tumor_sample_df<-tumor_sample_df %>% dplyr::left_join(affinity_cluster_ADA2_reas
   dplyr::left_join(affinity_cluster_ADA2_dist_short,by="Tumor_Names")%>%
   dplyr::left_join(min_dist_matches,by="Tumor_Names")
 
-tumor_sample_df<-tumor_sample_df[,c(2,1,3:14)]
 
 tumor_sample_df<- add_column(tumor_sample_df,valid_af_v3="", .after = "af_v3")
 tumor_sample_df<- add_column(tumor_sample_df,valid_af_ad2="", .after = "af_ada2")
