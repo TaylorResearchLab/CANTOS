@@ -458,5 +458,5 @@ tumor_sample_df<- add_column(tumor_sample_df,valid_lv_match="", .after = "lv_mat
 
 
 # Write samples
-write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df.csv",sep = ""))
+write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df_script10.csv",sep = ""))
 save.image("script10.RData")
