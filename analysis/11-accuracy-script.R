@@ -58,13 +58,3 @@ for (iter in 1:dim(tumor_sample_df)[1]){
 
 tumor_sample_df <- tumor_sample_df[order_by(tumor_sample_df$ground_truth),]
 write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df_ground_truth.csv",sep = ""))
-
-# 
-# tumor_sample_df <- tumor_sample_df %>% filter(ground_truth=="G")
-# 
-# 
-# #accuracy_df<- tumor_sample_df[,c(seq(5,27,2))]
-# #print(colSums(accuracy_df)/dim(accuracy_df)[1])
-# print(round(colSums(accuracy_df)/dim(accuracy_df)[1],2))
-# 
-# lv_df<-tumor_sample_df%>% dplyr::select(ID,nct_id,Tumor_Names,lv_match,valid_lv_match)
