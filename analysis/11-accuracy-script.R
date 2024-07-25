@@ -25,7 +25,7 @@ intermediate_dir <- file.path(analysis_dir,"intermediate")
 result_dir <- file.path(analysis_dir,"results")
 
 
-tumor_sample_df<-read.csv(paste(result_dir,"/tumor_sample_df.csv",sep = ""))
+tumor_sample_df<-read.csv(paste(result_dir,"/tumor_sample_df_script10_ground_truth.csv",sep = ""))
 tumor_sample_df<-tumor_sample_df[,1:27]
 # tumor_sample_df<-tumor_sample_df %>% filter(!is.na(valid_af_v3))
 # 
