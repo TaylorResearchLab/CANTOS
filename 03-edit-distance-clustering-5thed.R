@@ -83,7 +83,7 @@ simmilarity_matrix_lv <- 1- dissimilarity_matrix_lv
 
 
 ######### Cluster with LV ########
-apclust_lv <- apcluster(simmilarity_matrix_lv) #11:19 am
+apclust_lv <- apcluster(simmilarity_matrix_lv) #11:19 am -2:44 pm 
 affinity_cluster_lv_df<-as.data.frame(matrix(nrow=1,ncol=2))
 colnames(affinity_cluster_lv_df)<-c("Tumor_Names","Cluster_ID")
 for (iter in 1: length(apclust_lv@clusters)){
@@ -91,4 +91,31 @@ for (iter in 1: length(apclust_lv@clusters)){
   affinity_cluster_lv_df[iter,2] <- iter
 }
 affinity_cluster_lv_df<- affinity_cluster_lv_df %>% separate_rows(Tumor_Names, sep = '@')
+
+
+
+######### Cluster with jw ########
+apclust_jw <- apcluster(simmilarity_matrix_jw) #2:53 pm 
+affinity_cluster_jw_df<-as.data.frame(matrix(nrow=1,ncol=2))
+colnames(affinity_cluster_jw_df)<-c("Tumor_Names","Cluster_ID")
+for (iter in 1: length(apclust_jw@clusters)){
+  affinity_cluster_jw_df[iter,1] <- paste(names(unlist(apclust_jw@clusters[iter])),collapse = "@")
+  affinity_cluster_jw_df[iter,2] <- iter
+}
+affinity_cluster_jw_df<- affinity_cluster_jw_df %>% separate_rows(Tumor_Names, sep = '@')
+
+######### Cluster with cosine ########
+apclust_cosine <- apcluster(simmilarity_matrix_cosine)#11:07 am - 1:56 pm
+affinity_cluster_cosine_df<-as.data.frame(matrix(nrow=1,ncol=2))
+colnames(affinity_cluster_cosine_df)<-c("Tumor_Names","Cluster_ID")
+for (iter in 1: length(apclust_cosine@clusters)){
+  affinity_cluster_cosine_df[iter,1] <- paste(names(unlist(apclust_cosine@clusters[iter])),collapse = "@")
+  affinity_cluster_cosine_df[iter,2] <- iter
+}
+affinity_cluster_cosine_df<- affinity_cluster_cosine_df %>% separate_rows(Tumor_Names, sep = '@')
+
+save.image(file = "script3_5thed.RData")
+
+
+
 
