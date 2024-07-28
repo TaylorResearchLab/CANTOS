@@ -14,7 +14,6 @@ util_dir <- file.path(root_dir, "util")
 data_dir <- file.path(root_dir,"data")
 input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
-intermediate_dir <- file.path(analysis_dir,"intermediate")
 results_dir <- file.path(analysis_dir,"results_5th")
 
 # Load dissimalirity matrices
