@@ -114,6 +114,31 @@ for (iter in 1: length(apclust_cosine@clusters)){
 }
 affinity_cluster_cosine_df<- affinity_cluster_cosine_df %>% separate_rows(Tumor_Names, sep = '@')
 
+# nested clustering based on size of cluster
+nested_affinity_cluster_lv<- edit_distance_nested_cluster(affinity_cluster_lv_df,simmilarity_matrix_lv)
+nested_affinity_cluster_jw<- edit_distance_nested_cluster(affinity_cluster_jw_df,simmilarity_matrix_jw)
+nested_affinity_cluster_cosine<- edit_distance_nested_cluster(affinity_cluster_cosine_df,simmilarity_matrix_cosine)
+
+
+# Compute Silo Dist
+
+nested_affinity_cluster_lv<-compute_silhouette(cluster_df = nested_affinity_cluster_lv,dist_mat = dissimilarity_matrix_lv)
+nested_affinity_cluster_jw<-compute_silhouette(cluster_df = nested_affinity_cluster_jw,dist_mat = dissimilarity_matrix_jw)
+nested_affinity_cluster_cosine<-compute_silhouette(cluster_df = nested_affinity_cluster_cosine,dist_mat = dissimilarity_matrix_cosine)
+
+
+mean_freq_lv <- nested_affinity_cluster_lv %>% dplyr::select(Cluster_ID, silhouette_score) %>% dplyr::group_by(Cluster_ID) %>% dplyr::summarise(mean_silo_score=mean(silhouette_score),cluster_member_count =dplyr::n()) 
+mean_freq_jw <- nested_affinity_cluster_jw %>% dplyr::select(Cluster_ID, silhouette_score) %>% dplyr::group_by(Cluster_ID) %>% dplyr::summarise(mean_silo_score=mean(silhouette_score),cluster_member_count =dplyr::n())
+mean_freq_cosine <- nested_affinity_cluster_cosine %>% dplyr::select(Cluster_ID, silhouette_score) %>% dplyr::group_by(Cluster_ID) %>% dplyr::summarise(mean_silo_score=mean(silhouette_score),cluster_member_count =dplyr::n())
+
+
+nested_affinity_cluster_lv<- nested_affinity_cluster_lv %>% dplyr::left_join(mean_freq_lv,by="Cluster_ID")
+nested_affinity_cluster_jw<- nested_affinity_cluster_jw %>% dplyr::left_join(mean_freq_jw,by="Cluster_ID")
+nested_affinity_cluster_cosine<- nested_affinity_cluster_cosine %>% dplyr::left_join(mean_freq_cosine,by="Cluster_ID")
+
+
+ct_disease_df <- read_csv(paste(intermediate_dir,"/ct_disease_df.csv",sep=""))
+
 save.image(file = "script3_5thed.RData")
 
 
