@@ -123,13 +123,13 @@ write.csv(display_table_benchmark_kmeans,paste(result_dir,"/display_table_benchm
 clust_plot_kmeans <- display_table_benchmark_kmeans %>% dplyr::select(cluster,mean_silo_score,cluster_member_count) 
 clust_plot_kmeans<-unique(clust_plot_kmeans)
 p_kmeans_benchmark <- ggplot(clust_plot_kmeans, aes(x=cluster_member_count, y=mean_silo_score)) +geom_point() +
-  geom_text(label=clust_plot_kmeans$cluster,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.005) + labs(title = "Kmeans clusters, K=5400")
+  geom_text(label=clust_plot_kmeans$cluster,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.005) + labs(title = paste("Kmeans clusters, K=",Kmeans_silhouette_Max$k,sep=""))
 ggsave(p_kmeans_benchmark, filename = paste(plots_dir,"/kmeans_Embedding_Benchmark_v3.png",sep=""), height = 30, width = 21, units = "cm")
 
 # Global Plot kmeans
 global_clust_plot_kmeans <- kmeans_clust_result %>% dplyr::select(cluster,mean_silo_score,cluster_member_count) %>% dplyr::distinct()
 plt_global_kmeans <- ggplot(global_clust_plot_kmeans, aes(x=cluster_member_count, y=mean_silo_score)) +geom_point() +
-  geom_text(label=global_clust_plot_kmeans$cluster,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) + labs(title = "Kmeans clusters, K=5400")
+  geom_text(label=global_clust_plot_kmeans$cluster,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) + labs(title = paste("Kmeans clusters, K=",Kmeans_silhouette_Max$k,sep=""))
 ggsave(plt_global_kmeans, filename = paste(plots_dir,"/plt_global_kmeans_embedding_v3.pdf",sep=""), height = 30, width = 21, units = "cm")
 
 save.image("script-5B.RData")
