@@ -245,8 +245,6 @@ write.csv(nested_affinity_cluster_lv,paste(results_dir,"/nested_affinity_cluster
 write.csv(nested_affinity_cluster_jw,paste(results_dir,"/nested_affinity_cluster_jw.csv",sep=""))
 write.csv(nested_affinity_cluster_cosine,paste(results_dir,"/nested_affinity_cluster_cosine.csv",sep=""))
 
-write.csv(dissimilarity_matrix_cosine,paste(intermediate_dir,"/dissimilarity_matrix_cosine.csv",sep=""))
-write.csv(dissimilarity_matrix_jw,paste(intermediate_dir,"/dissimilarity_matrix_jw.csv",sep=""))
-write.csv(dissimilarity_matrix_lv,paste(intermediate_dir,"/dissimilarity_matrix_lv.csv",sep=""))
+
 
 
