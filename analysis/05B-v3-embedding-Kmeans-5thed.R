@@ -60,6 +60,8 @@ avg_sil <- sapply(k, silhouette_score)
 p1<-ggplot(Kmeans_silhouette, aes(x =k, y = mean_silhouette_score)) + geom_point() +
   geom_point(data = Kmeans_silhouette[which.max(Kmeans_silhouette$mean_silhouette_score), ], color="red")+
   scale_x_continuous("k", labels = as.character(k), breaks = k) + ggtitle("Kmean Silhouette Score vs Clusters with V3 embeddings")
+ggsave(p1, filename = paste(plots_dir,"/Kmeans_Silhouette_Score_vs_cluster_v3_5thed.png",sep=""), height = 30, width = 21, units = "cm")
+
 
 # Kmeans optimal cluster is 6100 from 5000
 km.res <- eclust(disease_transform_v3[,2:ncol(disease_transform_v3)], "kmeans", k = Kmeans_silhouette_Max$k,nstart = 25, graph = FALSE)
@@ -113,6 +115,18 @@ display_table_benchmark_kmeans<-display_table_benchmark_kmeans[,c(7,1:6)]
 write.csv(kmeans_clust_result,paste(result_dir,"/kmeans_clust_result_embedding_v3_5thed.csv",sep=""))
 write.csv(display_table_benchmark_kmeans,paste(result_dir,"/display_table_benchmark_kmeans_v3_5thed.csv",sep=""))
 
+# Plot for Kmeans
+clust_plot_kmeans <- display_table_benchmark_kmeans %>% dplyr::select(cluster,mean_silo_score,cluster_member_count) 
+clust_plot_kmeans<-unique(clust_plot_kmeans)
+p_kmeans_benchmark <- ggplot(clust_plot_kmeans, aes(x=cluster_member_count, y=mean_silo_score)) +geom_point() +
+  geom_text(label=clust_plot_kmeans$cluster,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.005) + labs(title = paste("Kmeans clusters, K=",Kmeans_silhouette_Max$k,sep=""))
+ggsave(p_kmeans_benchmark, filename = paste(plots_dir,"/kmeans_Embedding_Benchmark_v3_5thed.png",sep=""), height = 30, width = 21, units = "cm")
+
+# Global Plot kmeans
+global_clust_plot_kmeans <- kmeans_clust_result %>% dplyr::select(cluster,mean_silo_score,cluster_member_count) %>% dplyr::distinct()
+plt_global_kmeans <- ggplot(global_clust_plot_kmeans, aes(x=cluster_member_count, y=mean_silo_score)) +geom_point() +
+  geom_text(label=global_clust_plot_kmeans$cluster,check_overlap = TRUE,angle = 45,vjust = 0, nudge_y = 0.05) + labs(title = paste("Kmeans clusters, K=",Kmeans_silhouette_Max$k,sep=""))
+ggsave(plt_global_kmeans, filename = paste(plots_dir,"/plt_global_kmeans_embedding_v3_5thed.pdf",sep=""), height = 30, width = 21, units = "cm")
 
 
 
