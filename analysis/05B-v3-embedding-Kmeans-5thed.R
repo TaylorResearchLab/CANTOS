@@ -56,6 +56,11 @@ k <- c(10,500,1000,2000,3000,4000,5000,5500,5800,6000,6100,6200,6300,6400,
 
 avg_sil <- sapply(k, silhouette_score)
 
+Kmeans_silhouette<-as.data.frame(cbind(k,avg_sil))
+colnames(Kmeans_silhouette) <- c("k","mean_silhouette_score") #5500
+
+Kmeans_silhouette_Max <- Kmeans_silhouette[ which(max(Kmeans_silhouette$mean_silhouette_score) == Kmeans_silhouette$mean_silhouette_score), ]
+
 
 p1<-ggplot(Kmeans_silhouette, aes(x =k, y = mean_silhouette_score)) + geom_point() +
   geom_point(data = Kmeans_silhouette[which.max(Kmeans_silhouette$mean_silhouette_score), ], color="red")+
