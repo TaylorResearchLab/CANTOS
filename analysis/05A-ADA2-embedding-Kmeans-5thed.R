@@ -54,15 +54,16 @@ k <- c(10,100,500,1000,2000,3000,4000,5000,
 avg_sil <- sapply(k, silhouette_score)#7:37 pm
 
 Kmeans_silhouette<-as.data.frame(cbind(k,avg_sil))
-colnames(Kmeans_silhouette) <- c("k","mean_silhouette_score") #6100
+colnames(Kmeans_silhouette) <- c("k","mean_silhouette_score") #6050
 
 Kmeans_silhouette_Max <- Kmeans_silhouette[ which(max(Kmeans_silhouette$mean_silhouette_score) == Kmeans_silhouette$mean_silhouette_score), ]
 
 p1<-ggplot(Kmeans_silhouette, aes(x =k, y = mean_silhouette_score)) + geom_point() +
   geom_point(data = Kmeans_silhouette[which.max(Kmeans_silhouette$mean_silhouette_score), ], color="red")+
   scale_x_continuous("k", labels = as.character(k), breaks = k) + ggtitle("Kmean Silhouette Score vs Clusters")
+ggsave(p1, filename = paste(plots_dir,"/Kmeans_Silhouette_Score_vs_cluster_5thed.png",sep=""), height = 30, width = 21, units = "cm")
 
-# Kmeans optimal cluster is 6000
+# Kmeans optimal cluster is 6050
 km.res <- eclust(disease_transform[,2:ncol], "kmeans", k = Kmeans_silhouette_Max$k,nstart = 25, graph = FALSE)
 kmeans_clust_result <- as.data.frame(km.res$cluster)
 kmeans_clust_result$Tumors<-rownames(kmeans_clust_result)
@@ -109,8 +110,8 @@ display_table_benchmark_kmeans<-display_table_benchmark_kmeans%>%left_join(ct_tu
 kmeans_clust_result<-kmeans_clust_result[,c(7,1:6)]
 display_table_benchmark_kmeans<-display_table_benchmark_kmeans[,c(7,1:6)]
 
-write.csv(kmeans_clust_result,paste(result_dir,"/kmeans_clust_result_embedding.csv",sep=""))
-write.csv(display_table_benchmark_kmeans,paste(result_dir,"/display_table_benchmark_kmeans.csv",sep=""))
+write.csv(kmeans_clust_result,paste(result_dir,"/kmeans_clust_result_embedding_5thed.csv",sep=""))
+write.csv(display_table_benchmark_kmeans,paste(result_dir,"/display_table_benchmark_kmeans_5thed.csv",sep=""))
 
 
 # Plot for Kmeans
