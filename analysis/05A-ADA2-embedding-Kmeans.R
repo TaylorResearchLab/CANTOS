@@ -111,8 +111,8 @@ display_table_benchmark_kmeans<-display_table_benchmark_kmeans%>%left_join(ct_tu
 kmeans_clust_result<-kmeans_clust_result[,c(7,1:6)]
 display_table_benchmark_kmeans<-display_table_benchmark_kmeans[,c(7,1:6)]
 
-write.csv(kmeans_clust_result,paste(result_dir,"/kmeans_clust_result_embedding.csv",sep=""))
-write.csv(display_table_benchmark_kmeans,paste(result_dir,"/display_table_benchmark_kmeans.csv",sep=""))
+write.csv(kmeans_clust_result,paste(result_dir,"/kmeans_clust_result_embedding_ada2.csv",sep=""))
+write.csv(display_table_benchmark_kmeans,paste(result_dir,"/display_table_benchmark_kmeans_ada2.csv",sep=""))
 
 
 # Plot for Kmeans
