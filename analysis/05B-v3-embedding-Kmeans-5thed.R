@@ -110,8 +110,8 @@ display_table_benchmark_kmeans<-display_table_benchmark_kmeans[,c(7,1:6)]
 
 
 
-write.csv(kmeans_clust_result,paste(result_dir,"/kmeans_clust_result_embedding_v3.csv",sep=""))
-write.csv(display_table_benchmark_kmeans,paste(result_dir,"/display_table_benchmark_kmeans_v3.csv",sep=""))
+write.csv(kmeans_clust_result,paste(result_dir,"/kmeans_clust_result_embedding_v3_5thed.csv",sep=""))
+write.csv(display_table_benchmark_kmeans,paste(result_dir,"/display_table_benchmark_kmeans_v3_5thed.csv",sep=""))
 
 
 
