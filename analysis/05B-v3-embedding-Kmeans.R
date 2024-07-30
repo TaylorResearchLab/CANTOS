@@ -64,6 +64,7 @@ Kmeans_silhouette_Max <- Kmeans_silhouette[ which(max(Kmeans_silhouette$mean_sil
 p1<-ggplot(Kmeans_silhouette, aes(x =k, y = mean_silhouette_score)) + geom_point() +
   geom_point(data = Kmeans_silhouette[which.max(Kmeans_silhouette$mean_silhouette_score), ], color="red")+
   scale_x_continuous("k", labels = as.character(k), breaks = k) + ggtitle("Kmean Silhouette Score vs Clusters with V3 embeddings")
+ggsave(p1, filename = paste(plots_dir,"/Kmeans_Silhouette_Score_vs_cluster_v3.png",sep=""), height = 30, width = 21, units = "cm")
 
 
 # Kmeans optimal cluster is 6100 from 5000
