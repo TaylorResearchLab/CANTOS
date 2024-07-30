@@ -53,14 +53,21 @@ k <- c(10,500,1000,2000,3000,4000,5000,5500,5800,6000,6100,6200,6300,6400,
        6500,6600,6700,6800,6900,
        7000,7100,7200,7300,7400,7500,7600,7700,7800,7900,8000,9000,10000,11000,12000,13000,
        14000,15000,16000)
-
+k2<-c(5100,5200,5300,5400,5500,5600,5700,5800,5900)
 avg_sil <- sapply(k, silhouette_score)
+avg_sil2 <- sapply(k2, silhouette_score)
 
 Kmeans_silhouette<-as.data.frame(cbind(k,avg_sil))
-colnames(Kmeans_silhouette) <- c("k","mean_silhouette_score") #5500
+colnames(Kmeans_silhouette) <- c("k","mean_silhouette_score") 
+
+Kmeans_silhouette2<-as.data.frame(cbind(k2,avg_sil2))
+colnames(Kmeans_silhouette2) <- c("k","mean_silhouette_score")
+
+Kmeans_silhouette<-rbind(Kmeans_silhouette,Kmeans_silhouette2)
+Kmeans_silhouette<-Kmeans_silhouette[order(Kmeans_silhouette$k),]
 
 Kmeans_silhouette_Max <- Kmeans_silhouette[ which(max(Kmeans_silhouette$mean_silhouette_score) == Kmeans_silhouette$mean_silhouette_score), ]
-
+#5800 clusters
 
 p1<-ggplot(Kmeans_silhouette, aes(x =k, y = mean_silhouette_score)) + geom_point() +
   geom_point(data = Kmeans_silhouette[which.max(Kmeans_silhouette$mean_silhouette_score), ], color="red")+
