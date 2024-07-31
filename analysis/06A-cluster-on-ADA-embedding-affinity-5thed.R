@@ -43,8 +43,8 @@ set.seed(13)
 dist_euclidean<- dist(disease_transform,method = "euclidean")
 dist_euclidean<-as.matrix(dist_euclidean)
 simmilarity_euclidean<- 1/(1+dist_euclidean)
-af_clust_euclidean <- apcluster(simmilarity_euclidean) # 6:05 pm
-cat("affinity propogation optimal number of clusters:", length(af_clust_euclidean@clusters), "\n")#3550 clusters
+af_clust_euclidean <- apcluster(simmilarity_euclidean) # 6:05 pm-8:40 pm
+cat("affinity propogation optimal number of clusters:", length(af_clust_euclidean@clusters), "\n")#3242 clusters
 
 #d.apclus2 <- apcluster(negDistMat(r=2), disease_transform) # 1 hr 28 mins 11:28 pm - 12:08 pm
 #cat("affinity propogation optimal number of clusters:", length(d.apclus2@clusters), "\n") #1113 clusters 
@@ -110,6 +110,6 @@ while(length(large_cluster_labels)>0){
 }
 
 
-save(affinity_cluster_df,file = paste(intermediate_dir,"/affinity_cluster_df_ada2.RData",sep=""))
+save(affinity_cluster_df,file = paste(intermediate_dir,"/affinity_cluster_df_ada2_5thed.RData",sep=""))
 
-save.image(file = "script6a.RData")
+save.image(file = "script6a_5thed.RData")
