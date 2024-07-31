@@ -63,3 +63,5 @@ disease_transform = as.data.frame(-results$x[,1:136])
 write.csv(disease_transform,file =paste(intermediate_dir,"/disease_transform_pca_ada2_5thed.csv",sep="") )
 
 save.image(file = "script4a_5thed.RData")
+save(combined_embedding_df,file = paste(intermediate_dir,"/combined_embedding_ada2_df_5thed.RData",sep=""))
+
