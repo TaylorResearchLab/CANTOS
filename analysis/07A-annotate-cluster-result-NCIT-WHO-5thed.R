@@ -153,6 +153,7 @@ affinity_cluster_df<- affinity_cluster_df %>% dplyr::left_join(NCIT_match_df,by=
 
 affinity_cluster_df<- cluster_label_assignment_refined(affinity_cluster_df)
 tumor_id<- read.csv(paste(data_dir,"/Tumor_NCT_ID.csv",sep=""))
+tumor_id<-tumor_id[,c(-1)]
 
 affinity_cluster_df<-affinity_cluster_df%>%left_join(tumor_id,by="Tumor_Names")
 affinity_cluster_df<-affinity_cluster_df[,c(9,1:8)]
