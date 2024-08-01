@@ -44,7 +44,7 @@ colnames(WHO_embedding_df)<-colnames(NCIT_embedding_df)
 
 
 
-cl <- makeCluster(6, outfile="")
+cl <- makeCluster(25, outfile="")
 registerDoParallel(cl)
 
 CalculateEuclideanDistance <- function(vect1, vect2) sqrt(sum((vect1 - vect2)^2)) 
@@ -56,6 +56,106 @@ outer_who_final<-foreach(i = 1:dim(combined_embedding_df)[1], .combine = rbind) 
   euclidean_dist <- as.matrix(dist(embedding_pairwise,method = "euclidean"))
   d<-as.double(euclidean_dist[1,c(-1)])
 }
+
+
 colnames(outer_who_final)<-(WHO_embedding_df$Disease)
 rownames(outer_who_final)<-rownames(combined_embedding_df)
 
+save.image(file = "script7a-5thed.RData")
+
+
+# 
+# while(stop <16700){
+#   outer_who_final<-foreach(i = start:stop, .combine = rbind) %dopar% { #12:10pm -
+#     print(i)
+#     #s <- apply(WHO_embedding_df[,2:1537],1,CalculateEuclideanDistance,vect2=combined_embedding_df[i,])
+#     embedding_pairwise<- as.matrix(rbind(combined_embedding_df[i,],WHO_embedding_df[,2:ncol(WHO_embedding_df)]))
+#     euclidean_dist <- as.matrix(dist(embedding_pairwise,method = "euclidean"))
+#     d<-as.double(euclidean_dist[1,c(-1)])
+#   }
+# 
+#   tmp<-rbind(tmp,outer_who_final)
+#   rm(outer_who_final)
+#   start=stop+1
+#   stop=start+399
+#   save.image(file = "script7a-5thed-while-temp.RData")
+# 
+# }
+
+
+outer_NCIT_final<-foreach(i = 1:dim(combined_embedding_df)[1], .combine = rbind) %dopar% {
+  print(i)
+  embedding_pairwise<- as.matrix(rbind(combined_embedding_df[i,],NCIT_embedding_df[,2:ncol(NCIT_embedding_df)]))
+  euclidean_dist <- as.matrix(dist(embedding_pairwise,method = "euclidean"))
+  d<-as.double(euclidean_dist[1,c(-1)])
+}
+
+colnames(outer_NCIT_final)<-(tolower(NCIT_embedding_df$Disease))
+rownames(outer_NCIT_final)<-rownames(combined_embedding_df)
+
+# 
+# while(stop <16700){
+#   outer_NCIT_final<-foreach(i = start:stop, .combine = rbind) %dopar% {
+#     print(i)
+#     embedding_pairwise<- as.matrix(rbind(combined_embedding_df[i,],NCIT_embedding_df[,2:ncol(NCIT_embedding_df)]))
+#     euclidean_dist <- as.matrix(dist(embedding_pairwise,method = "euclidean"))
+#     d<-as.double(euclidean_dist[1,c(-1)])
+#   }
+#   
+#   tmp<-rbind(tmp,outer_NCIT_final)
+#   rm(outer_NCIT_final)
+#   start=stop+1
+#   stop=start+499
+#   save.image(file = "script7a-5thed-while-temp.RData")
+#   
+# }
+
+index_min_who <- as.matrix(apply(outer_who_final, 1, which.min))
+
+who_match_df <- cbind(rownames(outer_who_final))
+
+colnames(who_match_df)<-"Tumor_Names"
+who_match_df <-as.data.frame(who_match_df)
+
+who_match_df$WHO_Matches<- NA
+who_match_df$WHO_distance<-NA
+
+for (iter in 1: dim(who_match_df)[1]){
+  
+  who_match_df$WHO_Matches[iter] <- colnames(outer_who_final)[index_min_who[iter]]
+  who_match_df$WHO_distance[iter]<-outer_who_final[iter,index_min_who[iter]]
+  
+}
+
+
+
+
+index_min_NCIT <- as.matrix(apply(outer_NCIT_final, 1, which.min))
+
+NCIT_match_df <- cbind(rownames(outer_NCIT_final))
+
+colnames(NCIT_match_df)<-"Tumor_Names"
+NCIT_match_df <-as.data.frame(NCIT_match_df)
+
+NCIT_match_df$NCIT_Matches<- NA
+NCIT_match_df$NCIT_distance<-NA
+
+for (iter in 1: dim(NCIT_match_df)[1]){
+  
+  NCIT_match_df$NCIT_Matches[iter] <- colnames(outer_NCIT_final)[index_min_NCIT[iter]]
+  NCIT_match_df$NCIT_distance[iter]<-outer_NCIT_final[iter,index_min_NCIT[iter]]
+  
+}
+##########################
+affinity_cluster_df<- affinity_cluster_df %>% dplyr::left_join(who_match_df,by="Tumor_Names")
+affinity_cluster_df<- affinity_cluster_df %>% dplyr::left_join(NCIT_match_df,by="Tumor_Names")
+
+
+affinity_cluster_df<- cluster_label_assignment_refined(affinity_cluster_df)
+tumor_id<- read.csv(paste(data_dir,"/Tumor_NCT_ID.csv",sep=""))
+
+affinity_cluster_df<-affinity_cluster_df%>%left_join(tumor_id,by="Tumor_Names")
+affinity_cluster_df<-affinity_cluster_df[,c(9,1:8)]
+
+write.csv(affinity_cluster_df,paste(intermediate_dir,"/affinity_cluster_ADA2_df_5thed.csv",sep=""))
+save.image(file = "script7a-5thed-while-temp.RData")
