@@ -38,15 +38,15 @@ affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_reassigned_df[,c(-1)]
 affinity_cluster_ADA2_reassigned_df<-read.csv(paste(intermediate_dir,"/affinity_cluster_ADA2_reassigned_df.csv",sep=""))
 affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_reassigned_df[,c(-1)]
 #Read Kmeans 
-kmeans_clust_result_embedding_ADA2 <- read_csv("analysis/results/kmeans_clust_result_embedding.csv")
+kmeans_clust_result_embedding_ADA2 <- read_csv(paste(result_dir,"/kmeans_clust_result_embedding_ada2.csv",sep=""))
 kmeans_clust_result_embedding_ADA2<-kmeans_clust_result_embedding_ADA2[,c(-1)]
-kmeans_clust_result_embedding_V3 <- read_csv("analysis/results/kmeans_clust_result_embedding_v3.csv")
+kmeans_clust_result_embedding_V3 <- read_csv(paste(result_dir,"/kmeans_clust_result_embedding_v3.csv",sep=""))
 kmeans_clust_result_embedding_V3<-kmeans_clust_result_embedding_V3[,c(-1)]
 
 # Read edit distance cluster
-nested_affinity_cluster_cosine <- read_csv("analysis/results/nested_affinity_cluster_cosine.csv")
-nested_affinity_cluster_jw <- read_csv("analysis/results/nested_affinity_cluster_jw.csv")
-nested_affinity_cluster_lv <- read_csv("analysis/results/nested_affinity_cluster_lv.csv")
+nested_affinity_cluster_cosine <- read_csv(paste(result_dir,"/nested_affinity_cluster_cosine.csv",sep=""))
+nested_affinity_cluster_jw <- read_csv(paste(result_dir,"/nested_affinity_cluster_jw.csv",sep=""))
+nested_affinity_cluster_lv <- read_csv(paste(result_dir,"/nested_affinity_cluster_lv.csv",sep=""))
 
 nested_affinity_cluster_cosine<-nested_affinity_cluster_cosine[,c(-1)]
 nested_affinity_cluster_jw<-nested_affinity_cluster_jw[,c(-1)]
@@ -428,7 +428,6 @@ for (iter in 1: dim(min_dist_matches)[1]){
 
 affinity_cluster_v3_reassigned_df_short<-affinity_cluster_v3_reassigned_df_short%>%dplyr::filter(nct_id!="NA")
 
-set.seed(13)
 tumor_sample_df<-sample_n(affinity_cluster_v3_reassigned_df_short, 1600)
 tumor_sample_df<-tumor_sample_df %>% dplyr::left_join(affinity_cluster_ADA2_reassigned_df_short,by="Tumor_Names")%>%
   dplyr::left_join(kmeans_clust_result_embedding_V3_short,by="Tumor_Names") %>%
@@ -456,7 +455,11 @@ tumor_sample_df<- add_column(tumor_sample_df,valid_cosine_match="", .after = "co
 tumor_sample_df<- add_column(tumor_sample_df,valid_jw_match="", .after = "jw_match")
 tumor_sample_df<- add_column(tumor_sample_df,valid_lv_match="", .after = "lv_match")
 
-
+tumor_sample_df<-tumor_sample_df[order(tumor_sample_df$Tumor_Names),]
+rownames(tumor_sample_df)<-NULL
 # Write samples
 write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df_script10.csv",sep = ""))
-save.image("script10.RData")
+save.image("script10_aug5.RData")
+
+#tumor_sample_df<-affinity_cluster_v3_reassigned_df_short%>%dplyr::filter(Tumor_Names %in% tumor_sample_df_ground_truth_old$Tumor_Names)
+
