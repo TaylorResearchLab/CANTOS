@@ -471,3 +471,4 @@ tumor_sample_df<- add_column(tumor_sample_df,valid_lv_match="", .after = "lv_mat
 tumor_sample_df<-tumor_sample_df[order(tumor_sample_df$Tumor_Names),]
 rownames(tumor_sample_df)<-NULL
 save.image("script10_aug6_5thed.RData")
+write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df_script10_5thed.csv",sep = ""))
