@@ -48,11 +48,32 @@ nested_affinity_cluster_lv <- read_csv(paste(result_dir,"/nested_affinity_cluste
 
 
 
+nested_affinity_cluster_cosine<-nested_affinity_cluster_cosine[,c(-1,-8)]
+nested_affinity_cluster_jw<-nested_affinity_cluster_jw[,c(-1,-8)]
+nested_affinity_cluster_lv<-nested_affinity_cluster_lv[,c(-1,-8)]
+
+
+# Adjust NCT_IDs
+affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_reassigned_df[,c(-1)]
+affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_reassigned_df[,c(-1)]
 nested_affinity_cluster_cosine<-nested_affinity_cluster_cosine[,c(-1)]
 nested_affinity_cluster_jw<-nested_affinity_cluster_jw[,c(-1)]
 nested_affinity_cluster_lv<-nested_affinity_cluster_lv[,c(-1)]
 
+tumor_nct_map <- kmeans_clust_result_embedding_ADA2 %>% dplyr::select(nct_id,Tumor_Names)
 
+affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_reassigned_df %>% left_join(tumor_nct_map,by="Tumor_Names")
+affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_reassigned_df %>% left_join(tumor_nct_map,by="Tumor_Names")
+nested_affinity_cluster_cosine<-nested_affinity_cluster_cosine %>% left_join(tumor_nct_map,by="Tumor_Names")
+nested_affinity_cluster_jw<-nested_affinity_cluster_jw %>% left_join(tumor_nct_map,by="Tumor_Names")
+nested_affinity_cluster_lv<-nested_affinity_cluster_lv %>% left_join(tumor_nct_map,by="Tumor_Names")
+
+affinity_cluster_v3_reassigned_df<-affinity_cluster_v3_reassigned_df[,c(10,1:9)]
+affinity_cluster_ADA2_reassigned_df<-affinity_cluster_ADA2_reassigned_df[,c(10,1:9)]
+
+nested_affinity_cluster_cosine<-nested_affinity_cluster_cosine[,c(6,1:5)]
+nested_affinity_cluster_jw<-nested_affinity_cluster_jw[,c(6,1:5)]
+nested_affinity_cluster_lv<-nested_affinity_cluster_lv[,c(6,1:5)]
 
 # Find the WHO and NCIT closest matches 
 who_ncit_match_ADA2 <- affinity_cluster_ADA2_reassigned_df %>% dplyr::select(Tumor_Names,WHO_Matches,WHO_distance,NCIT_Matches,NCIT_distance) 
@@ -337,12 +358,9 @@ nested_affinity_cluster_cosine_reassigned<-edit_distance_cluster_reassignment(ne
 nested_affinity_cluster_jw_reassigned<-edit_distance_cluster_reassignment(nested_affinity_cluster_jw)
 nested_affinity_cluster_lv_reassigned<-edit_distance_cluster_reassignment(nested_affinity_cluster_lv)
 
-tumor_id<- read.csv(paste(data_dir,"/Tumor_NCT_ID.csv",sep=""))
-tumor_id<- tumor_id[,c(-1)]
-
-nested_affinity_cluster_cosine_reassigned <- nested_affinity_cluster_cosine_reassigned %>% left_join(tumor_id,by="Tumor_Names")
-nested_affinity_cluster_jw_reassigned <- nested_affinity_cluster_jw_reassigned %>% left_join(tumor_id,by="Tumor_Names")
-nested_affinity_cluster_lv_reassigned <- nested_affinity_cluster_lv_reassigned %>% left_join(tumor_id,by="Tumor_Names")
+nested_affinity_cluster_cosine_reassigned<-nested_affinity_cluster_cosine_reassigned %>% left_join(tumor_nct_map,by="Tumor_Names")
+nested_affinity_cluster_jw_reassigned<-nested_affinity_cluster_jw_reassigned %>% left_join(tumor_nct_map,by="Tumor_Names")
+nested_affinity_cluster_lv_reassigned<-nested_affinity_cluster_lv_reassigned %>% left_join(tumor_nct_map,by="Tumor_Names")
 
 # Sample 
 affinity_cluster_ADA2_reassigned_df_short <- affinity_cluster_ADA2_reassigned_df %>% dplyr::select(nct_id,Tumor_Names,who_cluster_label)
@@ -423,4 +441,33 @@ tumor_sample_df_all_editions<- read.csv(paste(analysis_dir,"/results/tumor_sampl
 
 tumor_sample_df<-affinity_cluster_v3_reassigned_df_short %>% filter(Tumor_Names %in% tumor_sample_df_all_editions$Tumor_Names)
 
-save.image("script10_aug5_5thed.RData")
+
+tumor_sample_df<-tumor_sample_df %>% dplyr::left_join(affinity_cluster_ADA2_reassigned_df_short,by="Tumor_Names")%>%
+  dplyr::left_join(kmeans_clust_result_embedding_V3_short,by="Tumor_Names") %>%
+  dplyr::left_join(kmeans_clust_result_embedding_ADA2_short,by="Tumor_Names") %>%
+  dplyr::left_join(nested_affinity_cluster_cosine_reassigned_short,by="Tumor_Names") %>%
+  dplyr::left_join(nested_affinity_cluster_jw_reassigned_short,by="Tumor_Names") %>%
+  dplyr::left_join(nested_affinity_cluster_lv_reassigned_short,by="Tumor_Names") %>%
+  dplyr::left_join(affinity_cluster_v3_dist_short,by="Tumor_Names") %>%
+  dplyr::left_join(affinity_cluster_ADA2_dist_short,by="Tumor_Names")%>%
+  dplyr::left_join(min_dist_matches,by="Tumor_Names") %>% 
+  dplyr::select(nct_id,Tumor_Names,af_v3,af_ada2,kmeans_v3,kmeans_ada2,af_cosine,af_jw,af_lv,
+                euclidean_dist_v3,euclidean_dist_ada2,cosine_match,jw_match,lv_match)
+
+
+tumor_sample_df<- add_column(tumor_sample_df,valid_af_v3="", .after = "af_v3")
+tumor_sample_df<- add_column(tumor_sample_df,valid_af_ad2="", .after = "af_ada2")
+tumor_sample_df<- add_column(tumor_sample_df,valid_kmeans_v3="", .after = "kmeans_v3")
+tumor_sample_df<- add_column(tumor_sample_df,valid_kmeans_ada2="", .after = "kmeans_ada2")
+tumor_sample_df<- add_column(tumor_sample_df,valid_af_cosine="", .after = "af_cosine")
+tumor_sample_df<- add_column(tumor_sample_df,valid_af_jw="", .after = "af_jw")
+tumor_sample_df<- add_column(tumor_sample_df,valid_af_lv="", .after = "af_lv")
+tumor_sample_df<- add_column(tumor_sample_df,valid_euclidean_dist_v3="", .after = "euclidean_dist_v3")
+tumor_sample_df<- add_column(tumor_sample_df,valid_euclidean_dist_ada2="", .after = "euclidean_dist_ada2")
+tumor_sample_df<- add_column(tumor_sample_df,valid_cosine_match="", .after = "cosine_match")
+tumor_sample_df<- add_column(tumor_sample_df,valid_jw_match="", .after = "jw_match")
+tumor_sample_df<- add_column(tumor_sample_df,valid_lv_match="", .after = "lv_match")
+
+tumor_sample_df<-tumor_sample_df[order(tumor_sample_df$Tumor_Names),]
+rownames(tumor_sample_df)<-NULL
+save.image("script10_aug6_5thed.RData")
