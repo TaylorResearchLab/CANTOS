@@ -23,10 +23,17 @@ input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
 result_dir <- file.path(analysis_dir,"results")
+intermediate_dir_5th <- file.path(analysis_dir,"intermediate_5th")
+result_dir_5th <- file.path(analysis_dir,"results_5th")
+
+tumor_sample_df_all<-read.csv(paste(result_dir,"/tumor_sample_df_script10_validation.csv",sep = ""))
+tumor_sample_df_5thed<-read.csv(paste(result_dir_5th,"/tumor_sample_df_script10_validation_5thed.csv",sep = ""))
 
 
-tumor_sample_df<-read.csv(paste(result_dir,"/tumor_sample_df_script10_ground_truth.csv",sep = ""))
-tumor_sample_df<-tumor_sample_df[,1:27]
+
+
+
+
 # tumor_sample_df<-tumor_sample_df %>% filter(!is.na(valid_af_v3))
 # 
 # tumor_sample_df<-tumor_sample_df %>% filter(valid_af_v3==1|valid_af_ad2==1|valid_kmeans_v3==1|
@@ -34,8 +41,8 @@ tumor_sample_df<-tumor_sample_df[,1:27]
 #                                               valid_af_lv==1|valid_euclidean_dist_v3==1| valid_euclidean_dist_ada2==1|
 #                                               valid_cosine_match==1|valid_jw_match==1|valid_jw_match==1)
 
-tumor_sample_df$ground_truth <- NA
-tumor_sample_df$ground_truth_val <- NA
+tumor_sample_df_all$ground_truth <- NA
+tumor_sample_df_5thed$ground_truth_val <- NA
 tumor_sample_df$ID<-as.character(tumor_sample_df$ID)
 for (iter in 1:dim(tumor_sample_df)[1]){
   ind<- which(tumor_sample_df[iter,seq(5,27,2)]==1)
