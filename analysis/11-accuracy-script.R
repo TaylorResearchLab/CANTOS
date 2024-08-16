@@ -43,25 +43,51 @@ tumor_sample_df_5thed<-read.csv(paste(result_dir_5th,"/tumor_sample_df_script10_
 
 tumor_sample_df_all$ground_truth <- NA
 tumor_sample_df_5thed$ground_truth_val <- NA
-tumor_sample_df$ID<-as.character(tumor_sample_df$ID)
-for (iter in 1:dim(tumor_sample_df)[1]){
-  ind<- which(tumor_sample_df[iter,seq(5,27,2)]==1)
-  actual_ind<- seq(5,27,2)[ind]-1
-  tumor_names <- unique(unlist(tumor_sample_df[iter,actual_ind]))
+
+for (iter in 1:dim(tumor_sample_df_all)[1]){
+  ind<- which(tumor_sample_df_all[iter,seq(4,27,2)]==1)
+  actual_ind<- seq(4,27,2)[ind]-1
+  tumor_names <- unique(unlist(tumor_sample_df_all[iter,actual_ind]))
   if(length(ind)>0){
   if(length(tumor_names)>1){
-    tumor_sample_df$ground_truth[iter]<-"MG"
-    tumor_sample_df$ground_truth_val[iter]<-paste(tumor_names,collapse = ";")
+    tumor_sample_df_all$ground_truth[iter]<-"MG"
+    tumor_sample_df_all$ground_truth_val[iter]<-paste(tumor_names,collapse = ";")
     
   }else{
-    tumor_sample_df$ground_truth[iter]<-"G"
-    tumor_sample_df$ground_truth_val[iter]<-paste(tumor_names,collapse = ";")
+    tumor_sample_df_all$ground_truth[iter]<-"G"
+    tumor_sample_df_all$ground_truth_val[iter]<-paste(tumor_names,collapse = ";")
   }
   }else{
-    tumor_sample_df$ground_truth[iter]<-"U"
-    tumor_sample_df$ground_truth_val[iter]<-"Unknown"
+    tumor_sample_df_all$ground_truth[iter]<-"U"
+    tumor_sample_df_all$ground_truth_val[iter]<-"Unknown"
     }
 }
 
-tumor_sample_df <- tumor_sample_df[order_by(tumor_sample_df$ground_truth),]
-write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df_ground_truth.csv",sep = ""))
+tumor_sample_df_all<- tumor_sample_df_all[order(tumor_sample_df_all$ground_truth),]
+rownames(tumor_sample_df_all)<-NULL
+
+
+for (iter in 1:dim(tumor_sample_df_5thed)[1]){
+  ind<- which(tumor_sample_df_5thed[iter,seq(4,27,2)]==1)
+  actual_ind<- seq(4,27,2)[ind]-1
+  tumor_names <- unique(unlist(tumor_sample_df_5thed[iter,actual_ind]))
+  if(length(ind)>0){
+    if(length(tumor_names)>1){
+      tumor_sample_df_5thed$ground_truth[iter]<-"MG"
+      tumor_sample_df_5thed$ground_truth_val[iter]<-paste(tumor_names,collapse = ";")
+      
+    }else{
+      tumor_sample_df_5thed$ground_truth[iter]<-"G"
+      tumor_sample_df_5thed$ground_truth_val[iter]<-paste(tumor_names,collapse = ";")
+    }
+  }else{
+    tumor_sample_df_5thed$ground_truth[iter]<-"U"
+    tumor_sample_df_5thed$ground_truth_val[iter]<-"Unknown"
+  }
+}
+tumor_sample_df_5thed<- tumor_sample_df_5thed[order(tumor_sample_df_5thed$ground_truth),]
+rownames(tumor_sample_df_5thed)<-NULL
+
+
+write.csv(tumor_sample_df_all,paste(result_dir,"/tumor_sample_df_ground_truth_all.csv",sep = ""))
+write.csv(tumor_sample_df_5thed,paste(result_dir_5th,"/tumor_sample_df_ground_truth_5thed.csv",sep = ""))
