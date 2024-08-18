@@ -88,6 +88,9 @@ for (iter in 1:dim(tumor_sample_df_5thed)[1]){
 tumor_sample_df_5thed<- tumor_sample_df_5thed[order(tumor_sample_df_5thed$ground_truth),]
 rownames(tumor_sample_df_5thed)<-NULL
 
+tumor_sample_df_5thed<-tumor_sample_df_5thed[,c(1,2,27,28,3:26)]
+tumor_sample_df_all<-tumor_sample_df_all[,c(1,2,27,28,3:26)]
+
 
 write.csv(tumor_sample_df_all,paste(result_dir,"/tumor_sample_df_ground_truth_all.csv",sep = ""))
 write.csv(tumor_sample_df_5thed,paste(result_dir_5th,"/tumor_sample_df_ground_truth_5thed.csv",sep = ""))
