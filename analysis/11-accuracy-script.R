@@ -27,19 +27,10 @@ intermediate_dir_5th <- file.path(analysis_dir,"intermediate_5th")
 result_dir_5th <- file.path(analysis_dir,"results_5th")
 
 tumor_sample_df_all<-read.csv(paste(result_dir,"/tumor_sample_df_script10_validation.csv",sep = ""))
-tumor_sample_df_5thed<-read.csv(paste(result_dir_5th,"/tumor_sample_df_script10_validation_5thed.csv",sep = ""))
+tumor_sample_df_5thed<-read.csv(paste(result_dir_5th,"/tumor_sample_df_script10_5thed_corrected_validated.csv",sep = ""))
 
 
 
-
-
-
-# tumor_sample_df<-tumor_sample_df %>% filter(!is.na(valid_af_v3))
-# 
-# tumor_sample_df<-tumor_sample_df %>% filter(valid_af_v3==1|valid_af_ad2==1|valid_kmeans_v3==1|
-#                                               valid_kmeans_ad2==1| valid_af_cosine==1| valid_af_jw==1|
-#                                               valid_af_lv==1|valid_euclidean_dist_v3==1| valid_euclidean_dist_ada2==1|
-#                                               valid_cosine_match==1|valid_jw_match==1|valid_jw_match==1)
 
 tumor_sample_df_all$ground_truth <- NA
 tumor_sample_df_5thed$ground_truth_val <- NA
@@ -93,4 +84,4 @@ tumor_sample_df_all<-tumor_sample_df_all[,c(1,2,27,28,3:26)]
 
 
 write.csv(tumor_sample_df_all,paste(result_dir,"/tumor_sample_df_ground_truth_all.csv",sep = ""))
-write.csv(tumor_sample_df_5thed,paste(result_dir_5th,"/tumor_sample_df_ground_truth_5thed.csv",sep = ""))
+write.csv(tumor_sample_df_5thed,paste(result_dir_5th,"/tumor_sample_df_script10_5thed_corrected_ground_truth.csv",sep = ""))
