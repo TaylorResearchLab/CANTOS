@@ -470,5 +470,57 @@ tumor_sample_df<- add_column(tumor_sample_df,valid_lv_match="", .after = "lv_mat
 
 tumor_sample_df<-tumor_sample_df[order(tumor_sample_df$Tumor_Names),]
 rownames(tumor_sample_df)<-NULL
-save.image("script10_aug6_5thed.RData")
-write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df_script10_5thed.csv",sep = ""))
+save.image("script10_aug18_5thed.RData")
+write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df_script10_5thed_corrected.csv",sep = ""))
+
+
+
+for(iter in 1:1600){
+  if(tumor_sample_df$af_v3[iter]==old$af_v3[iter]){
+    tumor_sample_df$valid_af_v3[iter]=old$valid_af_v3[iter]
+  }
+  if(tumor_sample_df$af_ada2[iter]==old$af_ada2[iter]){
+    tumor_sample_df$valid_af_ad2[iter]=old$valid_af_ad2[iter]
+    
+  }
+  if(tumor_sample_df$kmeans_v3[iter]==old$kmeans_v3[iter]){
+    tumor_sample_df$valid_kmeans_v3[iter]=old$valid_kmeans_v3[iter]
+    
+  }
+  if(tumor_sample_df$kmeans_ada2[iter]==old$kmeans_ada2[iter]){
+    tumor_sample_df$valid_kmeans_ada2[iter]=old$valid_kmeans_ada2[iter]
+    
+  }
+  if(tumor_sample_df$af_cosine[iter]==old$af_cosine[iter]){
+    tumor_sample_df$valid_af_cosine[iter]=old$valid_af_cosine[iter]
+    
+  }
+  if(tumor_sample_df$af_jw[iter]==old$af_jw[iter]){
+    tumor_sample_df$valid_af_jw[iter]=old$valid_af_jw[iter]
+    
+  }
+  if(tumor_sample_df$af_lv[iter]==old$af_lv[iter]){
+    tumor_sample_df$valid_af_lv[iter]=old$valid_af_lv[iter]
+    
+  }
+  if(tumor_sample_df$euclidean_dist_v3[iter]==old$euclidean_dist_v3[iter]){
+    tumor_sample_df$valid_euclidean_dist_v3[iter]=old$valid_euclidean_dist_v3[iter]
+    
+  }
+  if(tumor_sample_df$euclidean_dist_ada2[iter]==old$euclidean_dist_ada2[iter]){
+    tumor_sample_df$valid_euclidean_dist_ada2[iter]=old$valid_euclidean_dist_ada2[iter]
+    
+  }
+  if(tumor_sample_df$cosine_match[iter]==old$cosine_match[iter]){
+    tumor_sample_df$valid_cosine_match[iter]=old$valid_cosine_match[iter]
+    
+  }
+  if(tumor_sample_df$jw_match[iter]==old$jw_match[iter]){
+    tumor_sample_df$valid_jw_match[iter]=old$valid_jw_match[iter]
+    
+  }
+  if(tumor_sample_df$lv_match[iter]==old$lv_match[iter]){
+    tumor_sample_df$valid_lv_match[iter]=old$valid_lv_match[iter]
+    
+  }
+}
