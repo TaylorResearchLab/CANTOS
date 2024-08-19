@@ -37,6 +37,9 @@ NCIT_embedding_df<-read.csv(paste(data_dir,"/NCIT_Embeddings_V3.csv",sep=""))
 WHO_embedding_df<-WHO_embedding_df[,c(-1)]
 NCIT_embedding_df<-NCIT_embedding_df[,c(-1)]
 
+WHO_Terms_All <-readxl::read_xlsx(paste(data_dir,"/WHO_Tumors/result/WHO_Tumor_all_edition.xlsx",sep=""))
+WHO_Terms_5th<-WHO_Terms_All%>%filter(edition_5th=="Yes")
+
 cl <- makeCluster(50, outfile="")
 registerDoParallel(cl)
 
@@ -50,6 +53,13 @@ outer_who_final<-foreach(i = 1:dim(combined_embeddings_df)[1], .combine = rbind)
 }
 colnames(outer_who_final)<-(WHO_embedding_df$Tumor_Names)
 rownames(outer_who_final)<-rownames(combined_embeddings_df)
+
+outer_who_final<-as.data.frame(outer_who_final)
+outer_who_final<-outer_who_final %>% dplyr::select(any_of(WHO_Terms_5th$Tumor_Names))
+outer_who_final<-as.matrix(outer_who_final)
+
+
+
 
 combined_embedding<-combined_embeddings_df
 # 
@@ -150,7 +160,7 @@ affinity_cluster_v3_df<- affinity_cluster_v3_df %>% dplyr::left_join(NCIT_match_
 
 
 affinity_cluster_v3_df<- cluster_label_assignment_refined(affinity_cluster_v3_df)
-
+affinity_cluster_v3_df<-affinity_cluster_v3_df[,c(-1)]
 tumor_id<- read.csv(paste(data_dir,"/Tumor_NCT_ID.csv",sep=""))
 tumor_id<- tumor_id[,c(-1)]
 affinity_cluster_v3_df<-affinity_cluster_v3_df%>%left_join(tumor_id,by="Tumor_Names")
@@ -159,4 +169,5 @@ affinity_cluster_v3_df<-affinity_cluster_v3_df[,c(9,1:8)]
 
 ##
 write.csv(affinity_cluster_v3_df,paste(intermediate_dir,"/affinity_cluster_v3_df_5thed.csv",sep=""))
-save.image(file = "script7b-5thed_aug4.RData")
+#save.image(file = "script7b-5thed_aug4.RData")
+save.image(file = "script7b-5thed_aug18.RData")
