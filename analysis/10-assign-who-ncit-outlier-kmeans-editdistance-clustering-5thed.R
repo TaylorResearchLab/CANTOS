@@ -475,52 +475,108 @@ write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df_script10_5thed_corr
 
 
 
-for(iter in 1:1600){
-  if(tumor_sample_df$af_v3[iter]==old$af_v3[iter]){
-    tumor_sample_df$valid_af_v3[iter]=old$valid_af_v3[iter]
-  }
-  if(tumor_sample_df$af_ada2[iter]==old$af_ada2[iter]){
-    tumor_sample_df$valid_af_ad2[iter]=old$valid_af_ad2[iter]
+# Retreive NCIT
+affinity_cluster_ADA2_reassigned_df_short_NCIT <- affinity_cluster_ADA2_reassigned_df %>% dplyr::select(nct_id,Tumor_Names,ncit_cluster_label)
+affinity_cluster_v3_reassigned_df_short_NCIT <- affinity_cluster_v3_reassigned_df %>% dplyr::select(nct_id,Tumor_Names,ncit_cluster_label)
+kmeans_clust_result_embedding_ADA2_short_NCIT <- kmeans_clust_result_embedding_ADA2 %>% dplyr::select(nct_id,Tumor_Names,ncit_cluster_label)
+kmeans_clust_result_embedding_V3_short_NCIT <- kmeans_clust_result_embedding_V3 %>% dplyr::select(nct_id,Tumor_Names,ncit_cluster_label)
+nested_affinity_cluster_cosine_reassigned_short_NCIT <- nested_affinity_cluster_cosine_reassigned %>% dplyr::select(nct_id,Tumor_Names,ncit_cluster_label)
+nested_affinity_cluster_jw_reassigned_short_NCIT <- nested_affinity_cluster_jw_reassigned %>% dplyr::select(nct_id,Tumor_Names,ncit_cluster_label)
+nested_affinity_cluster_lv_reassigned_short_NCIT <- nested_affinity_cluster_lv_reassigned %>% dplyr::select(nct_id,Tumor_Names,ncit_cluster_label)
+
+affinity_cluster_ADA2_dist_short_NCIT<-affinity_cluster_ADA2_reassigned_df %>% dplyr::select(nct_id,Tumor_Names,NCIT_Matches)
+affinity_cluster_v3_dist_short_NCIT<-affinity_cluster_v3_reassigned_df %>% dplyr::select(nct_id,Tumor_Names,NCIT_Matches)
+
+
+colnames(affinity_cluster_v3_reassigned_df_short_NCIT)[3]<-"af_v3"
+colnames(affinity_cluster_ADA2_reassigned_df_short_NCIT)[3]<-"af_ada2"
+
+colnames(kmeans_clust_result_embedding_V3_short_NCIT)[3]<-"kmeans_v3"
+colnames(kmeans_clust_result_embedding_ADA2_short_NCIT)[3]<-"kmeans_ada2"
+
+colnames(nested_affinity_cluster_cosine_reassigned_short_NCIT)[3]<-"af_cosine"
+colnames(nested_affinity_cluster_jw_reassigned_short_NCIT)[3]<-"af_jw"
+colnames(nested_affinity_cluster_lv_reassigned_short_NCIT)[3]<-"af_lv"
+
+colnames(affinity_cluster_v3_dist_short_NCIT)[3]<-"euclidean_dist_v3"
+colnames(affinity_cluster_ADA2_dist_short_NCIT)[3]<-"euclidean_dist_ada2"
+
+
+# Closest Cosine , LV, JW
+min_dist_matches_NCIT<- as.data.frame(affinity_cluster_ADA2_reassigned_df$Tumor_Names)
+min_dist_matches_NCIT$cosine_match<-NA
+min_dist_matches_NCIT$jw_match<-NA
+min_dist_matches_NCIT$lv_match<-NA
+
+colnames(min_dist_matches_NCIT)[1]<-"Tumor_Names"
+for (iter in 1: dim(min_dist_matches_NCIT)[1]){
+  print(iter)
+  ind_row_cosine <- which(rownames(dissimilarity_matrix_cosine_ncit)==min_dist_matches_NCIT$Tumor_Names[iter])
+  ind_col_cosine <- which(dissimilarity_matrix_cosine_ncit[ind_row_cosine,]==min(dissimilarity_matrix_cosine_ncit[ind_row_cosine,]))
+  
+  
+  
+  ind_row_jw <- which(rownames(dissimilarity_matrix_jw_ncit)==min_dist_matches_NCIT$Tumor_Names[iter])
+  ind_col_jw <- which(dissimilarity_matrix_jw_ncit[ind_row_jw,]==min(dissimilarity_matrix_jw_ncit[ind_row_jw,]))
+  
+  ind_row_lv <- which(rownames(dissimilarity_matrix_lv_ncit)==min_dist_matches_NCIT$Tumor_Names[iter])
+  ind_col_lv<- which(dissimilarity_matrix_lv_ncit[ind_row_lv,]==min(dissimilarity_matrix_lv_ncit[ind_row_lv,]))
+  
+  if(length(ind_col_cosine)>1){
+    min_dist_matches_NCIT$cosine_match[iter]<- paste(unique(colnames(dissimilarity_matrix_cosine_ncit)[ind_col_cosine]), collapse =";") 
+    
+  }else{
+    min_dist_matches_NCIT$cosine_match[iter]<- colnames(dissimilarity_matrix_cosine_ncit)[ind_col_cosine]
     
   }
-  if(tumor_sample_df$kmeans_v3[iter]==old$kmeans_v3[iter]){
-    tumor_sample_df$valid_kmeans_v3[iter]=old$valid_kmeans_v3[iter]
+  
+  if(length(ind_col_jw)>1){
+    min_dist_matches_NCIT$jw_match[iter]<- paste(unique(colnames(dissimilarity_matrix_jw_ncit)[ind_col_jw]), collapse =";") 
+    
+  }else{
+    min_dist_matches_NCIT$jw_match[iter]<- colnames(dissimilarity_matrix_jw_ncit)[ind_col_jw]
     
   }
-  if(tumor_sample_df$kmeans_ada2[iter]==old$kmeans_ada2[iter]){
-    tumor_sample_df$valid_kmeans_ada2[iter]=old$valid_kmeans_ada2[iter]
+  
+  if(length(ind_col_lv)>1){
+    min_dist_matches_NCIT$lv_match[iter]<- paste(unique(colnames(dissimilarity_matrix_lv_ncit)[ind_col_lv]), collapse =";") 
+    
+  }else{
+    min_dist_matches_NCIT$lv_match[iter]<- colnames(dissimilarity_matrix_lv_ncit)[ind_col_lv]
     
   }
-  if(tumor_sample_df$af_cosine[iter]==old$af_cosine[iter]){
-    tumor_sample_df$valid_af_cosine[iter]=old$valid_af_cosine[iter]
-    
-  }
-  if(tumor_sample_df$af_jw[iter]==old$af_jw[iter]){
-    tumor_sample_df$valid_af_jw[iter]=old$valid_af_jw[iter]
-    
-  }
-  if(tumor_sample_df$af_lv[iter]==old$af_lv[iter]){
-    tumor_sample_df$valid_af_lv[iter]=old$valid_af_lv[iter]
-    
-  }
-  if(tumor_sample_df$euclidean_dist_v3[iter]==old$euclidean_dist_v3[iter]){
-    tumor_sample_df$valid_euclidean_dist_v3[iter]=old$valid_euclidean_dist_v3[iter]
-    
-  }
-  if(tumor_sample_df$euclidean_dist_ada2[iter]==old$euclidean_dist_ada2[iter]){
-    tumor_sample_df$valid_euclidean_dist_ada2[iter]=old$valid_euclidean_dist_ada2[iter]
-    
-  }
-  if(tumor_sample_df$cosine_match[iter]==old$cosine_match[iter]){
-    tumor_sample_df$valid_cosine_match[iter]=old$valid_cosine_match[iter]
-    
-  }
-  if(tumor_sample_df$jw_match[iter]==old$jw_match[iter]){
-    tumor_sample_df$valid_jw_match[iter]=old$valid_jw_match[iter]
-    
-  }
-  if(tumor_sample_df$lv_match[iter]==old$lv_match[iter]){
-    tumor_sample_df$valid_lv_match[iter]=old$valid_lv_match[iter]
-    
-  }
+  
+  
+  
 }
+affinity_cluster_v3_reassigned_df_short_NCIT<-affinity_cluster_v3_reassigned_df_short_NCIT%>%dplyr::filter(nct_id!="NA")
+
+
+NCIT_Results_df<-affinity_cluster_v3_reassigned_df_short_NCIT %>% dplyr::left_join(affinity_cluster_ADA2_reassigned_df_short_NCIT,by="Tumor_Names")%>%
+  dplyr::left_join(kmeans_clust_result_embedding_V3_short_NCIT,by="Tumor_Names") %>%
+  dplyr::left_join(kmeans_clust_result_embedding_ADA2_short_NCIT,by="Tumor_Names") %>%
+  dplyr::left_join(nested_affinity_cluster_cosine_reassigned_short_NCIT,by="Tumor_Names") %>%
+  dplyr::left_join(nested_affinity_cluster_jw_reassigned_short_NCIT,by="Tumor_Names") %>%
+  dplyr::left_join(nested_affinity_cluster_lv_reassigned_short_NCIT,by="Tumor_Names") %>%
+  dplyr::left_join(affinity_cluster_v3_dist_short_NCIT,by="Tumor_Names") %>%
+  dplyr::left_join(affinity_cluster_ADA2_dist_short_NCIT,by="Tumor_Names")%>%
+  dplyr::left_join(min_dist_matches_NCIT,by="Tumor_Names") %>% 
+  dplyr::select(nct_id,Tumor_Names,af_v3,af_ada2,kmeans_v3,kmeans_ada2,af_cosine,af_jw,af_lv,
+                euclidean_dist_v3,euclidean_dist_ada2,cosine_match,jw_match,lv_match)
+
+WHO_Results_df<-affinity_cluster_v3_reassigned_df_short %>% dplyr::left_join(affinity_cluster_ADA2_reassigned_df_short,by="Tumor_Names")%>%
+  dplyr::left_join(kmeans_clust_result_embedding_V3_short,by="Tumor_Names") %>%
+  dplyr::left_join(kmeans_clust_result_embedding_ADA2_short,by="Tumor_Names") %>%
+  dplyr::left_join(nested_affinity_cluster_cosine_reassigned_short,by="Tumor_Names") %>%
+  dplyr::left_join(nested_affinity_cluster_jw_reassigned_short,by="Tumor_Names") %>%
+  dplyr::left_join(nested_affinity_cluster_lv_reassigned_short,by="Tumor_Names") %>%
+  dplyr::left_join(affinity_cluster_v3_dist_short,by="Tumor_Names") %>%
+  dplyr::left_join(affinity_cluster_ADA2_dist_short,by="Tumor_Names")%>%
+  dplyr::left_join(min_dist_matches,by="Tumor_Names") %>% 
+  dplyr::select(nct_id,Tumor_Names,af_v3,af_ada2,kmeans_v3,kmeans_ada2,af_cosine,af_jw,af_lv,
+                euclidean_dist_v3,euclidean_dist_ada2,cosine_match,jw_match,lv_match)
+
+write.csv(NCIT_Results_df,paste(result_dir,"/NCIT_Results_5thed.csv",sep = ""))
+write.csv(WHO_Results_df,paste(result_dir,"/WHO_Results_5thed.csv",sep = ""))
+
+save.image("script10_aug21_5thed.RData")
