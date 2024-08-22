@@ -61,4 +61,5 @@ a4<-ggplot(Kmeans_silhouette_5th_edition_v3, aes(x=k, y=mean_silhouette_score)) 
 
 
 p5<-ggarrange(a1, a2,a3,a4,nrow = 2,ncol = 2)
-ggsave(p5, filename ="Paper/plots/Kmeans_Silhouette_Score_Embeddings_all.png",, height = 50, width = 120, units = "cm")
+ggsave(p5, filename ="Paper/plots/Kmeans_Silhouette_Score_Embeddings_all.png",, height = 50, width = 120, units = "cm",  dpi = 300,
+)
