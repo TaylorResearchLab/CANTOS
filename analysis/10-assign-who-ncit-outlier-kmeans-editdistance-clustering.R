@@ -482,6 +482,7 @@ rownames(tumor_sample_df)<-NULL
 # Write samples
 write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df_script10.csv",sep = ""))
 save.image("script10_aug6.RData")
+#write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df_script10_10sep.csv",sep = ""))
 
 #tumor_sample_df<-affinity_cluster_v3_reassigned_df_short%>%dplyr::filter(Tumor_Names %in% tumor_sample_df_ground_truth_old$Tumor_Names)
 
@@ -590,3 +591,4 @@ write.csv(NCIT_Results_df,paste(result_dir,"/NCIT_Results_all.csv",sep = ""))
 write.csv(WHO_Results_df,paste(result_dir,"/WHO_Results_all.csv",sep = ""))
 
 save.image("script10_aug21_all.RData")
+#save.image("script10_sep10_all.RData")

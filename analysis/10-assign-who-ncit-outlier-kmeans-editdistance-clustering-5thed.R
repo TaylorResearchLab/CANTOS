@@ -516,7 +516,9 @@ write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df_script10_5thed_corr
 #   }
 #   
 # }
-
+# i<-seq(4,26,2)
+# tumor_sample_df_script10_validation[, i] <- apply(tumor_sample_df_script10_validation[, i], 2, function(x) as.numeric(as.character(x)))
+# sapply(tumor_sample_df_script10_validation, class)
 # Retreive NCIT
 affinity_cluster_ADA2_reassigned_df_short_NCIT <- affinity_cluster_ADA2_reassigned_df %>% dplyr::select(nct_id,Tumor_Names,ncit_cluster_label)
 affinity_cluster_v3_reassigned_df_short_NCIT <- affinity_cluster_v3_reassigned_df %>% dplyr::select(nct_id,Tumor_Names,ncit_cluster_label)
