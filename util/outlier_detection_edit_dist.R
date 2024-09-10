@@ -12,7 +12,10 @@ outlier_detection_edit_dist <- function(nested_affinity_cluster,dissimilarity_ma
       subset_distance <- subset_distance %>% filter(Tumor_Names %in% colnames(subset_distance))
       subset_df<-subset_df %>% dplyr::left_join(subset_distance,by="Tumor_Names")
       
-      model <- isolation.forest(subset_df[1:nrow(subset_df),3:ncol(subset_df)], ndim=3, ntrees=ceiling(sqrt(ncol(subset_df)-2)), nthreads=1) # ntrees 50 initially
+      #model <- isolation.forest(subset_df[1:nrow(subset_df),3:ncol(subset_df)], ndim=3, ntrees=ceiling(sqrt(ncol(subset_df)-2)), nthreads=1) # ntrees 50 initially
+      
+      model <- isolation.forest(subset_df[1:nrow(subset_df),3:ncol(subset_df)], ndim=3, ntrees=100, nthreads=1) # ntrees 50 initially
+      
       scores <- predict(model, subset_df[1:nrow(subset_df),3:ncol(subset_df)], type="score")
       ind_clust <- which(nested_affinity_cluster$Cluster_ID==current_cluster_label)
       nested_affinity_cluster$isolation_outlier_score[ind_clust]<-scores
