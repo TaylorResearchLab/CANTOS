@@ -15,11 +15,13 @@ data_dir <- file.path(root_dir,"data")
 input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
 results_dir <- file.path(analysis_dir,"results_5th")
+intermediate_dir <- file.path(analysis_dir,"intermediate")
 
 # Load dissimalirity matrices
-load("/Users/lahiria/Desktop/MTP_Paper/temp/CT-Large-File-June21/dissimilarity_matrix_lv.RData")
-load("/Users/lahiria/Desktop/MTP_Paper/temp/CT-Large-File-June21/dissimilarity_matrix_cosine.RData")
-load("/Users/lahiria/Desktop/MTP_Paper/temp/CT-Large-File-June21/dissimilarity_matrix_jw.RData")
+load(paste(intermediate_dir,"dissimilarity_matrix_lv.RData",sep=""))
+load(paste(intermediate_dir,"dissimilarity_matrix_cosine.RData",sep=""))
+load(paste(intermediate_dir,"dissimilarity_matrix_jw.RData",sep=""))
+
 source(paste(util_dir,"/distance_clusters.R",sep=""))
 
 dissimilarity_matrix_cosine<-as.data.frame(dissimilarity_matrix_cosine)
