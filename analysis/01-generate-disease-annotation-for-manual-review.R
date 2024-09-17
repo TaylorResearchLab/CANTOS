@@ -38,15 +38,6 @@ who_general_words$who_cancers<-tolower(who_general_words$who_cancers)
 who_ped_words$who_paediatric_cancers<-tolower(who_ped_words$who_paediatric_cancers)
 
 
-# Load Pedcan Hisologies from STJude, ALS and Cancer.net
-pedcan_histology <- read_excel(paste(data_dir,"/pediatric_cancer_list.xlsx",sep="")) # PedCan list from St Jude, Cancer.net and ALS
-pedcan_histology<- as.data.frame(c(pedcan_histology$Pedcan_Stjude,pedcan_histology$Pedcan_Alex,pedcan_histology$Pedcan_Cancernet))
-colnames(pedcan_histology)<-"Pediatric_Cancer"
-pedcan_histology <- pedcan_histology %>% drop_na()
-pedcan_histology$Pediatric_Cancer <- tolower(pedcan_histology$Pediatric_Cancer)
-pedcan_histology<-unique(pedcan_histology)
-
-
 cancer_search_terms <- "cancer|carcinoma|adenocarcinoma|tumor|lymphoma|blast|myeloma|melanoma|leukemia|astrocytoma|malignant|neoplasm|neoplasia|
 mesothelioma|ependymoma|glioma|thymoma|waldenstrom macroglobulinemia|myelodysplastic syndrome|polycythemia vera|myelofibrosis
 |myeloproliferative|sarcoma|gist-plus syndrome|macroglobulinemia|mycosis fungoides|sezary's disease|plasmacytoma"
