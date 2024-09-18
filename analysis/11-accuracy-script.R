@@ -86,37 +86,7 @@ tumor_sample_df_5thed<-tumor_sample_df_5thed[,c(1,2,27,28,3:26)]
 tumor_sample_df_all<-tumor_sample_df_all[,c(1,2,27,28,3:26)]
 
 
-write.csv(tumor_sample_df_all,paste(result_dir,"/tumor_sample_df_ground_truth_all.csv",sep = ""))
-write.csv(tumor_sample_df_5thed,paste(result_dir_5th,"/tumor_sample_df_script10_5thed_corrected_ground_truth.csv",sep = ""))
-
-
 write.csv(tumor_sample_df_all,paste(result_dir,"/tumor_sample_df_gt_annotated_all_sep11.csv",sep = ""))
 write.csv(tumor_sample_df_5thed,paste(result_dir_5th,"/tumor_sample_df_gt_annotated_5th_sep11.csv",sep = ""))
 
 
-
-# 
-
-tdf_old_5th<-read.csv(paste(result_dir_5th,"/tumor_sample_df_script10_5thed_corrected_ground_truth_aug19.csv",sep=""))
-tdf_old_all<-read.csv(paste(result_dir,"/tumor_sample_df_ground_truth_all_edition_aug19.csv",sep=""))
-tdf_old_5th<-tdf_old_5th[,c(-1)]
-tdf_old_all<-tdf_old_all[,c(-1)]
-
-tdf_old_5th<-tdf_old_5th[order(tdf_old_5th$Tumor_Names),]
-tdf_old_all<-tdf_old_all[order(tdf_old_all$Tumor_Names),]
-tumor_sample_df_5thed<-tumor_sample_df_5thed[order(tumor_sample_df_5thed$Tumor_Names),]
-tumor_sample_df_all<-tumor_sample_df_all[order(tumor_sample_df_all$Tumor_Names),]
-
-
-  for(iter in 1:1600){
-    if(tumor_sample_df_5thed$ground_truth[iter]=="U"){
-      tumor_sample_df_5thed$ground_truth_val[iter]==tdf_old_5th$ground_truth_val[iter]
-      tumor_sample_df_5thed$ground_truth[iter]=tdf_old_5th$ground_truth[iter]
-    }
-    if(tumor_sample_df_all$ground_truth[iter]=="U"){
-      tumor_sample_df_all$ground_truth_val[iter]==tdf_old_all$ground_truth_val[iter]
-      tumor_sample_df_all$ground_truth[iter]=tdf_old_all$ground_truth[iter]
-    }
-  }
-
-  }
