@@ -64,23 +64,6 @@ rownames(outer_who_final)<-rownames(combined_embedding_df)
 save.image(file = "script7a-5thed.RData")
 
 
-# 
-# while(stop <16700){
-#   outer_who_final<-foreach(i = start:stop, .combine = rbind) %dopar% { #12:10pm -
-#     print(i)
-#     #s <- apply(WHO_embedding_df[,2:1537],1,CalculateEuclideanDistance,vect2=combined_embedding_df[i,])
-#     embedding_pairwise<- as.matrix(rbind(combined_embedding_df[i,],WHO_embedding_df[,2:ncol(WHO_embedding_df)]))
-#     euclidean_dist <- as.matrix(dist(embedding_pairwise,method = "euclidean"))
-#     d<-as.double(euclidean_dist[1,c(-1)])
-#   }
-# 
-#   tmp<-rbind(tmp,outer_who_final)
-#   rm(outer_who_final)
-#   start=stop+1
-#   stop=start+399
-#   save.image(file = "script7a-5thed-while-temp.RData")
-# 
-# }
 
 
 outer_NCIT_final<-foreach(i = 1:dim(combined_embedding_df)[1], .combine = rbind) %dopar% {
@@ -93,22 +76,6 @@ outer_NCIT_final<-foreach(i = 1:dim(combined_embedding_df)[1], .combine = rbind)
 colnames(outer_NCIT_final)<-(tolower(NCIT_embedding_df$Disease))
 rownames(outer_NCIT_final)<-rownames(combined_embedding_df)
 
-# 
-# while(stop <16700){
-#   outer_NCIT_final<-foreach(i = start:stop, .combine = rbind) %dopar% {
-#     print(i)
-#     embedding_pairwise<- as.matrix(rbind(combined_embedding_df[i,],NCIT_embedding_df[,2:ncol(NCIT_embedding_df)]))
-#     euclidean_dist <- as.matrix(dist(embedding_pairwise,method = "euclidean"))
-#     d<-as.double(euclidean_dist[1,c(-1)])
-#   }
-#   
-#   tmp<-rbind(tmp,outer_NCIT_final)
-#   rm(outer_NCIT_final)
-#   start=stop+1
-#   stop=start+499
-#   save.image(file = "script7a-5thed-while-temp.RData")
-#   
-# }
 
 index_min_who <- as.matrix(apply(outer_who_final, 1, which.min))
 
