@@ -63,25 +63,7 @@ outer_who_final<-as.matrix(outer_who_final)
 
 combined_embedding<-combined_embeddings_df
 # 
-# while(stop <501){
-#   outer_who_final<-foreach(i = start:stop, .combine = rbind) %dopar% { #12:10pm -
-#     print(i)
-#     embedding_pairwise<- as.matrix(rbind(combined_embeddings_df[i,],WHO_embedding_df[,2:ncol(WHO_embedding_df)]))
-#     euclidean_dist <- as.matrix(dist(embedding_pairwise,method = "euclidean"))
-#     d<-as.double(euclidean_dist[1,c(-1)])
-#   }
-#   
-#   tmp<-rbind(tmp,outer_who_final)
-#   rm(outer_who_final)
-#   start=stop+1
-#   stop=start+199
-#   save.image(file = "script7b-5thed_aug1_1146pm.RData")
-#   stopCluster(cl)
-#   rm(cl)
-#   cl <- makeCluster(50, outfile="")
-#   registerDoParallel(cl)
-#   
-# }
+
 
 outer_NCIT_final<-foreach(i = 1:dim(combined_embeddings_df)[1], .combine = rbind) %dopar% { #2:03 pm Friday
   print(i)
@@ -94,25 +76,6 @@ rownames(outer_NCIT_final)<-rownames(combined_embeddings_df)
 
 
 
-# while(stop <1001){
-#   outer_NCIT_final<-foreach(i = start:stop, .combine = rbind) %dopar% { #2:03 pm Friday
-#     print(i)
-#     embedding_pairwise<- as.matrix(rbind(combined_embeddings_df[i,],NCIT_embedding_df[,2:3073]))
-#     euclidean_dist <- as.matrix(dist(embedding_pairwise,method = "euclidean"))
-#     d<-as.double(euclidean_dist[1,c(-1)])
-#   }
-# 
-#   tmp<-rbind(tmp,outer_NCIT_final)
-#   rm(outer_NCIT_final)
-#   start=stop+1
-#   stop=start+199
-#   save.image(file = "script7b-5thed_aug1_1146pm.RData")
-#   stopCluster(cl)
-#   rm(cl)
-#   cl <- makeCluster(50, outfile="")
-#   registerDoParallel(cl)
-# 
-# }
 
 
 ######################
