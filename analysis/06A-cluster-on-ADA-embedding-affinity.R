@@ -23,11 +23,6 @@ input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
 results_dir <- file.path(analysis_dir,"results")
-# Load affinity Cluster
-#load(paste(intermediate_dir,"/affinity_cluster_annotation.RData",sep=""))
-#source(paste(util_dir,"/nested_affinity_cluster.R",sep=""))
-#source(paste(util_dir,"/cluster_label_assignment.R",sep=""))
-
 source(paste(util_dir,"/run_affinity_clustering.R",sep=""))
 
 ########################################*************************************###########
