@@ -28,7 +28,7 @@ source(paste(util_dir,"/cluster_label_assignment_refined.R",sep=""))
 
 
 load(paste(intermediate_dir,"/affinity_cluster_v3_df_5thed.RData",sep=""))
-load(paste(intermediate_dir,"/combined_embedding_v3_df.RData",sep=""))
+load(paste(intermediate_dir,"/combined_embedding_v3_df_5thed.RData",sep=""))
 
 
 WHO_embedding_df<-read.csv(paste(data_dir,"/WHO_Terms_All_V3.csv",sep=""))
