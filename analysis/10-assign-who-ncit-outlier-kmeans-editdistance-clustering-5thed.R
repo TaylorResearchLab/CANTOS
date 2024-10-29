@@ -472,53 +472,7 @@ tumor_sample_df<-tumor_sample_df[order(tumor_sample_df$Tumor_Names),]
 rownames(tumor_sample_df)<-NULL
 save.image("script10_aug18_5thed.RData")
 write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df_script10_5thed_corrected.csv",sep = ""))
-#save.image("script10_sep9_5thed.RData")
-#write.csv(tumor_sample_df,paste(result_dir,"/tumor_sample_df_script10_5thed_sep9.csv",sep = ""))
 
-
-# for(iter in 1:1600){
-#   print(iter)
-#   if (tumor_sample_df[iter,3]==tumor_sample_df_script10_5thed_corrected_validated[iter,3]){
-#     tumor_sample_df[iter,4]=tumor_sample_df_script10_5thed_corrected_validated[iter,4]
-#   }
-#   if (tumor_sample_df[iter,5]==tumor_sample_df_script10_5thed_corrected_validated[iter,5]){
-#     tumor_sample_df[iter,6]=tumor_sample_df_script10_5thed_corrected_validated[iter,6]
-#   }
-#   if (tumor_sample_df[iter,7]==tumor_sample_df_script10_5thed_corrected_validated[iter,7]){
-#     tumor_sample_df[iter,8]=tumor_sample_df_script10_5thed_corrected_validated[iter,8]
-#   }
-#   if (tumor_sample_df[iter,9]==tumor_sample_df_script10_5thed_corrected_validated[iter,9]){
-#     tumor_sample_df[iter,10]=tumor_sample_df_script10_5thed_corrected_validated[iter,10]
-#   }
-#   if (tumor_sample_df[iter,11]==tumor_sample_df_script10_5thed_corrected_validated[iter,11]){
-#     tumor_sample_df[iter,12]=tumor_sample_df_script10_5thed_corrected_validated[iter,12]
-#   }
-#   if (tumor_sample_df[iter,13]==tumor_sample_df_script10_5thed_corrected_validated[iter,13]){
-#     tumor_sample_df[iter,14]=tumor_sample_df_script10_5thed_corrected_validated[iter,14]
-#   }
-#   if (tumor_sample_df[iter,15]==tumor_sample_df_script10_5thed_corrected_validated[iter,15]){
-#     tumor_sample_df[iter,16]=tumor_sample_df_script10_5thed_corrected_validated[iter,16]
-#   }
-#   if (tumor_sample_df[iter,17]==tumor_sample_df_script10_5thed_corrected_validated[iter,17]){
-#     tumor_sample_df[iter,18]=tumor_sample_df_script10_5thed_corrected_validated[iter,18]
-#   }
-#   if (tumor_sample_df[iter,19]==tumor_sample_df_script10_5thed_corrected_validated[iter,19]){
-#     tumor_sample_df[iter,20]=tumor_sample_df_script10_5thed_corrected_validated[iter,20]
-#   }
-#   if (tumor_sample_df[iter,21]==tumor_sample_df_script10_5thed_corrected_validated[iter,21]){
-#     tumor_sample_df[iter,22]=tumor_sample_df_script10_5thed_corrected_validated[iter,22]
-#   }
-#   if (tumor_sample_df[iter,23]==tumor_sample_df_script10_5thed_corrected_validated[iter,23]){
-#     tumor_sample_df[iter,24]=tumor_sample_df_script10_5thed_corrected_validated[iter,24]
-#   }
-#   if (tumor_sample_df[iter,25]==tumor_sample_df_script10_5thed_corrected_validated[iter,25]){
-#     tumor_sample_df[iter,26]=tumor_sample_df_script10_5thed_corrected_validated[iter,26]
-#   }
-#   
-# }
-# i<-seq(4,26,2)
-# tumor_sample_df_script10_validation[, i] <- apply(tumor_sample_df_script10_validation[, i], 2, function(x) as.numeric(as.character(x)))
-# sapply(tumor_sample_df_script10_validation, class)
 # Retreive NCIT
 affinity_cluster_ADA2_reassigned_df_short_NCIT <- affinity_cluster_ADA2_reassigned_df %>% dplyr::select(nct_id,Tumor_Names,ncit_cluster_label)
 affinity_cluster_v3_reassigned_df_short_NCIT <- affinity_cluster_v3_reassigned_df %>% dplyr::select(nct_id,Tumor_Names,ncit_cluster_label)
