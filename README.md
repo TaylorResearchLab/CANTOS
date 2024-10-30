@@ -77,7 +77,7 @@ This script to detect outliers for Kmeans and editdistance based standardization
 This script is used to annotate the types of ground truth found for each of the 1600 tumors sampled. </br>
 
 12--summarize-results.R </br>
-Prints the accuracy of each standardization method </br>.
+Prints the accuracy of each standardization method. </br>
 
 13-plot-script.R </br>
-Script is used for generating silhouette plots </br>.
+Script is used for generating silhouette plots. </br>
