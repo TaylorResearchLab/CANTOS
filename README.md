@@ -70,15 +70,14 @@ This script is used to detect if Affinity cluster members are outliers using LOF
 09-cluster-reassignment-outlier.R </br>
 This script performs Affinity cluster reassignment after outlier detection </br>
 
-10-generate-hemato-tables.R </br>
-This script to generate hematology tumors table </br>
+10-assign-who-ncit-outlier-kmeans-editdistance-clustering.R </br>
+This script to detect outliers for Kmeans and editdistance based standardization </br>
 
 11-generate-records-annotation.R </br>
-This script is not in use </br>
+This script is used to annotate the types of ground truth found for each of the 1600 tumors sampled. </br>
 
-12-assign-who-ncit-outlier-kmeans-editdistance-clustering.R </br>
-This script performs outlier detection and cluster label assignment for Kmeans V3 and ADA2. Assigns the closest matching label to edit distance affinity clusters. Samples 1600 tumors and generates file for validation. </br>
+12--summarize-results.R </br>
+Prints the accuracy of each standardization method </br>.
 
-13-accuracy-script.R </br>
-This script is used evaluate the accuracy of each clustering+standardization methods. 
-
+13-plot-script.R </br>
+Script is used for generating silhouette plots </br>.
