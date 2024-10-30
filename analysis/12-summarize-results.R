@@ -43,6 +43,13 @@ fifth<-(colSums(tumor_5thed_gt[,c(seq(6,28,2))]))/1033
 all<-as.data.frame(all)
 fifth<-as.data.frame(fifth)
 
+all$method<-rownames(all)
+fifth$method<-rownames(fifth)
+rownames(all)<-NULL
+rownames(fifth)<-NULL
+all <- all %>%dplyr::select(method,all)
+fifth<- fifth %>%dplyr::select(method,fifth)
+
 all<-all[order(all$all,decreasing = TRUE),]
 fifth<-fifth[order(fifth$fifth,decreasing = TRUE),]
 
@@ -123,4 +130,7 @@ for(iter in 1:12){
   }
   
 }
-
+rownames(all)<- NULL
+rownames(fifth)<-NULL
+print(all)
+print(fifth)
