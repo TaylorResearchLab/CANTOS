@@ -41,43 +41,61 @@ This script loads data from clinical trials and select only the diseases with NC
 This script annotates the 50K diseases automatically as cancer or not. </br>
 
 02-calculate-edit-distance.R </br>
+02-calculate-edit-distance-5thed.R</br>
 This script loads the manually annotated disease file with pediatric and adult cancer annotation. <br/>
 
 03-edit-distance-clustering.R </br>
+03-edit-distance-clustering-5thed.R </br>
 This Script computes edit distances between clinical trials tumors, WHO tumors, and NCIT tumors.Performs Affinity Cluster with 3 levels of nesting. </br>
 
 04-preprocess-embedding-pca.R </br>
+04A-preprocess-embedding-pca-ADA2-5thed.R
 This script loads embeddings V3 and ADA2 for CT, WHO, NCIT  Tumors and then performs PCA. </br>
 
+04B-preprocess-embedding-pca-v3.R </br>
+04B-preprocess-embedding-pca-v3-5thed.R </br>
+
+
 05A-cluster-on-ADA2-embedding-Kmeans.R </br>
+05A-ADA2-embedding-Kmeans-5thed.R </br>
 This script computes Kmeans cluster of ADA2 data and also computes silhouette index. </br>
+
+05B-v3-embedding-Kmeans.R </br>
+05B-v3-embedding-Kmeans-5thed.R </br>
 
 
 05B-cluster-on-v3-embedding-Kmeans.R </br>
 This script computes Kmeans cluster of V3 data and also computes silhouette index. </br>
 
 06A-cluster-on-ADA-embedding-affinity.R </br>
+06A-cluster-on-ADA-embedding-affinity-5thed.R </br>
 This script computes affinity cluster of ADA2 data. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership. <br/>
 
 
 06B-cluster-on-V3-embedding-affinity.R </br>
+06B-cluster-on-V3-embedding-affinity-5thed.R </br>
 This script computes affinity cluster of V3 data. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.
 
 
 07A-annotate-cluster-result-NCIT-WHO.R </br>
+07A-annotate-cluster-result-NCIT-WHO-5thed.R
 This script annotates Affinity cluster results of ADA2 embeddings. </br>
 
 07B-annotate-cluster-result-V3-NCIT-WHO.R </br>
+07B-annotate-cluster-result-V3-NCIT-WHO-5thed.R </br>
 This script annotates Affinity cluster results of V3 embeddings. </br>
 
 
 08-outlier-detection-embeddings.R </br>
+08-outlier-detection-embeddings-5thed.R </br>
 This script is used to detect if Affinity cluster members are outliers using LOF and Isolation Forest on ADA2 and V3 embedding data </br>
 
 09-cluster-reassignment-outlier.R </br>
+09-cluster-reassignment-outlier-5thed.R </br>
 This script performs Affinity cluster reassignment after outlier detection </br>
 
 10-assign-who-ncit-outlier-kmeans-editdistance-clustering.R </br>
+10-assign-who-ncit-outlier-kmeans-editdistance-clustering-5thed.R </br>
 This script to detect outliers for Kmeans and editdistance based standardization </br>
 
 11-generate-records-annotation.R </br>
