@@ -18,9 +18,9 @@ results_dir <- file.path(analysis_dir,"results_5th")
 intermediate_dir <- file.path(analysis_dir,"intermediate")
 
 # Load dissimalirity matrices
-load(paste(intermediate_dir,"/dissimilarity_matrix_lv.RData",sep=""))
-load(paste(intermediate_dir,"/dissimilarity_matrix_cosine.RData",sep=""))
-load(paste(intermediate_dir,"/dissimilarity_matrix_jw.RData",sep=""))
+load(paste(data_dir,"/dissimilarity_matrix_lv.RData",sep=""))
+load(paste(data_dir,"/dissimilarity_matrix_cosine.RData",sep=""))
+load(paste(data_dir,"/dissimilarity_matrix_jw.RData",sep=""))
 
 source(paste(util_dir,"/distance_clusters.R",sep=""))
 

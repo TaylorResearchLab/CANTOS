@@ -26,9 +26,9 @@ source(paste(util_dir,"/edit_distance_nested_cluster.R",sep=""))
 
 
 # Load data
-load(paste(intermediate_dir,"/dissimilarity_matrix_lv.RData",sep=""))
-load(paste(intermediate_dir,"/dissimilarity_matrix_cosine.RData",sep=""))
-load(paste(intermediate_dir,"/dissimilarity_matrix_jw.RData",sep=""))
+load(paste(data_dir,"/dissimilarity_matrix_lv.RData",sep=""))
+load(paste(data_dir,"/dissimilarity_matrix_cosine.RData",sep=""))
+load(paste(data_dir,"/dissimilarity_matrix_jw.RData",sep=""))
 # load("/Users/lahiria/Desktop/MTP_Paper/temp/CT-Large-File-June21/dissimilarity_matrix_lv.RData")
 # load("/Users/lahiria/Desktop/MTP_Paper/temp/CT-Large-File-June21/dissimilarity_matrix_cosine.RData")
 # load("/Users/lahiria/Desktop/MTP_Paper/temp/CT-Large-File-June21/dissimilarity_matrix_jw.RData")

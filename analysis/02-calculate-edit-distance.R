@@ -80,7 +80,7 @@ rownames(normalizing_matrix_lv) <- df_tumor_names
 colnames(normalizing_matrix_lv) <- df_tumor_names
 dissimilarity_matrix_lv<-dissimilarity_matrix_lv/normalizing_matrix_lv
 
-save(dissimilarity_matrix_lv,file=paste(intermediate_dir,"/dissimilarity_matrix_lv.RData",sep=""))
+save(dissimilarity_matrix_lv,file=paste(data_dir,"/dissimilarity_matrix_lv.RData",sep=""))
 
 stopCluster(cl)
 
@@ -102,7 +102,7 @@ dissimilarity_matrix_jw<-foreach(iter=1:length(df_tumor_names),.combine=rbind) %
 rownames(dissimilarity_matrix_jw) <- df_tumor_names
 colnames(dissimilarity_matrix_jw) <- df_tumor_names
 stopCluster(cl)
-save(dissimilarity_matrix_jw,file=paste(intermediate_dir,"/dissimilarity_matrix_jw.RData",sep=""))
+save(dissimilarity_matrix_jw,file=paste(data_dir,"/dissimilarity_matrix_jw.RData",sep=""))
 
 # Cosine Distance
 cl <- makeCluster(25, outfile="")
@@ -121,7 +121,7 @@ rownames(dissimilarity_matrix_cosine) <- df_tumor_names
 colnames(dissimilarity_matrix_cosine) <- df_tumor_names
 stopCluster(cl)
 
-save(dissimilarity_matrix_cosine,file=paste(intermediate_dir,"/dissimilarity_matrix_cosine.RData",sep=""))
+save(dissimilarity_matrix_cosine,file=paste(data_dir,"/dissimilarity_matrix_cosine.RData",sep=""))
 
 
 # Find clusters of 
