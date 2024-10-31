@@ -100,9 +100,9 @@ nested_affinity_cluster_cosine<-nested_affinity_cluster_cosine %>% dplyr::select
 nested_affinity_cluster_jw<-nested_affinity_cluster_jw %>% dplyr::select(nct_id,Tumor_Names,Cluster_ID)
 nested_affinity_cluster_lv<-nested_affinity_cluster_lv %>% dplyr::select(nct_id,Tumor_Names,Cluster_ID)
 
-dissimilarity_matrix_cosine<-load(paste(intermediate_dir,"/dissimilarity_matrix_cosine.RData",sep=""))
-dissimilarity_matrix_jw<-load(paste(intermediate_dir,"/dissimilarity_matrix_jw.RData",sep=""))
-dissimilarity_matrix_lv<-load(paste(intermediate_dir,"/dissimilarity_matrix_lv.RData",sep=""))
+dissimilarity_matrix_cosine<-load(paste(data_dir,"/dissimilarity_matrix_cosine.RData",sep=""))
+dissimilarity_matrix_jw<-load(paste(data_dir,"/dissimilarity_matrix_jw.RData",sep=""))
+dissimilarity_matrix_lv<-load(paste(data_dir,"/dissimilarity_matrix_lv.RData",sep=""))
 
 dissimilarity_matrix_cosine<-as.data.frame(dissimilarity_matrix_cosine)
 dissimilarity_matrix_jw<-as.data.frame(dissimilarity_matrix_jw)

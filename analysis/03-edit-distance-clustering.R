@@ -30,9 +30,9 @@ source(paste(util_dir,"/edit_distance_nested_cluster.R",sep=""))
 
 # Load data
 
-load(paste(intermediate_dir,"/dissimilarity_matrix_lv.RData",sep=""))
-load(paste(intermediate_dir,"/dissimilarity_matrix_jw.RData",sep=""))
-load(paste(intermediate_dir,"/dissimilarity_matrix_cosine.RData",sep=""))
+load(paste(data_dir,"/dissimilarity_matrix_lv.RData",sep=""))
+load(paste(data_dir,"/dissimilarity_matrix_jw.RData",sep=""))
+load(paste(data_dir,"/dissimilarity_matrix_cosine.RData",sep=""))
 
 
 cluster_results_lv<- read.csv(paste(results_dir,"/cluster_lv.csv",sep=""))
