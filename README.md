@@ -20,7 +20,14 @@ This repository contains the code, tables, and plots associated with the CT Embe
 8. After cluster refinement, each cluster is standardized to the WHO term that matches a majority of the members of that cluster.  
    
    
+## Run Instructions
+Following are the steps for running the pipeline: </br>
+1. Clone this Github repository to your local machine </br> 
+1. Navigate to the following website: and download the zip file labeled '' </br>
+2. Unzip the file and store the files in each of the following directory:
+3. 
    
+
 
 The results of this study is used to standardize the tumor names in CT database, so they can be used in a meaningful way for further downstream analysis of relating drugs and targets to tumors.
 
