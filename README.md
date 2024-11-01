@@ -18,13 +18,19 @@ Following are the steps for running the pipeline: </br>
 
 </br> 
 Please note that the ADA002 embeddings file for NCIT is contained in the following directory: </br>
-`CANTOS/data/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv` </br>
+
+`CANTOS/data/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv`</br>
 
 ## Run Instructions for CANTOS
-We ran CANTOS on RStudio Version 2023.09.1+494 (2023.09.1+494) using R version 4.4.0 (2024-04-24). Users can also run cantos from the command line from the following directory
+We ran CANTOS on RStudio Version 2023.09.1+494 (2023.09.1+494) using R version 4.4.0 (2024-04-24). Users can also run CANTOS from the command line from the following directory
 `CANTOS/analysis` using the following command: <br/>
 
 `bash CANTOS.sh`
+
+Please ensure your machine has R installed on it. It can be downloaded from the following website: https://www.r-project.org/ <br/>. 
+
+Before running CANTOS, please ensure the libraries listed in 
+
 
 ## Description
 This repository contains the code, tables, and plots associated with the CT Embedding paper. The pipeline built in this repository does the following task: <br/>
@@ -135,3 +141,28 @@ Prints the accuracy of each standardization method. </br>
 
 **13-plot-script.R** </br>
 Script is used for generating silhouette plots. </br>
+
+## Libraries Used
+1. apcluster </br>
+2. biomaRt </br>
+3. cluster </br>
+4. data.table </br>
+5. dbscan </br>
+6. DescTools </br>
+7. doParallel </br>
+8. dplyr </br>
+9. factoextra</br>
+10. foreach</br>
+11. ggplot2 </br>
+12. ggpubr </br>
+13. ghql </br>
+14. httr </br>
+15. isotree </br>
+16. jsonlite </br>
+17. magrittr </br>
+18. qdapRegex </br>
+19. readxl </br>
+20. stringdist </br>
+21. stringi </br>
+22. stringr </br>
+23. tidyverse </br>
