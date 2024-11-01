@@ -29,7 +29,7 @@ We ran CANTOS on RStudio Version 2023.09.1+494 (2023.09.1+494) using R version 4
 
 Please ensure your machine has R installed on it. It can be downloaded from the following website: https://www.r-project.org/ <br/>
 
-Before running CANTOS, please ensure the libraries listed in 
+Before running CANTOS, please ensure the libraries listed in the Library section below. 
 
 
 ## Description
@@ -100,7 +100,6 @@ This script computes affinity propagation clustering using ADA002 embeddings. Ne
 **06A-cluster-on-ADA-embedding-affinity-5thed.R** </br>
 This script computes affinity propagation clustering using ADA002 embeddings. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.WHO database 5th editions was used in this script.</br>
 
-
 **06B-cluster-on-V3-embedding-affinity.R** </br>
 This script computes affinity propagation cluster using V3 embeddings. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.WHO database all editions was used in this script.</br>
 **06B-cluster-on-V3-embedding-affinity-5thed.R** </br>
@@ -116,8 +115,6 @@ This script annotates Affinity propagation cluster results of ADA002 embeddings.
 This script annotates Affinity propagation cluster results of V3 embeddings. WHO database all editions was used in this script. </br>
 **07B-annotate-cluster-result-V3-NCIT-WHO-5thed.R** </br>
 This script annotates Affinity propagation cluster results of V3 embeddings. WHO database 5th editions was used in this script. </br>
-
-
 **08-outlier-detection-embeddings.R** </br>
 This script is used to detect if Affinity propagation cluster members are outliers using LOF and Isolation Forest.We perform this for clusters formed using both ADA002 and V3 embeddings. WHO database all editions was used in this script </br>
 **08-outlier-detection-embeddings-5thed.R** </br>
@@ -142,7 +139,7 @@ Prints the accuracy of each standardization method. </br>
 **13-plot-script.R** </br>
 Script is used for generating silhouette plots. </br>
 
-## Libraries Used
+## Libraries 
 1. apcluster </br>
 2. biomaRt </br>
 3. cluster </br>
