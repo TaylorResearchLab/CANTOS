@@ -108,4 +108,4 @@ while(length(large_cluster_labels)>0){
 
 save(affinity_cluster_df,file = paste(intermediate_dir,"/affinity_cluster_df_ada2_5thed.RData",sep=""))
 
-save.image(file = "script6a_5thed.RData")
+#save.image(file = "script6a_5thed.RData")

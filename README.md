@@ -3,11 +3,11 @@
 ## Description
 This repository contains the code, tables, and plots associated with the CT Embedding paper. The pipeline built in this repository does the following task: <br/>
 
-1. Extract tumor names from the CT database if they are associated with an NCT ID and have an associated drug belonging to the categories  of Drug, Biological,Combination Product,Genetic. A total 50,410 diseases are extracted.<br/>
+1. Extract tumor names from the CT database if they are associated with an NCT ID and have an associated drug belonging to the categories  of Drug, Biological,Combination Product,Genetic. A total 50,410 condition names are extracted.<br/>
 
-2. These 50410 diseases are flagged as tumors and non tumors by the pipeline, which are then further manually annotated pediatric and adult tumors. A total of 13,329 tumors are identified from the 50,410 diseases.<br/> 
+2. These 50410 condition names are flagged as tumors and non tumors by the pipeline, which are then further manually annotated pediatric and adult tumors. A total of 13,230 tumors are identified from the 50,410 conditions and out of the 13,230 tumors,  6,324 were classified as pediatric tumors. <br/> 
 
-3. We compute the distance of each  13,329 clinical trials tumors, 4720 WHO tumors, and 1395 NCIT tumors.  Distance metrics used are Levenshtein, Cosine , and Jarro-Winkler. </br>
+3. We compute the distance of each  13,230 clinical trials tumors, 4720 WHO tumors, and 1395 NCIT tumors.  Distance metrics used are Levenshtein, Cosine , and Jarro-Winkler. </br>
 
 4. We find the closest matching WHO term for each tumor for each distance metric and then also group the top 0.05% closest matching group of tumors. Each of the closest match terms are standardized to their closest matching WHO Term. </br>
 
@@ -19,37 +19,24 @@ This repository contains the code, tables, and plots associated with the CT Embe
 
 8. After cluster refinement, each cluster is standardized to the WHO term that matches a majority of the members of that cluster.  
    
-   
-## Run Instructions
+The results of this study is used to standardize the tumor names in CT database, so they can be used in a meaningful way for further downstream analysis of relating drugs and targets to tumors.   
+## Embeddings Data Download and Instructions for Running CANTOS:
 Following are the steps for running the pipeline: </br>
 1. Clone this Github repository to your local machine </br> 
-1. Navigate to the following website: and download the zip file labeled '' </br>
-2. Unzip the file and store the files in each of the following directory of the cloned GitHub repository: </br>
-	
-CT_Embeddings_ADA2.csv			
-CT_Embeddings_V3.csv			
-NCIT_Embeddings_V3.csv		
-WHO_Aggregate_ADA2.csv			
-WHO_Terms_All_V3.csv		
-combined_embedding_ada2_df.RData	
-combined_embedding_ada2_df_5thed.RData	
-combined_embedding_v3_df.RData		
-combined_embedding_v3_df_5thed.RData
-disease_transform_pca_ada2.csv 
-dissimilarity_matrix_cosine.RData
-dissimilarity_matrix_jw.RData
-dissimilarity_matrix_lv.RData
-disease_transform_pca_v3.csv
-script-5B.RData
-script-5b_5thed.Rdata
-script5a_5thed.RData
-script5a.RData
+2. Navigate to the following website: and download the zip file labeled '' </br>
+3. Unzip the file and store the OPEN AI embeddings files in each of the data directory of the cloned GitHub repository: </br>
 
-3. 
-   
+| File Name             | Directory     | 
+| :---------------------|:------------- | 
+| CT_Embeddings_ADA2.csv| CANTOS/data  | 
+| CT_Embeddings_V3.csv	| CANTOS/data  | 
+| NCIT_Embeddings_V3.csv| CANTOS/data  | 
+| WHO_Aggregate_ADA2.csv| CANTOS/data  | 
+| WHO_Terms_All_V3.csv	| CANTOS/data  | 
 
-
-The results of this study is used to standardize the tumor names in CT database, so they can be used in a meaningful way for further downstream analysis of relating drugs and targets to tumors.
+</br> 
+Please note that the ADA002 embeddings file for NCIT is contained in the following directory: </br>
+CANTOS/data/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv </br>
 
 ## Scripts
 
