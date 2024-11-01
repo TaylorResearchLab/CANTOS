@@ -2,24 +2,29 @@
 The results of this study is used to standardize the tumor names in CT database, so they can be integrated with other biomedical databases for further downstream analysis and understanding the therapeutic agents and drug-target landscape for a given tumor.   </br>
 
 
-## Embeddings Data Download and Instructions for Running CANTOS:
+## Embeddings Data Download 
 Following are the steps for running the pipeline: </br>
 1. Clone this Github repository to your local machine </br> 
-2. Navigate to the following DOI: DOI 10.17605/OSF.IO/DBGWN and download the zip file labeled Embeddings.zip </br>
+2. Navigate to the following DOI:10.17605/OSF.IO/DBGWN and download the zip file labeled Embeddings.zip </br>
 3. Unzip the file and store the OPEN AI embeddings files in the data directory of the cloned GitHub repository: </br>
 
 | File Name             | Directory    | 
 | :---------------------|:-------------| 
-| CT_Embeddings_ADA2.csv| CANTOS/data  | 
-| CT_Embeddings_V3.csv	| CANTOS/data  | 
-| NCIT_Embeddings_V3.csv| CANTOS/data  | 
-| WHO_Aggregate_ADA2.csv| CANTOS/data  | 
-| WHO_Terms_All_V3.csv	| CANTOS/data  | 
+| CT_Embeddings_ADA2.csv| `CANTOS/data`  | 
+| CT_Embeddings_V3.csv	| `CANTOS/data`  | 
+| NCIT_Embeddings_V3.csv| `CANTOS/data`  | 
+| WHO_Aggregate_ADA2.csv| `CANTOS/data`  | 
+| WHO_Terms_All_V3.csv	| `CANTOS/data`  | 
 
 </br> 
 Please note that the ADA002 embeddings file for NCIT is contained in the following directory: </br>
-CANTOS/data/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv </br>
+`CANTOS/data/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv` </br>
 
+## Run Instructions for CANTOS
+We ran CANTOS on RStudio Version 2023.09.1+494 (2023.09.1+494) using R version 4.4.0 (2024-04-24). Users can also run cantos from the command line from the following directory
+`CANTOS/analysis` using the following command: <br/>
+
+`bash CANTOS.sh`
 
 ## Description
 This repository contains the code, tables, and plots associated with the CT Embedding paper. The pipeline built in this repository does the following task: <br/>
@@ -63,7 +68,7 @@ This Script performs affinity propagation clustering using edit distances. WHO d
 **03-edit-distance-clustering-5thed.R** </br>
 This Script performs affinity propagation clustering using edit distances. WHO database 5th editions was used in this script. </br>
 
-**04-preprocess-embedding-pca.R** </br>
+**04A-preprocess-embedding-pca.R** </br>
 These script loads ADA002 embeddings for CT, WHO, NCIT  Tumors and then performs PCA.WHO database all editions was used in this script. </br>
 **04A-preprocess-embedding-pca-ADA2-5thed.R**</br>
 These script loads ADA002 embeddings for CT, WHO, NCIT  Tumors and then performs PCA.WHO database 5th editions was used in this script. </br>
@@ -74,7 +79,7 @@ These script loads V3 embeddings for CT, WHO, NCIT  Tumors and then performs PCA
 **04B-preprocess-embedding-pca-v3-5thed.R** </br>
 These script loads V3 embeddings for CT, WHO, NCIT  Tumors and then performs PCA.WHO database 5th editions was used in this script. </br>
 
-**05A-cluster-on-ADA2-embedding-Kmeans.R **</br>
+**05A-cluster-on-ADA2-embedding-Kmeans.R**</br>
 This script computes Kmeans cluster using ADA002 embeddings  and also computes silhouette index.WHO database all editions was used in this script. </br>
 **05A-ADA2-embedding-Kmeans-5thed.R** </br>
 This script computes Kmeans cluster using ADA002 embeddings  and also computes silhouette index.WHO database 5th editions was used in this script. </br>
@@ -85,24 +90,24 @@ This script computes Kmeans cluster using V3 embeddings  and also computes silho
 This script computes Kmeans cluster using V3 embeddings  and also computes silhouette index.WHO database 5th editions was used in this script. </br>
 
 **06A-cluster-on-ADA-embedding-affinity.R** </br>
-This script computes affinity propagation clustering using ADA002 embeddings. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.WHO database all editions was used in this script <br/>
+This script computes affinity propagation clustering using ADA002 embeddings. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.WHO database all editions was used in this script. </br>
 **06A-cluster-on-ADA-embedding-affinity-5thed.R** </br>
-This script computes affinity propagation clustering using ADA002 embeddings. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.WHO database 5th editions was used in this script <br/>
+This script computes affinity propagation clustering using ADA002 embeddings. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.WHO database 5th editions was used in this script.</br>
 
 
 **06B-cluster-on-V3-embedding-affinity.R** </br>
-This script computes affinity propagation cluster using V3 embeddings. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.WHO database all editions was used in this script <br/>
+This script computes affinity propagation cluster using V3 embeddings. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.WHO database all editions was used in this script.</br>
 **06B-cluster-on-V3-embedding-affinity-5thed.R** </br>
-This script computes affinity propagation cluster using V3 embeddings. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.WHO database 5th editions was used in this script <br/>
+This script computes affinity propagation cluster using V3 embeddings. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.WHO database 5th editions was used in this script. </br>
 
 
-**07A-annotate-cluster-result-NCIT-WHO.R **</br>
-This script annotates Affinity propagation cluster results of ADA002 embeddings. WHO database all editions was used in this script </br>
+**07A-annotate-cluster-result-NCIT-WHO.R**</br>
+This script annotates Affinity propagation cluster results of ADA002 embeddings. WHO database all editions was used in this script. </br>
 **07A-annotate-cluster-result-NCIT-WHO-5thed.R**</br>
-This script annotates Affinity propagation cluster results of ADA002 embeddings. WHO database 5th editions was used in this script </br>
+This script annotates Affinity propagation cluster results of ADA002 embeddings. WHO database 5th editions was used in this script. </br>
 
 **07B-annotate-cluster-result-V3-NCIT-WHO.R** </br>
-This script annotates Affinity propagation cluster results of V3 embeddings. WHO database all editions was used in this script
+This script annotates Affinity propagation cluster results of V3 embeddings. WHO database all editions was used in this script. </br>
 **07B-annotate-cluster-result-V3-NCIT-WHO-5thed.R** </br>
 This script annotates Affinity propagation cluster results of V3 embeddings. WHO database 5th editions was used in this script. </br>
 
@@ -122,10 +127,10 @@ This script to detect outliers for embedding-based-Kmeans and editdistance based
 **10-assign-who-ncit-outlier-kmeans-editdistance-clustering-5thed.R** </br>
 This script to detect outliers for embedding-based-Kmeans and editdistance based standardization. WHO database 5th editions was used in this script. </br>
 
-**11-generate-records-annotation.R **</br>
+**11-generate-records-annotation.R**</br>
 This script is used to annotate the types of ground truth found for each of the 1600 tumors sampled. </br>
 
-**12-summarize-results.R **</br>
+**12-summarize-results.R**</br>
 Prints the accuracy of each standardization method. </br>
 
 **13-plot-script.R** </br>
