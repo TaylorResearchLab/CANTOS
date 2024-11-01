@@ -5,8 +5,10 @@ The results of this study is used to standardize the tumor names in CT database,
 ## Embeddings Data Download 
 Following are the steps for running the pipeline: </br>
 1. Clone this Github repository to your local machine </br> 
-2. Navigate to the following DOI:10.17605/OSF.IO/DBGWN and download the zip file labeled Embeddings.zip </br>
-3. Unzip the file and store the OPEN AI embeddings files in the data directory of the cloned GitHub repository: </br>
+2. Navigate to the following Open Science Foundation website to find the embeddings data files needed to run CANTOS: https://doi.org/10.17605/OSF.IO/DBGWN </br>
+3. Under the files section, locate the file titled "Embeddings.zip" and click it. </br>
+4. On the next page click the download button in the File Metadata section, a zip file will be downloaded. </br>
+5. Unzip the file and store the OPEN AI embeddings files in the data directory of the cloned GitHub repository: </br>
 
 | File Name             | Directory    | 
 | :---------------------|:-------------| 
