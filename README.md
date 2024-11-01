@@ -24,7 +24,27 @@ This repository contains the code, tables, and plots associated with the CT Embe
 Following are the steps for running the pipeline: </br>
 1. Clone this Github repository to your local machine </br> 
 1. Navigate to the following website: and download the zip file labeled '' </br>
-2. Unzip the file and store the files in each of the following directory:
+2. Unzip the file and store the files in each of the following directory of the cloned GitHub repository: </br>
+	
+CT_Embeddings_ADA2.csv			
+CT_Embeddings_V3.csv			
+NCIT_Embeddings_V3.csv		
+WHO_Aggregate_ADA2.csv			
+WHO_Terms_All_V3.csv		
+combined_embedding_ada2_df.RData	
+combined_embedding_ada2_df_5thed.RData	
+combined_embedding_v3_df.RData		
+combined_embedding_v3_df_5thed.RData
+disease_transform_pca_ada2.csv 
+dissimilarity_matrix_cosine.RData
+dissimilarity_matrix_jw.RData
+dissimilarity_matrix_lv.RData
+disease_transform_pca_v3.csv
+script-5B.RData
+script-5b_5thed.Rdata
+script5a_5thed.RData
+script5a.RData
+
 3. 
    
 
