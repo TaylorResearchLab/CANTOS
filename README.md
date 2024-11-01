@@ -27,7 +27,7 @@ We ran CANTOS on RStudio Version 2023.09.1+494 (2023.09.1+494) using R version 4
 
 `bash CANTOS.sh`
 
-Please ensure your machine has R installed on it. It can be downloaded from the following website: https://www.r-project.org/ <br/>. 
+Please ensure your machine has R installed on it. It can be downloaded from the following website: https://www.r-project.org/ <br/>
 
 Before running CANTOS, please ensure the libraries listed in 
 
