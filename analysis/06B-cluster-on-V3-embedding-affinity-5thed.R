@@ -108,5 +108,5 @@ while(length(large_cluster_labels_v3)>0){
   large_cluster_labels_v3<-setdiff(large_cluster_labels_v3, unlist(converge_list_v3))
 }
 save(affinity_cluster_v3_df,file = paste(intermediate_dir,"/affinity_cluster_v3_df_5thed.RData",sep=""))
-save.image(file = "script6B_affinitycluster_v3_5thed.RData")
+#save.image(file = "script6B_affinitycluster_v3_5thed.RData")
 

@@ -143,4 +143,4 @@ ggsave(plt_global_kmeans, filename = paste(plots_dir,"/plt_global_kmeans_embeddi
 
 
 
-save.image(file = "script-5B_5thedition.RData")
+save.image(file = "script-5b_5thed.Rdata")

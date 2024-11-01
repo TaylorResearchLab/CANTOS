@@ -126,4 +126,4 @@ affinity_cluster_df<-affinity_cluster_df%>%left_join(tumor_id,by="Tumor_Names")
 affinity_cluster_df<-affinity_cluster_df[,c(9,1:8)]
 
 write.csv(affinity_cluster_df,paste(intermediate_dir,"/affinity_cluster_ADA2_df_5thed.csv",sep=""))
-save.image(file = "script7a-5thed-while-temp.RData")
+#save.image(file = "script7a-5thed-while-temp.RData")

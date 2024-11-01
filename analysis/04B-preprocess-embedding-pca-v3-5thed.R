@@ -60,6 +60,6 @@ disease_transform_v3<-as.data.frame(-results_v3$x[,1:178])
 
 
 write.csv(disease_transform_v3,file =paste(intermediate_dir,"/disease_transform_pca_v3_5thed.csv",sep="") )
-save.image(file = "script4b_5thed.RData")
+#save.image(file = "script4b_5thed.RData")
 save(combined_embeddings_df,file = paste(intermediate_dir,"/combined_embedding_v3_df_5thed.RData",sep=""))
 

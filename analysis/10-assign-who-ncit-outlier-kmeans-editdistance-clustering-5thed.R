@@ -577,5 +577,5 @@ WHO_Results_df<-affinity_cluster_v3_reassigned_df_short %>% dplyr::left_join(aff
 write.csv(NCIT_Results_df,paste(result_dir,"/NCIT_Results_5thed.csv",sep = ""))
 write.csv(WHO_Results_df,paste(result_dir,"/WHO_Results_5thed.csv",sep = ""))
 
-save.image("script10_aug21_5thed.RData")
+#save.image("script10_aug21_5thed.RData")
 #save.image("script10_sep9_5thed.RData")

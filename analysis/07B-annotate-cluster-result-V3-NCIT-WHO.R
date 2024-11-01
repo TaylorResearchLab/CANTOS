@@ -123,6 +123,6 @@ tumor_id<- tumor_id[,c(-1)]
 affinity_cluster_v3_df<-affinity_cluster_v3_df%>%left_join(tumor_id,by="Tumor_Names")
 affinity_cluster_v3_df<-affinity_cluster_v3_df[,c(9,1:8)]
 
-save.image("script-7B.RData")
+#save.image("script-7B.RData")
 write.csv(affinity_cluster_v3_df,paste(intermediate_dir,"/affinity_cluster_v3_df.csv",sep=""))
 

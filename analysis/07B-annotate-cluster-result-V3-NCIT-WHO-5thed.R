@@ -133,4 +133,4 @@ affinity_cluster_v3_df<-affinity_cluster_v3_df[,c(9,1:8)]
 ##
 write.csv(affinity_cluster_v3_df,paste(intermediate_dir,"/affinity_cluster_v3_df_5thed.csv",sep=""))
 #save.image(file = "script7b-5thed_aug4.RData")
-save.image(file = "script7b-5thed_aug18.RData")
+#save.image(file = "script7b-5thed_aug18.RData")

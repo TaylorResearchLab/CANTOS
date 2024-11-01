@@ -198,7 +198,7 @@ barplot(height=benchmark_aff_clust_cosine$silhouette_score,names=benchmark_aff_c
 
 
 ## Write workspace
-save.image(file = "script3.RData")
+#save.image(file = "script3.RData")
 
 write.csv(benchmark_aff_clust_lv,paste(results_dir,"/benchmark_aff_clust_lv.csv",sep=""))
 write.csv(benchmark_aff_clust_jw,paste(results_dir,"/benchmark_aff_clust_jw.csv",sep=""))
