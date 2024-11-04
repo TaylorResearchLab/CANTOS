@@ -127,7 +127,7 @@ This script performs reannotates Affinity cluster  after outlier detection. We p
 **09-cluster-reassignment-outlier-5thed.R** </br>
 This script performs reannotates Affinity cluster  after outlier detection. We perform this for clusters formed using both ADA002 and V3 embeddings. WHO database 5th editions was used in this script. </br>
 
-**10-assign-who-ncit-outlier-kmeans-editdistance-clustering.R **</br>
+**10-assign-who-ncit-outlier-kmeans-editdistance-clustering.R**</br>
 This script to detect outliers for embedding-based-Kmeans and editdistance based standardization. WHO database all editions was used in this script. </br>
 **10-assign-who-ncit-outlier-kmeans-editdistance-clustering-5thed.R** </br>
 This script to detect outliers for embedding-based-Kmeans and editdistance based standardization. WHO database 5th editions was used in this script. </br>
