@@ -24,14 +24,15 @@ Please note that the ADA002 embeddings file for NCIT is contained in the followi
 `CANTOS/data/dt_input_file_6_dec/NCIT_Neoplasm_Core_terms_text-embedding-ada-002_embeddings.csv`</br>
 
 ## Run Instructions for CANTOS
+Before running CANTOS, please ensure <br/>
+1. Please ensure your machine has R installed on it. It can be downloaded from the following website: https://www.r-project.org/ <br/>
+2. The libraries listed in the Library section below are installed. <br/>
+3. 
+
 We ran CANTOS on RStudio Version 2023.09.1+494 (2023.09.1+494) using R version 4.4.0 (2024-04-24). Users can also run CANTOS from the command line from the following directory
 `CANTOS/analysis` using the following command: <br/>
 
 `bash CANTOS.sh`
-
-Please ensure your machine has R installed on it. It can be downloaded from the following website: https://www.r-project.org/ <br/>
-
-Before running CANTOS, please ensure the libraries listed in the Library section below. 
 
 
 ## Description
