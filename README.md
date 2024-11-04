@@ -27,8 +27,14 @@ Please note that the ADA002 embeddings file for NCIT is contained in the followi
 Before running CANTOS, please ensure <br/>
 1. Please ensure your machine has R installed on it. It can be downloaded from the following website: https://www.r-project.org/ <br/>
 2. The libraries listed in the Library section below are installed. <br/>
-3. 
-
+3. In the following scripts make sure to edit the makeCluster argument with the number of cores available on your machine. The number of available cores cab found using the R command `detectCores()` in the `parallel` library <br/>
+  **02-calculate-edit-distance-5thed.R** <br/>
+  **02-calculate-edit-distance.R** <br/>
+  **07A-annotate-cluster-result-NCIT-WHO-5thed.R**<br/>
+  **07A-annotate-cluster-result-NCIT-WHO.R**<br/>
+  **07B-annotate-cluster-result-V3-NCIT-WHO-5thed.R** <br/>
+  **07B-annotate-cluster-result-V3-NCIT-WHO.R**<br/>
+  
 We ran CANTOS on RStudio Version 2023.09.1+494 (2023.09.1+494) using R version 4.4.0 (2024-04-24). Users can also run CANTOS from the command line from the following directory
 `CANTOS/analysis` using the following command: <br/>
 
