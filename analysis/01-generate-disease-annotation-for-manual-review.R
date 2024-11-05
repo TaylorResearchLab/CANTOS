@@ -31,8 +31,8 @@ source(paste(util_dir,"/pedcan_fuzzy_match.R",sep = ""))
 ct_disease_df <- read.csv(paste(intermediate_dir,"/ct_disease_df.csv",sep=""))
 ct_disease_df<-ct_disease_df %>% dplyr::select(nct_id,diseases)
   
-who_general_words <- read_excel(paste(data_dir,"/who_cancer_key_words_general.xlsx",sep="")) # WHO Tumour List general (ADULT + PED)
-who_ped_words<-  read_excel(paste(data_dir,"/who_cancer_key_words_paediatric.xlsx",sep="")) # WHO Tumour List PED
+who_general_words <- read_excel(paste(data_dir,"/who_cancer_key_words_general_5th_edition.xlsx",sep="")) # WHO Tumour List general (ADULT + PED)
+who_ped_words<-  read_excel(paste(data_dir,"/who_cancer_key_words_paediatric_5th_edition.xlsx",sep="")) # WHO Tumour List PED
 
 who_general_words$who_cancers<-tolower(who_general_words$who_cancers)
 who_ped_words$who_paediatric_cancers<-tolower(who_ped_words$who_paediatric_cancers)
