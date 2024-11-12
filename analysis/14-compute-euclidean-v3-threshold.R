@@ -78,19 +78,32 @@ colnames(distances_all_edition)[1]<-"Euclidean_distance_LTE_embedding"
 
 
 Plt_5th_ed<- ggplot(distances_5th_edition, aes(x=classification_result, y=Euclidean_distance_LTE_embedding,
-                                  color=classification_result)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ labs(y= "Euclidean distance in LTE-3 embedding space", x = "Classifcation Results")
+                                  color=classification_result)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ labs(y= "Euclidean distance in LTE-3 embedding space", x = "Standardization Results for 5th edition WHO System")
 
 Plt_all_ed<- ggplot(distances_all_edition, aes(x=classification_result, y=Euclidean_distance_LTE_embedding,
-                                              color=classification_result)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2") + labs(y= "Euclidean distance in LTE-3 embedding space", x = "Classifcation Results")
+                                              color=classification_result)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2") + labs(y= "Euclidean distance in LTE-3 embedding space", x = "Standardization Results for all edition WHO System")
 
 
 
-#distances_5th_edition_correct<- tumor_5th_edition%>%filter(valid_euclidean_dist_v3==1)
-#distances_5th_edition_wrong<- tumor_5th_edition%>%filter(valid_euclidean_dist_v3==0)
+distances_5th_edition_correct<- tumor_5th_edition%>%filter(valid_euclidean_dist_v3==1)
+distances_5th_edition_wrong<- tumor_5th_edition%>%filter(valid_euclidean_dist_v3==0)
 
-#summary_5th_correct <- lapply(distances_5th_edition_correct, summary)
-#summary_5th_wrong <- lapply(distances_5th_edition_wrong, summary)
+summary_5th_correct <- lapply(distances_5th_edition_correct, summary)
+summary_5th_wrong <- lapply(distances_5th_edition_wrong, summary)
 
+print(summary_5th_correct$WHO_distance)
+print(summary_5th_wrong$WHO_distance)
+
+
+
+distances_all_edition_correct<- tumor_all_edition%>%filter(valid_euclidean_dist_v3==1)
+distances_all_edition_wrong<- tumor_all_edition%>%filter(valid_euclidean_dist_v3==0)
+
+summary_all_correct <- lapply(distances_all_edition_correct, summary)
+summary_all_wrong <- lapply(distances_all_edition_wrong, summary)
+
+print(summary_all_correct$WHO_distance)
+print(summary_all_wrong$WHO_distance)
 
 
 #ggplot(distances_5th_edition, aes(fill=valid_euclidean_dist_v3, y=WHO_distance, x=valid_euclidean_dist_v3)) + 
