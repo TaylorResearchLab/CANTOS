@@ -61,4 +61,37 @@ tumor_5th_edition<- tumor_5th_edition %>%filter(ground_truth !="NF")
 tumor_all_edition<- tumor_all_edition %>%filter(ground_truth !="NF")
 
 
-# data table for 5th edition Euclidean V3 distance
+# data table for 5th and all edition Euclidean V3 distance
+distances_5th_edition<- tumor_5th_edition%>%dplyr::select(WHO_distance,valid_euclidean_dist_v3)
+distances_all_edition<- tumor_all_edition%>%dplyr::select(WHO_distance,valid_euclidean_dist_v3)
+
+distances_5th_edition<-distances_5th_edition %>% mutate(classification_result= case_when(valid_euclidean_dist_v3==1~ "Correct",
+                                                                                         valid_euclidean_dist_v3==0~"Wrong"))
+
+
+distances_all_edition<-distances_all_edition %>% mutate(classification_result= case_when(valid_euclidean_dist_v3==1~ "Correct",
+                                                                                         valid_euclidean_dist_v3==0~"Wrong"))
+
+
+colnames(distances_5th_edition)[1]<-"Euclidean_distance_LTE_embedding"
+colnames(distances_all_edition)[1]<-"Euclidean_distance_LTE_embedding"
+
+
+Plt_5th_ed<- ggplot(distances_5th_edition, aes(x=classification_result, y=Euclidean_distance_LTE_embedding,
+                                  color=classification_result)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ labs(y= "Euclidean distance in LTE-3 embedding space", x = "Classifcation Results")
+
+Plt_all_ed<- ggplot(distances_all_edition, aes(x=classification_result, y=Euclidean_distance_LTE_embedding,
+                                              color=classification_result)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2") + labs(y= "Euclidean distance in LTE-3 embedding space", x = "Classifcation Results")
+
+
+
+#distances_5th_edition_correct<- tumor_5th_edition%>%filter(valid_euclidean_dist_v3==1)
+#distances_5th_edition_wrong<- tumor_5th_edition%>%filter(valid_euclidean_dist_v3==0)
+
+#summary_5th_correct <- lapply(distances_5th_edition_correct, summary)
+#summary_5th_wrong <- lapply(distances_5th_edition_wrong, summary)
+
+
+
+#ggplot(distances_5th_edition, aes(fill=valid_euclidean_dist_v3, y=WHO_distance, x=valid_euclidean_dist_v3)) + 
+#  geom_bar(position="dodge", stat="identity")
