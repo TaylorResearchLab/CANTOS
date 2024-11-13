@@ -148,6 +148,9 @@ Prints the accuracy of each standardization method. </br>
 **13-plot-script.R** </br>
 Script is used for generating silhouette plots. </br>
 
+**14-compute-euclidean-v3-threshold.R** </br>
+Script is used for generating box-plots for comparing the standardization results of LTE-3 + Euclidean Dist method. </br>
+
 ## Libraries 
 1. apcluster </br>
 2. biomaRt </br>
