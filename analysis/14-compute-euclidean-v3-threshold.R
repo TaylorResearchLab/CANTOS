@@ -1,4 +1,4 @@
-#This script is used to generate the box plots for figure 1 
+#This script is used to generate the box plots for figure 1 . The box-plots compare the standardization results of LTE-3 + Euclidean Dist method.
 
 suppressPackageStartupMessages({
   library(dplyr)
