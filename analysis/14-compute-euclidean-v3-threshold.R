@@ -11,6 +11,7 @@ suppressPackageStartupMessages({
   library(readxl)
   library(dbscan)
   library(isotree)
+  library(ggpubr)
   
 })
 
@@ -65,24 +66,23 @@ tumor_all_edition<- tumor_all_edition %>%filter(ground_truth !="NF")
 distances_5th_edition<- tumor_5th_edition%>%dplyr::select(WHO_distance,valid_euclidean_dist_v3)
 distances_all_edition<- tumor_all_edition%>%dplyr::select(WHO_distance,valid_euclidean_dist_v3)
 
-distances_5th_edition<-distances_5th_edition %>% mutate(classification_result= case_when(valid_euclidean_dist_v3==1~ "Correct",
-                                                                                         valid_euclidean_dist_v3==0~"Wrong"))
+distances_5th_edition<-distances_5th_edition %>% mutate(standardization_result= case_when(valid_euclidean_dist_v3==1~ "Correctly Standardized",
+                                                                                         valid_euclidean_dist_v3==0~"Incorrectly Standardized"))
 
 
-distances_all_edition<-distances_all_edition %>% mutate(classification_result= case_when(valid_euclidean_dist_v3==1~ "Correct",
-                                                                                         valid_euclidean_dist_v3==0~"Wrong"))
+distances_all_edition<-distances_all_edition %>% mutate(standardization_result= case_when(valid_euclidean_dist_v3==1~ "Correctly Standardized",
+                                                                                         valid_euclidean_dist_v3==0~"Incorrectly Standardized"))
 
 
 colnames(distances_5th_edition)[1]<-"Euclidean_distance_LTE_embedding"
 colnames(distances_all_edition)[1]<-"Euclidean_distance_LTE_embedding"
 
 
-Plt_5th_ed<- ggplot(distances_5th_edition, aes(x=classification_result, y=Euclidean_distance_LTE_embedding,
-                                  color=classification_result)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ labs(y= "Euclidean distance in LTE-3 embedding space", x = "Standardization Results for 5th edition WHO System")
+Plt_5th_ed<- ggplot(distances_5th_edition, aes(x=standardization_result, y=Euclidean_distance_LTE_embedding,
+                                  color=standardization_result)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ labs(y= "Euclidean distance in LTE-3 embedding space", x = "Standardization results for WHO 5th edition")+ggtitle("a")
 
-Plt_all_ed<- ggplot(distances_all_edition, aes(x=classification_result, y=Euclidean_distance_LTE_embedding,
-                                              color=classification_result)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2") + labs(y= "Euclidean distance in LTE-3 embedding space", x = "Standardization Results for all edition WHO System")
-
+Plt_all_ed<- ggplot(distances_all_edition, aes(x=standardization_result, y=Euclidean_distance_LTE_embedding,
+                                              color=standardization_result)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2") + labs(y= "Euclidean distance in LTE-3 embedding space", x = "Standardization results for WHO all edition")+ggtitle("b")
 
 
 distances_5th_edition_correct<- tumor_5th_edition%>%filter(valid_euclidean_dist_v3==1)
@@ -108,3 +108,5 @@ print(summary_all_wrong$WHO_distance)
 
 #ggplot(distances_5th_edition, aes(fill=valid_euclidean_dist_v3, y=WHO_distance, x=valid_euclidean_dist_v3)) + 
 #  geom_bar(position="dodge", stat="identity")
+
+p3<-ggarrange(Plt_5th_ed, Plt_all_ed,nrow = 1,ncol = 2)
