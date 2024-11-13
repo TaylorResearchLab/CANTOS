@@ -1,4 +1,4 @@
-#This script is used evaluate the accuracy of each clustering+standardization methods. 
+#This script is used to generate the box plots for figure 1 
 
 suppressPackageStartupMessages({
   library(dplyr)
@@ -105,8 +105,5 @@ summary_all_wrong <- lapply(distances_all_edition_wrong, summary)
 print(summary_all_correct$WHO_distance)
 print(summary_all_wrong$WHO_distance)
 
-
-#ggplot(distances_5th_edition, aes(fill=valid_euclidean_dist_v3, y=WHO_distance, x=valid_euclidean_dist_v3)) + 
-#  geom_bar(position="dodge", stat="identity")
 
 p3<-ggarrange(Plt_5th_ed, Plt_all_ed,nrow = 1,ncol = 2)
