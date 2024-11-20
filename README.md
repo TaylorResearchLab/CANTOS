@@ -7,7 +7,7 @@ Following are the steps for running the pipeline: </br>
 1. Clone this Github repository to your local machine </br> 
 2. Navigate to the following Open Science Foundation website to find the embeddings data files needed to run CANTOS: https://doi.org/10.17605/OSF.IO/DBGWN </br>
 3. Under the files section, locate the file titled "Embeddings.zip" and click it. </br>
-4. On the next page click the download button in the File Metadata section, a zip file will be downloaded. </br>
+4. On the next page click the menu with three vertical dots, and select the download button, a zip file will be downloaded. </br>
 5. Unzip the file and store the embeddings files in the data directory of the cloned GitHub repository: </br>
 
 | File Name             | Directory    | 
