@@ -86,7 +86,7 @@ tumor_sample_df_5thed<-tumor_sample_df_5thed[,c(1,2,27,28,3:26)]
 tumor_sample_df_all<-tumor_sample_df_all[,c(1,2,27,28,3:26)]
 
 
-write.csv(tumor_sample_df_all,paste(result_dir,"/tumor_sample_df_gt_annotated_all_sep11.csv",sep = ""))
+write.csv(tumor_sample_df_all,paste(result_dir,"/tumor_sample_df_gt_annotated_all.csv",sep = ""))
 write.csv(tumor_sample_df_5thed,paste(result_dir_5th,"/tumor_sample_df_gt_annotated_5th.csv",sep = ""))
 
 
