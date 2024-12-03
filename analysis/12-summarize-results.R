@@ -27,8 +27,8 @@ intermediate_dir_5th <- file.path(analysis_dir,"intermediate_5th")
 result_dir_5th <- file.path(analysis_dir,"results_5th")
 
 
-tumor_all_gt<-read.csv(paste(result_dir,"/tumor_sample_df_gt_annotated_all_sep11.csv",sep = ""))
-tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_sample_df_gt_annotated_5th_sep11.csv",sep = ""))
+tumor_all_gt<-read.csv(paste(result_dir,"/tumor_sample_df_gt_annotated_all.csv",sep = ""))
+tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_sample_df_gt_annotated_5th.csv",sep = ""))
 
 
 
