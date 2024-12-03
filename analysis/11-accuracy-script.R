@@ -26,8 +26,8 @@ result_dir <- file.path(analysis_dir,"results")
 intermediate_dir_5th <- file.path(analysis_dir,"intermediate_5th")
 result_dir_5th <- file.path(analysis_dir,"results_5th")
 
-tumor_sample_df_all<-read.csv(paste(result_dir,"/tumor_sample_df_script10_validation.csv",sep = ""))
-tumor_sample_df_5thed<-read.csv(paste(result_dir_5th,"/tumor_sample_df_script10_5thed_corrected_validated.csv",sep = ""))
+#tumor_sample_df_all<-read.csv(paste(result_dir,"/tumor_sample_df_script10_validation.csv",sep = ""))
+#tumor_sample_df_5thed<-read.csv(paste(result_dir_5th,"/tumor_sample_df_script10_5thed_corrected_validated.csv",sep = ""))
 
 tumor_sample_df_all<-read.csv(paste(result_dir,"/tumor_sample_df_script10_11sep.csv",sep = ""))
 tumor_sample_df_5thed<-read.csv(paste(result_dir_5th,"/tumor_sample_df_script10_5thed_sep11.csv",sep = ""))
