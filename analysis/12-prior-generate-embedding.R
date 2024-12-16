@@ -47,17 +47,11 @@ tumor_terms<-c(ct_terms2,who_terms2,ncit_terms2)
 #                             verbose = getOption("rollama_verbose", default = interactive()))
 
 embeddings_lama<- read.csv(paste(data_dir,"/embeddings_llama.csv",sep=""))
-embeddings_lama<-embeddings_lama %>% group_by(Tumor_Names) %>% summarise_all("mean")
-
-read.csv(paste(data_dir,"/biobert_embedding.csv",sep=""))
-
 biobert_embeddings <- read.csv(paste(data_dir,"/biobert_embedding.csv",sep=""))
-biobert_embeddings<-biobert_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
-
-
 medllama_embeddings <- read.csv(paste(data_dir,"/medllama-13b.csv",sep="")) #5121 dimension
+pubmedbert_embeddings <-read.csv(paste(data_dir,"/pubmedbert-base-embeddings.csv",sep="")) #768 dimension
+
+embeddings_lama<-embeddings_lama %>% group_by(Tumor_Names) %>% summarise_all("mean")
+biobert_embeddings<-biobert_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 medllama_embeddings<-medllama_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
-
-
-pubmedbert_embeddings <-read.csv(paste(data_dir,"/pubmedbert-base-embeddings.csv.csv",sep="")) #768 dimension
 pubmedbert_embeddings<-pubmedbert_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
