@@ -55,3 +55,8 @@ embeddings_lama<-embeddings_lama %>% group_by(Tumor_Names) %>% summarise_all("me
 biobert_embeddings<-biobert_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 medllama_embeddings<-medllama_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 pubmedbert_embeddings<-pubmedbert_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
+
+
+WHO_Terms_All <-readxl::read_xlsx(paste(analyses_dir,"/embeddings-analysis/WHO_Tumor_all_edition.xlsx",sep=""))
+WHO_Terms_5th<-WHO_Terms_All%>%filter(edition_5th=="Yes")
+
