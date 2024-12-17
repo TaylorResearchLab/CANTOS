@@ -1,7 +1,5 @@
 compute_embedding_distance <- function(embeddings,distance_name){
   
-  distance_matrix<-pdist(embeddings[1:nrow(embeddings),2:4096],metric = distance_name)
-  rownames(distance_matrix) <- embeddings$Tumor_Names[1:nrow(embeddings)]
-  colnames(distance_matrix) <- embeddings$Tumor_Names[1:nrow(embeddings)]
+  distance_matrix<-pdist(embeddings,metric = distance_name)
   return(distance_matrix)
 }
