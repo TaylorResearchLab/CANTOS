@@ -57,6 +57,14 @@ medllama_embeddings<-medllama_embeddings %>% group_by(Tumor_Names) %>% summarise
 pubmedbert_embeddings<-pubmedbert_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 
 
-WHO_Terms_All <-readxl::read_xlsx(paste(analyses_dir,"/embeddings-analysis/WHO_Tumor_all_edition.xlsx",sep=""))
+WHO_Terms_All <-readxl::read_xlsx(paste(data_dir,"/WHO_Tumors/result/WHO_Tumor_all_edition.xlsx",sep=""))
 WHO_Terms_5th<-WHO_Terms_All%>%filter(edition_5th=="Yes")
+
+
+embeddings_5th_ed <- embeddings_lama %>% filter(Tumor_Names %in% c(ncit_terms2,ct_terms2,WHO_Terms_5th$Tumor_Names))
+embeddings_all_ed <- embeddings_lama %>% filter(Tumor_Names %in% c(ncit_terms2,ct_terms2,WHO_Terms_All$Tumor_Names))
+
+
+distance_matrix_5th_ed<-pdist(embeddings_5th_ed[1:nrow(embeddings_5th_ed),2:4096],metric = "euclidean")
+distance_matrix_all_ed<-pdist(embeddings_all_ed[1:nrow(embeddings_all_ed),2:4096],metric = "euclidean")
 
