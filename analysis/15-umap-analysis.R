@@ -57,6 +57,7 @@ LTE_V3_Embeddings<-LTE_V3_Embeddings %>% group_by(Tumor_Names) %>% summarise_all
 medllama_Embeddings <- read.csv(paste(data_dir,"/Embeddings/medllama-13b.csv",sep=""))
 # Load llama 
 llama_Embeddings <- read.csv(paste(data_dir,"/Embeddings/embeddings_llama.csv",sep=""))
+llama_Embeddings<-llama_Embeddings[,c(-1)]
 # Load biobert
 biobert_Embeddings <- read.csv(paste(data_dir,"/Embeddings/biobert_embedding.csv",sep=""))
 # Load pubmedbert
@@ -67,9 +68,19 @@ llama_Embeddings<-llama_Embeddings %>% group_by(Tumor_Names) %>% summarise_all("
 biobert_Embeddings<-biobert_Embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 pubmedbert_Embeddings<-pubmedbert_Embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 
+save.image("15-umap-analysis.RData")
 
 # Scale the embeddings
-ADA_002_Embeddings<-scale(ADA_002_Embeddings)
+scale_data <- function(embeddings_data){
+  Tumors<- embeddings_data$Tumor_Names
+  embeddings_data<-embeddings_data[,c(-1)]
+  embeddings_data<-scale(embeddings_data)
+  embeddings_data<-cbind(Tumors,embeddings_data)
+  return(embeddings_data)
+}
+
+
+ADA_002_Embeddings_Scaled<-scale_data(ADA_002_Embeddings)
 LTE_V3_Embeddings<-scale(LTE_V3_Embeddings)
 medllama_Embeddings<-scale(medllama_Embeddings)
 llama_Embeddings<-scale(llama_Embeddings)
