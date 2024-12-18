@@ -138,3 +138,15 @@ llama_KMeans<-perform_kmeans(llama_Umap)
 biobert_KMeans<-perform_kmeans(biobert_Umap)
 pubmedbert_KMeans<-perform_kmeans(pubmedbert_Umap)
 
+
+
+# Entropy analysis
+calculate_entropy <- function(data) {
+  class_proportions <- table(data$class_label) / nrow(data)
+  entropy <- -sum(class_proportions * log2(class_proportions))
+  return(entropy)
+}
+
+ADA_002_Umap$class_label <- ADA002_KMeans$cluster
+cluster_entropy_ada <- ADA_002_Umap %>% group_by(cluster) %>%summarise(entropy = calculate_entropy(cur_data()))
+
