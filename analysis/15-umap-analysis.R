@@ -68,5 +68,11 @@ biobert_Embeddings<-biobert_Embeddings %>% group_by(Tumor_Names) %>% summarise_a
 pubmedbert_Embeddings<-pubmedbert_Embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 
 
-
+# Scale the embeddings
+ADA_002_Embeddings<-scale(ADA_002_Embeddings)
+LTE_V3_Embeddings<-scale(LTE_V3_Embeddings)
+medllama_Embeddings<-scale(medllama_Embeddings)
+llama_Embeddings<-scale(llama_Embeddings)
+biobert_Embeddings<-scale(biobert_Embeddings)
+pubmedbert_Embeddings<-scale(pubmedbert_Embeddings)
 
