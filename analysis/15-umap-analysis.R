@@ -70,20 +70,71 @@ pubmedbert_Embeddings<-pubmedbert_Embeddings %>% group_by(Tumor_Names) %>% summa
 
 save.image("15-umap-analysis.RData")
 
+WHO_Terms_All <-readxl::read_xlsx(paste(data_dir,"/WHO_Tumors/result/WHO_Tumor_all_edition.xlsx",sep=""))
+WHO_Terms_5th<-WHO_Terms_All%>%filter(edition_5th=="Yes")
+
+
 # Scale the embeddings
 scale_data <- function(embeddings_data){
   Tumors<- embeddings_data$Tumor_Names
   embeddings_data<-embeddings_data[,c(-1)]
   embeddings_data<-scale(embeddings_data)
-  embeddings_data<-cbind(Tumors,embeddings_data)
+  embeddings_data<-cbind(Tumor_Names =Tumors , as.data.frame(embeddings_data))
+  #apply(embeddings_data, 2, sd)
+  #colMeans(embeddings_data)
   return(embeddings_data)
 }
 
 
+
 ADA_002_Embeddings_Scaled<-scale_data(ADA_002_Embeddings)
-LTE_V3_Embeddings<-scale(LTE_V3_Embeddings)
-medllama_Embeddings<-scale(medllama_Embeddings)
-llama_Embeddings<-scale(llama_Embeddings)
-biobert_Embeddings<-scale(biobert_Embeddings)
-pubmedbert_Embeddings<-scale(pubmedbert_Embeddings)
+LTE_V3_Embeddings_Scaled<-scale_data(LTE_V3_Embeddings)
+medllama_Embeddings_Scaled<-scale_data(medllama_Embeddings)
+llama_Embeddings_Scaled<-scale_data(llama_Embeddings)
+biobert_Embeddings_Scaled<-scale_data(biobert_Embeddings)
+pubmedbert_Embeddings_Scaled<-scale_data(pubmedbert_Embeddings)
+
+set.seed(44)
+
+UMAP_data <- function(Scaled_Data){
+  Tumors<-Scaled_Data$Tumor_Names
+  Scaled_Data<- Scaled_Data[,c(-1)]
+  # Perform UMAP to reduce to 3 dimensions
+  umap_config <- umap.defaults
+  umap_config$n_components <- 3  # Focus on 3 dimensions
+  umap_result <- umap(Scaled_Data, config = umap_config)
+  # Extract the UMAP reduced data
+  reduced_data <- as.data.frame(umap_result$layout)
+  colnames(reduced_data) <- c("UMAP1", "UMAP2", "UMAP3")  # Rename columns
+  reduced_data$Tumor_Names <- Tumors  # Add tumor names back to the reduced data
+  reduced_data<-reduced_data[,c(4,1,2,3)]
+  return(reduced_data)
+}
+
+ADA_002_Umap<-UMAP_data(ADA_002_Embeddings_Scaled)
+LTE_V3_Umap<-UMAP_data(LTE_V3_Embeddings_Scaled)
+medllama_Umap<-UMAP_data(medllama_Embeddings_Scaled)
+llama_Umap<-UMAP_data(llama_Embeddings_Scaled)
+biobert_Umap<-UMAP_data(biobert_Embeddings_Scaled)
+pubmedbert_Umap<-UMAP_data(pubmedbert_Embeddings_Scaled)
+
+
+perform_kmeans <- function(embedding_data){
+  set.seed(44)
+  rownames(embedding_data)<-embedding_data$Tumor_Names
+  embedding_data<-embedding_data[,c(-1)]
+  km.res <- eclust(embedding_data, "kmeans", k = 6200,nstart = 25, graph = FALSE)
+  kmeans_clust_result <- as.data.frame(km.res$cluster)
+  kmeans_clust_result$Tumor_Names<-rownames(kmeans_clust_result)
+  colnames(kmeans_clust_result)[1]<-"cluster"
+  kmeans_clust_result <- kmeans_clust_result %>% dplyr::select(Tumor_Names,cluster)
+  
+}
+
+ADA002_KMeans<-perform_kmeans(ADA_002_Umap)
+LTE_V3_KMeans<-perform_kmeans(LTE_V3_Umap)
+medllama_KMeans<-perform_kmeans(medllama_Umap)
+llama_KMeans<-perform_kmeans(llama_Umap)
+biobert_KMeans<-perform_kmeans(biobert_Umap)
+pubmedbert_KMeans<-perform_kmeans(pubmedbert_Umap)
 
