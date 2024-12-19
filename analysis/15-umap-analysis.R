@@ -18,6 +18,9 @@ suppressPackageStartupMessages({
   library(readr)
   library(umap)
   library(tidyr)
+  library(cluster)  # For silhouette scores
+  library(factoextra)  # For visualization and clustering
+  library(eclust) 
 })
 setwd(getwd())
 root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
@@ -129,6 +132,14 @@ perform_kmeans <- function(embedding_data){
   colnames(kmeans_clust_result)[1]<-"cluster"
   kmeans_clust_result <- kmeans_clust_result %>% dplyr::select(Tumor_Names,cluster)
   
+  sil <- silhouette(km.res$cluster, dist(embedding_data)) # Verify this 
+  sil<-as.data.frame(sil)
+  sil$Tumor_Names<-names(km.res$cluster)
+  
+  kmeans_clust_result <- kmeans_clust_result %>% dplyr::left_join(sil,by=c("cluster", "Tumor_Names"))
+  
+  kmeans_clust_result<-kmeans_clust_result[order(kmeans_clust_result$cluster),]
+  return(kmeans_clust_result)
 }
 
 ADA002_KMeans<-perform_kmeans(ADA_002_Umap)
@@ -180,4 +191,43 @@ has_semicolon_outside_parentheses <- function(input_string) {
 CT_GT$split_row<-unlist(lapply(CT_GT$ground_truth_val, has_semicolon_outside_parentheses))
 CT_GT<-CT_GT[order(CT_GT$split_row),]                                                               
 write.csv(CT_GT,"CT_GT.csv")
+CT_GT2 <- readxl::read_xlsx("CT_GT.xlsx")
+
+# CT_GT IS OK, WORK WITH CT_GT4
+CT_GT5<-CT_GT4[,c(1,2,3)]
+
+CT_GT6 <-CT_GT5 %>% separate_rows(ground_truth_val,sep = "\\*;\\*")
+CT_GT6<-unique(CT_GT6)
+
+
+# CLUSTER GROUND TRUTH ANALYSIS
+CT_GT7<- CT_GT6[,c(3,2)]
+colnames(CT_GT7)<-c("Cluster_Label_WHO", "CT_Tumor_Names")
+
+biobert_KMeans_GT<-biobert_KMeans%>%filter(Tumor_Names %in% CT_GT7$CT_Tumor_Names )
+
+
+
+# Add silohoutte
+sillohoute_index <- function(clustering_df){
+  # Extract clustering labels
+  cluster_labels <- clustering_df$class_label
+  # Compute silhouette scores
+  silhouette_scores <- silhouette(cluster_labels, dist(clustering_df[,c(2,3,4)]))
+  # Convert silhouette object to a data frame for better readability
+  silhouette_df <- as.data.frame(silhouette_scores[, 1:3])
+  colnames(silhouette_df) <- c("Cluster", "Silhouette_Width", "Neighbor_Cluster")
+  # Average silhouette width (overall evaluation metric)
+  average_silhouette_width <- mean(silhouette_scores[, "sil_width"])
+  
+}
+
+
+
+
+
+
+
+
+
 
