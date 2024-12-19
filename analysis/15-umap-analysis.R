@@ -149,6 +149,13 @@ llama_KMeans<-perform_kmeans(llama_Umap)
 biobert_KMeans<-perform_kmeans(biobert_Umap)
 pubmedbert_KMeans<-perform_kmeans(pubmedbert_Umap)
 
+sil_df<-as.data.frame(matrix(nrow=6,ncol=2))
+colnames(sil_df)<-c("Embedding_KMeans", "Silhouette_Scores")
+sil_df$Embedding_KMeans<-c("ADA002+KMeans","LTE-3+KMeans","Medllama+KMeans","Llama+KMeans","Biobert+KMeans","Pubmedbert+KMeans")
+sil_df$Silhouette_Scores<-c(mean(ADA002_KMeans$sil_width),mean(LTE_V3_KMeans$sil_width),mean(medllama_KMeans$sil_width),mean(llama_KMeans$sil_width),mean(biobert_KMeans$sil_width),mean(pubmedbert_KMeans$sil_width))
+
+
+
 
 # Entropy analysis
 calculate_entropy <- function(data) {
