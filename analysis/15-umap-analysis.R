@@ -17,7 +17,7 @@ suppressPackageStartupMessages({
   library(rdist)
   library(readr)
   library(umap)
-  
+  library(tidyr)
 })
 setwd(getwd())
 root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
@@ -139,7 +139,6 @@ biobert_KMeans<-perform_kmeans(biobert_Umap)
 pubmedbert_KMeans<-perform_kmeans(pubmedbert_Umap)
 
 
-
 # Entropy analysis
 calculate_entropy <- function(data) {
   class_proportions <- table(data$class_label) / nrow(data)
@@ -149,4 +148,36 @@ calculate_entropy <- function(data) {
 
 ADA_002_Umap$class_label <- ADA002_KMeans$cluster
 cluster_entropy_ada <- ADA_002_Umap %>% group_by(cluster) %>%summarise(entropy = calculate_entropy(cur_data()))
+
+# PROCESS GROUND TRUTH
+
+tumor_all_review_gdrive <- read_csv("~/Desktop/MTP_Paper/PMTL_paper/analyses/embeddings-analysis/tumor_all_review_gdrive.csv")
+CT_GT<-tumor_all_review_gdrive%>%dplyr::select(nct_id,Tumor_Names,ground_truth_val)
+
+has_semicolon_outside_parentheses <- function(input_string) {
+  # Split the string into characters
+  chars <- strsplit(input_string, NULL)[[1]]
+  
+  # Initialize counters
+  open_parentheses <- 0  # Tracks open parentheses
+  semicolon_outside <- FALSE  # Flag for semicolon outside parentheses
+  
+  # Iterate through each character in the string
+  for (char in chars) {
+    if (char == "(") {
+      open_parentheses <- open_parentheses + 1  # Increment for open parenthesis
+    } else if (char == ")") {
+      open_parentheses <- max(open_parentheses - 1, 0)  # Decrement for close parenthesis
+    } else if (char == ";" && open_parentheses == 0) {
+      semicolon_outside <- TRUE  # Semicolon found outside parentheses
+      break
+    }
+  }
+  
+  return(semicolon_outside)
+}
+
+CT_GT$split_row<-unlist(lapply(CT_GT$ground_truth_val, has_semicolon_outside_parentheses))
+CT_GT<-CT_GT[order(CT_GT$split_row),]                                                               
+write.csv(CT_GT,"CT_GT.csv")
 
