@@ -21,6 +21,8 @@ suppressPackageStartupMessages({
   library(cluster)  # For silhouette scores
   library(factoextra)  # For visualization and clustering
   library(eclust) 
+  library(clusterSim)   # For calculating DBI
+  
 })
 setwd(getwd())
 root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
@@ -139,6 +141,17 @@ perform_kmeans <- function(embedding_data){
   kmeans_clust_result <- kmeans_clust_result %>% dplyr::left_join(sil,by=c("cluster", "Tumor_Names"))
   
   kmeans_clust_result<-kmeans_clust_result[order(kmeans_clust_result$cluster),]
+  
+  cluster_labels <- kmeans_clust_result$cluster
+  
+  # Compute pairwise distances
+  distance_matrix <- dist(embedding_data)
+  
+  # Calculate Davies-Bouldin Index
+  dbi <- index.DB(embedding_data, cluster_labels, d = distance_matrix, centrotypes = "centroids")
+  
+  kmeans_clust_result$dbi<-dbi$DB
+  
   return(kmeans_clust_result)
 }
 
