@@ -22,6 +22,7 @@ suppressPackageStartupMessages({
   library(factoextra)  # For visualization and clustering
   library(eclust) 
   library(clusterSim)   # For calculating DBI
+  library(fpc)          # For Calinski-Harabasz Index
   
 })
 setwd(getwd())
@@ -151,6 +152,10 @@ perform_kmeans <- function(embedding_data){
   dbi <- index.DB(embedding_data, cluster_labels, d = distance_matrix, centrotypes = "centroids")
   
   kmeans_clust_result$dbi<-dbi$DB
+  
+  # CH Index
+  ch_index <- cluster.stats(distance_matrix, cluster_labels)$ch
+  kmeans_clust_result$ch_index<-ch_index
   
   return(kmeans_clust_result)
 }
