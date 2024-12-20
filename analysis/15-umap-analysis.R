@@ -229,19 +229,6 @@ biobert_KMeans_GT<-biobert_KMeans%>%filter(Tumor_Names %in% CT_GT7$CT_Tumor_Name
 
 
 
-# Add silohoutte
-sillohoute_index <- function(clustering_df){
-  # Extract clustering labels
-  cluster_labels <- clustering_df$class_label
-  # Compute silhouette scores
-  silhouette_scores <- silhouette(cluster_labels, dist(clustering_df[,c(2,3,4)]))
-  # Convert silhouette object to a data frame for better readability
-  silhouette_df <- as.data.frame(silhouette_scores[, 1:3])
-  colnames(silhouette_df) <- c("Cluster", "Silhouette_Width", "Neighbor_Cluster")
-  # Average silhouette width (overall evaluation metric)
-  average_silhouette_width <- mean(silhouette_scores[, "sil_width"])
-  
-}
 
 
 
