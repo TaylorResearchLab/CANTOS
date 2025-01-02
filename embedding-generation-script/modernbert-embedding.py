@@ -45,7 +45,7 @@ tumor_names = data["Tumor_Names"].dropna().tolist()
 len(tumor_names)
 
 
-# In[5]:
+# In[6]:
 
 
 # Define batch size
@@ -63,14 +63,14 @@ def get_batch_embeddings(batch_texts, tokenizer, model):
     return sum_embeddings / sum_mask
 
 
-# In[6]:
+# In[7]:
 
 
 hidden_size = model.config.hidden_size
 hidden_size
 
 
-# In[7]:
+# In[8]:
 
 
 # Initialize results DataFrame
@@ -96,7 +96,7 @@ for i in range(0, len(tumor_names), batch_size):
     print(f"Processed batch {i // batch_size + 1}/{(len(tumor_names) + batch_size - 1) // batch_size}")
 
 
-# In[12]:
+# In[10]:
 
 
 # Convert results to DataFrame
@@ -104,7 +104,7 @@ results_df.shape
 
 
 
-# In[13]:
+# In[11]:
 
 
 # Save results incrementally to a CSV file
