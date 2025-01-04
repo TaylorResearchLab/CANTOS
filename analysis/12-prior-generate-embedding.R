@@ -52,6 +52,7 @@ biobert_embeddings <- read.csv(paste(data_dir,"/Embeddings/biobert_embedding.csv
 medllama_embeddings <- read.csv(paste(data_dir,"/Embeddings/medllama-13b.csv",sep="")) #5121 dimension
 pubmedbert_embeddings <-read.csv(paste(data_dir,"/Embeddings/pubmedbert-base-embeddings.csv",sep="")) #768 dimension
 modernbert_embeddings<-read.csv(paste(data_dir,"/Embeddings/mordernbert_embeddings.csv",sep=""))
+colnames(modernbert_embeddings)[1]<-"Tumor_Names"
 
 llama_embeddings<-llama_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 biobert_embeddings<-biobert_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
