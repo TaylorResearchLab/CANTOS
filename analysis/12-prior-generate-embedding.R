@@ -65,13 +65,13 @@ WHO_Terms_All <-readxl::read_xlsx(paste(data_dir,"/WHO_Tumors/result/WHO_Tumor_a
 WHO_Terms_5th<-WHO_Terms_All%>%filter(edition_5th=="Yes")
 
 
-embeddings_5th_ed <- embeddings_lama %>% filter(Tumor_Names %in% c(ncit_terms2,ct_terms2,WHO_Terms_5th$Tumor_Names))
-embeddings_all_ed <- embeddings_lama %>% filter(Tumor_Names %in% c(ncit_terms2,ct_terms2,WHO_Terms_All$Tumor_Names))
+llama_5th <- llama_embeddings %>% filter(Tumor_Names %in% c(ncit_terms2,ct_terms2,WHO_Terms_5th$Tumor_Names))
+llama_all<- llama_embeddings %>% filter(Tumor_Names %in% c(ncit_terms2,ct_terms2,WHO_Terms_All$Tumor_Names))
 
 
-distance_matrix_5th_ed <- compute_embedding_distance(embeddings_5th_ed[1:nrow(embeddings_5th_ed),2:4097],"euclidean")
-rownames(distance_matrix_5th_ed)<-embeddings_5th_ed$Tumor_Names
-colanes(distance_matrix_5th_ed)<-embeddings_5th_ed$Tumor_Names
+distance_matrix_llama_5th <- compute_embedding_distance(llama_5th[1:nrow(llama_5th),2:4097],"euclidean")
+rownames(distance_matrix_5th_ed)<-llama_5th$Tumor_Names
+colanes(distance_matrix_5th_ed)<-llama_5th$Tumor_Names
 
 
 distance_matrix_5th_ed<-pdist(embeddings_5th_ed[1:nrow(embeddings_5th_ed),2:4096],metric = "euclidean")
