@@ -65,29 +65,32 @@ WHO_Terms_All <-readxl::read_xlsx(paste(data_dir,"/WHO_Tumors/result/WHO_Tumor_a
 WHO_Terms_5th<-WHO_Terms_All%>%filter(edition_5th=="Yes")
 
 
-llama_5th <- llama_embeddings %>% filter(Tumor_Names %in% c(ncit_terms2,ct_terms2,WHO_Terms_5th$Tumor_Names))
-llama_all<- llama_embeddings %>% filter(Tumor_Names %in% c(ncit_terms2,ct_terms2,WHO_Terms_All$Tumor_Names))
+distance_matrix_llama<- compute_embedding_distance(llama_all[1:nrow(llama_embeddings),2:ncol(llama_embeddings)],"euclidean")
+rownames(distance_matrix_llama)<-llama_embeddings$Tumor_Names
+colnames(distance_matrix_llama)<-llama_embeddings$Tumor_Names
 
 
-distance_matrix_llama_5th <- compute_embedding_distance(llama_5th[1:nrow(llama_5th),2:4097],"euclidean")
-rownames(distance_matrix_llama_5th)<-llama_5th$Tumor_Names
-colnamees(distance_matrix_llama_5th)<-llama_5th$Tumor_Names
+distance_matrix_biobert<-compute_embedding_distance(biobert_embeddings[1:nrow(biobert_embeddings),2:ncol(biobert_embeddings)],"euclidean")
+rownames(distance_matrix_biobert)<-biobert_embeddings$Tumor_Names
+colnames(distance_matrix_biobert)<-biobert_embeddings$Tumor_Names
+
+distance_matrix_medllama<-compute_embedding_distance(medllama_embeddings[1:nrow(medllama_embeddings),2:ncol(medllama_embeddings)],"euclidean")
+rownames(distance_matrix_medllama)<-medllama_embeddings$Tumor_Names
+colnames(distance_matrix_medllama)<-medllama_embeddings$Tumor_Names
 
 
+distance_matrix_pubmedbert<-compute_embedding_distance(pubmedbert_embeddings[1:nrow(pubmedbert_embeddings),2:ncol(pubmedbert_embeddings)],"euclidean")
+rownames(distance_matrix_pubmedbert)<-pubmedbert_embeddings$Tumor_Names
+colnames(distance_matrix_pubmedbert)<-pubmedbert_embeddings$Tumor_Names
+
+distance_matrix_llama<-as.data.frame(distance_matrix_llama) # EXECUTED
+distance_matrix_biobert<-as.data.frame(distance_matrix_biobert) # EXECUTED
+distance_matrix_medllama<-as.data.frame(distance_matrix_medllama) # EXECUTED
+distance_matrix_pubmedbert<-as.data.frame(distance_matrix_pubmedbert) 
 
 
-save(distance_matrix_llama_5th,file="distance_matrix_llama_5th.RData")
-
-
-
-distance_matrix_llama_all <- compute_embedding_distance(llama_all[1:nrow(llama_all),2:ncol(llama_all)],"euclidean")
-rownames(distance_matrix_llama_all)<-llama_all$Tumor_Names
-colnames(distance_matrix_llama_all)<-llama_all$Tumor_Names
-
-
-distance_matrix_biobert_all<-compute_embedding_distance(biobert_embeddings[1:nrow(biobert_embeddings),2:ncol(biobert_embeddings)],"euclidean")
-distance_matrix_medllama_all<-compute_embedding_distance(medllama_embeddings[1:nrow(medllama_embeddings),2:ncol(medllama_embeddings)],"euclidean")
-
+distance_matrix_llama_5th_rep <- distance_matrix_llama_all%>% filter(rownames(distance_matrix_llama_all) %in% c(ncit_terms2,ct_terms2,WHO_Terms_5th$Tumor_Names))
+distance_matrix_llama_5th_rep<-distance_matrix_llama_5th_rep %>% dplyr::select(c(ncit_terms2,ct_terms2,WHO_Terms_5th$Tumor_Names))
 
 
 distance_matrix_5th_ed<-pdist(embeddings_5th_ed[1:nrow(embeddings_5th_ed),2:4096],metric = "euclidean")
