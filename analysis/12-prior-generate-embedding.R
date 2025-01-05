@@ -70,8 +70,16 @@ llama_all<- llama_embeddings %>% filter(Tumor_Names %in% c(ncit_terms2,ct_terms2
 
 
 distance_matrix_llama_5th <- compute_embedding_distance(llama_5th[1:nrow(llama_5th),2:4097],"euclidean")
-rownames(distance_matrix_5th_ed)<-llama_5th$Tumor_Names
-colanes(distance_matrix_5th_ed)<-llama_5th$Tumor_Names
+rownames(distance_matrix_llama_5th)<-llama_5th$Tumor_Names
+colnamees(distance_matrix_llama_5th)<-llama_5th$Tumor_Names
+
+save(distance_matrix_llama_5th,file="distance_matrix_llama_5th.RData")
+
+
+
+distance_matrix_llama_all <- compute_embedding_distance(llama_all[1:nrow(llama_all),2:ncol(llama_all)],"euclidean")
+rownames(distance_matrix_llama_all)<-llama_all$Tumor_Names
+colnamees(distance_matrix_llama_all)<-llama_all$Tumor_Names
 
 
 distance_matrix_5th_ed<-pdist(embeddings_5th_ed[1:nrow(embeddings_5th_ed),2:4096],metric = "euclidean")
