@@ -90,7 +90,21 @@ distance_matrix_pubmedbert<-as.data.frame(distance_matrix_pubmedbert) # EXECUTED
 
 
 # WHO Matrices All edition 
+distance_matrix_llama_all <- distance_matrix_llama %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
+distance_matrix_biobert_all <- distance_matrix_biobert %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
+distance_matrix_medllama_all <- distance_matrix_medllama %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
+distance_matrix_pubmedbert_all <- distance_matrix_pubmedbert %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 
+# WHO Matrices 5th edition 
+distance_matrix_llama_5th <- distance_matrix_llama %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
+distance_matrix_biobert_5th <- distance_matrix_biobert %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
+distance_matrix_medllama_5th <- distance_matrix_medllama %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
+distance_matrix_pubmedbert_5th <- distance_matrix_pubmedbert %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
+
+
+
+CT_WHO_All <- ct_terms
+CT_WHO_All<- nearest_match_embeddings(CT_WHO_All,distance_matrix_llama,"llama")
 
 
 
