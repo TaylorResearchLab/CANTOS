@@ -86,13 +86,12 @@ colnames(distance_matrix_pubmedbert)<-pubmedbert_embeddings$Tumor_Names
 distance_matrix_llama<-as.data.frame(distance_matrix_llama) # EXECUTED
 distance_matrix_biobert<-as.data.frame(distance_matrix_biobert) # EXECUTED
 distance_matrix_medllama<-as.data.frame(distance_matrix_medllama) # EXECUTED
-distance_matrix_pubmedbert<-as.data.frame(distance_matrix_pubmedbert) 
+distance_matrix_pubmedbert<-as.data.frame(distance_matrix_pubmedbert) # EXECUTED
 
 
-distance_matrix_llama_5th_rep <- distance_matrix_llama_all%>% filter(rownames(distance_matrix_llama_all) %in% c(ncit_terms2,ct_terms2,WHO_Terms_5th$Tumor_Names))
-distance_matrix_llama_5th_rep<-distance_matrix_llama_5th_rep %>% dplyr::select(c(ncit_terms2,ct_terms2,WHO_Terms_5th$Tumor_Names))
+# WHO Matrices All edition 
 
 
-distance_matrix_5th_ed<-pdist(embeddings_5th_ed[1:nrow(embeddings_5th_ed),2:4096],metric = "euclidean")
-distance_matrix_all_ed<-pdist(embeddings_all_ed[1:nrow(embeddings_all_ed),2:4096],metric = "euclidean")
+
+
 
