@@ -118,6 +118,13 @@ medllama_match_all<- nearest_match_embeddings(distance_matrix_medllama_all,"medl
 pubmedbert_match_all<- nearest_match_embeddings(distance_matrix_pubmedbert_all,"pubmedbert")
 modernbert_match_all<- nearest_match_embeddings(distance_matrix_modernbert_all,"modernbert")
 
+
+embedding_nearest_all <- llama_match_all %>%
+  full_join(biobert_match_all, by = "Tumor_Names") %>%
+  full_join(medllama_match_all, by = "Tumor_Names") %>%
+  full_join(pubmedbert_match_all, by = "Tumor_Names") %>%
+  full_join(modernbert_match_all, by = "Tumor_Names")
+
 ####
 llama_match_5th<- nearest_match_embeddings(distance_matrix_llama_5th,"llama") # Executed
 biobert_match_5th<- nearest_match_embeddings(distance_matrix_biobert_5th,"biobert")
@@ -125,6 +132,12 @@ medllama_match_5th<- nearest_match_embeddings(distance_matrix_medllama_5th,"medl
 pubmedbert_match_5th<- nearest_match_embeddings(distance_matrix_pubmedbert_5th,"pubmedbert")
 modernbert_match_5th<- nearest_match_embeddings(distance_matrix_modernbert_5th,"modernbert")
 
+
+embedding_nearest_5th <- llama_match_5th %>%
+  full_join(biobert_match_5th, by = "Tumor_Names") %>%
+  full_join(medllama_match_5th, by = "Tumor_Names") %>%
+  full_join(pubmedbert_match_5th, by = "Tumor_Names") %>%
+  full_join(modernbert_match_5th, by = "Tumor_Names")
 save.image("12-prior.RData")
 
 
