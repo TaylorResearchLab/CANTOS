@@ -83,10 +83,17 @@ distance_matrix_pubmedbert<-compute_embedding_distance(pubmedbert_embeddings[1:n
 rownames(distance_matrix_pubmedbert)<-pubmedbert_embeddings$Tumor_Names
 colnames(distance_matrix_pubmedbert)<-pubmedbert_embeddings$Tumor_Names
 
+
+distance_matrix_modernbert<-compute_embedding_distance(modernbert_embeddings[1:nrow(modernbert_embeddings),2:ncol(modernbert_embeddings)],"euclidean")
+rownames(distance_matrix_modernbert)<-modernbert_embeddings$Tumor_Names
+colnames(distance_matrix_modernbert)<-modernbert_embeddings$Tumor_Names
+
+
 distance_matrix_llama<-as.data.frame(distance_matrix_llama) # EXECUTED
 distance_matrix_biobert<-as.data.frame(distance_matrix_biobert) # EXECUTED
 distance_matrix_medllama<-as.data.frame(distance_matrix_medllama) # EXECUTED
 distance_matrix_pubmedbert<-as.data.frame(distance_matrix_pubmedbert) # EXECUTED
+distance_matrix_modernbert<-as.data.frame(distance_matrix_modernbert) # EXECUTED
 
 
 # WHO Matrices All edition 
@@ -94,12 +101,14 @@ distance_matrix_llama_all <- distance_matrix_llama %>% dplyr::select(all_of(WHO_
 distance_matrix_biobert_all <- distance_matrix_biobert %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 distance_matrix_medllama_all <- distance_matrix_medllama %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 distance_matrix_pubmedbert_all <- distance_matrix_pubmedbert %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
+distance_matrix_modernbert_all <- distance_matrix_modernbert %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 
 # WHO Matrices 5th edition 
 distance_matrix_llama_5th <- distance_matrix_llama %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 distance_matrix_biobert_5th <- distance_matrix_biobert %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 distance_matrix_medllama_5th <- distance_matrix_medllama %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 distance_matrix_pubmedbert_5th <- distance_matrix_pubmedbert %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
+distance_matrix_modernbert_5th <- distance_matrix_modernbert %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 
 
 ###
@@ -107,6 +116,7 @@ llama_match_all<- nearest_match_embeddings(distance_matrix_llama_all,"llama") # 
 biobert_match_all<- nearest_match_embeddings(distance_matrix_biobert_all,"biobert")
 medllama_match_all<- nearest_match_embeddings(distance_matrix_medllama_all,"medllama")
 pubmedbert_match_all<- nearest_match_embeddings(distance_matrix_pubmedbert_all,"pubmedbert")
+modernbert_match_all<- nearest_match_embeddings(distance_matrix_modernbert_all,"modernbert")
 
 
 
