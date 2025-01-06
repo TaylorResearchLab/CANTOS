@@ -118,7 +118,13 @@ medllama_match_all<- nearest_match_embeddings(distance_matrix_medllama_all,"medl
 pubmedbert_match_all<- nearest_match_embeddings(distance_matrix_pubmedbert_all,"pubmedbert")
 modernbert_match_all<- nearest_match_embeddings(distance_matrix_modernbert_all,"modernbert")
 
+####
+llama_match_5th<- nearest_match_embeddings(distance_matrix_llama_5th,"llama") # Executed
+biobert_match_5th<- nearest_match_embeddings(distance_matrix_biobert_5th,"biobert")
+medllama_match_5th<- nearest_match_embeddings(distance_matrix_medllama_5th,"medllama")
+pubmedbert_match_5th<- nearest_match_embeddings(distance_matrix_pubmedbert_5th,"pubmedbert")
+modernbert_match_5th<- nearest_match_embeddings(distance_matrix_modernbert_5th,"modernbert")
 
-
+save.image("12-prior.RData")
 
 
