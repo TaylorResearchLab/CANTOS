@@ -102,9 +102,12 @@ distance_matrix_medllama_5th <- distance_matrix_medllama %>% dplyr::select(all_o
 distance_matrix_pubmedbert_5th <- distance_matrix_pubmedbert %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 
 
+###
+llama_match_all<- nearest_match_embeddings(distance_matrix_llama_all,"llama") # Executed
+biobert_match_all<- nearest_match_embeddings(distance_matrix_biobert_all,"biobert")
+medllama_match_all<- nearest_match_embeddings(distance_matrix_medllama_all,"medllama")
+pubmedbert_match_all<- nearest_match_embeddings(distance_matrix_pubmedbert_all,"pubmedbert")
 
-CT_WHO_All <- ct_terms
-CT_WHO_All<- nearest_match_embeddings(CT_WHO_All,distance_matrix_llama,"llama")
 
 
 
