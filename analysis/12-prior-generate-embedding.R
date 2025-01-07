@@ -138,6 +138,15 @@ embedding_nearest_5th <- llama_match_5th %>%
   full_join(medllama_match_5th, by = "Tumor_Names") %>%
   full_join(pubmedbert_match_5th, by = "Tumor_Names") %>%
   full_join(modernbert_match_5th, by = "Tumor_Names")
+
+
+#### NCIT 
+distance_matrix_llama_ncit <- distance_matrix_llama %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
+distance_matrix_biobert_ncit <- distance_matrix_biobert %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
+distance_matrix_medllama_ncit <- distance_matrix_medllama %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
+distance_matrix_pubmedbert_ncit <- distance_matrix_pubmedbert %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
+distance_matrix_modernbert_ncit <- distance_matrix_modernbert %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
+
 save.image("12-prior.RData")
 
 
