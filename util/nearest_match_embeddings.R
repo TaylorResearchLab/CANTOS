@@ -10,7 +10,7 @@ nearest_match_embeddings <- function(distance_matrix_df,col_name,standardization
     if(length(names_extracted)>1){
       names_extracted<-paste(names_extracted,collapse = "*;*")
     }
-    embedding_df$llama[iter]<-names_extracted
+    embedding_df[[col_name]][iter]<-names_extracted
     print(iter)
   }
   return(embedding_df)  
