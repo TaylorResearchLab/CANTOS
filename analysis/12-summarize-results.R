@@ -146,22 +146,22 @@ for(iter in 1:17){
   }else if(fifth$method[iter]=="valid_af_cosine"){
     fifth$method[iter]="Cosine + AP"
     
-  }else if(all$method[iter]=="valid_euclidean_dist_llama"){
-    all$method[iter]="LLama + Euclidean Dist"
+  }else if(fifth$method[iter]=="valid_euclidean_dist_llama"){
+    fifth$method[iter]="LLama + Euclidean Dist"
     
   }
-  else if(all$method[iter]=="valid_euclidean_dist_biobert"){
-    all$method[iter]="Biobert + Euclidean Dist"
+  else if(fifth$method[iter]=="valid_euclidean_dist_biobert"){
+    fifth$method[iter]="Biobert + Euclidean Dist"
     
-  }else if(all$method[iter]=="valid_euclidean_dist_medllama"){
-    all$method[iter]="Medllama + Euclidean Dist"
+  }else if(fifth$method[iter]=="valid_euclidean_dist_medllama"){
+    fifth$method[iter]="Medllama + Euclidean Dist"
     
-  }else if(all$method[iter]=="valid_euclidean_dist_pubmedbert"){
-    all$method[iter]="PubMedBert + Euclidean Dist"
+  }else if(fifth$method[iter]=="valid_euclidean_dist_pubmedbert"){
+    fifth$method[iter]="PubMedBert + Euclidean Dist"
     
   }
-  else if(all$method[iter]=="valid_euclidean_dist_modernbert"){
-    all$method[iter]="ModernBert + Euclidean Dist"
+  else if(fifth$method[iter]=="valid_euclidean_dist_modernbert"){
+    fifth$method[iter]="ModernBert + Euclidean Dist"
     
   }
   
