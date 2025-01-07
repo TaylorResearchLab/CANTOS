@@ -146,6 +146,12 @@ distance_matrix_biobert_ncit <- distance_matrix_biobert %>% dplyr::select(all_of
 distance_matrix_medllama_ncit <- distance_matrix_medllama %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
 distance_matrix_pubmedbert_ncit <- distance_matrix_pubmedbert %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
 distance_matrix_modernbert_ncit <- distance_matrix_modernbert %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
+####
+llama_match_ncit<- nearest_match_embeddings(distance_matrix_llama_ncit,"llama") # Executed
+biobert_match_ncit<- nearest_match_embeddings(distance_matrix_biobert_ncit,"biobert")
+medllama_match_ncit<- nearest_match_embeddings(distance_matrix_medllama_ncit,"medllama")
+pubmedbert_match_ncit<- nearest_match_embeddings(distance_matrix_pubmedbert_ncit,"pubmedbert")
+modernbert_match_ncit<- nearest_match_embeddings(distance_matrix_modernbert_ncit,"modernbert")
 
 save.image("12-prior.RData")
 
