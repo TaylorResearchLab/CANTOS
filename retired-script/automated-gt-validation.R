@@ -1,7 +1,7 @@
 tumor_all_review_gdrive<- tumor_all_review_gdrive[,1:28]
-write.csv(tumor_all_review_gdrive,"analysis/results/tumor_manually_validated_tmp.csv")
 tumor_5thed_review_gdrive<-tumor_5thed_review_gdrive[,1:28]
-write.csv(tumor_5thed_review_gdrive,"analysis/results_5th/tumor_manually_validated_tmp_5th.csv")
+
+
 load("12-prior.RData")
 
 colnames(embedding_nearest_all)<- c("Tumor_Names","euclidean_dist_llama","euclidean_dist_biobert",
@@ -102,3 +102,6 @@ for(iter in 1:1600){
     tumor_5thed_review_gdrive$valid_euclidean_dist_modernbert[iter]=0
   }
 }
+
+write.csv(tumor_all_review_gdrive,"analysis/results/tumor_manually_validated_tmp.csv")
+write.csv(tumor_5thed_review_gdrive,"analysis/results_5th/tumor_manually_validated_tmp_5th.csv")
