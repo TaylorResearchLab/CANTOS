@@ -153,6 +153,14 @@ medllama_match_ncit<- nearest_match_embeddings(distance_matrix_medllama_ncit,"me
 pubmedbert_match_ncit<- nearest_match_embeddings(distance_matrix_pubmedbert_ncit,"pubmedbert")
 modernbert_match_ncit<- nearest_match_embeddings(distance_matrix_modernbert_ncit,"modernbert")
 
+
+embedding_nearest_ncit <- llama_match_ncit %>%
+  full_join(biobert_match_ncit, by = "Tumor_Names") %>%
+  full_join(medllama_match_ncit, by = "Tumor_Names") %>%
+  full_join(pubmedbert_match_ncit, by = "Tumor_Names") %>%
+  full_join(modernbert_match_ncit, by = "Tumor_Names")
+
+
 save.image("12-prior.RData")
 
 
