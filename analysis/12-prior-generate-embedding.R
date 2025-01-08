@@ -179,6 +179,11 @@ colnames(embedding_nearest_all) <- c("Tumor_Names","euclidean_dist_llama","eucli
 colnames(embedding_nearest_5th) <- c("Tumor_Names","euclidean_dist_llama","euclidean_dist_biobert",
                                       "euclidean_dist_medllama","euclidean_dist_pubmedbert","euclidean_dist_modernbert")
 
+NCIT_Results_all <- NCIT_Results_all %>% left_join(embedding_nearest_ncit , by="Tumor_Names")
+NCIT_Results_5th <- NCIT_Results_5th %>% left_join(embedding_nearest_ncit , by="Tumor_Names")
+
+WHO_Results_all <- WHO_Results_all %>% left_join(embedding_nearest_all , by="Tumor_Names")
+WHO_Results_5th <- WHO_Results_5th %>% left_join(embedding_nearest_5th , by="Tumor_Names")
 
 save.image("12-prior.RData")
 
