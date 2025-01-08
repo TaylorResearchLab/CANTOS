@@ -160,6 +160,25 @@ embedding_nearest_ncit <- llama_match_ncit %>%
   full_join(pubmedbert_match_ncit, by = "Tumor_Names") %>%
   full_join(modernbert_match_ncit, by = "Tumor_Names")
 
+# Reconcile Results
+
+NCIT_Results_all <- read_csv("analysis/results/NCIT_Results_all.csv")
+NCIT_Results_5th <- read_csv("analysis/results_5th/NCIT_Results_5thed.csv")
+WHO_Results_all <- read_csv("analysis/results/WHO_Results_all.csv")
+WHO_Results_5th <- read_csv("analysis/results_5th/WHO_Results_5thed.csv")
+
+NCIT_Results_all<-NCIT_Results_all[,c(-1)]
+NCIT_Results_5th<-NCIT_Results_5th[,c(-1)]
+WHO_Results_all<-WHO_Results_all[,c(-1)]
+WHO_Results_5th<-WHO_Results_5th[,c(-1)]
+
+colnames(embedding_nearest_ncit) <- c("Tumor_Names","euclidean_dist_llama","euclidean_dist_biobert",
+                                      "euclidean_dist_medllama","euclidean_dist_pubmedbert","euclidean_dist_modernbert")
+colnames(embedding_nearest_all) <- c("Tumor_Names","euclidean_dist_llama","euclidean_dist_biobert",
+                                      "euclidean_dist_medllama","euclidean_dist_pubmedbert","euclidean_dist_modernbert")
+colnames(embedding_nearest_5th) <- c("Tumor_Names","euclidean_dist_llama","euclidean_dist_biobert",
+                                      "euclidean_dist_medllama","euclidean_dist_pubmedbert","euclidean_dist_modernbert")
+
 
 save.image("12-prior.RData")
 
