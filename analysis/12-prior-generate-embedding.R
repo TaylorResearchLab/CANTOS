@@ -23,7 +23,7 @@ root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
 util_dir <- file.path(root_dir, "util")
 data_dir <- file.path(root_dir,"data")
 input_dir <- file.path(root_dir,"data","input")
-analyses_dir <- file.path(root_dir,"analyses")
+analysis_dir <- file.path(root_dir,"analysis")
 
 
 # Read the embedding terms from the LTE-3 files
@@ -184,6 +184,14 @@ NCIT_Results_5th <- NCIT_Results_5th %>% left_join(embedding_nearest_ncit , by="
 
 WHO_Results_all <- WHO_Results_all %>% left_join(embedding_nearest_all , by="Tumor_Names")
 WHO_Results_5th <- WHO_Results_5th %>% left_join(embedding_nearest_5th , by="Tumor_Names")
+
+write.csv(NCIT_Results_all,paste(analysis_dir,"/results/NCIT_Results_all_ose.csv",sep=""))
+write.csv(WHO_Results_all,paste(analysis_dir,"/results/WHO_Results_all_ose.csv",sep=""))
+
+write.csv(NCIT_Results_5th,paste(analysis_dir,"/results_5th/NCIT_Results_5thed_ose.csv",sep=""))
+write.csv(WHO_Results_5th,paste(analysis_dir,"/results_5th/WHO_Results_5thed_ose.csv",sep=""))
+
+
 
 save.image("12-prior.RData")
 
