@@ -193,6 +193,6 @@ write.csv(WHO_Results_5th,paste(analysis_dir,"/results_5th/WHO_Results_5thed_ose
 
 
 
-save.image("12-prior.RData")
+#save.image("12-prior.RData")
 
 
