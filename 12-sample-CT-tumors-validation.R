@@ -33,4 +33,11 @@ WHO_Results_5th<- read.csv(paste(analysis_dir,"/results_5th/WHO_Results_5thed_os
 WHO_Results_all<-WHO_Results_all[,c(-1)]
 WHO_Results_5th<-WHO_Results_5th[,c(-1)]
 
+# Tumor sample
+tumor_WHO_ALL <- sample_n(WHO_Results_all, 1600)
+tumor_WHO_5th <- sample_n(WHO_Results_5th, 1600)
+
+write.csv(tumor_WHO_ALL,paste(analysis_dir,"/results/tumor_all_validate_this_manually.csv",sep = ""))
+write.csv(tumor_WHO_5th,paste(analysis_dir,"/results_5th/tumor_5th_validate_this_manually.csv",sep = ""))
+
 
