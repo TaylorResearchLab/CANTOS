@@ -29,8 +29,11 @@ result_dir_5th <- file.path(analysis_dir,"results_5th")
 
 
 # Load the annotations for 5th edition 
-tumor_5th_edition<-read.csv(paste(result_dir_5th,"/tumor_sample_df_gt_annotated_5th.csv",sep = ""))
-tumor_all_edition<-read.csv(paste(result_dir,"/tumor_sample_df_gt_annotated_all.csv",sep = ""))
+#tumor_5th_edition<-read.csv(paste(result_dir_5th,"/tumor_sample_df_gt_annotated_5th.csv",sep = ""))
+#tumor_all_edition<-read.csv(paste(result_dir,"/tumor_sample_df_gt_annotated_all.csv",sep = ""))
+
+tumor_all_edition<-read.csv(paste(result_dir,"/tumor_manually_validated_all.csv",sep = ""))
+tumor_5th_edition<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_5th.csv",sep = ""))
 
 # Pick only the Euclidean distance standardization with V3 embeddings
 tumor_5th_edition<-tumor_5th_edition %>% dplyr::select(nct_id,Tumor_Names,ground_truth_val,ground_truth,
