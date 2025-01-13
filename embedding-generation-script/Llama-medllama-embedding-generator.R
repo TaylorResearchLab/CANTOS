@@ -48,3 +48,6 @@ embeddings_lama<- embed_text(tumor_terms,model = "llama3",server = NULL,model_pa
 
 embeddings_medllama<- embed_text(tumor_terms,model = "medllama2",server = NULL,model_params = NULL,
                              verbose = getOption("rollama_verbose", default = interactive()))
+
+write.csv(embeddings_lama,paste(data_dir,"/Embeddings/llama3_embedding.csv",sep=""))
+write.csv(embeddings_medllama,paste(data_dir,"/Embeddings/medllama-7b.csv",sep=""))
