@@ -65,9 +65,7 @@ medllama_embeddings_7b<-cbind(medllama_embeddings$Tumor_Names,medllama_embedding
 colnames(medllama_embeddings_7b)[1]<-"Tumor_Names"
 medllama_embeddings_7b<-medllama_embeddings_7b %>% group_by(Tumor_Names) %>% summarise_all("mean")
 
-distance_matrix_llama<- compute_embedding_distance(medllama_embeddings_7b[1:nrow(medllama_embeddings_7b),2:ncol(medllama_embeddings_7b)],"euclidean")
-rownames(distance_matrix_medllama_7b)<-medllama_embeddings_7b$Tumor_Names
-colnames(distance_matrix_medllama_7b)<-medllama_embeddings_7b$Tumor_Names
+
 
 
 
@@ -99,11 +97,18 @@ rownames(distance_matrix_modernbert)<-modernbert_embeddings$Tumor_Names
 colnames(distance_matrix_modernbert)<-modernbert_embeddings$Tumor_Names
 
 
+distance_matrix_medllama_7b<- compute_embedding_distance(medllama_embeddings_7b[1:nrow(medllama_embeddings_7b),2:ncol(medllama_embeddings_7b)],"euclidean")
+rownames(distance_matrix_medllama_7b)<-medllama_embeddings_7b$Tumor_Names
+colnames(distance_matrix_medllama_7b)<-medllama_embeddings_7b$Tumor_Names
+
+
+
 distance_matrix_llama<-as.data.frame(distance_matrix_llama) # EXECUTED
 distance_matrix_biobert<-as.data.frame(distance_matrix_biobert) # EXECUTED
 distance_matrix_medllama<-as.data.frame(distance_matrix_medllama) # EXECUTED
 distance_matrix_pubmedbert<-as.data.frame(distance_matrix_pubmedbert) # EXECUTED
 distance_matrix_modernbert<-as.data.frame(distance_matrix_modernbert) # EXECUTED
+distance_matrix_medllama_7b<-as.data.frame(distance_matrix_medllama_7b) # EXECUTED
 
 
 # WHO Matrices All edition 
@@ -112,6 +117,7 @@ distance_matrix_biobert_all <- distance_matrix_biobert %>% dplyr::select(all_of(
 distance_matrix_medllama_all <- distance_matrix_medllama %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 distance_matrix_pubmedbert_all <- distance_matrix_pubmedbert %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 distance_matrix_modernbert_all <- distance_matrix_modernbert %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
+distance_matrix_medllama_7b_all <- distance_matrix_medllama_7b %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 
 # WHO Matrices 5th edition 
 distance_matrix_llama_5th <- distance_matrix_llama %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
@@ -119,6 +125,7 @@ distance_matrix_biobert_5th <- distance_matrix_biobert %>% dplyr::select(all_of(
 distance_matrix_medllama_5th <- distance_matrix_medllama %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 distance_matrix_pubmedbert_5th <- distance_matrix_pubmedbert %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 distance_matrix_modernbert_5th <- distance_matrix_modernbert %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
+distance_matrix_medllama_7b_5th <- distance_matrix_medllama_7b %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 
 
 ###
@@ -127,13 +134,15 @@ biobert_match_all<- nearest_match_embeddings(distance_matrix_biobert_all,"biober
 medllama_match_all<- nearest_match_embeddings(distance_matrix_medllama_all,"medllama")
 pubmedbert_match_all<- nearest_match_embeddings(distance_matrix_pubmedbert_all,"pubmedbert")
 modernbert_match_all<- nearest_match_embeddings(distance_matrix_modernbert_all,"modernbert")
+medllama_7b_match_all<- nearest_match_embeddings(distance_matrix_medllama_7b_all,"medllama_7b")
 
 
 embedding_nearest_all <- llama_match_all %>%
   full_join(biobert_match_all, by = "Tumor_Names") %>%
   full_join(medllama_match_all, by = "Tumor_Names") %>%
   full_join(pubmedbert_match_all, by = "Tumor_Names") %>%
-  full_join(modernbert_match_all, by = "Tumor_Names")
+  full_join(modernbert_match_all, by = "Tumor_Names") %>%
+  full_join(medllama_7b_match_all, by = "Tumor_Names")
 
 ####
 llama_match_5th<- nearest_match_embeddings(distance_matrix_llama_5th,"llama") # Executed
