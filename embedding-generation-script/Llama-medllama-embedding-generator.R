@@ -43,6 +43,12 @@ ncit_terms2<-ncit_terms %>% dplyr::pull(Tumor_Names)
 tumor_terms<-c(ct_terms2,who_terms2,ncit_terms2)
 
 
+
+embeddings_lama_32_3b<- embed_text(tumor_terms,model = "llama3.2:3b",server = NULL,model_params = NULL,
+                              verbose = getOption("rollama_verbose", default = interactive()))
+embeddings_lama_phi4<- embed_text(tumor_terms,model = "phi4",server = NULL,model_params = NULL,
+                                  verbose = getOption("rollama_verbose", default = interactive()))
+
 embeddings_lama<- embed_text(tumor_terms,model = "llama3",server = NULL,model_params = NULL,
                              verbose = getOption("rollama_verbose", default = interactive()))
 
