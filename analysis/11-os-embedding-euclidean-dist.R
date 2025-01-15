@@ -25,7 +25,7 @@ data_dir <- file.path(root_dir,"data")
 input_dir <- file.path(root_dir,"data","input")
 analysis_dir <- file.path(root_dir,"analysis")
 
-
+source("~/Desktop/MTP_Paper/CT-Embedding-Paper/util/compute_embedding_distance.R")
 # Read the embedding terms from the LTE-3 files
 ct_terms <- read.csv(paste(data_dir,"/CT_Embeddings_V3.csv",sep = ""))
 ncit_terms <- read.csv(paste(data_dir,"/NCIT_Embeddings_V3.csv",sep = ""))
@@ -58,6 +58,7 @@ colnames(modernbert_embeddings)[1]<-"Tumor_Names"
 llama_32_3b_embeddings<-read.csv(paste(data_dir,"/Embeddings/llama32_3B.csv",sep="")) 
 llama_32_3b_embeddings<-llama_32_3b_embeddings[,c(-1)]
 phi4_embeddings <- read.csv(paste(data_dir,"/Embeddings/phi4.csv",sep="")) 
+phi4_embeddings<-phi4_embeddings[,c(-1)]
 
 
 
@@ -108,6 +109,15 @@ colnames(distance_matrix_modernbert)<-modernbert_embeddings$Tumor_Names
 distance_matrix_medllama_7b<- compute_embedding_distance(medllama_embeddings_7b[1:nrow(medllama_embeddings_7b),2:ncol(medllama_embeddings_7b)],"euclidean")
 rownames(distance_matrix_medllama_7b)<-medllama_embeddings_7b$Tumor_Names
 colnames(distance_matrix_medllama_7b)<-medllama_embeddings_7b$Tumor_Names
+
+distance_matrix_llama32<- compute_embedding_distance(llama_32_3b_embeddings[1:nrow(llama_32_3b_embeddings),2:ncol(llama_32_3b_embeddings)],"euclidean")
+rownames(distance_matrix_llama32)<-llama_32_3b_embeddings$Tumor_Names
+colnames(distance_matrix_llama32)<-llama_32_3b_embeddings$Tumor_Names
+
+distance_matrix_phi<- compute_embedding_distance(phi4_embeddings[1:nrow(phi4_embeddings),2:ncol(phi4_embeddings)],"euclidean")
+rownames(distance_matrix_phi)<-phi4_embeddings$Tumor_Names
+colnames(distance_matrix_phi)<-phi4_embeddings$Tumor_Names
+
 
 
 
