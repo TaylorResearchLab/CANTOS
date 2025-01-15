@@ -48,6 +48,9 @@ embeddings_lama_32_3b<- embed_text(tumor_terms,model = "llama3.2:3b",server = NU
                               verbose = getOption("rollama_verbose", default = interactive()))
 embeddings_lama_phi4<- embed_text(tumor_terms,model = "phi4",server = NULL,model_params = NULL,
                                   verbose = getOption("rollama_verbose", default = interactive()))
+embeddings_lama_phi4<-cbind(tumor_terms,embeddings_lama_phi4)
+embeddings_lama_phi4<-as.data.frame(embeddings_lama_phi4)
+colnames(embeddings_lama_phi4)[1]<-"Tumor_Names"
 
 embeddings_lama<- embed_text(tumor_terms,model = "llama3",server = NULL,model_params = NULL,
                              verbose = getOption("rollama_verbose", default = interactive()))
@@ -57,3 +60,4 @@ embeddings_medllama<- embed_text(tumor_terms,model = "medllama2",server = NULL,m
 
 write.csv(embeddings_lama,paste(data_dir,"/Embeddings/llama3_embedding.csv",sep=""))
 write.csv(embeddings_medllama,paste(data_dir,"/Embeddings/medllama-7b.csv",sep=""))
+write.csv(embeddings_lama_phi4,paste(data_dir,"/Embeddings/phi4.csv",sep=""))
