@@ -167,7 +167,9 @@ embedding_nearest_all <- llama_match_all %>%
   full_join(medllama_match_all, by = "Tumor_Names") %>%
   full_join(pubmedbert_match_all, by = "Tumor_Names") %>%
   full_join(modernbert_match_all, by = "Tumor_Names") %>%
-  full_join(medllama_7b_match_all, by = "Tumor_Names")
+  full_join(medllama_7b_match_all, by = "Tumor_Names") %>%
+  full_join(llama_32_3b_match_all, by = "Tumor_Names") %>%
+  full_join(phi4_match_all, by = "Tumor_Names") 
 
 ####
 llama_match_5th<- nearest_match_embeddings(distance_matrix_llama_5th,"llama") # Executed
@@ -176,14 +178,17 @@ medllama_match_5th<- nearest_match_embeddings(distance_matrix_medllama_5th,"medl
 pubmedbert_match_5th<- nearest_match_embeddings(distance_matrix_pubmedbert_5th,"pubmedbert")
 modernbert_match_5th<- nearest_match_embeddings(distance_matrix_modernbert_5th,"modernbert")
 medllama_7b_match_5th<- nearest_match_embeddings(distance_matrix_medllama_7b_5th,"medllama_7b")
-
+llama_32_3b_match_5th<- nearest_match_embeddings(distance_matrix_llama32_5th,"llama_32_3b")
+phi4_match_5th<- nearest_match_embeddings(distance_matrix_phi_5th,"phi4")
 
 embedding_nearest_5th <- llama_match_5th %>%
   full_join(biobert_match_5th, by = "Tumor_Names") %>%
   full_join(medllama_match_5th, by = "Tumor_Names") %>%
   full_join(pubmedbert_match_5th, by = "Tumor_Names") %>%
   full_join(modernbert_match_5th, by = "Tumor_Names")%>%
-  full_join(medllama_7b_match_5th, by = "Tumor_Names")
+  full_join(medllama_7b_match_5th, by = "Tumor_Names") %>%
+  full_join(llama_32_3b_match_5th, by = "Tumor_Names") %>%
+  full_join(phi4_match_5th, by = "Tumor_Names") 
 
 
 #### NCIT 
@@ -193,6 +198,8 @@ distance_matrix_medllama_ncit <- distance_matrix_medllama %>% dplyr::select(all_
 distance_matrix_pubmedbert_ncit <- distance_matrix_pubmedbert %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
 distance_matrix_modernbert_ncit <- distance_matrix_modernbert %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
 distance_matrix_medllama_7b_ncit <- distance_matrix_medllama_7b %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
+distance_matrix_llama32_ncit <- distance_matrix_llama32 %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
+distance_matrix_phi_ncit <- distance_matrix_phi %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
 
 ####
 llama_match_ncit<- nearest_match_embeddings(distance_matrix_llama_ncit,"llama") # Executed
@@ -201,14 +208,17 @@ medllama_match_ncit<- nearest_match_embeddings(distance_matrix_medllama_ncit,"me
 pubmedbert_match_ncit<- nearest_match_embeddings(distance_matrix_pubmedbert_ncit,"pubmedbert")
 modernbert_match_ncit<- nearest_match_embeddings(distance_matrix_modernbert_ncit,"modernbert")
 medllama_7b_match_ncit<- nearest_match_embeddings(distance_matrix_medllama_7b_ncit,"medllama_7b")
-
+llama_32_3b_match_ncit<- nearest_match_embeddings(distance_matrix_llama32_ncit,"llama_32_3b")
+phi4_match_ncit<- nearest_match_embeddings(distance_matrix_phi_ncit,"phi4")
 
 embedding_nearest_ncit <- llama_match_ncit %>%
   full_join(biobert_match_ncit, by = "Tumor_Names") %>%
   full_join(medllama_match_ncit, by = "Tumor_Names") %>%
   full_join(pubmedbert_match_ncit, by = "Tumor_Names") %>%
   full_join(modernbert_match_ncit, by = "Tumor_Names") %>%
-  full_join(medllama_7b_match_ncit, by = "Tumor_Names")
+  full_join(medllama_7b_match_ncit, by = "Tumor_Names")%>%
+  full_join(llama_32_3b_match_ncit, by = "Tumor_Names") %>%
+  full_join(phi4_match_ncit, by = "Tumor_Names") 
 
 # Reconcile Results
 
