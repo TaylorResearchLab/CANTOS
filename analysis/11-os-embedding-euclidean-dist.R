@@ -158,6 +158,8 @@ medllama_match_all<- nearest_match_embeddings(distance_matrix_medllama_all,"medl
 pubmedbert_match_all<- nearest_match_embeddings(distance_matrix_pubmedbert_all,"pubmedbert")
 modernbert_match_all<- nearest_match_embeddings(distance_matrix_modernbert_all,"modernbert")
 medllama_7b_match_all<- nearest_match_embeddings(distance_matrix_medllama_7b_all,"medllama_7b")
+llama_32_3b_match_all<- nearest_match_embeddings(distance_matrix_llama32_all,"llama_32_3b")
+phi4_match_all<- nearest_match_embeddings(distance_matrix_phi_all,"phi4")
 
 
 embedding_nearest_all <- llama_match_all %>%
