@@ -256,3 +256,14 @@ write.csv(WHO_Results_5th,paste(analysis_dir,"/results_5th/WHO_Results_5thed_ose
 #save.image("12-prior.RData")
 
 #save.image("12-prior-jan15-onlyllama32-phi4.RData")
+# NCIT_Results_all<-NCIT_Results_all%>%left_join(llama_32_3b_match_ncit, by = "Tumor_Names")
+# NCIT_Results_all<-NCIT_Results_all%>%left_join(phi4_match_ncit, by = "Tumor_Names")
+# 
+# NCIT_Results_5th<-NCIT_Results_5th%>%left_join(llama_32_3b_match_5th, by = "Tumor_Names")
+# NCIT_Results_5th<-NCIT_Results_5th%>%left_join(phi4_match_5th, by = "Tumor_Names")
+# 
+# WHO_Results_5th<-WHO_Results_5th%>%left_join(llama_32_3b_match_5th, by = "Tumor_Names")
+# WHO_Results_5th<-WHO_Results_5th%>%left_join(phi4_match_5th, by = "Tumor_Names")
+# 
+# WHO_Results_all<-WHO_Results_all%>%left_join(llama_32_3b_match_all, by = "Tumor_Names")
+# WHO_Results_all<-WHO_Results_all%>%left_join(phi4_match_all, by = "Tumor_Names")
