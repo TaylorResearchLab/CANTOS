@@ -127,6 +127,8 @@ distance_matrix_medllama<-as.data.frame(distance_matrix_medllama) # EXECUTED
 distance_matrix_pubmedbert<-as.data.frame(distance_matrix_pubmedbert) # EXECUTED
 distance_matrix_modernbert<-as.data.frame(distance_matrix_modernbert) # EXECUTED
 distance_matrix_medllama_7b<-as.data.frame(distance_matrix_medllama_7b) # EXECUTED
+distance_matrix_llama32<-as.data.frame(distance_matrix_llama32) # EXECUTED
+distance_matrix_phi<-as.data.frame(distance_matrix_phi) # EXECUTED
 
 
 # WHO Matrices All edition 
@@ -136,6 +138,8 @@ distance_matrix_medllama_all <- distance_matrix_medllama %>% dplyr::select(all_o
 distance_matrix_pubmedbert_all <- distance_matrix_pubmedbert %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 distance_matrix_modernbert_all <- distance_matrix_modernbert %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 distance_matrix_medllama_7b_all <- distance_matrix_medllama_7b %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
+distance_matrix_llama32_all <- distance_matrix_llama32 %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
+distance_matrix_phi_all <- distance_matrix_phi %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 
 # WHO Matrices 5th edition 
 distance_matrix_llama_5th <- distance_matrix_llama %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
@@ -144,7 +148,8 @@ distance_matrix_medllama_5th <- distance_matrix_medllama %>% dplyr::select(all_o
 distance_matrix_pubmedbert_5th <- distance_matrix_pubmedbert %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 distance_matrix_modernbert_5th <- distance_matrix_modernbert %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 distance_matrix_medllama_7b_5th <- distance_matrix_medllama_7b %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
-
+distance_matrix_llama32_5th <- distance_matrix_llama32 %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
+distance_matrix_phi_5th <- distance_matrix_phi %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 
 ###
 llama_match_all<- nearest_match_embeddings(distance_matrix_llama_all,"llama") # Executed
@@ -238,4 +243,4 @@ write.csv(WHO_Results_5th,paste(analysis_dir,"/results_5th/WHO_Results_5thed_ose
 
 #save.image("12-prior.RData")
 
-
+#save.image("12-prior-jan15-onlyllama32-phi4.RData")
