@@ -60,6 +60,8 @@ llama_32_3b_embeddings<-llama_32_3b_embeddings[,c(-1)]
 phi4_embeddings <- read.csv(paste(data_dir,"/Embeddings/phi4.csv",sep="")) 
 phi4_embeddings<-phi4_embeddings[,c(-1)]
 
+llama_33_70b_embeddings<-read.csv(paste(data_dir,"/Embeddings/all_embedding_llama_33_70b.csv",sep="")) 
+colnames(llama_33_70b_embeddings)[1]<-"Tumor_Names"
 
 
 llama_embeddings<-llama_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
@@ -74,6 +76,7 @@ medllama_embeddings_7b<-medllama_embeddings_7b %>% group_by(Tumor_Names) %>% sum
 
 llama_32_3b_embeddings<-llama_32_3b_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 phi4_embeddings<-phi4_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
+llama_33_70b_embeddings<-llama_33_70b_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 
 
 
@@ -118,6 +121,9 @@ distance_matrix_phi<- compute_embedding_distance(phi4_embeddings[1:nrow(phi4_emb
 rownames(distance_matrix_phi)<-phi4_embeddings$Tumor_Names
 colnames(distance_matrix_phi)<-phi4_embeddings$Tumor_Names
 
+distance_matrix_llama33_70b<- compute_embedding_distance(llama_33_70b_embeddings[1:nrow(llama_33_70b_embeddings),2:ncol(llama_33_70b_embeddings)],"euclidean")
+rownames(distance_matrix_llama33)<-llama_33_70b_embeddings$Tumor_Names
+colnames(distance_matrix_llama33)<-llama_33_70b_embeddings$Tumor_Names
 
 
 
