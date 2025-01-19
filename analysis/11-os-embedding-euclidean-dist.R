@@ -179,7 +179,8 @@ embedding_nearest_all <- llama_match_all %>%
   full_join(modernbert_match_all, by = "Tumor_Names") %>%
   full_join(medllama_7b_match_all, by = "Tumor_Names") %>%
   full_join(llama_32_3b_match_all, by = "Tumor_Names") %>%
-  full_join(phi4_match_all, by = "Tumor_Names") 
+  full_join(phi4_match_all, by = "Tumor_Names")%>%
+  full_join(llama_match_all,by = "Tumor_Names")
 
 ####
 llama_match_5th<- nearest_match_embeddings(distance_matrix_llama_5th,"llama") # Executed
@@ -199,7 +200,8 @@ embedding_nearest_5th <- llama_match_5th %>%
   full_join(modernbert_match_5th, by = "Tumor_Names")%>%
   full_join(medllama_7b_match_5th, by = "Tumor_Names") %>%
   full_join(llama_32_3b_match_5th, by = "Tumor_Names") %>%
-  full_join(phi4_match_5th, by = "Tumor_Names") 
+  full_join(phi4_match_5th, by = "Tumor_Names")%>%
+  full_join(llama_match_5th,by = "Tumor_Names")
 
 
 #### NCIT 
@@ -231,7 +233,8 @@ embedding_nearest_ncit <- llama_match_ncit %>%
   full_join(modernbert_match_ncit, by = "Tumor_Names") %>%
   full_join(medllama_7b_match_ncit, by = "Tumor_Names")%>%
   full_join(llama_32_3b_match_ncit, by = "Tumor_Names") %>%
-  full_join(phi4_match_ncit, by = "Tumor_Names") 
+  full_join(phi4_match_ncit, by = "Tumor_Names")%>%
+  full_join(llama33_70b_ncit, by = "Tumor_Names")
 
 # Reconcile Results
 
@@ -246,11 +249,11 @@ WHO_Results_all<-WHO_Results_all[,c(-1)]
 WHO_Results_5th<-WHO_Results_5th[,c(-1)]
 
 colnames(embedding_nearest_ncit) <- c("Tumor_Names","euclidean_dist_llama","euclidean_dist_biobert",
-                                      "euclidean_dist_medllama","euclidean_dist_pubmedbert","euclidean_dist_modernbert","euclidean_dist_medllama_7b")
+                                      "euclidean_dist_medllama","euclidean_dist_pubmedbert","euclidean_dist_modernbert","euclidean_dist_medllama_7b","euclidean_dist_llama_32_3b", "euclidean_dist_phi4","euclidean_dist_llama_33_70b")
 colnames(embedding_nearest_all) <- c("Tumor_Names","euclidean_dist_llama","euclidean_dist_biobert",
-                                      "euclidean_dist_medllama","euclidean_dist_pubmedbert","euclidean_dist_modernbert","euclidean_dist_medllama_7b")
+                                      "euclidean_dist_medllama","euclidean_dist_pubmedbert","euclidean_dist_modernbert","euclidean_dist_medllama_7b","euclidean_dist_llama_32_3b", "euclidean_dist_phi4","euclidean_dist_llama_33_70b")
 colnames(embedding_nearest_5th) <- c("Tumor_Names","euclidean_dist_llama","euclidean_dist_biobert",
-                                      "euclidean_dist_medllama","euclidean_dist_pubmedbert","euclidean_dist_modernbert","euclidean_dist_medllama_7b")
+                                      "euclidean_dist_medllama","euclidean_dist_pubmedbert","euclidean_dist_modernbert","euclidean_dist_medllama_7b","euclidean_dist_llama_32_3b", "euclidean_dist_phi4","euclidean_dist_llama_33_70b")
 
 NCIT_Results_all <- NCIT_Results_all %>% left_join(embedding_nearest_ncit , by="Tumor_Names")
 NCIT_Results_5th <- NCIT_Results_5th %>% left_join(embedding_nearest_ncit , by="Tumor_Names")
@@ -271,12 +274,22 @@ write.csv(WHO_Results_5th,paste(analysis_dir,"/results_5th/WHO_Results_5thed_ose
 #save.image("12-prior-jan15-onlyllama32-phi4.RData")
 # NCIT_Results_all<-NCIT_Results_all%>%left_join(llama_32_3b_match_ncit, by = "Tumor_Names")
 # NCIT_Results_all<-NCIT_Results_all%>%left_join(phi4_match_ncit, by = "Tumor_Names")
+# NCIT_Results_all<-NCIT_Results_all%>%left_join(llama33_70b_ncit, by = "Tumor_Names")
 # 
-# NCIT_Results_5th<-NCIT_Results_5th%>%left_join(llama_32_3b_match_5th, by = "Tumor_Names")
-# NCIT_Results_5th<-NCIT_Results_5th%>%left_join(phi4_match_5th, by = "Tumor_Names")
+# NCIT_Results_5th<-NCIT_Results_5th%>%left_join(llama_32_3b_match_ncit, by = "Tumor_Names")
+# NCIT_Results_5th<-NCIT_Results_5th%>%left_join(phi4_match_ncit, by = "Tumor_Names")
+# NCIT_Results_5th<-NCIT_Results_5th%>%left_join(llama33_70b_ncit, by = "Tumor_Names")
 # 
 # WHO_Results_5th<-WHO_Results_5th%>%left_join(llama_32_3b_match_5th, by = "Tumor_Names")
 # WHO_Results_5th<-WHO_Results_5th%>%left_join(phi4_match_5th, by = "Tumor_Names")
+# WHO_Results_5th<-WHO_Results_5th%>%left_join(llama33_70b_5th, by = "Tumor_Names")
 # 
 # WHO_Results_all<-WHO_Results_all%>%left_join(llama_32_3b_match_all, by = "Tumor_Names")
 # WHO_Results_all<-WHO_Results_all%>%left_join(phi4_match_all, by = "Tumor_Names")
+# WHO_Results_all<-WHO_Results_all%>%left_join(llama33_70b_all, by = "Tumor_Names")
+
+
+# colnames(NCIT_Results_all)[c(21,22,23)]<-c("euclidean_dist_llama_32_3b", "euclidean_dist_phi4","euclidean_dist_llama_33_70b")
+# colnames(NCIT_Results_5th)[c(21,22,23)]<-c("euclidean_dist_llama_32_3b", "euclidean_dist_phi4","euclidean_dist_llama_33_70b")
+# colnames(WHO_Results_all)[c(21,22,23)]<-c("euclidean_dist_llama_32_3b", "euclidean_dist_phi4","euclidean_dist_llama_33_70b")
+# colnames(WHO_Results_5th)[c(21,22,23)]<-c("euclidean_dist_llama_32_3b", "euclidean_dist_phi4","euclidean_dist_llama_33_70b")
