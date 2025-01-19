@@ -122,8 +122,8 @@ rownames(distance_matrix_phi)<-phi4_embeddings$Tumor_Names
 colnames(distance_matrix_phi)<-phi4_embeddings$Tumor_Names
 
 distance_matrix_llama33_70b<- compute_embedding_distance(llama_33_70b_embeddings[1:nrow(llama_33_70b_embeddings),2:ncol(llama_33_70b_embeddings)],"euclidean")
-rownames(distance_matrix_llama33)<-llama_33_70b_embeddings$Tumor_Names
-colnames(distance_matrix_llama33)<-llama_33_70b_embeddings$Tumor_Names
+rownames(distance_matrix_llama33_70b)<-llama_33_70b_embeddings$Tumor_Names
+colnames(distance_matrix_llama33_70b)<-llama_33_70b_embeddings$Tumor_Names
 
 
 
