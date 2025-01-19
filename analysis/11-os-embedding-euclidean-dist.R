@@ -26,6 +26,7 @@ input_dir <- file.path(root_dir,"data","input")
 analysis_dir <- file.path(root_dir,"analysis")
 
 source("~/Desktop/MTP_Paper/CT-Embedding-Paper/util/compute_embedding_distance.R")
+source("~/Desktop/MTP_Paper/CT-Embedding-Paper/util/nearest_match_embeddings.R")
 # Read the embedding terms from the LTE-3 files
 ct_terms <- read.csv(paste(data_dir,"/CT_Embeddings_V3.csv",sep = ""))
 ncit_terms <- read.csv(paste(data_dir,"/NCIT_Embeddings_V3.csv",sep = ""))
@@ -135,6 +136,7 @@ distance_matrix_modernbert<-as.data.frame(distance_matrix_modernbert) # EXECUTED
 distance_matrix_medllama_7b<-as.data.frame(distance_matrix_medllama_7b) # EXECUTED
 distance_matrix_llama32<-as.data.frame(distance_matrix_llama32) # EXECUTED
 distance_matrix_phi<-as.data.frame(distance_matrix_phi) # EXECUTED
+distance_matrix_llama33_70b<-as.data.frame(distance_matrix_llama33_70b) # EXECUTED
 
 
 # WHO Matrices All edition 
@@ -146,6 +148,7 @@ distance_matrix_modernbert_all <- distance_matrix_modernbert %>% dplyr::select(a
 distance_matrix_medllama_7b_all <- distance_matrix_medllama_7b %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 distance_matrix_llama32_all <- distance_matrix_llama32 %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 distance_matrix_phi_all <- distance_matrix_phi %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
+distance_matrix_llama33_70b_all <- distance_matrix_llama33_70b %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 
 # WHO Matrices 5th edition 
 distance_matrix_llama_5th <- distance_matrix_llama %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
@@ -156,6 +159,7 @@ distance_matrix_modernbert_5th <- distance_matrix_modernbert %>% dplyr::select(a
 distance_matrix_medllama_7b_5th <- distance_matrix_medllama_7b %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 distance_matrix_llama32_5th <- distance_matrix_llama32 %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 distance_matrix_phi_5th <- distance_matrix_phi %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
+distance_matrix_llama33_70b_5th <- distance_matrix_llama33_70b %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 
 ###
 llama_match_all<- nearest_match_embeddings(distance_matrix_llama_all,"llama") # Executed
@@ -166,7 +170,7 @@ modernbert_match_all<- nearest_match_embeddings(distance_matrix_modernbert_all,"
 medllama_7b_match_all<- nearest_match_embeddings(distance_matrix_medllama_7b_all,"medllama_7b")
 llama_32_3b_match_all<- nearest_match_embeddings(distance_matrix_llama32_all,"llama_32_3b")
 phi4_match_all<- nearest_match_embeddings(distance_matrix_phi_all,"phi4")
-
+llama33_70b_all<-nearest_match_embeddings(distance_matrix_llama33_70b_all,"llama_33_70b")
 
 embedding_nearest_all <- llama_match_all %>%
   full_join(biobert_match_all, by = "Tumor_Names") %>%
@@ -186,6 +190,7 @@ modernbert_match_5th<- nearest_match_embeddings(distance_matrix_modernbert_5th,"
 medllama_7b_match_5th<- nearest_match_embeddings(distance_matrix_medllama_7b_5th,"medllama_7b")
 llama_32_3b_match_5th<- nearest_match_embeddings(distance_matrix_llama32_5th,"llama_32_3b")
 phi4_match_5th<- nearest_match_embeddings(distance_matrix_phi_5th,"phi4")
+llama33_70b_5th<-nearest_match_embeddings(distance_matrix_llama33_70b_5th,"llama_33_70b")
 
 embedding_nearest_5th <- llama_match_5th %>%
   full_join(biobert_match_5th, by = "Tumor_Names") %>%
@@ -206,6 +211,7 @@ distance_matrix_modernbert_ncit <- distance_matrix_modernbert %>% dplyr::select(
 distance_matrix_medllama_7b_ncit <- distance_matrix_medllama_7b %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
 distance_matrix_llama32_ncit <- distance_matrix_llama32 %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
 distance_matrix_phi_ncit <- distance_matrix_phi %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
+distance_matrix_llama33_70b_ncit <- distance_matrix_llama33_70b %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
 
 ####
 llama_match_ncit<- nearest_match_embeddings(distance_matrix_llama_ncit,"llama") # Executed
@@ -216,6 +222,7 @@ modernbert_match_ncit<- nearest_match_embeddings(distance_matrix_modernbert_ncit
 medllama_7b_match_ncit<- nearest_match_embeddings(distance_matrix_medllama_7b_ncit,"medllama_7b")
 llama_32_3b_match_ncit<- nearest_match_embeddings(distance_matrix_llama32_ncit,"llama_32_3b")
 phi4_match_ncit<- nearest_match_embeddings(distance_matrix_phi_ncit,"phi4")
+llama33_70b_ncit<-nearest_match_embeddings(distance_matrix_llama33_70b_ncit,"llama_33_70b")
 
 embedding_nearest_ncit <- llama_match_ncit %>%
   full_join(biobert_match_ncit, by = "Tumor_Names") %>%
