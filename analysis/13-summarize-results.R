@@ -33,14 +33,17 @@ result_dir_5th <- file.path(analysis_dir,"results_5th")
 tumor_all_gt<-read.csv(paste(result_dir,"/tumor_manually_validated_all.csv",sep = ""))
 tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_5th.csv",sep = ""))
 
+tumor_all_gt<-read.csv(paste(result_dir,"/tumor_manually_validated_tmp.csv",sep = ""))
+tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_tmp_5th.csv",sep = ""))
+
 tumor_all_gt<-tumor_all_gt[,c(-1)]
 tumor_5thed_gt<-tumor_5thed_gt[,c(-1)]
 
 tumor_all_gt<-tumor_all_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 tumor_5thed_gt<-tumor_5thed_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 
-all<-(colSums(tumor_all_gt[,c(seq(6,40,2))]))/1113
-fifth<-(colSums(tumor_5thed_gt[,c(seq(6,40,2))]))/1033
+all<-(colSums(tumor_all_gt[,c(seq(6,46,2))]))/1113
+fifth<-(colSums(tumor_5thed_gt[,c(seq(6,46,2))]))/1033
 all<-as.data.frame(all)
 fifth<-as.data.frame(fifth)
 
@@ -54,7 +57,7 @@ fifth<- fifth %>%dplyr::select(method,fifth)
 all<-all[order(all$all,decreasing = TRUE),]
 fifth<-fifth[order(fifth$fifth,decreasing = TRUE),]
 
-for(iter in 1:18){
+for(iter in 1:21){
   if(all$method[iter]=="valid_euclidean_dist_v3" ){
     all$method[iter]="LTE-3 + Euclidean Dist"
   }else if(all$method[iter]=="valid_af_v3"){
@@ -112,9 +115,22 @@ for(iter in 1:18){
     all$method[iter]="Medllama_7B + Euclidean Dist"
     
   }
+  else if(all$method[iter]=="valid_euclidean_dist_llama_32_3b"){
+    all$method[iter]="LLama_32_3B + Euclidean Dist"
+    
+  }
+  else if(all$method[iter]=="valid_euclidean_dist_phi4"){
+    all$method[iter]="Phi4 + Euclidean Dist"
+    
+  }
+  else if(all$method[iter]=="valid_euclidean_dist_llama_33_70b"){
+    all$method[iter]="LLama_33_70B + Euclidean Dist"
+    
+  }
+  
 }
 
-for(iter in 1:18){
+for(iter in 1:21){
   if(fifth$method[iter]=="valid_euclidean_dist_v3" ){
     fifth$method[iter]="LTE-3 + Euclidean Dist"
   }else if(fifth$method[iter]=="valid_af_v3"){
@@ -169,6 +185,18 @@ for(iter in 1:18){
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_medllama_7b"){
     fifth$method[iter]="Medllama_7B + Euclidean Dist"
+    
+  }
+  else if(fifth$method[iter]=="valid_euclidean_dist_llama_32_3b"){
+    fifth$method[iter]="LLama_32_3B + Euclidean Dist"
+    
+  }
+  else if(fifth$method[iter]=="valid_euclidean_dist_phi4"){
+    fifth$method[iter]="Phi4 + Euclidean Dist"
+    
+  }
+  else if(fifth$method[iter]=="valid_euclidean_dist_llama_33_70b"){
+    fifth$method[iter]="LLama_33_70B + Euclidean Dist"
     
   }
   
