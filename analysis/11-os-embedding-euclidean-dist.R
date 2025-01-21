@@ -64,6 +64,10 @@ phi4_embeddings<-phi4_embeddings[,c(-1)]
 llama_33_70b_embeddings<-read.csv(paste(data_dir,"/Embeddings/all_embedding_llama_33_70b.csv",sep="")) 
 colnames(llama_33_70b_embeddings)[1]<-"Tumor_Names"
 
+all_MiniLM_L6_v2_embeddings<-read.csv(paste(data_dir,"/Embeddings/all_MiniLM_L6_v2.csv",sep="")) 
+all_mpnet_base_v2_embeddings<-read.csv(paste(data_dir,"/Embeddings/all_mpnet_base_v2.csv",sep=""))
+
+
 
 llama_embeddings<-llama_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 biobert_embeddings<-biobert_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
@@ -79,6 +83,9 @@ llama_32_3b_embeddings<-llama_32_3b_embeddings %>% group_by(Tumor_Names) %>% sum
 phi4_embeddings<-phi4_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 llama_33_70b_embeddings<-llama_33_70b_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 
+
+all_MiniLM_L6_v2_embeddings<-all_MiniLM_L6_v2_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
+all_mpnet_base_v2_embeddings<-all_mpnet_base_v2_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 
 
 
@@ -126,7 +133,13 @@ distance_matrix_llama33_70b<- compute_embedding_distance(llama_33_70b_embeddings
 rownames(distance_matrix_llama33_70b)<-llama_33_70b_embeddings$Tumor_Names
 colnames(distance_matrix_llama33_70b)<-llama_33_70b_embeddings$Tumor_Names
 
+distance_matrix_all_MiniLM_L6_v2<- compute_embedding_distance(all_MiniLM_L6_v2_embeddings[1:nrow(all_MiniLM_L6_v2_embeddings),2:ncol(all_MiniLM_L6_v2_embeddings)],"euclidean")
+rownames(distance_matrix_all_MiniLM_L6_v2)<-all_MiniLM_L6_v2_embeddings$Tumor_Names
+colnames(distance_matrix_all_MiniLM_L6_v2)<-all_MiniLM_L6_v2_embeddings$Tumor_Names
 
+distance_matrix_all_mpnet_base_v2<- compute_embedding_distance(all_mpnet_base_v2_embeddings[1:nrow(all_mpnet_base_v2_embeddings),2:ncol(all_mpnet_base_v2_embeddings)],"euclidean")
+rownames(distance_matrix_all_mpnet_base_v2)<-all_mpnet_base_v2_embeddings$Tumor_Names
+colnames(distance_matrix_all_mpnet_base_v2)<-all_mpnet_base_v2_embeddings$Tumor_Names
 
 distance_matrix_llama<-as.data.frame(distance_matrix_llama) # EXECUTED
 distance_matrix_biobert<-as.data.frame(distance_matrix_biobert) # EXECUTED
@@ -137,7 +150,8 @@ distance_matrix_medllama_7b<-as.data.frame(distance_matrix_medllama_7b) # EXECUT
 distance_matrix_llama32<-as.data.frame(distance_matrix_llama32) # EXECUTED
 distance_matrix_phi<-as.data.frame(distance_matrix_phi) # EXECUTED
 distance_matrix_llama33_70b<-as.data.frame(distance_matrix_llama33_70b) # EXECUTED
-
+distance_matrix_all_MiniLM_L6_v2<-as.data.frame(distance_matrix_all_MiniLM_L6_v2)# EXECUTED
+distance_matrix_all_mpnet_base_v2<-as.data.frame(distance_matrix_all_mpnet_base_v2)# EXECUTED
 
 # WHO Matrices All edition 
 distance_matrix_llama_all <- distance_matrix_llama %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
@@ -150,6 +164,8 @@ distance_matrix_llama32_all <- distance_matrix_llama32 %>% dplyr::select(all_of(
 distance_matrix_phi_all <- distance_matrix_phi %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 distance_matrix_llama33_70b_all <- distance_matrix_llama33_70b %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 
+distance_matrix_MiniLM_L6_v2_all <- distance_matrix_all_MiniLM_L6_v2 %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
+distance_matrix_mpnet_base_all <- distance_matrix_all_mpnet_base_v2 %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 # WHO Matrices 5th edition 
 distance_matrix_llama_5th <- distance_matrix_llama %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 distance_matrix_biobert_5th <- distance_matrix_biobert %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
@@ -161,6 +177,8 @@ distance_matrix_llama32_5th <- distance_matrix_llama32 %>% dplyr::select(all_of(
 distance_matrix_phi_5th <- distance_matrix_phi %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 distance_matrix_llama33_70b_5th <- distance_matrix_llama33_70b %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 
+distance_matrix_MiniLM_L6_v2_5th <- distance_matrix_all_MiniLM_L6_v2 %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
+distance_matrix_mpnet_base_5th <- distance_matrix_all_mpnet_base_v2 %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 ###
 llama_match_all<- nearest_match_embeddings(distance_matrix_llama_all,"llama") # Executed
 biobert_match_all<- nearest_match_embeddings(distance_matrix_biobert_all,"biobert")
@@ -172,6 +190,10 @@ llama_32_3b_match_all<- nearest_match_embeddings(distance_matrix_llama32_all,"ll
 phi4_match_all<- nearest_match_embeddings(distance_matrix_phi_all,"phi4")
 llama33_70b_all<-nearest_match_embeddings(distance_matrix_llama33_70b_all,"llama_33_70b")
 
+MiniLM_L6_v2_all<-nearest_match_embeddings(distance_matrix_MiniLM_L6_v2_all,"MiniLM_L6_v2")
+mpnet_base_all<-nearest_match_embeddings(distance_matrix_mpnet_base_all,"mpnet_base")
+
+
 embedding_nearest_all <- llama_match_all %>%
   full_join(biobert_match_all, by = "Tumor_Names") %>%
   full_join(medllama_match_all, by = "Tumor_Names") %>%
@@ -180,7 +202,9 @@ embedding_nearest_all <- llama_match_all %>%
   full_join(medllama_7b_match_all, by = "Tumor_Names") %>%
   full_join(llama_32_3b_match_all, by = "Tumor_Names") %>%
   full_join(phi4_match_all, by = "Tumor_Names")%>%
-  full_join(llama_match_all,by = "Tumor_Names")
+  full_join(llama_match_all,by = "Tumor_Names")%>%
+  full_join(MiniLM_L6_v2_all,by="Tumor_Names") %>%
+  full_join(mpnet_base_all,by="Tumor_Names")
 
 ####
 llama_match_5th<- nearest_match_embeddings(distance_matrix_llama_5th,"llama") # Executed
@@ -193,6 +217,9 @@ llama_32_3b_match_5th<- nearest_match_embeddings(distance_matrix_llama32_5th,"ll
 phi4_match_5th<- nearest_match_embeddings(distance_matrix_phi_5th,"phi4")
 llama33_70b_5th<-nearest_match_embeddings(distance_matrix_llama33_70b_5th,"llama_33_70b")
 
+MiniLM_L6_v2_5th<-nearest_match_embeddings(distance_matrix_MiniLM_L6_v2_5th,"MiniLM_L6_v2")
+mpnet_base_5th<-nearest_match_embeddings(distance_matrix_mpnet_base_5th,"mpnet_base")
+
 embedding_nearest_5th <- llama_match_5th %>%
   full_join(biobert_match_5th, by = "Tumor_Names") %>%
   full_join(medllama_match_5th, by = "Tumor_Names") %>%
@@ -201,7 +228,9 @@ embedding_nearest_5th <- llama_match_5th %>%
   full_join(medllama_7b_match_5th, by = "Tumor_Names") %>%
   full_join(llama_32_3b_match_5th, by = "Tumor_Names") %>%
   full_join(phi4_match_5th, by = "Tumor_Names")%>%
-  full_join(llama_match_5th,by = "Tumor_Names")
+  full_join(llama_match_5th,by = "Tumor_Names")%>%
+  full_join(MiniLM_L6_v2_5th,by="Tumor_Names") %>%
+  full_join(mpnet_base_5th,by="Tumor_Names")
 
 
 #### NCIT 
@@ -214,7 +243,8 @@ distance_matrix_medllama_7b_ncit <- distance_matrix_medllama_7b %>% dplyr::selec
 distance_matrix_llama32_ncit <- distance_matrix_llama32 %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
 distance_matrix_phi_ncit <- distance_matrix_phi %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
 distance_matrix_llama33_70b_ncit <- distance_matrix_llama33_70b %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
-
+distance_matrix_MiniLM_L6_v2_ncit <- distance_matrix_all_MiniLM_L6_v2 %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
+distance_matrix_mpnet_base_ncit <- distance_matrix_all_mpnet_base_v2 %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
 ####
 llama_match_ncit<- nearest_match_embeddings(distance_matrix_llama_ncit,"llama") # Executed
 biobert_match_ncit<- nearest_match_embeddings(distance_matrix_biobert_ncit,"biobert")
