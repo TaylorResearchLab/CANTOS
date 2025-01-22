@@ -307,21 +307,38 @@ write.csv(WHO_Results_5th,paste(analysis_dir,"/results_5th/WHO_Results_5thed_ose
 #save.image("12-prior.RData")
 
 #save.image("12-prior-jan15-onlyllama32-phi4.RData")
+# NCIT_Results_all <- read_csv(paste(analysis_dir,"/results/NCIT_Results_all_ose.csv",sep=""))
+# NCIT_Results_5th <- read_csv(paste(analysis_dir,"/results_5th/NCIT_Results_5thed_ose.csv",sep=""))
+# WHO_Results_all <- read_csv(paste(analysis_dir,"/results/WHO_Results_all_ose.csv",sep=""))
+# WHO_Results_5th <- read_csv(paste(analysis_dir,"/results_5th/WHO_Results_5thed_ose.csv",sep=""))
+# NCIT_Results_all<-NCIT_Results_all[,c(-1)]
+# NCIT_Results_5th<-NCIT_Results_5th[,c(-1)]
+# WHO_Results_all<-WHO_Results_all[,c(-1)]
+# WHO_Results_5th<-WHO_Results_5th[,c(-1)]
+
 # NCIT_Results_all<-NCIT_Results_all%>%left_join(llama_32_3b_match_ncit, by = "Tumor_Names")
 # NCIT_Results_all<-NCIT_Results_all%>%left_join(phi4_match_ncit, by = "Tumor_Names")
 # NCIT_Results_all<-NCIT_Results_all%>%left_join(llama33_70b_ncit, by = "Tumor_Names")
+# NCIT_Results_all<-NCIT_Results_all%>%left_join(MiniLM_L6_v2_ncit, by = "Tumor_Names")
+# NCIT_Results_all<-NCIT_Results_all%>%left_join(mpnet_base_ncit, by = "Tumor_Names")
 # 
 # NCIT_Results_5th<-NCIT_Results_5th%>%left_join(llama_32_3b_match_ncit, by = "Tumor_Names")
 # NCIT_Results_5th<-NCIT_Results_5th%>%left_join(phi4_match_ncit, by = "Tumor_Names")
 # NCIT_Results_5th<-NCIT_Results_5th%>%left_join(llama33_70b_ncit, by = "Tumor_Names")
-# 
+#NCIT_Results_5th<-NCIT_Results_5th%>%left_join(MiniLM_L6_v2_ncit, by = "Tumor_Names")
+#NCIT_Results_5th<-NCIT_Results_5th%>%left_join(mpnet_base_ncit, by = "Tumor_Names")
+
 # WHO_Results_5th<-WHO_Results_5th%>%left_join(llama_32_3b_match_5th, by = "Tumor_Names")
 # WHO_Results_5th<-WHO_Results_5th%>%left_join(phi4_match_5th, by = "Tumor_Names")
 # WHO_Results_5th<-WHO_Results_5th%>%left_join(llama33_70b_5th, by = "Tumor_Names")
-# 
+# WHO_Results_5th<-WHO_Results_5th%>%left_join(MiniLM_L6_v2_5th, by = "Tumor_Names")
+#WHO_Results_5th<-WHO_Results_5th%>%left_join(mpnet_base_5th, by = "Tumor_Names")
+
 # WHO_Results_all<-WHO_Results_all%>%left_join(llama_32_3b_match_all, by = "Tumor_Names")
 # WHO_Results_all<-WHO_Results_all%>%left_join(phi4_match_all, by = "Tumor_Names")
 # WHO_Results_all<-WHO_Results_all%>%left_join(llama33_70b_all, by = "Tumor_Names")
+# WHO_Results_all<-WHO_Results_all%>%left_join(MiniLM_L6_v2_all, by = "Tumor_Names")
+#WHO_Results_all<-WHO_Results_all%>%left_join(mpnet_base_all, by = "Tumor_Names")
 
 
 # colnames(NCIT_Results_all)[c(21,22,23)]<-c("euclidean_dist_llama_32_3b", "euclidean_dist_phi4","euclidean_dist_llama_33_70b")
