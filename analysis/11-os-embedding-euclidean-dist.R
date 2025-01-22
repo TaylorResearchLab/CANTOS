@@ -256,6 +256,9 @@ llama_32_3b_match_ncit<- nearest_match_embeddings(distance_matrix_llama32_ncit,"
 phi4_match_ncit<- nearest_match_embeddings(distance_matrix_phi_ncit,"phi4")
 llama33_70b_ncit<-nearest_match_embeddings(distance_matrix_llama33_70b_ncit,"llama_33_70b")
 
+MiniLM_L6_v2_ncit<-nearest_match_embeddings(distance_matrix_MiniLM_L6_v2_ncit,"MiniLM_L6_v2")
+mpnet_base_ncit<-nearest_match_embeddings(distance_matrix_mpnet_base_ncit,"mpnet_base")
+
 embedding_nearest_ncit <- llama_match_ncit %>%
   full_join(biobert_match_ncit, by = "Tumor_Names") %>%
   full_join(medllama_match_ncit, by = "Tumor_Names") %>%
@@ -264,7 +267,9 @@ embedding_nearest_ncit <- llama_match_ncit %>%
   full_join(medllama_7b_match_ncit, by = "Tumor_Names")%>%
   full_join(llama_32_3b_match_ncit, by = "Tumor_Names") %>%
   full_join(phi4_match_ncit, by = "Tumor_Names")%>%
-  full_join(llama33_70b_ncit, by = "Tumor_Names")
+  full_join(llama33_70b_ncit, by = "Tumor_Names")%>%
+  full_join(MiniLM_L6_v2_ncit, by = "Tumor_Names")%>%
+  full_join(mpnet_base_ncit, by = "Tumor_Names")
 
 # Reconcile Results
 
