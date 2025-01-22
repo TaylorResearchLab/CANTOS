@@ -42,8 +42,8 @@ tumor_5thed_gt<-tumor_5thed_gt[,c(-1)]
 tumor_all_gt<-tumor_all_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 tumor_5thed_gt<-tumor_5thed_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 
-all<-(colSums(tumor_all_gt[,c(seq(6,46,2))]))/1113
-fifth<-(colSums(tumor_5thed_gt[,c(seq(6,46,2))]))/1033
+all<-(colSums(tumor_all_gt[,c(seq(6,50,2))]))/1113
+fifth<-(colSums(tumor_5thed_gt[,c(seq(6,50,2))]))/1033
 all<-as.data.frame(all)
 fifth<-as.data.frame(fifth)
 
@@ -127,6 +127,14 @@ for(iter in 1:21){
     all$method[iter]="LLama_33_70B + Euclidean Dist"
     
   }
+  else if(all$method[iter]=="valid_euclidean_dist_MiniLM_L6_v2"){
+    all$method[iter]="MiniLM_L6_v2 + Euclidean Dist"
+    
+  }
+  else if(all$method[iter]=="valid_euclidean_mpnet_base"){
+    all$method[iter]="mpnet_base + Euclidean Dist"
+    
+  }
   
 }
 
@@ -199,6 +207,15 @@ for(iter in 1:21){
     fifth$method[iter]="LLama_33_70B + Euclidean Dist"
     
   }
+  else if(fifth$method[iter]=="valid_euclidean_dist_MiniLM_L6_v2"){
+    fifth$method[iter]="MiniLM_L6_v2 + Euclidean Dist"
+    
+  }
+  else if(fifth$method[iter]=="valid_euclidean_mpnet_base"){
+    fifth$method[iter]="mpnet_base + Euclidean Dist"
+    
+  }
+  
   
 }
 rownames(all)<- NULL
