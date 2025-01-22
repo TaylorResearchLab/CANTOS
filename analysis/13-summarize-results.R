@@ -42,8 +42,8 @@ tumor_5thed_gt<-tumor_5thed_gt[,c(-1)]
 tumor_all_gt<-tumor_all_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 tumor_5thed_gt<-tumor_5thed_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 
-all<-(colSums(tumor_all_gt[,c(seq(6,50,2))]))/1113
-fifth<-(colSums(tumor_5thed_gt[,c(seq(6,50,2))]))/1033
+all<-(colSums(tumor_all_gt[,c(seq(6,54,2))]))/1113
+fifth<-(colSums(tumor_5thed_gt[,c(seq(6,54,2))]))/1033
 all<-as.data.frame(all)
 fifth<-as.data.frame(fifth)
 
@@ -57,7 +57,7 @@ fifth<- fifth %>%dplyr::select(method,fifth)
 all<-all[order(all$all,decreasing = TRUE),]
 fifth<-fifth[order(fifth$fifth,decreasing = TRUE),]
 
-for(iter in 1:21){
+for(iter in 1:25){
   if(all$method[iter]=="valid_euclidean_dist_v3" ){
     all$method[iter]="LTE-3 + Euclidean Dist"
   }else if(all$method[iter]=="valid_af_v3"){
@@ -135,10 +135,18 @@ for(iter in 1:21){
     all$method[iter]="mpnet_base + Euclidean Dist"
     
   }
+  else if(all$method[iter]=="valid_euclidean_dist_e5_large"){
+    all$method[iter]="E5_Large + Euclidean Dist"
+    
+  }
+  else if(all$method[iter]=="valid_euclidean_dist_gtr_t5_large"){
+    all$method[iter]="GTR_T5_Large + Euclidean Dist"
+    
+  }
   
 }
 
-for(iter in 1:21){
+for(iter in 1:25){
   if(fifth$method[iter]=="valid_euclidean_dist_v3" ){
     fifth$method[iter]="LTE-3 + Euclidean Dist"
   }else if(fifth$method[iter]=="valid_af_v3"){
@@ -213,6 +221,14 @@ for(iter in 1:21){
   }
   else if(fifth$method[iter]=="valid_euclidean_mpnet_base"){
     fifth$method[iter]="mpnet_base + Euclidean Dist"
+    
+  }
+  else if(fifth$method[iter]=="valid_euclidean_dist_e5_large"){
+    fifth$method[iter]="E5_Large + Euclidean Dist"
+    
+  }
+  else if(fifth$method[iter]=="valid_euclidean_dist_gtr_t5_large"){
+    fifth$method[iter]="GTR_T5_Large + Euclidean Dist"
     
   }
   
