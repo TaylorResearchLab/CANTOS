@@ -75,7 +75,10 @@ roberta_embeddings<-read.csv(paste(data_dir,"/Embeddings/roberta.csv",sep=""))
 MiniLM_L12_v2_embeddings<-read.csv(paste(data_dir,"/Embeddings/all-MiniLM-L12-v2.csv",sep=""))
 
 
-
+labse_embeddings<-read.csv(paste(data_dir,"/Embeddings/tumor_embeddings_labse.csv",sep="")) 
+sciBERT_embeddings<-read.csv(paste(data_dir,"/Embeddings/tumor_embeddings_scibert.csv",sep="")) 
+sapBERT_embeddings<-read.csv(paste(data_dir,"/Embeddings/tumor_embeddings_sapbert.csv",sep="")) 
+cohere_english_v2_embeddings<-read.csv(paste(data_dir,"/Embeddings/cohere_embeddings_embed_english_v2.csv",sep="")) 
 
 #############
 llama_embeddings<-llama_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
@@ -98,6 +101,15 @@ gtr_t5_large_embeddings<-gtr_t5_large_embeddings %>% group_by(Tumor_Names) %>% s
 
 roberta_embeddings<-roberta_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 MiniLM_L12_v2_embeddings<-MiniLM_L12_v2_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
+
+
+
+labse_embeddings<-labse_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
+sciBERT_embeddings<-sciBERT_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
+sapBERT_embeddings<-sapBERT_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
+cohere_english_v2_embeddings<-cohere_english_v2_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
+
+
 
 
 WHO_Terms_All <-readxl::read_xlsx(paste(data_dir,"/WHO_Tumors/result/WHO_Tumor_all_edition.xlsx",sep=""))
