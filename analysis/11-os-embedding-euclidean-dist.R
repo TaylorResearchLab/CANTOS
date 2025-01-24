@@ -96,6 +96,7 @@ phi4_embeddings<-phi4_embeddings %>% group_by(Tumor_Names) %>% summarise_all("me
 llama_33_70b_embeddings<-llama_33_70b_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 all_MiniLM_L6_v2_embeddings<-all_MiniLM_L6_v2_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 all_mpnet_base_v2_embeddings<-all_mpnet_base_v2_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
+
 e5_large_embeddings<-e5_large_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 gtr_t5_large_embeddings<-gtr_t5_large_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 
@@ -406,6 +407,12 @@ gtr_t5_large_ncit<-nearest_match_embeddings(distance_matrix_gtr_t5_large_ncit,"g
 roberta_ncit<-nearest_match_embeddings(distance_matrix_roberta_ncit,"roberta")
 MiniLM_L12_v2_ncit<-nearest_match_embeddings(distance_matrix_MiniLM_L12_v2_ncit,"MiniLM_L12_v2")
 
+labse_ncit<-nearest_match_embeddings(distance_matrix_labse_ncit,"labase")
+sciBERT_ncit<-nearest_match_embeddings(distance_matrix_sciBERT_ncit,"sciBERT")
+sapBERT_ncit<-nearest_match_embeddings(distance_matrix_sapBERT_ncit,"sapBERT")
+cohere_ncit<-nearest_match_embeddings(distance_matrix_cohere_ncit,"cohere")
+
+
 
 embedding_nearest_ncit <- llama_match_ncit %>%
   full_join(biobert_match_ncit, by = "Tumor_Names") %>%
@@ -480,6 +487,7 @@ WHO_Results_5th<-WHO_Results_5th[,c(-1)]
 # NCIT_Results_all<-NCIT_Results_all%>%left_join(mpnet_base_ncit, by = "Tumor_Names")
 # NCIT_Results_all<-NCIT_Results_all%>%left_join(e5_large_ncit, by = "Tumor_Names")
 #NCIT_Results_all<-NCIT_Results_all%>%left_join(gtr_t5_large_ncit, by = "Tumor_Names")
+
 # NCIT_Results_5th<-NCIT_Results_5th%>%left_join(llama_32_3b_match_ncit, by = "Tumor_Names")
 # NCIT_Results_5th<-NCIT_Results_5th%>%left_join(phi4_match_ncit, by = "Tumor_Names")
 # NCIT_Results_5th<-NCIT_Results_5th%>%left_join(llama33_70b_ncit, by = "Tumor_Names")
@@ -487,6 +495,7 @@ WHO_Results_5th<-WHO_Results_5th[,c(-1)]
 #NCIT_Results_5th<-NCIT_Results_5th%>%left_join(mpnet_base_ncit, by = "Tumor_Names")
 #NCIT_Results_5th<-NCIT_Results_5th%>%left_join(e5_large_ncit, by = "Tumor_Names")
 #NCIT_Results_5th<-NCIT_Results_5th%>%left_join(gtr_t5_large_ncit, by = "Tumor_Names")
+
 # WHO_Results_5th<-WHO_Results_5th%>%left_join(llama_32_3b_match_5th, by = "Tumor_Names")
 # WHO_Results_5th<-WHO_Results_5th%>%left_join(phi4_match_5th, by = "Tumor_Names")
 # WHO_Results_5th<-WHO_Results_5th%>%left_join(llama33_70b_5th, by = "Tumor_Names")
@@ -494,6 +503,7 @@ WHO_Results_5th<-WHO_Results_5th[,c(-1)]
 #WHO_Results_5th<-WHO_Results_5th%>%left_join(mpnet_base_5th, by = "Tumor_Names")
 #WHO_Results_5th<-WHO_Results_5th%>%left_join(e5_large_ncit, by = "Tumor_Names")
 #WHO_Results_5th<-WHO_Results_5th%>%left_join(gtr_t5_large_ncit, by = "Tumor_Names")
+
 # WHO_Results_all<-WHO_Results_all%>%left_join(llama_32_3b_match_all, by = "Tumor_Names")
 # WHO_Results_all<-WHO_Results_all%>%left_join(phi4_match_all, by = "Tumor_Names")
 # WHO_Results_all<-WHO_Results_all%>%left_join(llama33_70b_all, by = "Tumor_Names")
@@ -501,15 +511,24 @@ WHO_Results_5th<-WHO_Results_5th[,c(-1)]
 #WHO_Results_all<-WHO_Results_all%>%left_join(mpnet_base_all, by = "Tumor_Names")
 #WHO_Results_all<-WHO_Results_all%>%left_join(e5_large_ncit, by = "Tumor_Names")
 #WHO_Results_all<-WHO_Results_all%>%left_join(gtr_t5_large_ncit, by = "Tumor_Names")
-# > NCIT_Results_all<-NCIT_Results_all%>%left_join(roberta_ncit, by = "Tumor_Names")
-# > NCIT_Results_all<-NCIT_Results_all%>%left_join(MiniLM_L12_v2_ncit, by = "Tumor_Names")
-# > NCIT_Results_5th<-NCIT_Results_5th%>%left_join(roberta_ncit, by = "Tumor_Names")
+
+# NCIT_Results_all<-NCIT_Results_all%>%left_join(roberta_ncit, by = "Tumor_Names")
+#  NCIT_Results_all<-NCIT_Results_all%>%left_join(MiniLM_L12_v2_ncit, by = "Tumor_Names")
+#  NCIT_Results_5th<-NCIT_Results_5th%>%left_join(roberta_ncit, by = "Tumor_Names")
 # > NCIT_Results_5th<-NCIT_Results_5th%>%left_join(MiniLM_L12_v2_ncit, by = "Tumor_Names")
 # > WHO_Results_5th<-WHO_Results_5th%>%left_join(roberta_5th,by="Tumor_Names")
 # > WHO_Results_5th<-WHO_Results_5th%>%left_join(MiniLM_L12_v2_5th,by="Tumor_Names")
 # > WHO_Results_all<-WHO_Results_all%>%left_join(roberta_all,by="Tumor_Names")
 # > WHO_Results_all<-WHO_Results_all%>%left_join(MiniLM_L12_v2_all,by="Tumor_Names")
-
+# > WHO_Results_all<-WHO_Results_all%>%left_join(labse_all, by = "Tumor_Names")
+# > WHO_Results_all<-WHO_Results_all%>%left_join(sciBERT_all, by = "Tumor_Names")
+# > WHO_Results_all<-WHO_Results_all%>%left_join(sapBERT_all, by = "Tumor_Names")
+# > WHO_Results_all<-WHO_Results_all%>%left_join(cohere_all, by = "Tumor_Names")
+# > 
+#   > WHO_Results_5th<-WHO_Results_5th%>%left_join(labse_5th, by = "Tumor_Names")
+# > WHO_Results_5th<-WHO_Results_5th%>%left_join(sciBERT_5th, by = "Tumor_Names")
+# > WHO_Results_5th<-WHO_Results_5th%>%left_join(sapBERT_5th, by = "Tumor_Names")
+# > WHO_Results_5th<-WHO_Results_5th%>%left_join(cohere_5th, by = "Tumor_Names")
 
 # colnames(NCIT_Results_all)[c(28,29)]<-c("euclidean_dist_roberta", "euclidean_dist_MiniLM_L12_v2")
 # colnames(NCIT_Results_5th)[c(28,29)]<-c("euclidean_dist_roberta", "euclidean_dist_MiniLM_L12_v2")
