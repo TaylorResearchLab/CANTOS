@@ -176,10 +176,27 @@ distance_matrix_roberta<- compute_embedding_distance(roberta_embeddings[1:nrow(r
 rownames(distance_matrix_roberta)<-roberta_embeddings$Tumor_Names
 colnames(distance_matrix_roberta)<-roberta_embeddings$Tumor_Names
 
-
 distance_matrix_MiniLM_L12_v2<- compute_embedding_distance(MiniLM_L12_v2_embeddings[1:nrow(MiniLM_L12_v2_embeddings),2:ncol(MiniLM_L12_v2_embeddings)],"euclidean")
 rownames(distance_matrix_MiniLM_L12_v2)<-MiniLM_L12_v2_embeddings$Tumor_Names
 colnames(distance_matrix_MiniLM_L12_v2)<-MiniLM_L12_v2_embeddings$Tumor_Names
+
+
+
+distance_matrix_labse<- compute_embedding_distance(labse_embeddings[1:nrow(labse_embeddings),2:ncol(labse_embeddings)],"euclidean")
+rownames(distance_matrix_labse)<-labse_embeddings$Tumor_Names
+colnames(distance_matrix_labse)<-labse_embeddings$Tumor_Names
+
+distance_matrix_sciBERT<- compute_embedding_distance(sciBERT_embeddings[1:nrow(sciBERT_embeddings),2:ncol(sciBERT_embeddings)],"euclidean")
+rownames(distance_matrix_sciBERT)<-sciBERT_embeddings$Tumor_Names
+colnames(distance_matrix_sciBERT)<-sciBERT_embeddings$Tumor_Names
+
+distance_matrix_sapBERT<- compute_embedding_distance(sapBERT_embeddings[1:nrow(sapBERT_embeddings),2:ncol(sapBERT_embeddings)],"euclidean")
+rownames(distance_matrix_sapBERT)<-sapBERT_embeddings$Tumor_Names
+colnames(distance_matrix_sapBERT)<-sapBERT_embeddings$Tumor_Names
+
+distance_matrix_cohere<- compute_embedding_distance(cohere_english_v2_embeddings[1:nrow(cohere_english_v2_embeddings),2:ncol(cohere_english_v2_embeddings)],"euclidean")
+rownames(distance_matrix_cohere)<-cohere_english_v2_embeddings$Tumor_Names
+colnames(distance_matrix_cohere)<-cohere_english_v2_embeddings$Tumor_Names
 
 
 
@@ -199,6 +216,10 @@ distance_matrix_e5_large<-as.data.frame(distance_matrix_e5_large)
 distance_matrix_gtr_t5_large<-as.data.frame(distance_matrix_gtr_t5_large)
 distance_matrix_roberta<-as.data.frame(distance_matrix_roberta)
 distance_matrix_MiniLM_L12_v2<-as.data.frame(distance_matrix_MiniLM_L12_v2)
+distance_matrix_labse<-as.data.frame(distance_matrix_labse)
+distance_matrix_sciBERT<-as.data.frame(distance_matrix_sciBERT)
+distance_matrix_sapBERT<-as.data.frame(distance_matrix_sapBERT)
+distance_matrix_cohere<-as.data.frame(distance_matrix_cohere)
 
 # WHO Matrices All edition 
 distance_matrix_llama_all <- distance_matrix_llama %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
