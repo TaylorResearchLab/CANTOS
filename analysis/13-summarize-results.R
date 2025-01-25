@@ -42,8 +42,8 @@ tumor_5thed_gt<-tumor_5thed_gt[,c(-1)]
 tumor_all_gt<-tumor_all_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 tumor_5thed_gt<-tumor_5thed_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 
-all<-(colSums(tumor_all_gt[,c(seq(6,58,2))]))/1113
-fifth<-(colSums(tumor_5thed_gt[,c(seq(6,58,2))]))/1033
+all<-(colSums(tumor_all_gt[,c(seq(6,66,2))]))/1113
+fifth<-(colSums(tumor_5thed_gt[,c(seq(6,66,2))]))/1033
 all<-as.data.frame(all)
 fifth<-as.data.frame(fifth)
 
@@ -151,7 +151,22 @@ for(iter in 1:27){
     all$method[iter]="MiniLM_L12_v2 + Euclidean Dist"
     
   }
-  
+  else if(all$method[iter]=="valid_euclidean_dist_labse"){
+    all$method[iter]="labse + Euclidean Dist"
+    
+  }
+  else if(all$method[iter]=="valid_euclidean_dist_sciBERT"){
+    all$method[iter]="sciBERT + Euclidean Dist"
+    
+  }
+  else if(all$method[iter]=="valid_euclidean_dist_sapBERT"){
+    all$method[iter]="sapBERT + Euclidean Dist"
+    
+  }
+  else if(all$method[iter]=="valid_euclidean_dist_cohere"){
+    all$method[iter]="cohere + Euclidean Dist"
+    
+  }
 }
 
 for(iter in 1:27){
@@ -245,6 +260,22 @@ for(iter in 1:27){
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_MiniLM_L12_v2"){
     fifth$method[iter]="MiniLM_L12_v2 + Euclidean Dist"
+    
+  }
+  else if(fifth$method[iter]=="valid_euclidean_dist_labse"){
+    fifth$method[iter]="labse + Euclidean Dist"
+    
+  }
+  else if(fifth$method[iter]=="valid_euclidean_dist_sciBERT"){
+    fifth$method[iter]="sciBERT + Euclidean Dist"
+    
+  }
+  else if(fifth$method[iter]=="valid_euclidean_dist_sapBERT"){
+    fifth$method[iter]="sapBERT + Euclidean Dist"
+    
+  }
+  else if(fifth$method[iter]=="valid_euclidean_dist_cohere"){
+    fifth$method[iter]="cohere + Euclidean Dist"
     
   }
   
