@@ -378,7 +378,8 @@ embedding_nearest_5th <- llama_match_5th %>%
   full_join(labse_5th,by="Tumor_Names")%>%
   full_join(sciBERT_5th,by="Tumor_Names")%>%
   full_join(sapBERT_5th,by="Tumor_Names")%>%
-  full_join(cohere_5th,by="Tumor_Names")
+  full_join(cohere_5th,by="Tumor_Names")%>%
+  full_join(deepseek_5th,by="Tumor_Names")
 
 #### NCIT 
 distance_matrix_llama_ncit <- distance_matrix_llama %>% dplyr::select(all_of(ncit_terms$Tumor_Names))
@@ -402,6 +403,7 @@ distance_matrix_sciBERT_ncit<-distance_matrix_sciBERT%>% dplyr::select(all_of(nc
 distance_matrix_sapBERT_ncit<-distance_matrix_sapBERT%>% dplyr::select(all_of(ncit_terms$Tumor_Names))
 distance_matrix_cohere_ncit<-distance_matrix_cohere%>% dplyr::select(all_of(ncit_terms$Tumor_Names))
 
+distance_matrix_deepseek_ncit<-distance_matrix_deepseek%>% dplyr::select(all_of(ncit_terms$Tumor_Names))
 
 ####
 llama_match_ncit<- nearest_match_embeddings(distance_matrix_llama_ncit,"llama") # Executed
@@ -427,6 +429,7 @@ sciBERT_ncit<-nearest_match_embeddings(distance_matrix_sciBERT_ncit,"sciBERT")
 sapBERT_ncit<-nearest_match_embeddings(distance_matrix_sapBERT_ncit,"sapBERT")
 cohere_ncit<-nearest_match_embeddings(distance_matrix_cohere_ncit,"cohere")
 
+deepseek_ncit<-nearest_match_embeddings(distance_matrix_deepseek_ncit,"deepseek")
 
 
 embedding_nearest_ncit <- llama_match_ncit %>%
@@ -447,7 +450,8 @@ embedding_nearest_ncit <- llama_match_ncit %>%
   full_join(labse_ncit,by="Tumor_Names")%>%
   full_join(sciBERT_ncit,by="Tumor_Names")%>%
   full_join(sapBERT_ncit,by="Tumor_Names")%>%
-  full_join(cohere_ncit,by="Tumor_Names")
+  full_join(cohere_ncit,by="Tumor_Names")%>%
+  full_join(deepseek_ncit,by="Tumor_Names")
 
 
 # Reconcile Results
@@ -466,7 +470,7 @@ names_col <- c("Tumor_Names","euclidean_dist_llama","euclidean_dist_biobert","eu
                "euclidean_dist_modernbert","euclidean_dist_medllama_7b",   "euclidean_dist_llama_32_3b","euclidean_dist_phi4",
                "euclidean_dist_llama_33_70b","euclidean_dist_MiniLM_L6_v2", "euclidean_mpnet_base", "euclidean_dist_roberta",
                "euclidean_dist_MiniLM_L12_v2","euclidean_dist_e5_large","euclidean_dist_gtr_t5_large", "euclidean_dist_labse",
-               "euclidean_dist_sciBERT","euclidean_dist_sapBERT","euclidean_dist_cohere")
+               "euclidean_dist_sciBERT","euclidean_dist_sapBERT","euclidean_dist_cohere","euclidean_dist_deepseek")
 
 
 colnames(embedding_nearest_ncit) <- names_col
