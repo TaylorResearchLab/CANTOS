@@ -80,6 +80,8 @@ sciBERT_embeddings<-read.csv(paste(data_dir,"/Embeddings/tumor_embeddings_sciber
 sapBERT_embeddings<-read.csv(paste(data_dir,"/Embeddings/tumor_embeddings_sapbert.csv",sep="")) 
 cohere_english_v2_embeddings<-read.csv(paste(data_dir,"/Embeddings/cohere_embeddings_embed_english_v2.csv",sep="")) 
 
+deepseek_8b_embeddings<-read.csv(paste(data_dir,"/Embeddings/deepseek_8b.csv",sep = ""))
+
 #############
 llama_embeddings<-llama_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 biobert_embeddings<-biobert_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
@@ -109,6 +111,8 @@ labse_embeddings<-labse_embeddings %>% group_by(Tumor_Names) %>% summarise_all("
 sciBERT_embeddings<-sciBERT_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 sapBERT_embeddings<-sapBERT_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 cohere_english_v2_embeddings<-cohere_english_v2_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
+
+deepseek_8b_embeddings<-deepseek_8b_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 
 
 
@@ -200,6 +204,11 @@ rownames(distance_matrix_cohere)<-cohere_english_v2_embeddings$Tumor_Names
 colnames(distance_matrix_cohere)<-cohere_english_v2_embeddings$Tumor_Names
 
 
+distance_matrix_deepseek<- compute_embedding_distance(deepseek_8b_embeddings[1:nrow(deepseek_8b_embeddings),2:ncol(deepseek_8b_embeddings)],"euclidean")
+rownames(distance_matrix_deepseek)<-deepseek_8b_embeddings$Tumor_Names
+colnames(distance_matrix_deepseek)<-deepseek_8b_embeddings$Tumor_Names
+
+
 
 
 distance_matrix_llama<-as.data.frame(distance_matrix_llama) # EXECUTED
@@ -221,6 +230,7 @@ distance_matrix_labse<-as.data.frame(distance_matrix_labse)
 distance_matrix_sciBERT<-as.data.frame(distance_matrix_sciBERT)
 distance_matrix_sapBERT<-as.data.frame(distance_matrix_sapBERT)
 distance_matrix_cohere<-as.data.frame(distance_matrix_cohere)
+distance_matrix_deepseek<-as.data.frame(distance_matrix_deepseek)
 
 # WHO Matrices All edition 
 distance_matrix_llama_all <- distance_matrix_llama %>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
@@ -243,6 +253,8 @@ distance_matrix_labse_all<-distance_matrix_labse%>% dplyr::select(all_of(WHO_Ter
 distance_matrix_sciBERT_all<-distance_matrix_sciBERT%>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 distance_matrix_sapBERT_all<-distance_matrix_sapBERT%>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 distance_matrix_cohere_all<-distance_matrix_cohere%>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
+
+distance_matrix_deepseek_all<-distance_matrix_deepseek%>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 
 # WHO Matrices 5th edition 
 distance_matrix_llama_5th <- distance_matrix_llama %>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
@@ -269,6 +281,7 @@ distance_matrix_sciBERT_5th<-distance_matrix_sciBERT%>% dplyr::select(all_of(WHO
 distance_matrix_sapBERT_5th<-distance_matrix_sapBERT%>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 distance_matrix_cohere_5th<-distance_matrix_cohere%>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 
+distance_matrix_deepseek_5th<-distance_matrix_deepseek%>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 
 ###
 llama_match_all<- nearest_match_embeddings(distance_matrix_llama_all,"llama") # Executed
@@ -295,7 +308,7 @@ sciBERT_all<-nearest_match_embeddings(distance_matrix_sciBERT_all,"sciBERT")
 sapBERT_all<-nearest_match_embeddings(distance_matrix_sapBERT_all,"sapBERT")
 cohere_all<-nearest_match_embeddings(distance_matrix_cohere_all,"cohere")
 
-
+deepseek_all<-nearest_match_embeddings(distance_matrix_deepseek_all,"deepseek")
 
 
 embedding_nearest_all <- llama_match_all %>%
@@ -316,7 +329,8 @@ embedding_nearest_all <- llama_match_all %>%
   full_join(labse_all,by="Tumor_Names")%>%
   full_join(sciBERT_all,by="Tumor_Names")%>%
   full_join(sapBERT_all,by="Tumor_Names")%>%
-  full_join(cohere_all,by="Tumor_Names")
+  full_join(cohere_all,by="Tumor_Names")%>%
+  full_join(deepseek_all,by="Tumor_Names")
 ####
 llama_match_5th<- nearest_match_embeddings(distance_matrix_llama_5th,"llama") # Executed
 biobert_match_5th<- nearest_match_embeddings(distance_matrix_biobert_5th,"biobert")
@@ -342,6 +356,7 @@ sciBERT_5th<-nearest_match_embeddings(distance_matrix_sciBERT_5th,"sciBERT")
 sapBERT_5th<-nearest_match_embeddings(distance_matrix_sapBERT_5th,"sapBERT")
 cohere_5th<-nearest_match_embeddings(distance_matrix_cohere_5th,"cohere")
 
+deepseek_5th<-nearest_match_embeddings(distance_matrix_deepseek_5th,"deepseek")
 
 
 
