@@ -57,7 +57,7 @@ fifth<- fifth %>%dplyr::select(method,fifth)
 all<-all[order(all$all,decreasing = TRUE),]
 fifth<-fifth[order(fifth$fifth,decreasing = TRUE),]
 
-for(iter in 1:27){
+for(iter in 1:31){
   if(all$method[iter]=="valid_euclidean_dist_v3" ){
     all$method[iter]="LTE-3 + Euclidean Dist"
   }else if(all$method[iter]=="valid_af_v3"){
@@ -152,7 +152,7 @@ for(iter in 1:27){
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_labse"){
-    all$method[iter]="labse + Euclidean Dist"
+    all$method[iter]="LaBSE + Euclidean Dist"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_sciBERT"){
@@ -169,7 +169,7 @@ for(iter in 1:27){
   }
 }
 
-for(iter in 1:27){
+for(iter in 1:31){
   if(fifth$method[iter]=="valid_euclidean_dist_v3" ){
     fifth$method[iter]="LTE-3 + Euclidean Dist"
   }else if(fifth$method[iter]=="valid_af_v3"){
@@ -263,7 +263,7 @@ for(iter in 1:27){
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_labse"){
-    fifth$method[iter]="labse + Euclidean Dist"
+    fifth$method[iter]="LaBSE + Euclidean Dist"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_sciBERT"){
