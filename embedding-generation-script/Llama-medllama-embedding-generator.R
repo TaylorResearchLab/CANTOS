@@ -63,7 +63,11 @@ embeddings_lama<- embed_text(tumor_terms,model = "llama3",server = NULL,model_pa
 embeddings_medllama<- embed_text(tumor_terms,model = "medllama2",server = NULL,model_params = NULL,
                              verbose = getOption("rollama_verbose", default = interactive()))
 
+embeddings_deepseek<- embed_text(tumor_terms,model = "deepseek-r1:8b",server = NULL,model_params = NULL,
+                                 verbose = getOption("rollama_verbose", default = interactive()))
+
 write.csv(embeddings_lama,paste(data_dir,"/Embeddings/llama3_embedding.csv",sep=""))
 write.csv(embeddings_medllama,paste(data_dir,"/Embeddings/medllama-7b.csv",sep=""))
 write.csv(embeddings_lama_phi4,paste(data_dir,"/Embeddings/phi4.csv",sep=""))
 write.csv(embeddings_lama_32_3b,paste(data_dir,"/Embeddings/llama32_3B.csv",sep=""))
+write.csv(embeddings_deepseek,paste(data_dir,"/Embeddings/deepseek_8b.csv",sep=""))
