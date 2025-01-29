@@ -82,6 +82,10 @@ cohere_english_v2_embeddings<-read.csv(paste(data_dir,"/Embeddings/cohere_embedd
 
 deepseek_8b_embeddings<-read.csv(paste(data_dir,"/Embeddings/deepseek_8b.csv",sep = ""))
 
+
+BioGPT_embeddings<-read.csv(paste(data_dir,"/Embeddings/output_tumor_embeddings_biogpt.csv",sep="")) 
+clincalBERT_embeddings<-read.csv(paste(data_dir,"/Embeddings/output_tumor_embeddings_clinicalBERT.csv",sep="")) 
+
 #############
 llama_embeddings<-llama_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 biobert_embeddings<-biobert_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
@@ -114,6 +118,8 @@ cohere_english_v2_embeddings<-cohere_english_v2_embeddings %>% group_by(Tumor_Na
 
 deepseek_8b_embeddings<-deepseek_8b_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 
+BioGPT_embeddings<-BioGPT_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
+clincalBERT_embeddings<-clincalBERT_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 
 
 
@@ -207,6 +213,14 @@ colnames(distance_matrix_cohere)<-cohere_english_v2_embeddings$Tumor_Names
 distance_matrix_deepseek<- compute_embedding_distance(deepseek_8b_embeddings[1:nrow(deepseek_8b_embeddings),2:ncol(deepseek_8b_embeddings)],"euclidean")
 rownames(distance_matrix_deepseek)<-deepseek_8b_embeddings$Tumor_Names
 colnames(distance_matrix_deepseek)<-deepseek_8b_embeddings$Tumor_Names
+
+distance_matrix_BioGPT<- compute_embedding_distance(BioGPT_embeddings[1:nrow(BioGPT_embeddings),2:ncol(BioGPT_embeddings)],"euclidean")
+rownames(distance_matrix_deepseek)<-BioGPT_embeddings$Tumor_Names
+colnames(distance_matrix_deepseek)<-BioGPT_embeddings$Tumor_Names
+
+distance_matrix_clinicalBERT<- compute_embedding_distance(clincalBERT_embeddings[1:nrow(clincalBERT_embeddings),2:ncol(clincalBERT_embeddings)],"euclidean")
+rownames(distance_matrix_deepseek)<-clincalBERT_embeddings$Tumor_Names
+colnames(distance_matrix_deepseek)<-clincalBERT_embeddings$Tumor_Names
 
 
 
