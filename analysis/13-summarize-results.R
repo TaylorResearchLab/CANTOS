@@ -42,8 +42,8 @@ tumor_5thed_gt<-tumor_5thed_gt[,c(-1)]
 tumor_all_gt<-tumor_all_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 tumor_5thed_gt<-tumor_5thed_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 
-all<-(colSums(tumor_all_gt[,c(seq(6,68,2))]))/1113
-fifth<-(colSums(tumor_5thed_gt[,c(seq(6,68,2))]))/1033
+all<-(colSums(tumor_all_gt[,c(seq(6,72,2))]))/1113
+fifth<-(colSums(tumor_5thed_gt[,c(seq(6,72,2))]))/1033
 all<-as.data.frame(all)
 fifth<-as.data.frame(fifth)
 
@@ -171,6 +171,14 @@ for(iter in 1:nrow(all)){
     all$method[iter]="DeepSeek_8B+Euclidean Dist"
     
   }
+  else if(all$method[iter]=="valid_euclidean_dist_BioGPT"){
+    all$method[iter]="BioGPT+Euclidean Dist"
+    
+  }
+  else if(all$method[iter]=="valid_euclidean_dist_clincalBERT"){
+    all$method[iter]="clincalBERT+Euclidean Dist"
+    
+  }
 }
 
 for(iter in 1:nrow(fifth)){
@@ -286,7 +294,14 @@ for(iter in 1:nrow(fifth)){
     fifth$method[iter]="DeepSeek_8B+Euclidean Dist"
     
   }
-  
+  else if(fifth$method[iter]=="valid_euclidean_dist_BioGPT"){
+    fifth$method[iter]="BioGPT+Euclidean Dist"
+    
+  }
+  else if(fifth$method[iter]=="valid_euclidean_dist_clincalBERT"){
+    fifth$method[iter]="clincalBERT+Euclidean Dist"
+    
+  }
 }
 rownames(all)<- NULL
 rownames(fifth)<-NULL
