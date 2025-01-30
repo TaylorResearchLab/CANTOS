@@ -176,7 +176,7 @@ for(iter in 1:nrow(all)){
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_clincalBERT"){
-    all$method[iter]="clincalBERT+Euclidean Dist"
+    all$method[iter]="ClinicalBERT+Euclidean Dist"
     
   }
 }
@@ -299,7 +299,7 @@ for(iter in 1:nrow(fifth)){
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_clincalBERT"){
-    fifth$method[iter]="clincalBERT+Euclidean Dist"
+    fifth$method[iter]="ClinicalBERT+Euclidean Dist"
     
   }
 }
