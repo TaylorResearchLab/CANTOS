@@ -33,8 +33,8 @@ result_dir_5th <- file.path(analysis_dir,"results_5th")
 tumor_all_gt<-read.csv(paste(result_dir,"/tumor_manually_validated_all.csv",sep = ""))
 tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_5th.csv",sep = ""))
 
-tumor_all_gt<-read.csv(paste(result_dir,"/tumor_manually_validated_tmp.csv",sep = ""))
-tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_tmp_5th.csv",sep = ""))
+# tumor_all_gt<-read.csv(paste(result_dir,"/tumor_manually_validated_tmp.csv",sep = ""))
+# tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_tmp_5th.csv",sep = ""))
 
 tumor_all_gt<-tumor_all_gt[,c(-1)]
 tumor_5thed_gt<-tumor_5thed_gt[,c(-1)]
