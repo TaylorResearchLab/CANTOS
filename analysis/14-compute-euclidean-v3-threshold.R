@@ -37,19 +37,38 @@ tumor_5th_edition<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_5th.
 
 # Pick only the Euclidean distance standardization with V3 embeddings
 tumor_5th_edition<-tumor_5th_edition %>% dplyr::select(nct_id,Tumor_Names,ground_truth_val,ground_truth,
-                                                       euclidean_dist_v3,valid_euclidean_dist_v3)
+                                                       euclidean_dist_v3,valid_euclidean_dist_v3,
+                                                       euclidean_dist_MiniLM_L12_v2,valid_euclidean_dist_MiniLM_L12_v2,
+                                                       euclidean_dist_e5_large,valid_euclidean_dist_e5_large)
 tumor_all_edition<-tumor_all_edition %>% dplyr::select(nct_id,Tumor_Names,ground_truth_val,ground_truth,
-                                                       euclidean_dist_v3,valid_euclidean_dist_v3)
+                                                       euclidean_dist_v3,valid_euclidean_dist_v3,
+                                                       euclidean_dist_MiniLM_L12_v2,valid_euclidean_dist_MiniLM_L12_v2,
+                                                       euclidean_dist_e5_large,valid_euclidean_dist_e5_large)
 
 
-# Load 5th edition distance
+# Load 5th edition distance for LTE-3
 affinity_cluster_v3_reassigned_5thed_df<-read.csv(paste(intermediate_dir_5th,"/affinity_cluster_v3_reassigned_df_5thed.csv",sep=""))
 WHO_5th_edition<-affinity_cluster_v3_reassigned_5thed_df %>% dplyr::select(Tumor_Names,WHO_Matches,WHO_distance)
+colnames(WHO_5th_edition)[c(2,3)]<- c("LTE3_Matches","Euclidean_Dist_LTE3")
 
-
-# Load all edition distance
+# Load all edition distance for LTE-3
 affinity_cluster_v3_reassigned_df<-read.csv(paste(intermediate_dir,"/affinity_cluster_v3_reassigned_df.csv",sep=""))
 WHO_all_edition<-affinity_cluster_v3_reassigned_df %>% dplyr::select(Tumor_Names,WHO_Matches,WHO_distance)
+colnames(WHO_all_edition)[c(2,3)]<- c("LTE3_Matches","Euclidean_Dist_LTE3")
+
+
+# Load the embeddings for MiniLM_V12 and E-5_Large
+MiniLM_L12_v2_embeddings<-read.csv(paste(data_dir,"/Embeddings/all-MiniLM-L12-v2.csv",sep=""))
+e5_large_embeddings<-read.csv(paste(data_dir,"/Embeddings/e5-large.csv",sep="")) 
+MiniLM_L12_v2_embeddings<-MiniLM_L12_v2_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
+e5_large_embeddings<-e5_large_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
+
+
+
+
+
+
+
 
 
 # Join 5th edition data
@@ -57,6 +76,8 @@ tumor_5th_edition<- tumor_5th_edition %>% dplyr::left_join(WHO_5th_edition,by="T
 
 #Join all edition data
 tumor_all_edition<- tumor_all_edition %>% dplyr::left_join(WHO_all_edition,by="Tumor_Names")
+
+
 
 
 
