@@ -222,4 +222,6 @@ print(summary_5th_e5_large_correct)
 print(summary_5th_e5_large_wrong)
 
 
-p3<-ggarrange(Plt_5th_ed, Plt_all_ed,nrow = 1,ncol = 2)
+Plt_LTE<-ggarrange(Plt_5th_ed_LTE3, Plt_all_ed_LTE3,nrow = 1,ncol = 2)
+Plt_MiniLM_L12_v2<-ggarrange(Plt_5th_ed_MiniLM_L12_v2, Plt_all_ed_MiniLM_L12_v2,nrow = 1,ncol = 2)
+Plt_e5_large<-ggarrange(Plt_5th_ed_e5_large, Plt_all_ed_e5_large,nrow = 1,ncol = 2)
