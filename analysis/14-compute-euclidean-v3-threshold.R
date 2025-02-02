@@ -171,22 +171,55 @@ distances_all_edition_e5_large_correct<- tumor_all_edition%>%filter(valid_euclid
 distances_all_edition_e5_large_wrong<- tumor_all_edition%>%filter(valid_euclidean_dist_e5_large==0)
 
 
-summary_5th_correct <- lapply(distances_5th_edition_correct, summary)
-summary_5th_wrong <- lapply(distances_5th_edition_wrong, summary)
 
-print(summary_5th_correct$WHO_distance)
-print(summary_5th_wrong$WHO_distance)
+summary_5th_LTE_correct<-summary(distances_5th_edition_LTE_correct$Euclidean_Dist_LTE3)
+summary_5th_LTE_wrong<-summary(distances_5th_edition_LTE_wrong$Euclidean_Dist_LTE3)
+
+summary_all_LTE_correct<-summary(distances_all_edition_LTE_correct$Euclidean_Dist_LTE3)
+summary_all_LTE_wrong<-summary(distances_all_edition_LTE_wrong$Euclidean_Dist_LTE3)
 
 
 
-distances_all_edition_correct<- tumor_all_edition%>%filter(valid_euclidean_dist_v3==1)
-distances_all_edition_wrong<- tumor_all_edition%>%filter(valid_euclidean_dist_v3==0)
+summary_5th_MiniLM_L12_v2_correct<-summary(distances_5th_edition_MiniLM_L12_v2_correct$Euclidean_Dist_MiniLM_L12_v2)
+summary_5th_MiniLM_L12_v2_wrong<-summary(distances_5th_edition_MiniLM_L12_v2_wrong$Euclidean_Dist_MiniLM_L12_v2)
 
-summary_all_correct <- lapply(distances_all_edition_correct, summary)
-summary_all_wrong <- lapply(distances_all_edition_wrong, summary)
+summary_all_MiniLM_L12_v2_correct<-summary(distances_all_edition_MiniLM_L12_v2_correct$Euclidean_Dist_MiniLM_L12_v2)
+summary_all_MiniLM_L12_v2_wrong<-summary(distances_all_edition_MiniLM_L12_v2_wrong$Euclidean_Dist_MiniLM_L12_v2)
 
-print(summary_all_correct$WHO_distance)
-print(summary_all_wrong$WHO_distance)
+
+
+
+summary_5th_e5_large_correct<-summary(distances_5th_edition_e5_large_correct$Euclidean_Dist_e5_large)
+summary_5th_e5_large_wrong<-summary(distances_5th_edition_e5_large_wrong$Euclidean_Dist_e5_large)
+
+summary_all_e5_large_correct<-summary(distances_all_edition_e5_large_correct$Euclidean_Dist_e5_large)
+summary_all_e5_large_wrong<-summary(distances_all_edition_e5_large_wrong$Euclidean_Dist_e5_large)
+
+
+print("LTE-3 Statistic for all editions")
+print(summary_all_LTE_correct)
+print(summary_all_LTE_wrong)
+
+print("LTE-3 Statistic for 5th editions")
+print(summary_5th_LTE_correct)
+print(summary_5th_LTE_wrong)
+
+print("MiniLM_L12_v2 Statistic for all editions")
+print(summary_all_MiniLM_L12_v2_correct)
+print(summary_all_MiniLM_L12_v2_wrong)
+
+print("MiniLM_L12_v2 Statistic for 5th editions")
+print(summary_5th_MiniLM_L12_v2_correct)
+print(summary_5th_MiniLM_L12_v2_wrong)
+
+
+print("E5_Large Statistic for all editions")
+print(summary_all_e5_large_correct)
+print(summary_all_e5_large_wrong)
+
+print("E5_Large Statistic for 5th editions")
+print(summary_5th_e5_large_correct)
+print(summary_5th_e5_large_wrong)
 
 
 p3<-ggarrange(Plt_5th_ed, Plt_all_ed,nrow = 1,ncol = 2)
