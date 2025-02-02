@@ -126,19 +126,50 @@ distances_all_edition<-distances_all_edition %>% mutate(standardization_result_M
 distances_all_edition<-distances_all_edition %>% mutate(standardization_result_e5_large= case_when(valid_euclidean_dist_e5_large==1~ "Correctly Standardized",
                                                                                                    valid_euclidean_dist_e5_large==0~"Incorrectly Standardized"))
 
-colnames(distances_5th_edition)[1]<-"Euclidean_distance_LTE_embedding"
-colnames(distances_all_edition)[1]<-"Euclidean_distance_LTE_embedding"
+colnames(distances_5th_edition)[c(1,3,5)]<-c("Euclidean_distance_LTE_embedding","Euclidean_distance_MiniLM_L12_v2_embedding","Euclidean_distance_E5_Large_embedding")
+colnames(distances_all_edition)[c(1,3,5)]<-c("Euclidean_distance_LTE_embedding","Euclidean_distance_MiniLM_L12_v2_embedding","Euclidean_distance_E5_Large_embedding")
 
 
-Plt_5th_ed<- ggplot(distances_5th_edition, aes(x=standardization_result, y=Euclidean_distance_LTE_embedding,
-                                  color=standardization_result)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ labs(y= "Euclidean distance in LTE-3 embedding space", x = "Standardization results for WHO 5th edition")+ggtitle("a")
+Plt_5th_ed_LTE3<- ggplot(distances_5th_edition, aes(x=standardization_result_LTE3, y=Euclidean_distance_LTE_embedding,
+                                  color=standardization_result_LTE3)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ labs(y= "Euclidean distance in LTE-3 embedding space", x = "Standardization results for WHO 5th edition")+ggtitle("a")
 
-Plt_all_ed<- ggplot(distances_all_edition, aes(x=standardization_result, y=Euclidean_distance_LTE_embedding,
-                                              color=standardization_result)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2") + labs(y= "Euclidean distance in LTE-3 embedding space", x = "Standardization results for WHO all edition")+ggtitle("b")
+Plt_all_ed_LTE3<- ggplot(distances_all_edition, aes(x=standardization_result_LTE3, y=Euclidean_distance_LTE_embedding,
+                                              color=standardization_result_LTE3)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2") + labs(y= "Euclidean distance in LTE-3 embedding space", x = "Standardization results for WHO all edition")+ggtitle("b")
 
 
-distances_5th_edition_correct<- tumor_5th_edition%>%filter(valid_euclidean_dist_v3==1)
-distances_5th_edition_wrong<- tumor_5th_edition%>%filter(valid_euclidean_dist_v3==0)
+
+Plt_5th_ed_MiniLM_L12_v2<- ggplot(distances_5th_edition, aes(x=standardization_result_MiniLM_L12_v2, y=Euclidean_distance_MiniLM_L12_v2_embedding,
+                                                    color=standardization_result_MiniLM_L12_v2)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ labs(y= "Euclidean distance in MiniLM_L12_v2 embedding space", x = "Standardization results for WHO 5th edition")+ggtitle("a")
+
+Plt_all_ed_MiniLM_L12_v2<- ggplot(distances_all_edition, aes(x=standardization_result_MiniLM_L12_v2, y=Euclidean_distance_MiniLM_L12_v2_embedding,
+                                                    color=standardization_result_MiniLM_L12_v2)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2") + labs(y= "Euclidean distance in MiniLM_L12_v2 embedding space", x = "Standardization results for WHO all edition")+ggtitle("b")
+
+
+
+
+Plt_5th_ed_e5_large<- ggplot(distances_5th_edition, aes(x=standardization_result_e5_large, y=Euclidean_distance_E5_Large_embedding,
+                                                    color=standardization_result_e5_large)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ labs(y= "Euclidean distance in E5_Large embedding space", x = "Standardization results for WHO 5th edition")+ggtitle("a")
+
+Plt_all_ed_e5_large<- ggplot(distances_all_edition, aes(x=standardization_result_e5_large, y=Euclidean_distance_E5_Large_embedding,
+                                                    color=standardization_result_e5_large)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2") + labs(y= "Euclidean distance in E5_Large embedding space", x = "Standardization results for WHO all edition")+ggtitle("b")
+
+
+
+distances_5th_edition_LTE_correct<- tumor_5th_edition%>%filter(valid_euclidean_dist_v3==1)
+distances_5th_edition_LTE_wrong<- tumor_5th_edition%>%filter(valid_euclidean_dist_v3==0)
+distances_all_edition_LTE_correct<- tumor_all_edition%>%filter(valid_euclidean_dist_v3==1)
+distances_all_edition_LTE_wrong<- tumor_all_edition%>%filter(valid_euclidean_dist_v3==0)
+
+distances_5th_edition_MiniLM_L12_v2_correct<- tumor_5th_edition%>%filter(valid_euclidean_dist_MiniLM_L12_v2==1)
+distances_5th_edition_MiniLM_L12_v2_wrong<- tumor_5th_edition%>%filter(valid_euclidean_dist_MiniLM_L12_v2==0)
+distances_all_edition_MiniLM_L12_v2_correct<- tumor_all_edition%>%filter(valid_euclidean_dist_MiniLM_L12_v2==1)
+distances_all_edition_MiniLM_L12_v2_wrong<- tumor_all_edition%>%filter(valid_euclidean_dist_MiniLM_L12_v2==0)
+
+distances_5th_edition_e5_large_correct<- tumor_5th_edition%>%filter(valid_euclidean_dist_e5_large==1)
+distances_5th_edition_e5_large_wrong<- tumor_5th_edition%>%filter(valid_euclidean_dist_e5_large==0)
+distances_all_edition_e5_large_correct<- tumor_all_edition%>%filter(valid_euclidean_dist_e5_large==1)
+distances_all_edition_e5_large_wrong<- tumor_all_edition%>%filter(valid_euclidean_dist_e5_large==0)
+
 
 summary_5th_correct <- lapply(distances_5th_edition_correct, summary)
 summary_5th_wrong <- lapply(distances_5th_edition_wrong, summary)
