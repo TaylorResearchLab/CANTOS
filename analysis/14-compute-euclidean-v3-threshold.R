@@ -27,7 +27,7 @@ intermediate_dir_5th <- file.path(analysis_dir,"intermediate_5th")
 result_dir <- file.path(analysis_dir,"results")
 result_dir_5th <- file.path(analysis_dir,"results_5th")
 
-
+source(paste(util_dir,"/find_euclidean_match.R",sep=""))
 # Load the annotations for 5th edition 
 #tumor_5th_edition<-read.csv(paste(result_dir_5th,"/tumor_sample_df_gt_annotated_5th.csv",sep = ""))
 #tumor_all_edition<-read.csv(paste(result_dir,"/tumor_sample_df_gt_annotated_all.csv",sep = ""))
