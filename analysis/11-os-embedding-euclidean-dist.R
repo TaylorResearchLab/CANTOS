@@ -85,6 +85,7 @@ deepseek_8b_embeddings<-read.csv(paste(data_dir,"/Embeddings/deepseek_8b.csv",se
 
 BioGPT_embeddings<-read.csv(paste(data_dir,"/Embeddings/output_tumor_embeddings_biogpt.csv",sep="")) 
 clincalBERT_embeddings<-read.csv(paste(data_dir,"/Embeddings/output_tumor_embeddings_clinicalBERT.csv",sep="")) 
+e5_large_v2_embeddings<-read.csv(paste(data_dir,"/Embeddings/e5-large-v2.csv",sep="")) 
 
 #############
 llama_embeddings<-llama_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
@@ -120,6 +121,7 @@ deepseek_8b_embeddings<-deepseek_8b_embeddings %>% group_by(Tumor_Names) %>% sum
 
 BioGPT_embeddings<-BioGPT_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 clincalBERT_embeddings<-clincalBERT_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
+e5_large_v2_embeddings<-e5_large_v2_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 
 
 
@@ -224,6 +226,12 @@ colnames(distance_matrix_clinicalBERT)<-clincalBERT_embeddings$Tumor_Names
 
 
 
+distance_matrix_e5large_v2<- compute_embedding_distance(e5_large_v2_embeddings[1:nrow(e5_large_v2_embeddings),2:ncol(e5_large_v2_embeddings)],"euclidean")
+rownames(distance_matrix_e5large_v2)<-e5_large_v2_embeddings$Tumor_Names
+colnames(distance_matrix_e5large_v2)<-e5_large_v2_embeddings$Tumor_Names
+
+
+
 
 distance_matrix_llama<-as.data.frame(distance_matrix_llama) # EXECUTED
 distance_matrix_biobert<-as.data.frame(distance_matrix_biobert) # EXECUTED
@@ -247,6 +255,7 @@ distance_matrix_cohere<-as.data.frame(distance_matrix_cohere)
 distance_matrix_deepseek<-as.data.frame(distance_matrix_deepseek)
 distance_matrix_BioGPT<-as.data.frame(distance_matrix_BioGPT)
 distance_matrix_clinicalBERT<-as.data.frame(distance_matrix_clinicalBERT)
+distance_matrix_e5large_v2<-as.data.frame(distance_matrix_e5large_v2)
 
 
 # WHO Matrices All edition 
@@ -275,6 +284,7 @@ distance_matrix_deepseek_all<-distance_matrix_deepseek%>% dplyr::select(all_of(W
 
 distance_matrix_BioGPT_all<-distance_matrix_BioGPT%>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 distance_matrix_clinicalBERT_all<-distance_matrix_clinicalBERT%>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
+distance_matrix_e5large_v2_all<-distance_matrix_e5large_v2>% dplyr::select(all_of(WHO_Terms_All$Tumor_Names))
 
 
 # WHO Matrices 5th edition 
@@ -305,6 +315,7 @@ distance_matrix_cohere_5th<-distance_matrix_cohere%>% dplyr::select(all_of(WHO_T
 distance_matrix_deepseek_5th<-distance_matrix_deepseek%>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 distance_matrix_BioGPT_5th<-distance_matrix_BioGPT%>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 distance_matrix_clinicalBERT_5th<-distance_matrix_clinicalBERT%>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
+distance_matrix_e5large_v2_5th<-distance_matrix_e5large_v2>% dplyr::select(all_of(WHO_Terms_5th$Tumor_Names))
 
 ###
 llama_match_all<- nearest_match_embeddings(distance_matrix_llama_all,"llama") # Executed
@@ -335,6 +346,7 @@ deepseek_all<-nearest_match_embeddings(distance_matrix_deepseek_all,"deepseek")
 
 BioGPT_all<-nearest_match_embeddings(distance_matrix_BioGPT_all,"BioGPT")
 clincalBERT_all<-nearest_match_embeddings(distance_matrix_clinicalBERT_all,"clincalBERT")
+e5large_v2_all<-nearest_match_embeddings(distance_matrix_e5large_v2_all,"e5large_v2")
 
 embedding_nearest_all <- llama_match_all %>%
   full_join(biobert_match_all, by = "Tumor_Names") %>%
@@ -357,7 +369,8 @@ embedding_nearest_all <- llama_match_all %>%
   full_join(cohere_all,by="Tumor_Names")%>%
   full_join(deepseek_all,by="Tumor_Names")%>%
   full_join(BioGPT_all,by="Tumor_Names")%>%
-  full_join(clincalBERT_all,by="Tumor_Names")
+  full_join(clincalBERT_all,by="Tumor_Names")%>%
+  full_join(e5large_v2_all,by="Tumor_Names")
 ####
 llama_match_5th<- nearest_match_embeddings(distance_matrix_llama_5th,"llama") # Executed
 biobert_match_5th<- nearest_match_embeddings(distance_matrix_biobert_5th,"biobert")
@@ -387,6 +400,7 @@ deepseek_5th<-nearest_match_embeddings(distance_matrix_deepseek_5th,"deepseek")
 
 BioGPT_5th<-nearest_match_embeddings(distance_matrix_BioGPT_5th,"BioGPT")
 clincalBERT_5th<-nearest_match_embeddings(distance_matrix_clinicalBERT_5th,"clincalBERT")
+e5large_v2_5th<-nearest_match_embeddings(distance_matrix_e5large_v2_5th,"e5large_v2")
 
 
 embedding_nearest_5th <- llama_match_5th %>%
