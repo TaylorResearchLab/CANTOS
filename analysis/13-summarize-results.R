@@ -33,8 +33,8 @@ result_dir_5th <- file.path(analysis_dir,"results_5th")
 tumor_all_gt<-read.csv(paste(result_dir,"/tumor_manually_validated_all.csv",sep = ""))
 tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_5th.csv",sep = ""))
 
-# tumor_all_gt<-read.csv(paste(result_dir,"/tumor_manually_validated_tmp.csv",sep = ""))
-# tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_tmp_5th.csv",sep = ""))
+tumor_all_gt<-read.csv(paste(result_dir,"/tumor_manually_validated_tmp.csv",sep = ""))
+tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_tmp_5th.csv",sep = ""))
 
 tumor_all_gt<-tumor_all_gt[,c(-1)]
 tumor_5thed_gt<-tumor_5thed_gt[,c(-1)]
@@ -42,8 +42,8 @@ tumor_5thed_gt<-tumor_5thed_gt[,c(-1)]
 tumor_all_gt<-tumor_all_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 tumor_5thed_gt<-tumor_5thed_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 
-all<-(colSums(tumor_all_gt[,c(seq(6,72,2))]))/1113
-fifth<-(colSums(tumor_5thed_gt[,c(seq(6,72,2))]))/1033
+all<-(colSums(tumor_all_gt[,c(seq(6,76,2))]))/1113
+fifth<-(colSums(tumor_5thed_gt[,c(seq(6,76,2))]))/1033
 all<-as.data.frame(all)
 fifth<-as.data.frame(fifth)
 
@@ -179,6 +179,14 @@ for(iter in 1:nrow(all)){
     all$method[iter]="ClinicalBERT+Euclidean Dist"
     
   }
+  else if(all$method[iter]=="valid_euclidean_dist_e5large_v2"){
+    all$method[iter]="e5large_v2+Euclidean Dist"
+    
+  }
+  else if(all$method[iter]=="valid_euclidean_dist_nomic"){
+    all$method[iter]="nomic+Euclidean Dist"
+    
+  }
 }
 
 for(iter in 1:nrow(fifth)){
@@ -300,6 +308,14 @@ for(iter in 1:nrow(fifth)){
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_clincalBERT"){
     fifth$method[iter]="ClinicalBERT+Euclidean Dist"
+    
+  }
+  else if(fifth$method[iter]=="valid_euclidean_dist_e5large_v2"){
+    fifth$method[iter]="e5large_v2+Euclidean Dist"
+    
+  }
+  else if(fifth$method[iter]=="valid_euclidean_dist_nomic"){
+    fifth$method[iter]="nomic+Euclidean Dist"
     
   }
 }
