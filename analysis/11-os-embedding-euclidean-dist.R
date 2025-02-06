@@ -523,6 +523,10 @@ embedding_nearest_ncit <- llama_match_ncit %>%
   full_join(e5large_v2_ncit,by="Tumor_Names")%>%
   full_join(nomic_ncit,by="Tumor_Names")
 
+nomic_5th<-nearest_match_embeddings(distance_matrix_nomic_5th,"nomic")
+nomic_ncit<-nearest_match_embeddings(distance_matrix_nomic_ncit,"nomic")
+
+
 # Reconcile Results
 
 NCIT_Results_all <- read_csv("analysis/results/NCIT_Results_all.csv")
@@ -539,7 +543,8 @@ names_col <- c("Tumor_Names","euclidean_dist_llama","euclidean_dist_biobert","eu
                "euclidean_dist_modernbert","euclidean_dist_medllama_7b",   "euclidean_dist_llama_32_3b","euclidean_dist_phi4",
                "euclidean_dist_llama_33_70b","euclidean_dist_MiniLM_L6_v2", "euclidean_mpnet_base", "euclidean_dist_roberta",
                "euclidean_dist_MiniLM_L12_v2","euclidean_dist_e5_large","euclidean_dist_gtr_t5_large", "euclidean_dist_labse",
-               "euclidean_dist_sciBERT","euclidean_dist_sapBERT","euclidean_dist_cohere","euclidean_dist_deepseek","euclidean_dist_BioGPT","euclidean_dist_clincalBERT")
+               "euclidean_dist_sciBERT","euclidean_dist_sapBERT","euclidean_dist_cohere","euclidean_dist_deepseek","euclidean_dist_BioGPT","euclidean_dist_clincalBERT",
+               "euclidean_dist_e5_large_v2", "euclidean_dist_nomic")
 
 
 colnames(embedding_nearest_ncit) <- names_col
@@ -580,11 +585,11 @@ WHO_Results_5th<-WHO_Results_5th[,c(-1)]
 # NCIT_Results_all<-NCIT_Results_all%>%left_join(e5_large_ncit, by = "Tumor_Names")
 #NCIT_Results_all<-NCIT_Results_all%>%left_join(gtr_t5_large_ncit, by = "Tumor_Names")
 
-NCIT_Results_all<-NCIT_Results_all%>%left_join(e5large_v2_ncit, by = "Tumor_Names")
-NCIT_Results_5th<-NCIT_Results_5th%>%left_join(e5large_v2_ncit, by = "Tumor_Names")
+#NCIT_Results_all<-NCIT_Results_all%>%left_join(e5large_v2_ncit, by = "Tumor_Names")
+#NCIT_Results_5th<-NCIT_Results_5th%>%left_join(e5large_v2_ncit, by = "Tumor_Names")
 
-WHO_Results_all<-WHO_Results_all%>%left_join(e5large_v2_all, by = "Tumor_Names")
-WHO_Results_5th<-WHO_Results_5th%>%left_join(e5large_v2_5th, by = "Tumor_Names")
+#WHO_Results_all<-WHO_Results_all%>%left_join(e5large_v2_all, by = "Tumor_Names")
+#WHO_Results_5th<-WHO_Results_5th%>%left_join(e5large_v2_5th, by = "Tumor_Names")
 
 # NCIT_Results_5th<-NCIT_Results_5th%>%left_join(llama_32_3b_match_ncit, by = "Tumor_Names")
 # NCIT_Results_5th<-NCIT_Results_5th%>%left_join(phi4_match_ncit, by = "Tumor_Names")
