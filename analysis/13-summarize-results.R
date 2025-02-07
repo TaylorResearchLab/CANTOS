@@ -36,14 +36,17 @@ tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_5th.csv
 tumor_all_gt<-read.csv(paste(result_dir,"/tumor_manually_validated_tmp.csv",sep = ""))
 tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_tmp_5th.csv",sep = ""))
 
+tumor_all_gt<-read.csv(paste(result_dir,"/tumor_manually_validated_tmp2.csv",sep = ""))
+tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_tmp2_5th.csv",sep = ""))
+
 tumor_all_gt<-tumor_all_gt[,c(-1)]
 tumor_5thed_gt<-tumor_5thed_gt[,c(-1)]
 
 tumor_all_gt<-tumor_all_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 tumor_5thed_gt<-tumor_5thed_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 
-all<-(colSums(tumor_all_gt[,c(seq(6,76,2))]))/1113
-fifth<-(colSums(tumor_5thed_gt[,c(seq(6,76,2))]))/1033
+all<-(colSums(tumor_all_gt[,c(seq(6,76,2))]))/nrow(tumor_all_gt)
+fifth<-(colSums(tumor_5thed_gt[,c(seq(6,76,2))]))/nrow(tumor_5thed_gt)
 all<-as.data.frame(all)
 fifth<-as.data.frame(fifth)
 
