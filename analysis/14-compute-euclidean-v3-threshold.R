@@ -190,3 +190,4 @@ print(summary_5th_MiniLM_L12_v2_wrong)
 
 Plt_LTE<-ggarrange(Plt_5th_ed_LTE3, Plt_all_ed_LTE3,nrow = 1,ncol = 2)
 Plt_MiniLM_L12_v2<-ggarrange(Plt_5th_ed_MiniLM_L12_v2, Plt_all_ed_MiniLM_L12_v2,nrow = 1,ncol = 2)
+
