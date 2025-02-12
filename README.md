@@ -48,19 +48,26 @@ This repository contains the code, tables, and plots associated with the CT Embe
 
 2. These 50410 condition names are flagged as tumors and non tumors by the pipeline, which are then further manually annotated pediatric and adult tumors. A total of 13,230 tumors are identified from the 50,410 conditions and out of the 13,230 tumors,  6,324 were classified as pediatric tumors. <br/> 
 
-3. We compute the distance of each  13,230 clinical trials tumors, 4720 WHO tumors, and 1395 NCIT tumors.  Distance metrics used are Levenshtein, Cosine , and Jarro-Winkler. </br>
+3. Compute the distance of each  13,230 clinical trials tumors, 4720 WHO tumors, and 1395 NCIT tumors.  Distance metrics used are Levenshtein, Cosine , and Jarro-Winkler. </br>
 
-4. We find the closest matching WHO term for each tumor for each distance metric and then also group the top 0.05% closest matching group of tumors. Each of the closest match terms are standardized to their closest matching WHO Term. </br>
+4. Find the closest matching WHO term for each tumor for each distance metric and then also group the top 0.05% closest matching group of tumors. Each of the closest match terms are standardized to their closest matching WHO Term. </br>
 
-5. We also use the distance matrices computed to perform 3 levels of nested affinity clustering and group the tumors. After grouping the tumors they are standardized to their closest matching WHO Term. </br>
+5. Use the distance matrices computed to perform 3 levels of nested affinity clustering and group the tumors. After grouping the tumors they are standardized to their closest matching WHO Term. </br>
 
-6. We generate embeddings for each tumor terms (CT, WHO, NCIT) using Open AI's ADA2.0 and V-3 Large text-embedding models. We then compute the closest matching (Euclidean Distance) WHO terms for each tumor.  </br>
+6. Generate embeddings for each tumor terms (CT, WHO, NCIT) using Open AI's models  text-embedding-3-large (LTE-3) 
+ and text-embedding-ada-002 (ADA-002). We then identify the closest matching (Euclidean Distance) WHO terms for each tumor name from the CTR.  </br>
 
-7. We also perform PCA on each of the embedding types and then run K-means and Affinity Clustering to group the tumors together. We refine the clusters by filtering outliers using isolation forest and local outlier factor.  </br>
+7. Perform PCA on each of the embedding types and then run K-means and Affinity Clustering to group the tumors together. We refine the clusters by filtering outliers using isolation forest and local outlier factor.  </br>
 
 8. After cluster refinement, each cluster is standardized to the WHO term that matches a majority of the members of that cluster.  
-   
 
+9. We generate embeddings for each tumor terms (CT, WHO, NCIT) using embeddings obtained from LLama 3.3, Llama 3.2,LLama 3.0  
+,MedLLama2,MedLLama13B,BioBERT,PubMedBERT-Abstract (PubMedBERT),ModernBERT-Large (ModernBERT) ,Phi-4,,e5-large,e5-large-v2, all-mpnet-base-v2,gtr-t5-large,all-MiniLM-L12-v2,all-MiniLM-L6-v2,all-roberta-large-v1 ,SapBERT ,ClinicalBERT,LaBSE,BioGPT,
+DeepSeek_8B,SciBERT,nomic-embed-text, and Cohere: embed-english-v2.0.
+
+10. These embeddings are provided as inputs to CANTOS which then identifies the closest matching (Euclidean Distance) WHO terms for each tumor name from the CTR using these embeddings .  </br>
+   
+11. We randomly sampled 1600 tumor names from the CTR and manually annotated their ground truths obtained from the WHO System. We observed the methods LTE-3+Euclidean Dist and all-MiniLM-L12-v2+Euclidean Dist had the highest standardization accuracy against WHO all editions and WHO 5th edition respectively. We filtered any CTR tumor names (from the 1600 sampled) that did not have a ground truth to evaluate the standardization accuracy.  We then plotted the distributions of the Euclidean distances of the remaining CTR terms to their respective WHO terms as identified by these two methods and segregated the distribution based on correct and incorrect standardization.</br>
 
 
 
