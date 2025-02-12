@@ -1,4 +1,4 @@
-#This script is used to generate the box plots for figure 1 . The box-plots compare the standardization results of LTE-3 + Euclidean Dist method.
+#This script is used to generate the box plots for figure 1 and 2 . The box-plots compare the standardization results for the methods LTE-3 + Euclidean Dist and all-MiniLM-L12-v2+Euclidean Dist.  
 
 suppressPackageStartupMessages({
   library(dplyr)
@@ -35,8 +35,7 @@ source(paste(util_dir,"/find_euclidean_match.R",sep=""))
 tumor_all_edition<-read.csv(paste(result_dir,"/tumor_manually_validated_all.csv",sep = ""))
 tumor_5th_edition<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_5th.csv",sep = ""))
 
-tumor_all_edition<-read.csv(paste(result_dir,"/tumor_manually_validated_tmp2.csv",sep = ""))
-tumor_5th_edition<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_tmp2_5th.csv",sep = ""))
+
 tumor_all_edition<-tumor_all_edition[,c(-1)]
 tumor_5th_edition<-tumor_5th_edition[,c(-1)]
 
