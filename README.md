@@ -81,82 +81,82 @@ This script loads data from clinical trials and select only the diseases with NC
 This script annotates the 50K diseases automatically as cancer or not. </br>
 
 **02-calculate-edit-distance.R** </br>
-This script loads the manually annotated disease file with pediatric and adult cancer annotation and computes the edit distance matrices. WHO database all editions was used in this script <br/>
+This script loads the manually annotated disease file with pediatric and adult cancer annotation and computes the edit distance matrices. WHO  all editions was used in this script <br/>
 **02-calculate-edit-distance-5thed.R**</br>
-This script loads the manually annotated disease file with pediatric and adult cancer annotation and computes the edit distance matrices. WHO database 5th editions was used in this script. <br/>
+This script loads the manually annotated disease file with pediatric and adult cancer annotation and computes the edit distance matrices. WHO  5th editions was used in this script. <br/>
 
 **03-edit-distance-clustering.R** </br>
-This Script performs affinity propagation clustering using edit distances. WHO database all editions was used in this script.  </br>
+This Script performs affinity propagation clustering using edit distances. WHO all editions was used in this script.  </br>
 **03-edit-distance-clustering-5thed.R** </br>
-This Script performs affinity propagation clustering using edit distances. WHO database 5th editions was used in this script. </br>
+This Script performs affinity propagation clustering using edit distances. WHO 5th editions was used in this script. </br>
 
 **04A-preprocess-embedding-pca.R** </br>
-These script loads ADA002 embeddings for CT, WHO, NCIT  Tumors and then performs PCA.WHO database all editions was used in this script. </br>
+These script loads AD-A002 embeddings for CT, WHO, NCIT  Tumors and then performs PCA.WHO all editions was used in this script. </br>
 **04A-preprocess-embedding-pca-ADA2-5thed.R**</br>
-These script loads ADA002 embeddings for CT, WHO, NCIT  Tumors and then performs PCA.WHO database 5th editions was used in this script. </br>
+These script loads ADA-002 embeddings for CT, WHO, NCIT  Tumors and then performs PCA.WHO 5th editions was used in this script. </br>
 
 
 **04B-preprocess-embedding-pca-v3.R** </br>
-These script loads V3 embeddings for CT, WHO, NCIT  Tumors and then performs PCA.WHO database all editions was used in this script. </br>
+These script loads LTE-3 embeddings for CT, WHO, NCIT  Tumors and then performs PCA.WHO database all editions was used in this script. </br>
 **04B-preprocess-embedding-pca-v3-5thed.R** </br>
-These script loads V3 embeddings for CT, WHO, NCIT  Tumors and then performs PCA.WHO database 5th editions was used in this script. </br>
+These script loads LTE-3 embeddings for CT, WHO, NCIT  Tumors and then performs PCA.WHO database 5th editions was used in this script. </br>
 
 **05A-cluster-on-ADA2-embedding-Kmeans.R**</br>
-This script computes Kmeans cluster using ADA002 embeddings  and also computes silhouette index.WHO database all editions was used in this script. </br>
+This script computes Kmeans cluster using ADA-002 embeddings  and also computes silhouette index.WHO database all editions was used in this script. </br>
 **05A-ADA2-embedding-Kmeans-5thed.R** </br>
-This script computes Kmeans cluster using ADA002 embeddings  and also computes silhouette index.WHO database 5th editions was used in this script. </br>
+This script computes Kmeans cluster using ADA-002 embeddings  and also computes silhouette index.WHO database 5th editions was used in this script. </br>
 
 **05B-v3-embedding-Kmeans.R** </br>
-This script computes Kmeans cluster using V3 embeddings  and also computes silhouette index.WHO database all editions was used in this script. </br>
+This script computes Kmeans cluster using LTE-3 embeddings  and also computes silhouette index.WHO database all editions was used in this script. </br>
 **05B-v3-embedding-Kmeans-5thed.R** </br>
-This script computes Kmeans cluster using V3 embeddings  and also computes silhouette index.WHO database 5th editions was used in this script. </br>
+This script computes Kmeans cluster using LTE-3 embeddings  and also computes silhouette index.WHO database 5th editions was used in this script. </br>
 
 **06A-cluster-on-ADA-embedding-affinity.R** </br>
-This script computes affinity propagation clustering using ADA002 embeddings. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.WHO database all editions was used in this script. </br>
+This script computes affinity propagation clustering using ADA-002 embeddings. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.WHO database all editions was used in this script. </br>
 **06A-cluster-on-ADA-embedding-affinity-5thed.R** </br>
-This script computes affinity propagation clustering using ADA002 embeddings. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.WHO database 5th editions was used in this script.</br>
+This script computes affinity propagation clustering using ADA-002 embeddings. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.WHO database 5th editions was used in this script.</br>
 
 **06B-cluster-on-V3-embedding-affinity.R** </br>
-This script computes affinity propagation cluster using V3 embeddings. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.WHO database all editions was used in this script.</br>
+This script computes affinity propagation cluster using LTE-3 embeddings. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.WHO database all editions was used in this script.</br>
 **06B-cluster-on-V3-embedding-affinity-5thed.R** </br>
-This script computes affinity propagation cluster using V3 embeddings. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.WHO database 5th editions was used in this script. </br>
+This script computes affinity propagation cluster using LTE-3 embeddings. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.WHO database 5th editions was used in this script. </br>
 
 
 **07A-annotate-cluster-result-NCIT-WHO.R**</br>
-This script annotates Affinity propagation cluster results of ADA002 embeddings. WHO database all editions was used in this script. </br>
+This script annotates Affinity propagation cluster results of ADA-002 embeddings. WHO database all editions was used in this script. </br>
 **07A-annotate-cluster-result-NCIT-WHO-5thed.R**</br>
-This script annotates Affinity propagation cluster results of ADA002 embeddings. WHO database 5th editions was used in this script. </br>
+This script annotates Affinity propagation cluster results of ADA-002 embeddings. WHO database 5th editions was used in this script. </br>
 
 **07B-annotate-cluster-result-V3-NCIT-WHO.R** </br>
-This script annotates Affinity propagation cluster results of V3 embeddings. WHO database all editions was used in this script. </br>
+This script annotates Affinity propagation cluster results of LTE-3 embeddings. WHO database all editions was used in this script. </br>
 **07B-annotate-cluster-result-V3-NCIT-WHO-5thed.R** </br>
-This script annotates Affinity propagation cluster results of V3 embeddings. WHO database 5th editions was used in this script. </br>
+This script annotates Affinity propagation cluster results of LTE-3 embeddings. WHO database 5th editions was used in this script. </br>
 **08-outlier-detection-embeddings.R** </br>
 This script is used to detect if Affinity propagation cluster members are outliers using LOF and Isolation Forest.We perform this for clusters formed using both ADA002 and V3 embeddings. WHO database all editions was used in this script </br>
 **08-outlier-detection-embeddings-5thed.R** </br>
-This script is used to detect if Affinity propagation cluster members are outliers using LOF and Isolation Forest.We perform this for clusters formed using both ADA002 and V3 embeddings. WHO database 5th editions was used in this script </br>
+This script is used to detect if Affinity propagation cluster members are outliers using LOF and Isolation Forest.We perform this for clusters formed using both ADA-002 and LTE-3 embeddings. WHO database 5th editions was used in this script </br>
 
 **09-cluster-reassignment-outlier.R** </br>
 This script performs reannotates Affinity cluster  after outlier detection. We perform this for clusters formed using both ADA002 and V3 embeddings. WHO database all editions was used in this script. </br>
 **09-cluster-reassignment-outlier-5thed.R** </br>
-This script performs reannotates Affinity cluster  after outlier detection. We perform this for clusters formed using both ADA002 and V3 embeddings. WHO database 5th editions was used in this script. </br>
+This script performs reannotates Affinity cluster  after outlier detection. We perform this for clusters formed using both ADA-002 and LTE-3 embeddings. WHO database 5th editions was used in this script. </br>
 
 **10-assign-who-ncit-outlier-kmeans-editdistance-clustering.R**</br>
-This script to detect outliers for embedding-based-Kmeans and editdistance based standardization. WHO database all editions was used in this script. </br>
+This script to detect outliers for embedding-based-Kmeans and edit distance based standardization. WHO database all editions was used in this script. </br>
 **10-assign-who-ncit-outlier-kmeans-editdistance-clustering-5thed.R** </br>
-This script to detect outliers for embedding-based-Kmeans and editdistance based standardization. WHO database 5th editions was used in this script. </br>
+This script to detect outliers for embedding-based-Kmeans and edit distance based standardization. WHO database 5th editions was used in this script. </br>
 
-**11-generate-records-annotation.R**</br>
-This script is used to annotate the types of ground truth found for each of the 1600 tumors sampled. </br>
+**11-os-embedding-euclidean-dist.R**</br>
+This script is used to compute Euclidean distance matrices between tumor names in CTR, WHO and, NCIt  using embeddings obtained from non-Open AI models. For each embedding type, we identify the closest match WHO 5th edition, WHO all edition, and NCIt terms for ever CTR tumor name. </br>
 
-**12-summarize-results.R**</br>
-Prints the accuracy of each standardization method. </br>
+**12-sample-CT-tumors-validation.R**</br>
+Randomly Sample 1600 tumors from the CTR Tumor Names. </br>
 
-**13-plot-script.R** </br>
-Script is used for generating silhouette plots. </br>
+**13-summarize-results.R** </br>
+For each standardization method compute their standardization accuracy against the sampled tumor names for which at least one ground truth was found from the WHO system . </br>
 
 **14-compute-euclidean-v3-threshold.R** </br>
-Script is used for generating box-plots for comparing the standardization results of LTE-3 + Euclidean Dist method. </br>
+Script is used for generating box-plots for comparing the standardization results of the methods LTE-3+Euclidean Dist and all-MiniLM-L12-v2+Euclidean Dist. </br>
 
 ## Libraries 
 1. apcluster </br>
@@ -182,3 +182,4 @@ Script is used for generating box-plots for comparing the standardization result
 21. stringi </br>
 22. stringr </br>
 23. tidyverse </br>
+24. pdist </br>
