@@ -111,3 +111,78 @@ print(paste("Best diverse combination (lowest mutual information):", mi_scores_5
 print(paste("Best diverse combination (lowest mutual information):", mi_scores_all$methods[1]))
 
 
+
+################
+combined_pred_5th<-tumor_5thed_gt%>%dplyr::select(nct_id,Tumor_Names,ground_truth,ground_truth_val,af_ada2,
+                                                                     valid_af_ad2,kmeans_v3,valid_kmeans_v3,
+                                                  euclidean_dist_MiniLM_L12_v2,valid_euclidean_dist_MiniLM_L12_v2)
+
+combined_pred_all<-tumor_all_gt%>%dplyr::select(nct_id,Tumor_Names,ground_truth,ground_truth_val,kmeans_v3,
+                                                valid_kmeans_v3,kmeans_ada2, valid_kmeans_ada2,euclidean_dist_MiniLM_L12_v2,
+                                                valid_euclidean_dist_MiniLM_L12_v2)
+
+combined_pred_5th$combined_predictions<-NA
+combined_pred_5th$valid_combined_predictions<-NA
+
+
+combined_pred_all$combined_predictions<-NA
+combined_pred_all$valid_combined_predictions<-NA
+
+
+for(iter in 1:nrow(combined_pred_5th)){
+  ground_truths<- combined_pred_5th$ground_truth_val[iter]
+  ground_truths<-unique(unlist(strsplit(ground_truths,";")))
+  
+  kmeans_v3_pred<- combined_pred_5th$kmeans_v3[iter]
+  af_ada2_pred<-combined_pred_5th$af_ada2[iter]
+  minilm_pred <-combined_pred_5th$euclidean_dist_MiniLM_L12_v2[iter]
+  
+  table_pred<-as.data.frame(table(c(kmeans_v3_pred,af_ada2_pred,minilm_pred)))
+  most_frequent <- as.character(table_pred$Var1[table_pred$Freq== max(table_pred$Freq)])
+  
+  if(length(most_frequent)==1){
+    combined_pred_5th$combined_predictions[iter]=most_frequent
+  }else{
+    combined_pred_5th$combined_predictions[iter]=combined_pred_5th$euclidean_dist_MiniLM_L12_v2[iter]
+  }
+  
+  if(combined_pred_5th$combined_predictions[iter] %in% ground_truths){
+    combined_pred_5th$valid_combined_predictions[iter]=1
+  }else{
+    combined_pred_5th$valid_combined_predictions[iter]=0
+  }
+  
+  
+  
+}
+
+print(sum(combined_pred_5th$valid_combined_predictions)/nrow(combined_pred_5th))
+
+
+
+for(iter in 1:nrow(combined_pred_all)){
+  ground_truths<- combined_pred_all$ground_truth_val[iter]
+  ground_truths<-unique(unlist(strsplit(ground_truths,";")))
+  
+  kmeans_v3_pred<- combined_pred_all$kmeans_v3[iter]
+  kmeans_ada2_pred<-combined_pred_all$kmeans_ada2[iter]
+  minilm_pred <-combined_pred_all$euclidean_dist_MiniLM_L12_v2[iter]
+  
+  table_pred<-as.data.frame(table(c(kmeans_v3_pred,kmeans_ada2_pred,minilm_pred)))
+  most_frequent <- as.character(table_pred$Var1[table_pred$Freq== max(table_pred$Freq)])
+  
+  if(length(most_frequent)==1){
+    combined_pred_all$combined_predictions[iter]=most_frequent
+  }else{
+    combined_pred_all$combined_predictions[iter]=combined_pred_all$euclidean_dist_MiniLM_L12_v2[iter]
+  }
+  
+  if(combined_pred_all$combined_predictions[iter] %in% ground_truths){
+    combined_pred_all$valid_combined_predictions[iter]=1
+  }else{
+    combined_pred_all$valid_combined_predictions[iter]=0
+  }
+  
+}
+
+print(sum(combined_pred_all$valid_combined_predictions)/nrow(combined_pred_all))
