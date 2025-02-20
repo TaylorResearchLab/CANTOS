@@ -55,11 +55,21 @@ data_all<-data_all%>%dplyr::select(col_select)
 MI_mat_5th <-compute_mi_pairwise(data_5th)
 MI_mat_all <-compute_mi_pairwise(data_all)
 
+method_names<-c("LTE3+Euclidean_dist","ADA002+Euclidean_dist","ADA002+AP",                      
+                "LTE3+ADA002","LTE3+kmeans","ADA002+kmeans",                 
+                "all_MiniLM_L6_v2+euclidean_dist",  "all_mpnet_base+euclidean_dist","e5_large+euclidean_dist",     
+                "all_MiniLM_L12_v2+euclidean_dist", "nomic+euclidean_dist")
+
+colnames(MI_mat_5th)<-method_names
+colnames(MI_mat_all)<-method_names
+rownames(MI_mat_5th)<-method_names
+rownames(MI_mat_all)<-method_names
+
 
 
 which(MI_mat_5th==min(MI_mat_5th),arr.ind = TRUE)
 which(MI_mat_all==min(MI_mat_all),arr.ind = TRUE)  
-method_combinations <- combn(col_select, 3, simplify = FALSE)
+method_combinations <- combn(method_names, 3, simplify = FALSE)
 
 compute_avg_mi <- function(methods, mi_matrix) {
   sub_matrix <- mi_matrix[methods, methods]  # Extract sub-matrix for selected methods
@@ -162,3 +172,15 @@ for(iter in 1:nrow(combined_pred_all)){
 
 print(sum(combined_pred_all$valid_combined_predictions)/nrow(combined_pred_all))
 
+
+mi_values <- MI_mat_all[lower.tri(MI_mat_all)]
+
+hist(mi_values, 
+     main = "Histogram of Pairwise Mutual Information", 
+     xlab = "Mutual Information", 
+     col = "steelblue", 
+     border = "white", 
+     breaks = 10)
+
+text(x = mi_values, y = table(cut(mi_values, breaks = 10)), 
+     labels = method_pairs, pos = 3, cex = 0.7, col = "red")
