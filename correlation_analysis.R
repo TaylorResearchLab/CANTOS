@@ -173,14 +173,19 @@ for(iter in 1:nrow(combined_pred_all)){
 print(sum(combined_pred_all$valid_combined_predictions)/nrow(combined_pred_all))
 
 
-mi_values <- MI_mat_all[lower.tri(MI_mat_all)]
+mi_values_all <- MI_mat_all[lower.tri(MI_mat_all)]
+lower_tri_indices <- which(lower.tri(MI_mat_all), arr.ind=TRUE)
+row_names <- rownames(MI_mat_all)[lower_tri_indices[,1]]
+col_names <- colnames(MI_mat_all)[lower_tri_indices[,2]]
 
-hist(mi_values, 
+# Concatenate row and column names with "+"
+pairs <- paste(row_names, col_names, sep="+")
+
+hist(mi_values_all, 
      main = "Histogram of Pairwise Mutual Information", 
      xlab = "Mutual Information", 
      col = "steelblue", 
      border = "white", 
      breaks = 10)
-
-text(x = mi_values, y = table(cut(mi_values, breaks = 10)), 
-     labels = method_pairs, pos = 3, cex = 0.7, col = "red")
+text(x = mi_values_all, y = table(cut(mi_values_all, breaks = 10)), 
+     labels = pairs, pos = 3, cex = 0.7, col = "red")
