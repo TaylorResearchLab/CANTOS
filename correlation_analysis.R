@@ -177,13 +177,41 @@ print(sum(combined_pred_all$valid_combined_predictions)/nrow(combined_pred_all))
 
 # Convert MI matrix to long format for visualization
 mi_melted_all <- melt(MI_mat_all)
+min_val_all <- min(mi_melted_all$value)
+
+# Get positions of min and max values
+min_pos_all <- mi_melted_all[which(mi_melted_all$value == min_val_all), ]
 
 # Plot heatmap
-ggplot(mi_melted_all, aes(Var1, Var2, fill = value)) +
-  geom_tile() +
-  scale_fill_viridis_c()+
-  theme_minimal() +
+plt_heat_all<-ggplot(mi_melted_all, aes(Var1, Var2, fill = value)) +
+  geom_tile(color = "gray", size = 1)+
+  scale_fill_viridis_c(option = "magma") + # color bilind friendly
+  geom_point(data = min_pos_all, aes(Var1, Var2), color = "blue", size = 4, shape = 21, fill = "blue",stroke = 1.5) +  # Mark Min
+  annotate("text", x = min_pos_all$Var1, y = min_pos_all$Var2, label = "Min", color = "blue", size = 3, vjust = -1) +
+  theme_minimal() + 
   labs(title = "Heatmap of Pairwise Mutual Information for WHO all editions", 
+       x = "Methods", y = "Methods", fill = "MI")+
+  theme(
+    axis.text.x = element_text(size = 8, angle = 45, hjust = 1),  # Reduce x-axis tick size and rotate
+    axis.text.y = element_text(size = 8)  # Reduce y-axis tick size
+  )
+
+
+# Convert MI matrix to long format for visualization
+mi_melted_5th <- melt(MI_mat_5th)
+min_val_5th <- min(mi_melted_5th$value)
+
+# Get positions of min and max values
+min_pos_5th <- mi_melted_5th[which(mi_melted_5th$value == min_val_5th), ]
+
+# Plot heatmap
+plt_heat_5th<-ggplot(mi_melted_5th, aes(Var1, Var2, fill = value)) +
+  geom_tile(color = "gray", size = 1)+
+  scale_fill_viridis_c(option = "magma") + # color bilind friendly
+  geom_point(data = min_pos_5th, aes(Var1, Var2), color = "blue", size = 4, shape = 21, fill = "blue",stroke = 1.5) +  # Mark Min
+  annotate("text", x = min_pos_5th$Var1, y = min_pos_5th$Var2, label = "Min", color = "blue", size = 3, vjust = -1) +
+  theme_minimal() + 
+  labs(title = "Heatmap of Pairwise Mutual Information for WHO 5th editions", 
        x = "Methods", y = "Methods", fill = "MI")+
   theme(
     axis.text.x = element_text(size = 8, angle = 45, hjust = 1),  # Reduce x-axis tick size and rotate
