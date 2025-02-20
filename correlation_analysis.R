@@ -27,12 +27,11 @@ intermediate_dir_5th <- file.path(analysis_dir,"intermediate_5th")
 result_dir <- file.path(analysis_dir,"results")
 result_dir_5th <- file.path(analysis_dir,"results_5th")
 
+source(paste(util_dir,"/compute_mi_pairwise.R",sep = ""))
 
-#tumor_all_gt<-read.csv(paste(result_dir,"/tumor_sample_df_gt_annotated_all.csv",sep = ""))
-#tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_sample_df_gt_annotated_5th.csv",sep = ""))
+tumor_all_gt<-read.csv(paste(result_dir,"/tumor_manually_validated_all.csv",sep = ""))
+tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_5th.csv",sep = ""))
 
-tumor_all_gt<-read.csv(paste("/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/analysis/results","/tumor_manually_validated_all.csv",sep = ""))
-tumor_5thed_gt<-read.csv(paste("/Users/lahiria/Desktop/MTP_Paper/CT-Embedding-Paper/analysis/results_5th","/tumor_manually_validated_5th.csv",sep = ""))
 
 tumor_all_gt<-tumor_all_gt[,c(-1)]
 tumor_5thed_gt<-tumor_5thed_gt[,c(-1)]
@@ -51,33 +50,11 @@ col_select <- c("valid_euclidean_dist_v3","valid_euclidean_dist_ada2","valid_af_
 data_5th<-data_5th%>%dplyr::select(col_select)
 data_all<-data_all%>%dplyr::select(col_select)
 
-num_methods<-length(col_select)
 
 # Compute pairwise Mutual Information
-MI_mat_5th <- matrix(0, nrow = num_methods, ncol = num_methods)
-for (i in 1:num_methods) {
-  for (j in i:num_methods) {
-    mi_score <- mutinformation(data_5th[[i]], data_5th[[j]])
-    MI_mat_5th[i, j] <- mi_score
-    MI_mat_5th[j, i] <- mi_score  # Fill both halves since it's symmetric
-  }
-}
-colnames(MI_mat_5th) <- colnames(data_5th)
-rownames(MI_mat_5th) <- colnames(data_5th)
+MI_mat_5th <-compute_mi_pairwise(data_5th)
+MI_mat_all <-compute_mi_pairwise(data_all)
 
-
-MI_mat_all <- matrix(0, nrow = num_methods, ncol = num_methods)
-
-# Compute pairwise Mutual Information
-for (i in 1:num_methods) {
-  for (j in i:num_methods) {
-    mi_score <- mutinformation(data_all[[i]], data_all[[j]])
-    MI_mat_all[i, j] <- mi_score
-    MI_mat_all[j, i] <- mi_score  # Fill both halves since it's symmetric
-  }
-}
-colnames(MI_mat_all) <- colnames(data_all)
-rownames(MI_mat_all) <- colnames(data_all)
 
 
 which(MI_mat_5th==min(MI_mat_5th),arr.ind = TRUE)
@@ -93,11 +70,11 @@ compute_avg_mi <- function(methods, mi_matrix) {
 mi_scores_5th <- sapply(method_combinations, function(combo) compute_avg_mi(combo, MI_mat_5th))
 mi_scores_all <- sapply(method_combinations, function(combo) compute_avg_mi(combo, MI_mat_all))
 
-collapsed_string <- sapply(method_combinations, function(x) paste(x, collapse = "+"))
+collapsed_colnames <- sapply(method_combinations, function(x) paste(x, collapse = "+"))
 
 
-mi_scores_5th<-as.data.frame(cbind(collapsed_string,mi_scores_5th))
-mi_scores_all<-as.data.frame(cbind(collapsed_string,mi_scores_all))
+mi_scores_5th<-as.data.frame(cbind(collapsed_colnames,mi_scores_5th))
+mi_scores_all<-as.data.frame(cbind(collapsed_colnames,mi_scores_all))
 
 colnames(mi_scores_5th)<- c("methods","mi_score")
 colnames(mi_scores_all)<- c("methods","mi_score")
@@ -115,18 +92,12 @@ print(paste("Best diverse combination (lowest mutual information):", mi_scores_a
 ################
 combined_pred_5th<-tumor_5thed_gt%>%dplyr::select(nct_id,Tumor_Names,ground_truth,ground_truth_val,af_ada2,
                                                                      valid_af_ad2,kmeans_v3,valid_kmeans_v3,
-                                                  euclidean_dist_MiniLM_L12_v2,valid_euclidean_dist_MiniLM_L12_v2,euclidean_dist_e5_large,valid_euclidean_dist_e5_large)
+                                                  euclidean_dist_MiniLM_L12_v2,valid_euclidean_dist_MiniLM_L12_v2)
 
-combined_pred_all<-tumor_all_gt%>%dplyr::select(nct_id,Tumor_Names,ground_truth,ground_truth_val,kmeans_v3,
-                                                valid_kmeans_v3,kmeans_ada2, valid_kmeans_ada2,euclidean_dist_MiniLM_L12_v2,
-                                                valid_euclidean_dist_MiniLM_L12_v2,euclidean_dist_v3,valid_euclidean_dist_v3)
+
 
 combined_pred_5th$combined_predictions<-NA
 combined_pred_5th$valid_combined_predictions<-NA
-
-
-combined_pred_all$combined_predictions<-NA
-combined_pred_all$valid_combined_predictions<-NA
 
 
 for(iter in 1:nrow(combined_pred_5th)){
@@ -152,14 +123,18 @@ for(iter in 1:nrow(combined_pred_5th)){
     combined_pred_5th$valid_combined_predictions[iter]=0
   }
   
-  
-  
 }
 
 print(sum(combined_pred_5th$valid_combined_predictions)/nrow(combined_pred_5th))
 
+################################
 
+combined_pred_all<-tumor_all_gt%>%dplyr::select(nct_id,Tumor_Names,ground_truth,ground_truth_val,kmeans_v3,
+                                                valid_kmeans_v3,kmeans_ada2, valid_kmeans_ada2,euclidean_dist_MiniLM_L12_v2,
+                                                valid_euclidean_dist_MiniLM_L12_v2)
 
+combined_pred_all$combined_predictions<-NA
+combined_pred_all$valid_combined_predictions<-NA
 for(iter in 1:nrow(combined_pred_all)){
   ground_truths<- combined_pred_all$ground_truth_val[iter]
   ground_truths<-unique(unlist(strsplit(ground_truths,";")))
@@ -174,7 +149,7 @@ for(iter in 1:nrow(combined_pred_all)){
   if(length(most_frequent)==1){
     combined_pred_all$combined_predictions[iter]=most_frequent
   }else{
-    combined_pred_all$combined_predictions[iter]=combined_pred_all$euclidean_dist_v3[iter]
+    combined_pred_all$combined_predictions[iter]=combined_pred_all$euclidean_dist_MiniLM_L12_v2[iter]
   }
   
   if(combined_pred_all$combined_predictions[iter] %in% ground_truths){
@@ -186,43 +161,4 @@ for(iter in 1:nrow(combined_pred_all)){
 }
 
 print(sum(combined_pred_all$valid_combined_predictions)/nrow(combined_pred_all))
-col_select2<-col_select
-col_select2 <- gsub("valid_","",col_select2)
-col_select2[3]<-"af_ada2"  
-tumor_5thed_gt2<-tumor_5thed_gt%>%dplyr::select(nct_id,Tumor_Names,ground_truth,ground_truth_val,col_select,col_select2)
-
-
-
-tumor_5thed_gt2$combined_predictions<-NA
-tumor_5thed_gt2$valid_combined_predictions<-NA
-
-
-
-for(iter in 1:nrow(tumor_5thed_gt2)){
-  ground_truths<- tumor_5thed_gt2$ground_truth_val[iter]
-  ground_truths<-unique(unlist(strsplit(ground_truths,";")))
-  
-  list_std<-as.character(tumor_5thed_gt2[iter,16:26])
-  
-  table_pred<-as.data.frame(table(list_std))
-  most_frequent <- as.character(table_pred$Var1[table_pred$Freq== max(table_pred$Freq)])
-  
-  if(length(most_frequent)==1){
-    tumor_5thed_gt2$combined_predictions[iter]=most_frequent
-  }else{
-    tumor_5thed_gt2$combined_predictions[iter]=tumor_5thed_gt2$euclidean_dist_MiniLM_L12_v2[iter]
-  }
-  
-  if(tumor_5thed_gt2$combined_predictions[iter] %in% ground_truths){
-    tumor_5thed_gt2$valid_combined_predictions[iter]=1
-  }else{
-    tumor_5thed_gt2$valid_combined_predictions[iter]=0
-  }
-  
-  
-  
-}
-
-print(sum(tumor_5thed_gt2$valid_combined_predictions)/nrow(tumor_5thed_gt2))
-
 
