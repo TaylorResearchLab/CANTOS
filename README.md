@@ -158,6 +158,12 @@ For each standardization method compute their standardization accuracy against t
 **14-compute-euclidean-v3-threshold.R** </br>
 Script is used for generating box-plots for comparing the standardization results of the methods LTE-3+Euclidean Dist and all-MiniLM-L12-v2+Euclidean Dist. </br>
 
+**15-compute-euclidean-v3-threshold.R** </br>
+Script is used to generate average silhouette score vs number of cluster plot in figure 5.</br>
+
+**16-generate-heatmaps-mi-analysis.R** </br>
+Script is used to perform mutual information analysis to identify three high accuracy standardization methods for performing majority vote to select standardization for a given CTR tumor name. The script also generates heatmap (figure 6 and 7) of pairwise mutual information among the high-accuracy methods.</br>
+
 ## Libraries 
 1. apcluster </br>
 2. biomaRt </br>
