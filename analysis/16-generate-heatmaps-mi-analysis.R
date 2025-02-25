@@ -217,3 +217,8 @@ plt_heat_5th<-ggplot(mi_melted_5th, aes(Var1, Var2, fill = value)) +
     axis.text.x = element_text(size = 8, angle = 45, hjust = 1),  # Reduce x-axis tick size and rotate
     axis.text.y = element_text(size = 8)  # Reduce y-axis tick size
   )
+
+
+# write the files
+write.csv(MI_mat_5th,paste(result_dir_5th,"/MI_5th_results.csv",sep=""))
+write.csv(MI_mat_all,paste(result_dir,"/MI_all_results.csv",sep=""))
