@@ -222,3 +222,7 @@ plt_heat_5th<-ggplot(mi_melted_5th, aes(Var1, Var2, fill = value)) +
 # write the files
 write.csv(MI_mat_5th,paste(result_dir_5th,"/MI_5th_results.csv",sep=""))
 write.csv(MI_mat_all,paste(result_dir,"/MI_all_results.csv",sep=""))
+
+
+
+
