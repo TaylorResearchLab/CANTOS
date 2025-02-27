@@ -164,6 +164,12 @@ Script is used to generate average silhouette score vs number of cluster plot in
 **16-generate-heatmaps-mi-analysis.R** </br>
 Script is used to perform mutual information analysis to identify three high accuracy standardization methods for performing majority vote to select standardization for a given CTR tumor name. The script also generates heatmap (figure 6 and 7) of pairwise mutual information among the high-accuracy methods.</br>
 
+**17-all-method-voting.R** </br>
+Script is used to predict CTR tumor name standardization, by performing majority voting of high-accuracy methods (standardization accuracy >=60%) as identified in script 13. </br>
+
+**18-majority-vote-predictions.R** </br>
+Script is used to predict the majority vote based standardization methods identified in script 16 for all the CTR terms. Since two different combinations of methods were identified for WHO 5th and WHO all editions, we use each of the methods to also standardize the CTR terms with respect to NCIt. 
+
 ## Libraries 
 1. apcluster </br>
 2. biomaRt </br>
