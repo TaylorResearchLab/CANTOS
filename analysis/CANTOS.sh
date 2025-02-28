@@ -49,6 +49,13 @@ Rscript 09-cluster-reassignment-outlier-5thed.R
 Rscript 10-assign-who-ncit-outlier-kmeans-editdistance-clustering.R
 Rscript 10-assign-who-ncit-outlier-kmeans-editdistance-clustering-5thed.R
 
-Rscript 11-generate-records-annotation.R 
-Rscript 12-summarize-results.R 
-Rscript 13-plot-script.R
+Rscript 11-os-embedding-euclidean-dist.R
+Rscript 12-sample-CT-tumors-validation.R
+Rscript 13-summarize-results.R
+
+Rscript 14-compute-euclidean-v3-threshold.R
+Rscript 15-plot-silhouette-plot.R
+Rscript 16-generate-heatmaps-mi-analysis.R
+Rscript 17-all-method-voting.R
+Rscript 18-majority-vote-predictions.R
+
