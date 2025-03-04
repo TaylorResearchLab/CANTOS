@@ -318,5 +318,14 @@ for(iter in 1:nrow(fifth)){
 }
 rownames(all)<- NULL
 rownames(fifth)<-NULL
+
+all$all<-signif(all$all,digits = 3)*100
+fifth$fifth<-signif(fifth$fifth,digits = 3)*100
+
+all<-all[order(all$all,decreasing = TRUE),]
+fifth<-fifth[order(fifth$fifth,decreasing = TRUE),]
+
 print(all)
 print(fifth)
+
+
