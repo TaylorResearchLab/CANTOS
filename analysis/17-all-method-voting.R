@@ -76,7 +76,7 @@ for(iter in 1:nrow(tumor_5thed_gt)){
   
 }
 
-print(sum(tumor_5thed_gt$valid_combined_predictions)/nrow(tumor_5thed_gt))
+print(signif(sum(tumor_5thed_gt$valid_combined_predictions)/nrow(tumor_5thed_gt),digits = 3)*100)
 
 
 
@@ -108,7 +108,7 @@ for(iter in 1:nrow(tumor_all_gt)){
   
 }
 
-print(sum(tumor_all_gt$valid_combined_predictions)/nrow(tumor_all_gt))
+print(signif(sum(tumor_all_gt$valid_combined_predictions)/nrow(tumor_all_gt),digits = 3)*100)
 
 
 
