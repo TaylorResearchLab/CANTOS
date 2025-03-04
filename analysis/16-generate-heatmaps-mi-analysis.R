@@ -138,6 +138,7 @@ for(iter in 1:nrow(combined_pred_5th)){
 }
 
 print(sum(combined_pred_5th$valid_combined_predictions)/nrow(combined_pred_5th))
+print(signif(sum(combined_pred_5th$valid_combined_predictions)/nrow(combined_pred_5th),digits=3)*100)
 
 ################################
 
@@ -172,8 +173,8 @@ for(iter in 1:nrow(combined_pred_all)){
   
 }
 
-print(sum(combined_pred_all$valid_combined_predictions)/nrow(combined_pred_all))
-
+#print(sum(combined_pred_all$valid_combined_predictions)/nrow(combined_pred_all))
+print(signif(sum(combined_pred_all$valid_combined_predictions)/nrow(combined_pred_all),digits =3)*100)
 
 # Convert MI matrix to long format for visualization
 mi_melted_all <- melt(MI_mat_all)
