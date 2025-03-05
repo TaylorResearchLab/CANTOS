@@ -10,14 +10,36 @@ Following are the steps for running the pipeline: </br>
 4. On the next page click the menu with three vertical dots, and select the download button, a zip file will be downloaded. </br>
 5. Unzip the file and store the embeddings files in the data directory of the cloned GitHub repository: </br>
 
-| File Name             | Directory    | 
-| :---------------------|:-------------| 
-| CT_Embeddings_ADA2.csv| `CANTOS/data`  | 
-| CT_Embeddings_V3.csv	| `CANTOS/data`  | 
-| NCIT_Embeddings_V3.csv| `CANTOS/data`  | 
-| WHO_Aggregate_ADA2.csv| `CANTOS/data`  | 
-| WHO_Terms_All_V3.csv	| `CANTOS/data`  | 
-
+|#| File Name             | Directory    | 
+|:- | :---------------------|:-------------| 
+|1| CT_Embeddings_ADA2.csv| `CANTOS/data`  | 
+|2| CT_Embeddings_V3.csv	| `CANTOS/data`  | 
+|3| NCIT_Embeddings_V3.csv| `CANTOS/data`  | 
+|4| WHO_Aggregate_ADA2.csv| `CANTOS/data`  | 
+|5| WHO_Terms_All_V3.csv	| `CANTOS/data`  | 
+|6| all-MiniLM-L12-v2.csv| `CANTOS/data`  | 
+|7| all_MiniLM_L6_v2.csv| `CANTOS/data`  | 
+|8| all_embedding_llama_33_70b.csv| `CANTOS/data`  | 
+|9| all_mpnet_base_v2.csv| `CANTOS/data`  | 
+|10| biobert_embedding.csv	| `CANTOS/data`  | 
+|11| cohere_embeddings_embed_english_v2.csv| `CANTOS/data`  | 
+|12| deepseek_8b.csv| `CANTOS/data`  | 
+|13| e5-large-v2.csv| `CANTOS/data`  | 
+|14| e5-large.csv| `CANTOS/data`  | 
+|15| embeddings_llama.csv| `CANTOS/data`  | 
+|16| gtr-t5-large.csv| `CANTOS/data`  | 
+|17| llama32_3B.csv| `CANTOS/data`  | 
+|18| medllama-13b.csv| `CANTOS/data`  | 
+|19| medllama-7b.csv| `CANTOS/data`  | 
+|20| mordernbert_embeddings.csv| `CANTOS/data`  | 
+|21| nomic-embed-text.csv| `CANTOS/data`  | 
+|22| output_tumor_embeddings_biogpt.csv| `CANTOS/data`  | 
+|23| output_tumor_embeddings_clinicalBERT.csv| `CANTOS/data`  | 
+|24| phi4.csv	| `CANTOS/data`  | 
+|25| pubmedbert-base-embeddings.csv| `CANTOS/data`  | 
+|26|tumor_embeddings_labse.csv| `CANTOS/data`  | 
+|27| tumor_embeddings_sapbert.csv| `CANTOS/data`  | 
+|28| tumor_embeddings_scibert.csv| `CANTOS/data`  | 
 </br> 
 Please note that the ADA002 embeddings file for NCIT is contained in the following directory: </br>
 
