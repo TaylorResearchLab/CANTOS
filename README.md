@@ -34,7 +34,7 @@ Following are the steps for running the pipeline: </br>
 |20| mordernbert_embeddings.csv| `CANTOS/data`  | 
 |21| nomic-embed-text.csv| `CANTOS/data`  | 
 |22| output_tumor_embeddings_biogpt.csv| `CANTOS/data`  | 
-|23| output_tumor_embeddings_clinicalBERT.csv| `CANTOS/data`  | 
+|23| output_tumor_embeddings_clinicalBERT.csv| `CANTOS/data`|
 |24| phi4.csv	| `CANTOS/data`  | 
 |25| pubmedbert-base-embeddings.csv| `CANTOS/data`  | 
 |26|tumor_embeddings_labse.csv| `CANTOS/data`  | 
