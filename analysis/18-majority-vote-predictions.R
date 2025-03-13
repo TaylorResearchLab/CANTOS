@@ -129,6 +129,28 @@ for(iter in 1:nrow(NCIT_Results_all_ose)){
   
 }
 
+# Add the NCIT_ID
+
+WHO_5th<-read.csv(paste(result_dir_5th,"/WHO_Results_5thed.csv",sep = ""))
+WHO_all<-read.csv(paste(result_dir,"/WHO_Results_all.csv",sep = ""))
+NCIT_5th<-read.csv(paste(result_dir_5th,"/NCIT_Results_5thed.csv",sep = ""))
+NCIT_all<-read.csv(paste(result_dir,"/NCIT_Results_all.csv",sep = ""))
+
+WHO_5th<-WHO_5th[,c(2,3)]
+WHO_all<-WHO_all[,c(2,3)]
+NCIT_5th<-NCIT_5th[,c(2,3)]
+NCIT_all<-NCIT_all[,c(2,3)]
+
+WHO_Results_5thed_ose<- WHO_Results_5thed_ose%>%left_join(WHO_5th,by="Tumor_Names")
+WHO_Results_all_ose<- WHO_Results_all_ose%>%left_join(WHO_all,by="Tumor_Names")
+
+NCIT_Results_5thed_ose<- NCIT_Results_5thed_ose%>%left_join(NCIT_5th,by="Tumor_Names")
+NCIT_Results_all_ose<- NCIT_Results_all_ose%>%left_join(NCIT_all,by="Tumor_Names")
+
+WHO_Results_5thed_ose<-WHO_Results_5thed_ose[,c(39,1:38)]
+WHO_Results_all_ose<-WHO_Results_all_ose[,c(39,1:38)]
+NCIT_Results_5thed_ose<-NCIT_Results_5thed_ose[,c(39,1:38)]
+NCIT_Results_all_ose<-NCIT_Results_all_ose[,c(39,1:38)]
 
 # Write the results
 write.csv(WHO_Results_5thed_ose,paste(result_dir_5th,"/WHO_Results_5thed_ose.csv",sep = ""))
