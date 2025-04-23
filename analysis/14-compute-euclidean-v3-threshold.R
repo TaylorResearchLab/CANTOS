@@ -102,7 +102,7 @@ distances_all_edition<- tumor_all_edition%>%dplyr::select(Euclidean_Dist_LTE3,va
 distances_5th_edition<-distances_5th_edition %>% mutate(standardization_result_LTE3= case_when(valid_euclidean_dist_v3==1~ "Correctly Standardized",
                                                                                          valid_euclidean_dist_v3==0~"Incorrectly Standardized"))
 
-distances_5th_edition<-distances_5th_edition %>% mutate(standardization_result_MiniLM_L12_v2= case_when(valid_euclidean_dist_MiniLM_L12_v2==1~ "Correctly Standardized",
+distances_5th_edition<-distances_5th_edition %>% mutate(standardization_result_all_MiniLM_L12_v2= case_when(valid_euclidean_dist_MiniLM_L12_v2==1~ "Correctly Standardized",
                                                                                                valid_euclidean_dist_MiniLM_L12_v2==0~"Incorrectly Standardized"))
 
                            
@@ -111,7 +111,7 @@ distances_5th_edition<-distances_5th_edition %>% mutate(standardization_result_M
 distances_all_edition<-distances_all_edition %>% mutate(standardization_result_LTE3= case_when(valid_euclidean_dist_v3==1~ "Correctly Standardized",
                                                                                                valid_euclidean_dist_v3==0~"Incorrectly Standardized"))
 
-distances_all_edition<-distances_all_edition %>% mutate(standardization_result_MiniLM_L12_v2= case_when(valid_euclidean_dist_MiniLM_L12_v2==1~ "Correctly Standardized",
+distances_all_edition<-distances_all_edition %>% mutate(standardization_result_all_MiniLM_L12_v2= case_when(valid_euclidean_dist_MiniLM_L12_v2==1~ "Correctly Standardized",
                                                                                                         valid_euclidean_dist_MiniLM_L12_v2==0~"Incorrectly Standardized"))
 
 
@@ -127,11 +127,11 @@ Plt_all_ed_LTE3<- ggplot(distances_all_edition, aes(x=standardization_result_LTE
 
 
 
-Plt_5th_ed_MiniLM_L12_v2<- ggplot(distances_5th_edition, aes(x=standardization_result_MiniLM_L12_v2, y=Euclidean_distance_all_MiniLM_L12_v2_embedding,
-                                                             color=standardization_result_MiniLM_L12_v2)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ labs(y= "Euclidean distance in all_MiniLM_L12_v2 embedding space", x = "Standardization results for WHO 5th edition")+ggtitle("a")
+Plt_5th_ed_MiniLM_L12_v2<- ggplot(distances_5th_edition, aes(x=standardization_result_all_MiniLM_L12_v2, y=Euclidean_distance_all_MiniLM_L12_v2_embedding,
+                                                             color=standardization_result_all_MiniLM_L12_v2)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ labs(y= "Euclidean distance in all_MiniLM_L12_v2 embedding space", x = "Standardization results for WHO 5th edition")+ggtitle("a")
 
-Plt_all_ed_MiniLM_L12_v2<- ggplot(distances_all_edition, aes(x=standardization_result_MiniLM_L12_v2, y=Euclidean_distance_all_MiniLM_L12_v2_embedding,
-                                                             color=standardization_result_MiniLM_L12_v2)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2") + labs(y= "Euclidean distance in all_MiniLM_L12_v2 embedding space", x = "Standardization results for WHO all editions")+ggtitle("b")
+Plt_all_ed_MiniLM_L12_v2<- ggplot(distances_all_edition, aes(x=standardization_result_all_MiniLM_L12_v2, y=Euclidean_distance_all_MiniLM_L12_v2_embedding,
+                                                             color=standardization_result_all_MiniLM_L12_v2)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2") + labs(y= "Euclidean distance in all_MiniLM_L12_v2 embedding space", x = "Standardization results for WHO all editions")+ggtitle("b")
 
 
 
