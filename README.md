@@ -6,7 +6,7 @@ The results of this study is used to standardize the tumor names in CT database,
 Following are the steps for running the pipeline: </br>
 1. Clone this Github repository to your local machine </br> 
 2. Navigate to the following Open Science Foundation website to find the embeddings data files needed to run CANTOS: https://doi.org/10.17605/OSF.IO/DBGWN </br>
-3. Under the files section, there are several embedding files listed which need to be downloaded. </br>
+3. Under the files section, navigate to the Embeddings folder.  There are several embedding files in the Embedding folder that need to be downloaded. </br>
 4. Click the button with three vertical dots on the right side of each embedding file, and select the download button, which will initiate the download. </br>
 5. Locate the file on your machine and store the embeddings files in the data directory of the cloned GitHub repository: </br>
 
