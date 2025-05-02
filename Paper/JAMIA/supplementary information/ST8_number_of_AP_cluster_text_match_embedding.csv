@@ -1,6 +1,0 @@
-﻿Basis,Affinity Propagation Clustering Divergence Metric,"Number of Clusters for CTR Terms, NCIt Terms,  WHO system all editions","Number of Clusters for CTR Terms, NCIt Terms,  WHO system 5th edition"
-Text Match,Cosine,1040,967
-Text Match,Levenshtein,2020,1808
-Text Match,Jarro Winkler,1965,1785
-Embedding,ADA-002 + Euclidean Dist,3790,3456
-Embedding,LTE-3 + Euclidean Dist,3894,3427
