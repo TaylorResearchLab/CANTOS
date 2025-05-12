@@ -26,7 +26,7 @@ intermediate_dir_5th <- file.path(analysis_dir,"intermediate_5th")
 result_dir <- file.path(analysis_dir,"results")
 result_dir_5th <- file.path(analysis_dir,"results_5th")
 
-
+source(paste(util_dir,"/run_mcnemar_matrix.R",sep=""))
 
 tumor_all_gt<-read.csv(paste(result_dir,"/tumor_manually_validated_all.csv",sep = ""))
 tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_5th.csv",sep = ""))
@@ -50,4 +50,13 @@ colnames(correct_5thed_matrix)<-cleaned_colnames_5thed
 colnames(correct_all_matrix)<-cleaned_colnames_all
 
 
+result_5thed <- run_mcnemar_matrix(correct_5thed_matrix)
+result_all <- run_mcnemar_matrix(correct_all_matrix)
 
+pvals_5thed<- result_5thed$p_values
+disagreements_5thed <- result_5thed$disagreements
+
+
+library(pheatmap)
+pheatmap(result_5thed$p_values, cluster_rows = TRUE, cluster_cols = TRUE,
+         main = "McNemar's Test p-values", display_numbers = TRUE)
