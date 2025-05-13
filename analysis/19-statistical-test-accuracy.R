@@ -28,6 +28,8 @@ result_dir_5th <- file.path(analysis_dir,"results_5th")
 
 source(paste(util_dir,"/run_mcnemar_matrix.R",sep=""))
 source(paste(util_dir,"/column_rename.R",sep=""))
+source(paste(util_dir,"/bootstrap_accuracy_ci_all_models.R",sep=""))
+
 
 tumor_all_gt<-read.csv(paste(result_dir,"/tumor_manually_validated_all.csv",sep = ""))
 tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_5th.csv",sep = ""))
@@ -47,36 +49,37 @@ colnames(correct_all_matrix)<-column_rename(colnames(correct_all_matrix))
 result_5thed <- run_mcnemar_matrix(correct_5thed_matrix,adjust_method = "BH")
 result_all <- run_mcnemar_matrix(correct_all_matrix,adjust_method = "BH")
 
-pvals_5thed<- result_5thed$raw_p_values
 adj_pvals_5thed<-result_5thed$adjusted_p_values
-disagreements_5thed <- result_5thed$disagreements
-logical_sig_matrix_5thed <- adj_pvals_5thed < 0.05
-display_matrix_5thed <- ifelse(logical_sig_matrix_5thed, "TRUE", "FALSE")
-
-
-pvals_all<- result_all$raw_p_values
 adj_pvals_all<- result_all$adjusted_p_values
-disagreements_all <- result_all$disagreements
-logical_sig_matrix_all <- result_all$adjusted_p_values < 0.05
-display_matrix_all <- ifelse(logical_sig_matrix_all, "TRUE", "FALSE")
+
+
+
+
+signif_matrix_5thed <- ifelse(adj_pvals_5thed < 0.05, "*", "")
+signif_matrix_5thed <- ifelse(adj_pvals_all < 0.05, "*", "")
+
 
 #Heatmap for WHO-5th
 pheatmap(adj_pvals_5thed,
-         display_numbers = display_matrix_5thed,
-         main = "Pairwise McNemar Test: FDR-adjusted p-values,WHO-5th",
+         display_numbers = signif_matrix_5thed,
+         main = "Pairwise McNemar Test: FDR-adjusted p-values , WHO-5th ",
          cluster_rows = TRUE,
          cluster_cols = TRUE,
-         fontsize_number = 7,
+         fontsize_number = 10,
          legend = TRUE,
-         na_col = "white")
+         na_col = "white") 
 
 #Heatmap for WHO-all
 pheatmap(adj_pvals_all,
-         display_numbers = display_matrix_all,
-         main = "Pairwise McNemar Test: FDR-adjusted p-values , WHO-all",
+         display_numbers = signif_matrix_5thed,
+         main = "Pairwise McNemar Test: FDR-adjusted p-values , WHO-5th ",
          cluster_rows = TRUE,
          cluster_cols = TRUE,
-         fontsize_number = 7,
+         fontsize_number = 10,
          legend = TRUE,
-         na_col = "white")
+         na_col = "white") 
+
+
+ci_results_5thed <- bootstrap_accuracy_ci_all_models(correct_5thed_matrix)
+ci_results_all <- bootstrap_accuracy_ci_all_models(correct_all_matrix)
 
