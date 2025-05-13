@@ -27,6 +27,7 @@ result_dir <- file.path(analysis_dir,"results")
 result_dir_5th <- file.path(analysis_dir,"results_5th")
 
 source(paste(util_dir,"/run_mcnemar_matrix.R",sep=""))
+source(paste(util_dir,"/column_rename.R",sep=""))
 
 tumor_all_gt<-read.csv(paste(result_dir,"/tumor_manually_validated_all.csv",sep = ""))
 tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_5th.csv",sep = ""))
@@ -37,18 +38,11 @@ tumor_5thed_gt<-tumor_5thed_gt[,c(-1)]
 tumor_all_gt<-tumor_all_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 tumor_5thed_gt<-tumor_5thed_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 
-
-
 correct_5thed_matrix<-tumor_5thed_gt[,seq(6,76,2)]
 correct_all_matrix<-tumor_all_gt[,seq(6,76,2)]
 
-
-cleaned_colnames_5thed <- gsub("^valid_", "", colnames(correct_5thed_matrix))
-cleaned_colnames_all <- gsub("^valid_", "", colnames(correct_all_matrix))
-
-colnames(correct_5thed_matrix)<-cleaned_colnames_5thed
-colnames(correct_all_matrix)<-cleaned_colnames_all
-
+colnames(correct_5thed_matrix)<-column_rename(colnames(correct_5thed_matrix))
+colnames(correct_all_matrix)<-column_rename(colnames(correct_all_matrix))
 
 result_5thed <- run_mcnemar_matrix(correct_5thed_matrix,adjust_method = "BH")
 result_all <- run_mcnemar_matrix(correct_all_matrix,adjust_method = "BH")
@@ -56,14 +50,33 @@ result_all <- run_mcnemar_matrix(correct_all_matrix,adjust_method = "BH")
 pvals_5thed<- result_5thed$raw_p_values
 adj_pvals_5thed<-result_5thed$adjusted_p_values
 disagreements_5thed <- result_5thed$disagreements
+logical_sig_matrix_5thed <- adj_pvals_5thed < 0.05
+display_matrix_5thed <- ifelse(logical_sig_matrix_5thed, "TRUE", "FALSE")
+
 
 pvals_all<- result_all$raw_p_values
 adj_pvals_all<- result_all$adjusted_p_values
 disagreements_all <- result_all$disagreements
+logical_sig_matrix_all <- result_all$adjusted_p_values < 0.05
+display_matrix_all <- ifelse(logical_sig_matrix_all, "TRUE", "FALSE")
 
-pheatmap(result_5thed$adjusted_p_values,
-         display_numbers = result_5thed$adjusted_p_values < 0.05,
-         main = "Pairwise McNemar Test (FDR-adjusted p-values)",
-         cluster_rows = TRUE, cluster_cols = TRUE)
+#Heatmap for WHO-5th
+pheatmap(adj_pvals_5thed,
+         display_numbers = display_matrix_5thed,
+         main = "Pairwise McNemar Test: FDR-adjusted p-values,WHO-5th",
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         fontsize_number = 7,
+         legend = TRUE,
+         na_col = "white")
 
+#Heatmap for WHO-all
+pheatmap(adj_pvals_all,
+         display_numbers = display_matrix_all,
+         main = "Pairwise McNemar Test: FDR-adjusted p-values , WHO-all",
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         fontsize_number = 7,
+         legend = TRUE,
+         na_col = "white")
 
