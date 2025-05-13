@@ -11,7 +11,7 @@ suppressPackageStartupMessages({
   library(readxl)
   library(dbscan)
   library(isotree)
-  
+  library(pheatmap)
 })
 
 # Set the directories
@@ -50,13 +50,20 @@ colnames(correct_5thed_matrix)<-cleaned_colnames_5thed
 colnames(correct_all_matrix)<-cleaned_colnames_all
 
 
-result_5thed <- run_mcnemar_matrix(correct_5thed_matrix)
-result_all <- run_mcnemar_matrix(correct_all_matrix)
+result_5thed <- run_mcnemar_matrix(correct_5thed_matrix,adjust_method = "BH")
+result_all <- run_mcnemar_matrix(correct_all_matrix,adjust_method = "BH")
 
-pvals_5thed<- result_5thed$p_values
+pvals_5thed<- result_5thed$raw_p_values
+adj_pvals_5thed<-result_5thed$adjusted_p_values
 disagreements_5thed <- result_5thed$disagreements
 
+pvals_all<- result_all$raw_p_values
+adj_pvals_all<- result_all$adjusted_p_values
+disagreements_all <- result_all$disagreements
 
-library(pheatmap)
-pheatmap(result_5thed$p_values, cluster_rows = TRUE, cluster_cols = TRUE,
-         main = "McNemar's Test p-values", display_numbers = TRUE)
+pheatmap(result_5thed$adjusted_p_values,
+         display_numbers = result_5thed$adjusted_p_values < 0.05,
+         main = "Pairwise McNemar Test (FDR-adjusted p-values)",
+         cluster_rows = TRUE, cluster_cols = TRUE)
+
+
