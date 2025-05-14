@@ -54,7 +54,6 @@ dissimilarity_matrix_lv_5th<- dissimilarity_matrix_lv %>% dplyr::filter(rownames
 dissimilarity_matrix_lv_5th<- dissimilarity_matrix_lv_5th %>%dplyr::select(any_of(tumor_names_5th))
 dissimilarity_matrix_lv_5th<-as.matrix(dissimilarity_matrix_lv_5th)
 
-#dissimilarity_matrix_lv_5th<-dissimilarity_matrix_lv_5th[1:100,1:100]
 
 dissimilarity_matrix_lv<-as.matrix(dissimilarity_matrix_lv)
 
@@ -63,7 +62,7 @@ simmilarity_matrix_lv <- 1- dissimilarity_matrix_lv
 simmilarity_matrix_lv_5th <- 1- dissimilarity_matrix_lv_5th 
 #######################
 
-
+print("computing with WHO all")
 apclust_lv_all <- apcluster(simmilarity_matrix_lv) #11:19 am -2:44 pm 
 affinity_cluster_lv_all_df<-as.data.frame(matrix(nrow=1,ncol=2))
 colnames(affinity_cluster_lv_all_df)<-c("Tumor_Names","Cluster_ID")
@@ -74,50 +73,28 @@ for (iter in 1: length(apclust_lv_all@clusters)){
 affinity_cluster_lv_all_df<- affinity_cluster_lv_all_df %>% separate_rows(Tumor_Names, sep = '@')
 
 
-apclust_lv_5th <- apcluster(simmilarity_matrix_lv_5th) #11:19 am -2:44 pm 
-affinity_cluster_lv_5th_df<-as.data.frame(matrix(nrow=1,ncol=2))
-colnames(affinity_cluster_lv_5th_df)<-c("Tumor_Names","Cluster_ID")
-for (iter in 1: length(apclust_lv_5th@clusters)){
-  affinity_cluster_lv_5th_df[iter,1] <- paste(names(unlist(apclust_lv_5th@clusters[iter])),collapse = "@")
-  affinity_cluster_lv_5th_df[iter,2] <- iter
-}
-affinity_cluster_lv_5th_df<- affinity_cluster_lv_5th_df %>% separate_rows(Tumor_Names, sep = '@')
-end_time <- Sys.time()
-elapsed_time <- as.numeric(difftime(end_time, start_time, units = "secs"))
+# nested_affinity_cluster_lv<- edit_distance_nested_cluster(affinity_cluster_lv_df,simmilarity_matrix_lv)
+# nested_affinity_cluster_lv<-compute_silhouette(cluster_df = nested_affinity_cluster_lv,dist_mat = dissimilarity_matrix_lv)
+# mean_freq_lv <- nested_affinity_cluster_lv %>% dplyr::select(Cluster_ID, silhouette_score) %>% dplyr::group_by(Cluster_ID) %>% dplyr::summarise(mean_silo_score=mean(silhouette_score),cluster_member_count =dplyr::n()) 
+# nested_affinity_cluster_lv<- nested_affinity_cluster_lv %>% dplyr::left_join(mean_freq_lv,by="Cluster_ID")
+# nested_affinity_cluster_lv<- nested_affinity_cluster_lv %>% left_join(ct_disease_df, by=c("Tumor_Names"="diseases"))
+# nested_affinity_cluster_lv<-nested_affinity_cluster_lv[,c(7,1:6)]
+# nested_affinity_cluster_lv<-nested_affinity_cluster_lv[,c(-7)]
+#nested_affinity_cluster_lv<-nested_affinity_cluster_lv %>% dplyr::select(Tumor_Names,Cluster_ID)
+#dissimilarity_matrix_lv<-as.data.frame(dissimilarity_matrix_lv)
+#dissimilarity_matrix_lv_who_all <- dissimilarity_matrix_lv %>% dplyr::select(one_of(WHO_Terms_All$Tumor_Names))
+# dissimilarity_matrix_lv_ncit <- dissimilarity_matrix_lv %>% dplyr:::select(one_of(NCIT_Terms))
+#index_min_who_lv <- as.matrix(apply(dissimilarity_matrix_lv_who, 1, which.min))
+who_match_lv_df <- cbind(rownames(dissimilarity_matrix_lv_who))
+colnames(who_match_lv_df)<-"Tumor_Names"
+who_match_lv_df <-as.data.frame(who_match_lv_df)
+who_match_lv_df$WHO_Matches<- NA
+who_match_lv_df$WHO_distance<-NA
 
-
-
-
-
-nested_affinity_cluster_lv<- edit_distance_nested_cluster(affinity_cluster_lv_df,simmilarity_matrix_lv)
-nested_affinity_cluster_lv<-compute_silhouette(cluster_df = nested_affinity_cluster_lv,dist_mat = dissimilarity_matrix_lv)
-mean_freq_lv <- nested_affinity_cluster_lv %>% dplyr::select(Cluster_ID, silhouette_score) %>% dplyr::group_by(Cluster_ID) %>% dplyr::summarise(mean_silo_score=mean(silhouette_score),cluster_member_count =dplyr::n()) 
-nested_affinity_cluster_lv<- nested_affinity_cluster_lv %>% dplyr::left_join(mean_freq_lv,by="Cluster_ID")
-nested_affinity_cluster_lv<- nested_affinity_cluster_lv %>% left_join(ct_disease_df, by=c("Tumor_Names"="diseases"))
-nested_affinity_cluster_lv<-nested_affinity_cluster_lv[,c(7,1:6)]
-nested_affinity_cluster_lv<-nested_affinity_cluster_lv[,c(-7)]
-
-nested_affinity_cluster_lv<-nested_affinity_cluster_lv %>% dplyr::select(Tumor_Names,Cluster_ID)
-
-dissimilarity_matrix_lv<-as.data.frame(dissimilarity_matrix_lv)
-
-dissimilarity_matrix_lv_who_all <- dissimilarity_matrix_lv %>% dplyr::select(one_of(WHO_Terms_All$Tumor_Names))
-dissimilarity_matrix_lv_who_5th <- dissimilarity_matrix_lv %>% dplyr::select(one_of(WHO_Terms_5th$Tumor_Names))
-dissimilarity_matrix_lv_ncit <- dissimilarity_matrix_lv %>% dplyr:::select(one_of(NCIT_Terms))
-
-
-
-who_all_match_lv_df <- cbind(rownames(dissimilarity_matrix_lv_who_all))
-colnames(who_all_match_lv_df)<-"Tumor_Names"
-who_match_lv_df <-as.data.frame(who_all_match_lv_df)
-who_all_match_lv_df$WHO_Matches<- NA
-who_all_match_lv_df$WHO_distance<-NA
-index_min_who_all_lv <- as.matrix(apply(dissimilarity_matrix_lv_who_all, 1, which.min))
-
-for (iter in 1: dim(who_all_match_lv_df)[1]){
+for (iter in 1: dim(who_match_cosine_df)[1]){
   
-  who_all_match_lv_df$WHO_Matches[iter] <- colnames(dissimilarity_matrix_lv_who_all)[index_min_who_lv[iter]]
-  who_all_match_lv_df$WHO_distance[iter]<-dissimilarity_matrix_lv_who_all[iter,index_min_who_lv[iter]]
+  who_match_lv_df$WHO_Matches[iter] <- colnames(dissimilarity_matrix_lv_who)[index_min_who_lv[iter]]
+  who_match_lv_df$WHO_distance[iter]<-dissimilarity_matrix_lv_who[iter,index_min_who_lv[iter]]
   
 }
 
@@ -128,14 +105,12 @@ ncit_match_lv_df <-as.data.frame(ncit_match_lv_df)
 ncit_match_lv_df$NCIT_Matches<- NA
 ncit_match_lv_df$NCIT_distance<-NA
 
-for (iter in 1: dim(ncit_match_lv_df)[1]){
-  
+for (iter in 1: dim(ncit_match_cosine_df)[1]){
   
   ncit_match_lv_df$NCIT_Matches[iter] <- colnames(dissimilarity_matrix_lv_ncit)[index_min_ncit_lv[iter]]
   ncit_match_lv_df$NCIT_distance[iter]<-dissimilarity_matrix_lv_ncit[iter,index_min_ncit_lv[iter]]
   
 }
-
 
 nested_affinity_cluster_lv<- nested_affinity_cluster_lv %>% dplyr::left_join(who_match_lv_df,by="Tumor_Names")
 nested_affinity_cluster_lv<- nested_affinity_cluster_lv %>% dplyr::left_join(ncit_match_lv_df,by="Tumor_Names")
@@ -145,5 +120,85 @@ nested_affinity_cluster_lv<-outlier_detection_edit_dist(nested_affinity_cluster_
 nested_affinity_cluster_lv_reassigned<-edit_distance_cluster_reassignment(nested_affinity_cluster_lv)
 nested_affinity_cluster_lv_reassigned<-nested_affinity_cluster_lv_reassigned %>% left_join(tumor_nct_map,by="Tumor_Names")
 nested_affinity_cluster_lv_reassigned_short <- nested_affinity_cluster_lv_reassigned %>% dplyr::select(nct_id,Tumor_Names,who_cluster_label)
-colnames(nested_affinity_cluster_lv_reassigned_short)[3]<-"af_lv"
 
+
+end_time <- Sys.time()
+elapsed_time <- as.numeric(difftime(end_time, start_time, units = "secs"))
+print(elapsed_time)
+
+
+
+
+
+
+# nested_affinity_cluster_lv<-compute_silhouette(cluster_df = nested_affinity_cluster_lv,dist_mat = dissimilarity_matrix_lv)
+# mean_freq_lv <- nested_affinity_cluster_lv %>% dplyr::select(Cluster_ID, silhouette_score) %>% dplyr::group_by(Cluster_ID) %>% dplyr::summarise(mean_silo_score=mean(silhouette_score),cluster_member_count =dplyr::n()) 
+# nested_affinity_cluster_lv<- nested_affinity_cluster_lv %>% dplyr::left_join(mean_freq_lv,by="Cluster_ID")
+# nested_affinity_cluster_lv<- nested_affinity_cluster_lv %>% left_join(ct_disease_df, by=c("Tumor_Names"="diseases"))
+# nested_affinity_cluster_lv<-nested_affinity_cluster_lv[,c(7,1:6)]
+# nested_affinity_cluster_lv<-nested_affinity_cluster_lv[,c(-7)]
+# 
+# nested_affinity_cluster_lv<-nested_affinity_cluster_lv %>% dplyr::select(Tumor_Names,Cluster_ID)
+# 
+# dissimilarity_matrix_lv<-as.data.frame(dissimilarity_matrix_lv)
+# 
+# dissimilarity_matrix_lv_who_all <- dissimilarity_matrix_lv %>% dplyr::select(one_of(WHO_Terms_All$Tumor_Names))
+# dissimilarity_matrix_lv_who_5th <- dissimilarity_matrix_lv %>% dplyr::select(one_of(WHO_Terms_5th$Tumor_Names))
+# dissimilarity_matrix_lv_ncit <- dissimilarity_matrix_lv %>% dplyr:::select(one_of(NCIT_Terms))
+# 
+# 
+# 
+# who_all_match_lv_df <- cbind(rownames(dissimilarity_matrix_lv_who_all))
+# colnames(who_all_match_lv_df)<-"Tumor_Names"
+# who_match_lv_df <-as.data.frame(who_all_match_lv_df)
+# who_all_match_lv_df$WHO_Matches<- NA
+# who_all_match_lv_df$WHO_distance<-NA
+# index_min_who_all_lv <- as.matrix(apply(dissimilarity_matrix_lv_who_all, 1, which.min))
+# 
+# for (iter in 1: dim(who_all_match_lv_df)[1]){
+#   
+#   who_all_match_lv_df$WHO_Matches[iter] <- colnames(dissimilarity_matrix_lv_who_all)[index_min_who_lv[iter]]
+#   who_all_match_lv_df$WHO_distance[iter]<-dissimilarity_matrix_lv_who_all[iter,index_min_who_lv[iter]]
+#   
+# }
+# 
+# index_min_ncit_lv <- as.matrix(apply(dissimilarity_matrix_lv_ncit, 1, which.min))
+# ncit_match_lv_df <- cbind(rownames(dissimilarity_matrix_lv_ncit))
+# colnames(ncit_match_lv_df)<-"Tumor_Names"
+# ncit_match_lv_df <-as.data.frame(ncit_match_lv_df)
+# ncit_match_lv_df$NCIT_Matches<- NA
+# ncit_match_lv_df$NCIT_distance<-NA
+# 
+# for (iter in 1: dim(ncit_match_lv_df)[1]){
+#   
+#   
+#   ncit_match_lv_df$NCIT_Matches[iter] <- colnames(dissimilarity_matrix_lv_ncit)[index_min_ncit_lv[iter]]
+#   ncit_match_lv_df$NCIT_distance[iter]<-dissimilarity_matrix_lv_ncit[iter,index_min_ncit_lv[iter]]
+#   
+# }
+# 
+# 
+# nested_affinity_cluster_lv<- nested_affinity_cluster_lv %>% dplyr::left_join(who_match_lv_df,by="Tumor_Names")
+# nested_affinity_cluster_lv<- nested_affinity_cluster_lv %>% dplyr::left_join(ncit_match_lv_df,by="Tumor_Names")
+# 
+# nested_affinity_cluster_lv<- cluster_label_assignment_refined(nested_affinity_cluster_lv)
+# nested_affinity_cluster_lv<-outlier_detection_edit_dist(nested_affinity_cluster_lv,dissimilarity_matrix_lv)
+# nested_affinity_cluster_lv_reassigned<-edit_distance_cluster_reassignment(nested_affinity_cluster_lv)
+# nested_affinity_cluster_lv_reassigned<-nested_affinity_cluster_lv_reassigned %>% left_join(tumor_nct_map,by="Tumor_Names")
+# nested_affinity_cluster_lv_reassigned_short <- nested_affinity_cluster_lv_reassigned %>% dplyr::select(nct_id,Tumor_Names,who_cluster_label)
+# colnames(nested_affinity_cluster_lv_reassigned_short)[3]<-"af_lv"
+
+
+
+
+print("computing with WHO 5th")
+apclust_lv_5th <- apcluster(simmilarity_matrix_lv_5th) #11:19 am -2:44 pm 
+affinity_cluster_lv_5th_df<-as.data.frame(matrix(nrow=1,ncol=2))
+colnames(affinity_cluster_lv_5th_df)<-c("Tumor_Names","Cluster_ID")
+for (iter in 1: length(apclust_lv_5th@clusters)){
+  affinity_cluster_lv_5th_df[iter,1] <- paste(names(unlist(apclust_lv_5th@clusters[iter])),collapse = "@")
+  affinity_cluster_lv_5th_df[iter,2] <- iter
+}
+affinity_cluster_lv_5th_df<- affinity_cluster_lv_5th_df %>% separate_rows(Tumor_Names, sep = '@')
+
+save.image(paste(analysis_dir,"/run-time-analysis/Levenshtein_AP.RData",sep=""))
