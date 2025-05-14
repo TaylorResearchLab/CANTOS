@@ -1,0 +1,4 @@
+"Method","Runtime_sec"
+"Levenshtein",5662.84
+"Cosine",9981.3
+"Jaro-Winkler",5173.25
