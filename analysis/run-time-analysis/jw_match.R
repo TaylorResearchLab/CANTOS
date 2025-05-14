@@ -143,3 +143,4 @@ if (!file.exists(output_file)) {
 } else {
   write.table(benchmark, output_file, append = TRUE, sep = ",", col.names = FALSE, row.names = FALSE)
 }
+save.image(paste(analysis_dir,"/run-time-analysis/jw_match.RData",sep=""))
