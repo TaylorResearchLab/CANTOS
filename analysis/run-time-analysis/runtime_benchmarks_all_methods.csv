@@ -2,3 +2,5 @@
 "Levenshtein",5662.84
 "Cosine",9981.3
 "Jaro-Winkler",5173.25
+"Levenshtein+AP-WHO-ALL",25403.69
+"LTE-3+Euclidean Distance",18074.6
