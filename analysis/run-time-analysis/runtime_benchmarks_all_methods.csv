@@ -4,3 +4,4 @@
 "Jaro-Winkler",5173.25
 "Levenshtein+AP-WHO-ALL",25403.69
 "LTE-3+Euclidean Distance",18074.6
+"ADA002+Euclidean Distance",7264.26

@@ -47,7 +47,6 @@ WHO_Terms_V3<-WHO_Terms_V3[,c(-1)]
 NCIT_embedding_v3<-read.csv(paste(data_dir,"/NCIT_Embeddings_V3.csv",sep="")) 
 NCIT_embedding_v3<-NCIT_embedding_v3[,c(-1)]
 
-
 combined_embeddings_df<-rbind(ct_tumor_embeddings_v3_df,WHO_Terms_V3,NCIT_embedding_v3)#17660
 combined_embeddings_df <- combined_embeddings_df%>%group_by(Tumor_Names) %>% summarise(across(everything(), list(mean)))#16721
 combined_embeddings_df<-as.data.frame(combined_embeddings_df)
