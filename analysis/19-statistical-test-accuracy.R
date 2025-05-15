@@ -56,7 +56,7 @@ adj_pvals_all<- result_all$adjusted_p_values
 
 
 signif_matrix_5thed <- ifelse(adj_pvals_5thed < 0.05, "*", "")
-signif_matrix_5thed <- ifelse(adj_pvals_all < 0.05, "*", "")
+signif_matrix_all <- ifelse(adj_pvals_all < 0.05, "*", "")
 
 
 #Heatmap for WHO-5th
@@ -71,8 +71,8 @@ pheatmap(adj_pvals_5thed,
 
 #Heatmap for WHO-all
 pheatmap(adj_pvals_all,
-         display_numbers = signif_matrix_5thed,
-         main = "Pairwise McNemar Test: FDR-adjusted p-values , WHO-5th ",
+         display_numbers = signif_matrix_all,
+         main = "Pairwise McNemar Test: FDR-adjusted p-values , WHO-all ",
          cluster_rows = TRUE,
          cluster_cols = TRUE,
          fontsize_number = 10,
