@@ -1,7 +1,8 @@
-"Method","Runtime_sec"
-"Levenshtein",5662.84
-"Cosine",9981.3
-"Jaro-Winkler",5173.25
-"Levenshtein+AP-WHO-ALL",25403.69
-"LTE-3+Euclidean Distance",18074.6
-"ADA002+Euclidean Distance",7264.26
+"","Method","Runtime_sec","Memory_gb"
+"1","Levenshtein",5662.84,0.9745
+"2","Cosine",9981.3,2.86
+"3","Jaro-Winkler",5173.25,1.99
+"4","Levenshtein+AP-WHO-ALL",25403.69,1.8
+"5","LTE-3+Euclidean Distance",18074.6,4.69
+"6","ADA002+Euclidean Distance",7264.26,4.25
+"7","Llama3.0+Euclidean Distance",21481.04,4.387299

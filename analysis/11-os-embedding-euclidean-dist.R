@@ -132,7 +132,7 @@ WHO_Terms_All <-readxl::read_xlsx(paste(data_dir,"/WHO_Tumors/result/WHO_Tumor_a
 WHO_Terms_5th<-WHO_Terms_All%>%filter(edition_5th=="Yes")
 
 
-distance_matrix_llama<- compute_embedding_distance(llama_all[1:nrow(llama_embeddings),2:ncol(llama_embeddings)],"euclidean")
+distance_matrix_llama<- compute_embedding_distance(llama_embeddings[1:nrow(llama_embeddings),2:ncol(llama_embeddings)],"euclidean")
 rownames(distance_matrix_llama)<-llama_embeddings$Tumor_Names
 colnames(distance_matrix_llama)<-llama_embeddings$Tumor_Names
 
