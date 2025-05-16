@@ -10,4 +10,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 #Rscript cosine_match.R
 #Rscript jw_match.R
 
-Rscript Levenshtein_AP.R
+Rscript Medllama2_Euclidean.R
+Rscript llama32_Euclidean.R
+Rscript Phi4_Euclidean.R
+Rscript llama33_70b_Euclidean.R
