@@ -53,6 +53,7 @@ llama_embeddings<-llama_embeddings[,c(-1)]
 biobert_embeddings <- read.csv(paste(data_dir,"/Embeddings/biobert_embedding.csv",sep=""))
 medllama_embeddings <- read.csv(paste(data_dir,"/Embeddings/medllama-13b.csv",sep="")) #5121 dimension
 medllama_embeddings_7b<-read.csv(paste(data_dir,"/Embeddings/medllama-7b.csv",sep=""))
+medllama_embeddings_7b<-medllama_embeddings_7b[,c(-1)]
 pubmedbert_embeddings <-read.csv(paste(data_dir,"/Embeddings/pubmedbert-base-embeddings.csv",sep="")) #768 dimension
 modernbert_embeddings<-read.csv(paste(data_dir,"/Embeddings/mordernbert_embeddings.csv",sep=""))
 colnames(modernbert_embeddings)[1]<-"Tumor_Names"
@@ -96,7 +97,7 @@ medllama_embeddings<-medllama_embeddings %>% group_by(Tumor_Names) %>% summarise
 pubmedbert_embeddings<-pubmedbert_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 modernbert_embeddings<-modernbert_embeddings %>% group_by(Tumor_Names) %>% summarise_all("mean")
 
-medllama_embeddings_7b<-cbind(medllama_embeddings$Tumor_Names,medllama_embeddings_7b)
+medllama_embeddings_7b<-cbind(tumor_terms,medllama_embeddings_7b)
 colnames(medllama_embeddings_7b)[1]<-"Tumor_Names"
 medllama_embeddings_7b<-medllama_embeddings_7b %>% group_by(Tumor_Names) %>% summarise_all("mean")
 
