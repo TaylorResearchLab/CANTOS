@@ -12,3 +12,4 @@
 11,lama_32_3b+Euclidean Distance,16200.99,4.245045
 12,phi4+Euclidean Distance,27142.2,4.529435
 13,all_MiniLM_L6_v2_embeddings+Euclidean Distance,8356.02,3.871834
+14,all-MiniLM-L12-v2+Euclidean Distance,8105.89,3.871834
