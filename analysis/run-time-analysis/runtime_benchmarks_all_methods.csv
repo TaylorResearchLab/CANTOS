@@ -9,3 +9,4 @@
 "8","BioBERT+Euclidean Distance",4569.35,3.925104
 "9","MedLlama_13B+Euclidean Distance",26090.47,4.529443
 "10","Medllama2+Euclidean Distance",22309.04,4.38724
+"11","lama_32_3b+Euclidean Distance",16200.99,4.245045
