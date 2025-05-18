@@ -1,20 +1,22 @@
-,Method,Runtime_sec,Memory_gb
-1,Levenshtein,5662.84,0.9745
-2,Cosine,9981.3,2.86
-3,Jaro-Winkler,5173.25,1.99
-4,Levenshtein+AP-WHO-ALL,25403.69,1.8
-5,LTE-3+Euclidean Distance,18074.6,4.69
-6,ADA002+Euclidean Distance,7264.26,4.25
-7,Llama3.0+Euclidean Distance,21481.04,4.387299
-8,BioBERT+Euclidean Distance,4569.35,3.925104
-9,MedLlama_13B+Euclidean Distance,26090.47,4.529443
-10,Medllama2+Euclidean Distance,22309.04,4.38724
-11,lama_32_3b+Euclidean Distance,16200.99,4.245045
-12,phi4+Euclidean Distance,27142.2,4.529435
-13,all_MiniLM_L6_v2_embeddings+Euclidean Distance,8356.02,3.871834
-14,all-MiniLM-L12-v2+Euclidean Distance,8105.89,3.871834
-15,llama_33_70b+Euclidean Distance,44205.72,4.955967
-16,sciBERT+Euclidean Distance   ,13913.38,3.925154
-17,e5_large+Euclidean Distance,5803.91,3.960651
-18,e5_large_v2+Euclidean Distance,5827.63,3.960651
-19,LaBSE+Euclidean Distance     ,12675,3.925155
+"","Method","Runtime_sec","Memory_gb"
+"1","Levenshtein",5662.84,0.9745
+"2","Cosine",9981.3,2.86
+"3","Jaro-Winkler",5173.25,1.99
+"4","Levenshtein+AP-WHO-ALL",25403.69,1.8
+"5","LTE-3+Euclidean Distance",18074.6,4.69
+"6","ADA002+Euclidean Distance",7264.26,4.25
+"7","Llama3.0+Euclidean Distance",21481.04,4.387299
+"8","BioBERT+Euclidean Distance",4569.35,3.925104
+"9","MedLlama_13B+Euclidean Distance",26090.47,4.529443
+"10","Medllama2+Euclidean Distance",22309.04,4.38724
+"11","lama_32_3b+Euclidean Distance",16200.99,4.245045
+"12","phi4+Euclidean Distance",27142.2,4.529435
+"13","all_MiniLM_L6_v2_embeddings+Euclidean Distance",8356.02,3.871834
+"14","all-MiniLM-L12-v2+Euclidean Distance",8105.89,3.871834
+"15","llama_33_70b+Euclidean Distance",44205.72,4.955967
+"16","sciBERT+Euclidean Distance   ",13913.38,3.925154
+"17","e5_large+Euclidean Distance",5803.91,3.960651
+"18","e5_large_v2+Euclidean Distance",5827.63,3.960651
+"19","LaBSE+Euclidean Distance     ",12675,3.925155
+"20","pubmedbert+Euclidean Distance",14225.84,3.92516
+"21","embed-english-v2.0+Euclidean Distance",21971.53,4.38724
