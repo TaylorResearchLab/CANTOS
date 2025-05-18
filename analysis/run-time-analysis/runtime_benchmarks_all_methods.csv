@@ -16,3 +16,4 @@
 "15","llama_33_70b+Euclidean Distance",44205.72,4.955967
 "16","sciBERT+Euclidean Distance   ",13913.38,3.925154
 "17","e5_large+Euclidean Distance",5803.91,3.960651
+"18","e5_large_v2+Euclidean Distance",5827.63,3.960651
