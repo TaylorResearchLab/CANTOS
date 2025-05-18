@@ -23,3 +23,4 @@
 "22","nomic+Euclidean Distance",4841.13,3.925102
 "23","sapBERT+Euclidean Distance",13765,3.925154
 "24","all-roberta-large-v1+Euclidean Distance",5611.35,3.960653
+"25","ModernBERT+Euclidean Distance",6019.08,3.960653
