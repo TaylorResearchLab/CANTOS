@@ -81,7 +81,7 @@ print("all match deepseek")
 deepseek_match_all<- nearest_match_embeddings(distance_matrix_deepseek_all,"deepseek_8b") # Executed
 print("5th match deepseek")
 deepseek_match_5th<- nearest_match_embeddings(distance_matrix_deepseek_5th,"deepseek_8b") # Executed
-print("ncit match roberta")
+print("ncit match deepseek")
 deepseek_match_ncit<- nearest_match_embeddings(distance_matrix_deepseek_ncit,"deepseek_8b") # Executed
 end_time <- Sys.time()
 elapsed_time4<- as.numeric(difftime(end_time, start_time, units = "secs"))
