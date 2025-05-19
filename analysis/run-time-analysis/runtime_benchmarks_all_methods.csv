@@ -25,3 +25,4 @@
 "24","all-roberta-large-v1+Euclidean Distance",5611.35,3.960653
 "25","ModernBERT+Euclidean Distance",6019.08,3.960653
 "26","BioGPT+Euclidean Distance",5679.52,3.960649
+"27","all-mpnet-base-v2+Euclidean Distance",4777.24,3.925102
