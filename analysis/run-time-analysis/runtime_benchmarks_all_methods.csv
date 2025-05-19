@@ -28,3 +28,4 @@
 "27","all-mpnet-base-v2+Euclidean Distance",4777.24,3.925102
 "28","gtr-t5-large+Euclidean Distance",12199.21,3.925157
 "29","clincalBERT+Euclidean Distance",7724.92,3.925102
+"30","deepseek_8b+Euclidean Distance",25695.15,4.387377
