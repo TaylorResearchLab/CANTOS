@@ -24,7 +24,8 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 #Rscript roberta_Euclidean.R
 #Rscript modernBERT_Euclidean.R
 
-#Rscript deepseek_8b_Euclidean.R
-Rscript BioGPT_Euclidean.R
-Rscript all-mpnet-base-v2_Euclidean.R
-Rscript clinicalBERT_Euclidean.R
+#Rscript BioGPT_Euclidean.R
+#Rscript all-mpnet-base-v2_Euclidean.R
+#Rscript clinicalBERT_Euclidean.R
+
+Rscript deepseek_8b_Euclidean.R
