@@ -15,14 +15,14 @@ suppressPackageStartupMessages({
 
 # Set the directories
 setwd(getwd())
-#root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
-root_dir <- "/home/lahiria/CANTOS-RUN-TIME"
+root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
 util_dir <- file.path(root_dir, "util")
 data_dir <- file.path(root_dir,"data")
 input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
-intermediate_dir <- file.path(analysis_dir,"intermediate")
-result_dir <- file.path(analysis_dir,"results")
+run_time_analysis<-file.path(analysis_dir,"run-time-analysis")
+intermediate_dir <- file.path(run_time_analysis,"intermediate")
+result_dir <-file.path(run_time_analysis,"results")
 
 source(paste(util_dir,"/cluster_label_assignment_refined.R",sep=""))
 source(paste(util_dir,"/outlier_detection_edit_dist.R",sep=""))
@@ -34,13 +34,8 @@ source(paste(util_dir,"/edit_distance_cluster_reassignment.R",sep=""))
 #Read Kmeans 
 kmeans_clust_result_embedding_ADA2 <- read_csv(paste(result_dir,"/kmeans_clust_result_embedding_ada2.csv",sep=""))
 kmeans_clust_result_embedding_ADA2<-kmeans_clust_result_embedding_ADA2[,c(-1)]
-
-
-
-
-tumor_nct_map <- kmeans_clust_result_embedding_ADA2 %>% dplyr::select(nct_id,Tumor_Names)
-
-
+who_ncit_match_ADA2<-read.csv(paste(analysis_dir,"/results/who_ncit_match_ada2.csv",sep=""))
+who_ncit_match_ADA2<-who_ncit_match_ADA2[,c(-1)]
 
 
 
@@ -48,11 +43,8 @@ tumor_nct_map <- kmeans_clust_result_embedding_ADA2 %>% dplyr::select(nct_id,Tum
 
 # Join the matches to Kmeans 
 kmeans_clust_result_embedding_ADA2<-kmeans_clust_result_embedding_ADA2 %>% dplyr::select(nct_id,Tumor_Names,cluster)
-
-colnames(kmeans_clust_result_embedding_ADA2)[3]<-c("Cluster_ID")
-
+colnames(kmeans_clust_result_embedding_ADA2)[3]<-"Cluster_ID"
 kmeans_clust_result_embedding_ADA2<-kmeans_clust_result_embedding_ADA2 %>% dplyr::left_join(who_ncit_match_ADA2,by="Tumor_Names")
-
 kmeans_clust_result_embedding_ADA2<- cluster_label_assignment_refined(kmeans_clust_result_embedding_ADA2)
 
 
@@ -131,7 +123,7 @@ colnames(kmeans_clust_result_embedding_ADA2_short_NCIT)[3]<-"kmeans_ada2"
 
 end_time<-Sys.time()
 
-elapsed_time- as.numeric(difftime(end_time, start_time, units = "secs"))
+elapsed_time<- as.numeric(difftime(end_time, start_time, units = "secs"))
 objs <- ls(envir = .GlobalEnv)
 
 # Get the size of each object
@@ -148,4 +140,4 @@ sizes_df <- sizes_df[order(-sizes_df$Size_MB), ]
 
 # Print the total memory used
 cat("Total memory used in Global Environment:", round(sum(sizes) / (1024^2), 3), "MB\n")
-save.image(file = "10_all.RData")
+save.image(paste(analysis_dir,"/run-time-analysis/Kmeans_ADA2/10_all.RData",sep=""))

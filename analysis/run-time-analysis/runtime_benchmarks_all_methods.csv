@@ -30,3 +30,4 @@
 29,clincalBERT+Euclidean Distance,7724.92,3.925102
 30,deepseek_8b+Euclidean Distance,25695.15,4.387377
 31,LTE-3+K-means,39541.65,4.69
+32,ADA002+K-means,29248.44,4.25
