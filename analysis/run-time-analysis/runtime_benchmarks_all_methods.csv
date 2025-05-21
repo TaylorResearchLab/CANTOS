@@ -2,7 +2,7 @@
 1,Levenshtein,5662.84,0.9745
 2,Cosine,9981.3,2.86
 3,Jaro-Winkler,5173.25,1.99
-4,Levenshtein+AP-WHO-ALL,25403.69,1.8
+4,Levenshtein+AP,47533.82,4.907931
 5,LTE-3+Euclidean Distance,18074.6,4.69
 6,ADA002+Euclidean Distance,7264.26,4.25
 7,Llama3.0+Euclidean Distance,21481.04,4.387299
@@ -29,4 +29,4 @@
 28,gtr-t5-large+Euclidean Distance,12199.21,3.925157
 29,clincalBERT+Euclidean Distance,7724.92,3.925102
 30,deepseek_8b+Euclidean Distance,25695.15,4.387377
-31,LTE-3+K-means,21467.05,6.13
+31,LTE-3+K-means,39541.65,4.69
