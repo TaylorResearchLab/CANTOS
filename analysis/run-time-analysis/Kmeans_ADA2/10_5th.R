@@ -14,15 +14,14 @@ suppressPackageStartupMessages({
 })
 
 setwd(getwd())
-#root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
-root_dir <- "/home/lahiria/CANTOS-RUN-TIME"
-
+root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
 util_dir <- file.path(root_dir, "util")
 data_dir <- file.path(root_dir,"data")
 input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
-intermediate_dir <- file.path(analysis_dir,"intermediate_5th")
-result_dir <- file.path(analysis_dir,"results_5th")
+run_time_analysis<-file.path(analysis_dir,"run-time-analysis")
+intermediate_dir <- file.path(run_time_analysis,"intermediate_5th")
+result_dir <-file.path(run_time_analysis,"results_5th")
 
 source(paste(util_dir,"/cluster_label_assignment_refined.R",sep=""))
 source(paste(util_dir,"/outlier_detection_edit_dist.R",sep=""))
@@ -34,28 +33,20 @@ WHO_Terms_5th<-WHO_Terms_All%>%filter(edition_5th=="Yes")
 #Read Kmeans 
 kmeans_clust_result_embedding_ADA2 <- read_csv(paste(result_dir,"/kmeans_clust_result_embedding_ada2_5thed.csv",sep=""))
 kmeans_clust_result_embedding_ADA2<-kmeans_clust_result_embedding_ADA2[,c(-1)]
+who_ncit_match_ADA2<-read.csv(paste(analysis_dir,"/results_5th/who_ncit_match_ada2.csv",sep=""))
+who_ncit_match_ADA2<-who_ncit_match_ADA2[,c(-1)]
+
+
+# Join the matches to Kmeans 
+kmeans_clust_result_embedding_ADA2<-kmeans_clust_result_embedding_ADA2 %>% dplyr::select(nct_id,Tumor_Names,cluster)
+colnames(kmeans_clust_result_embedding_ADA2)[3]<-"Cluster_ID"
+kmeans_clust_result_embedding_ADA2<-kmeans_clust_result_embedding_ADA2 %>% dplyr::left_join(who_ncit_match_ADA2,by="Tumor_Names")
+kmeans_clust_result_embedding_ADA2<- cluster_label_assignment_refined(kmeans_clust_result_embedding_ADA2)
 
 # Load embeddings 
 disease_transform_ADA2<- read.csv(paste(intermediate_dir,"/disease_transform_pca_ada2_5thed.csv",sep="") )
 colnames(disease_transform_ADA2)[1]<-"Tumor_Names"
 rownames(disease_transform_ADA2)<-disease_transform_ADA2$Tumor_Names 
-
-
-
-
-
-tumor_nct_map <- kmeans_clust_result_embedding_ADA2 %>% dplyr::select(nct_id,Tumor_Names)
-
-
-# Join the matches to Kmeans 
-kmeans_clust_result_embedding_ADA2<-kmeans_clust_result_embedding_ADA2 %>% dplyr::select(nct_id,Tumor_Names,cluster)
-
-colnames(kmeans_clust_result_embedding_ADA2)[3]<-c("Cluster_ID")
-
-kmeans_clust_result_embedding_ADA2<-kmeans_clust_result_embedding_ADA2 %>% dplyr::left_join(who_ncit_match_ADA2,by="Tumor_Names")
-
-kmeans_clust_result_embedding_ADA2<- cluster_label_assignment_refined(kmeans_clust_result_embedding_ADA2)
-
 
 
 
@@ -128,7 +119,7 @@ colnames(kmeans_clust_result_embedding_ADA2_short_NCIT)[3]<-"kmeans_ada2"
 
 end_time<-Sys.time()
 
-elapsed_time- as.numeric(difftime(end_time, start_time, units = "secs"))
+elapsed_time<- as.numeric(difftime(end_time, start_time, units = "secs"))
 objs <- ls(envir = .GlobalEnv)
 
 # Get the size of each object
@@ -145,8 +136,8 @@ sizes_df <- sizes_df[order(-sizes_df$Size_MB), ]
 
 # Print the total memory used
 cat("Total memory used in Global Environment:", round(sum(sizes) / (1024^2), 3), "MB\n")
-save.image(file = "10_5th.RData")
 
+save.image(paste(analysis_dir,"/run-time-analysis/Kmeans_ADA2/10_5th.RData",sep=""))
 
 
 

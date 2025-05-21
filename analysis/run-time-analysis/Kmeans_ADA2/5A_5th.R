@@ -19,8 +19,7 @@ suppressPackageStartupMessages({
 
 # Set the directories
 setwd(getwd())
-#root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
-root_dir <- "/home/lahiria/CANTOS-RUN-TIME"
+root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
 util_dir <- file.path(root_dir, "util")
 data_dir <- file.path(root_dir,"data")
 input_dir <- file.path(root_dir,"input")
@@ -189,4 +188,4 @@ Memory_gb_5A_5th=round(sum(sizes) / (1024^2), 3)/1000
 # 
 # save.image(file = "5a_5th.RData")
 # 
-save.image(file = "5a_5th.RData")
+save.image(paste(analysis_dir,"/run-time-analysis/Kmeans_ADA2/5a_5th.RData",sep=""))
