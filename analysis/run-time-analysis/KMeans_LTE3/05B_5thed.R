@@ -1,0 +1,151 @@
+# Computes Kmeans cluster of ADA2 data and also computes silhouette index
+start_time_1<-Sys.time()
+print("Script 5b_5th running")
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(data.table)
+  library(ggplot2)
+  library(tidyverse)
+  library(stringi)
+  library(qdapRegex)
+  library(jsonlite)
+  library(httr)
+  library(biomaRt)
+  library(ghql)
+  library(readxl)
+  library(factoextra)
+  library(cluster)
+  library(apcluster)
+})
+
+# Set the directories
+setwd(getwd())
+root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
+util_dir <- file.path(root_dir, "util")
+data_dir <- file.path(root_dir,"data")
+input_dir <- file.path(root_dir,"input")
+analysis_dir <- file.path(root_dir,"analysis")
+run_time_analysis<-file.path(analysis_dir,"run-time-analysis")
+intermediate_dir <- file.path(run_time_analysis,"intermediate_5th")
+result_dir <-file.path(run_time_analysis,"results_5th")
+
+
+# Load PCA Embeddings of CT , WHO, NCIT
+disease_transform_v3<- read.csv(paste(intermediate_dir,"/disease_transform_pca_v3_5thed.csv",sep="") )
+colnames(disease_transform_v3)[1]<-"Diseases"
+rownames(disease_transform_v3)<-disease_transform_v3$Diseases # Needed for AP Clust
+
+ncol= dim(disease_transform_v3)[2]
+
+
+# Set Seed
+set.seed(13)
+
+
+# Peform Clustering 
+
+silhouette_score <- function(k){
+  km <- kmeans(disease_transform_v3[,2:ncol], centers = k, nstart=25)
+  ss <- silhouette(km$cluster, dist(disease_transform_v3[,2:ncol]))
+  print(k)
+  return(mean(ss[, 3]))
+}
+
+k <- c(10,500,1000,2000,3000,4000,5000,5500,5800,6000,6100,6200,6300,6400,
+       6500,6600,6700,6800,6900,
+       7000,7100,7200,7300,7400,7500,7600,7700,7800,7900,8000,9000,10000,11000,12000,13000,
+       14000,15000,16000)
+k2<-c(5100,5200,5300,5400,5500,5600,5700,5800,5900)
+avg_sil <- sapply(k, silhouette_score)
+avg_sil2 <- sapply(k2, silhouette_score)
+
+end_time_1<-Sys.time()
+
+elapsed_time_1<- as.numeric(difftime(end_time_1, start_time_1, units = "secs"))
+save.image(paste(run_time_analysis,"/KMeans_LTE3/5B_5thed.RData",sep=""))
+
+start_time_2<-Sys.time()
+
+Kmeans_silhouette<-as.data.frame(cbind(k,avg_sil))
+colnames(Kmeans_silhouette) <- c("k","mean_silhouette_score") 
+
+Kmeans_silhouette2<-as.data.frame(cbind(k2,avg_sil2))
+colnames(Kmeans_silhouette2) <- c("k","mean_silhouette_score")
+
+Kmeans_silhouette<-rbind(Kmeans_silhouette,Kmeans_silhouette2)
+Kmeans_silhouette<-Kmeans_silhouette[order(Kmeans_silhouette$k),]
+
+Kmeans_silhouette_Max <- Kmeans_silhouette[ which(max(Kmeans_silhouette$mean_silhouette_score) == Kmeans_silhouette$mean_silhouette_score), ]
+#5800 clusters
+
+
+# Kmeans optimal cluster is 6100 from 5000
+km.res <- eclust(disease_transform_v3[,2:ncol(disease_transform_v3)], "kmeans", k = Kmeans_silhouette_Max$k,nstart = 25, graph = FALSE)
+kmeans_clust_result <- as.data.frame(km.res$cluster)
+kmeans_clust_result$Tumors<-rownames(kmeans_clust_result)
+colnames(kmeans_clust_result)[1]<-"cluster"
+kmeans_clust_result <- kmeans_clust_result %>% dplyr::select(Tumors,cluster)
+
+sil <- silhouette(km.res$cluster, dist(disease_transform_v3[,2:ncol(disease_transform_v3)])) # Verify this 
+sil<-as.data.frame(sil)
+sil$Tumors<-names(km.res$cluster)
+
+kmeans_clust_result <- kmeans_clust_result %>% dplyr::left_join(sil,by=c("cluster", "Tumors"))
+
+kmeans_clust_result<-kmeans_clust_result[order(kmeans_clust_result$cluster),]
+rownames(kmeans_clust_result)<-NULL
+
+
+mean_freq_kmeans <- kmeans_clust_result %>% dplyr::select(cluster, sil_width) %>% dplyr::group_by(cluster) %>% dplyr::summarise(mean_silo_score=mean(sil_width),cluster_member_count =dplyr::n()) 
+kmeans_clust_result<- kmeans_clust_result %>% dplyr::left_join(mean_freq_kmeans,by="cluster")
+
+
+
+ct_disease_annot_adult_ped_df<-read.csv(paste(input_dir,"/tumor_annotated_adult_ped.csv",sep=""))
+ct_tumor_df<-ct_disease_annot_adult_ped_df%>%filter(validated_cancer_tumor=="Yes")
+ct_tumor_df<-ct_tumor_df[,c(-1)]
+ct_tumor_df<-ct_tumor_df[,c(1,2)]
+
+colnames(kmeans_clust_result)[1]<-"Tumor_Names"
+colnames(ct_tumor_df)[2]<-"Tumor_Names"
+
+kmeans_clust_result<-kmeans_clust_result%>%left_join(ct_tumor_df,by="Tumor_Names")
+
+kmeans_clust_result<-kmeans_clust_result[,c(7,1:6)]
+
+
+
+
+write.csv(kmeans_clust_result,paste(result_dir,"/kmeans_clust_result_embedding_v3_5thed.csv",sep=""))
+
+end_time_2<-Sys.time()
+
+elapsed_time_2<- as.numeric(difftime(end_time_2, start_time_2, units = "secs"))
+
+total_elapsed_time<-elapsed_time_1+elapsed_time_2
+
+
+
+objs <- ls(envir = .GlobalEnv)
+
+# Get the size of each object
+sizes <- sapply(objs, function(x) object.size(get(x, envir = .GlobalEnv)))
+
+# Convert sizes to readable format and summarize
+sizes_df <- data.frame(
+  Object = objs,
+  Size_MB = round(sizes / (1024^2), 3)
+)
+
+# Sort by size descending
+sizes_df <- sizes_df[order(-sizes_df$Size_MB), ]
+
+# Print the total memory used
+cat("Total memory used in Global Environment:", round(sum(sizes) / (1024^2), 3), "MB\n")
+
+Runtime_5B_5th = round(total_elapsed_time, 2)
+Memory_gb_5B_5th=round(sum(sizes) / (1024^2), 3)/1000
+
+
+save.image(paste(run_time_analysis,"/KMeans_LTE3/5B_5thed.RData",sep=""))
+
