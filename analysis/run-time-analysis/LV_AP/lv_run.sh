@@ -7,4 +7,4 @@ set -o pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")" 
 
 RScript LV_AP_5th.R
-RScript Levenshtein_AP.R
+RScript LV_AP_all.R
