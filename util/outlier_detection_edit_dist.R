@@ -54,6 +54,7 @@ outlier_detection_edit_dist <- function(nested_affinity_cluster,dissimilarity_ma
       for(iter_pts in min_pts){
         lof_scores_minpts <- lof(subset_df[,3:ncol(subset_df)],iter_pts)
         lof_scores_minpts_list[[as.character(iter_pts)]]<-lof_scores_minpts
+        print(iter_pts)
       }
       lof_scores_minpts_list<- t(as.data.frame(lof_scores_minpts_list))
       lof_scores_minpts_list_median<-apply(lof_scores_minpts_list,2,median)
