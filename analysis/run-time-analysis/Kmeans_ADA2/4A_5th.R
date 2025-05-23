@@ -22,8 +22,8 @@ util_dir <- file.path(root_dir, "util")
 data_dir <- file.path(root_dir,"data")
 input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
-intermediate_dir <- file.path(analysis_dir,"intermediate_5th")
-
+run_time_analysis<-file.path(analysis_dir,"run-time-analysis")
+intermediate_dir <- file.path(run_time_analysis,"intermediate_5th")
 #
 WHO_Terms_All <-readxl::read_xlsx(paste(data_dir,"/WHO_Tumors/result/WHO_Tumor_all_edition.xlsx",sep=""))
 WHO_Terms_5th<-WHO_Terms_All%>%filter(edition_5th=="Yes")
