@@ -31,3 +31,4 @@
 30,deepseek_8b+Euclidean Distance,25695.15,4.387377
 31,LTE-3+K-means,39541.65,4.69
 32,ADA002+K-means,29248.44,4.25
+33,Cosine+AP,55290.52,5.971153
