@@ -4,6 +4,7 @@ outlier_detection_edit_dist <- function(nested_affinity_cluster,dissimilarity_ma
   dissimilarity_matrix<- as.data.frame(dissimilarity_matrix)
   nested_affinity_cluster$isolation_outlier_score<-NA
   for(iter in 1:length(cluster_label)){
+    print(iter)
     current_cluster_label <- cluster_label[iter]
     subset_df <- nested_affinity_cluster %>% filter(Cluster_ID==current_cluster_label) %>% dplyr::select(Tumor_Names,Cluster_ID)
     if(dim(subset_df)[1]>2){
@@ -34,6 +35,7 @@ outlier_detection_edit_dist <- function(nested_affinity_cluster,dissimilarity_ma
   lof_scores_minpts_list<-list()
   
   for(iter in 1:length(cluster_label)){
+    print(iter)
     current_cluster_label <- cluster_label[iter]
     ind_clust <- which(nested_affinity_cluster$Cluster_ID==current_cluster_label)
     lof_scores_minpts_list<-list()
