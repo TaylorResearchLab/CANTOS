@@ -24,9 +24,8 @@ util_dir <- file.path(root_dir, "util")
 data_dir <- file.path(root_dir,"data")
 input_dir <- file.path(root_dir,"input")
 analysis_dir <- file.path(root_dir,"analysis")
-intermediate_dir <- file.path(analysis_dir,"intermediate_5th")
-result_dir <-file.path(analysis_dir,"results_5th")
-plots_dir<-file.path(root_dir,"plots_5th")
+run_time_analysis<-file.path(analysis_dir,"run-time-analysis")
+intermediate_dir <- file.path(run_time_analysis,"intermediate_5th")
 
 
 # Load PCA Embeddings of CT , WHO, NCIT
