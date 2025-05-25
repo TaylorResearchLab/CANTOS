@@ -27,12 +27,8 @@ result_dir <- file.path(analysis_dir,"results")
 result_dir_5th <- file.path(analysis_dir,"results_5th")
 
 
-tumor_all_gt<-read.csv(paste(result_dir,"/tumor_manually_validated_all.csv",sep = ""))
-
-#tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_5th.csv",sep = ""))
-tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_5th_corrected_may22.csv",sep = ""))
-
-tumor_all_gt<-tumor_all_gt[,c(-1)]
+tumor_all_gt<-read_excel(paste(result_dir,"/tumor_manually_validated_all_corrected_May23.xlsx",sep = ""))
+tumor_5thed_gt<-read_excel(paste(result_dir_5th,"/tumor_manually_validated_5th_corrected_May23.xlsx",sep = ""))
 tumor_5thed_gt<-tumor_5thed_gt[,c(-1)]
 
 tumor_all_gt<-tumor_all_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
@@ -55,21 +51,21 @@ fifth<-fifth[order(fifth$fifth,decreasing = TRUE),]
 
 for(iter in 1:nrow(all)){
   if(all$method[iter]=="valid_euclidean_dist_v3" ){
-    all$method[iter]="LTE-3+Euclidean Dist"
+    all$method[iter]="LTE-3+Euclidean distance"
   }else if(all$method[iter]=="valid_af_v3"){
     all$method[iter]="LTE-3+AP"
     
   }else if(all$method[iter]=="valid_euclidean_dist_ada2"){
-    all$method[iter]="ADA-002+Euclidean Dist"
+    all$method[iter]="ADA-002+Euclidean distance"
     
   }else if(all$method[iter]=="valid_af_ad2"){
     all$method[iter]="ADA-002+AP"
     
   }else if(all$method[iter]=="valid_kmeans_v3"){
-    all$method[iter]="LTE-3+KMeans"
+    all$method[iter]="LTE-3+K-means"
     
   }else if(all$method[iter]=="valid_kmeans_ada2"){
-    all$method[iter]="ADA-002+KMeans"
+    all$method[iter]="ADA-002+K-means"
     
   }else if(all$method[iter]=="valid_lv_match"){
     all$method[iter]="Levenshtein"
@@ -78,9 +74,9 @@ for(iter in 1:nrow(all)){
     all$method[iter]="Levenshtein+AP"
     
   }else if(all$method[iter]=="valid_jw_match"){
-    all$method[iter]="Jarro Winkler"
+    all$method[iter]="Jaro Winkler"
   }else if(all$method[iter]=="valid_af_jw"){
-    all$method[iter]="Jarro Winkler+AP"
+    all$method[iter]="Jaro Winkler+AP"
     
   }else if(all$method[iter]=="valid_cosine_match"){
     all$method[iter]="Cosine"
@@ -90,118 +86,118 @@ for(iter in 1:nrow(all)){
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_llama"){
-    all$method[iter]="LLama3.0+Euclidean Dist"
+    all$method[iter]="LLama3.0+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_biobert"){
-    all$method[iter]="BioBERT+Euclidean Dist"
+    all$method[iter]="BioBERT+Euclidean distance"
     
   }else if(all$method[iter]=="valid_euclidean_dist_medllama"){
-    all$method[iter]="MedLlama_13B+Euclidean Dist"
+    all$method[iter]="MedLlama_13B+Euclidean distance"
     
   }else if(all$method[iter]=="valid_euclidean_dist_pubmedbert"){
-    all$method[iter]="PubMedBERT+Euclidean Dist"
+    all$method[iter]="PubMedBERT+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_modernbert"){
-    all$method[iter]="ModernBERT+Euclidean Dist"
+    all$method[iter]="ModernBERT+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_medllama_7b"){
-    all$method[iter]="MedLlama2+Euclidean Dist"
+    all$method[iter]="MedLlama2+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_llama_32_3b"){
-    all$method[iter]="LLama3.2_3B+Euclidean Dist"
+    all$method[iter]="LLama3.2_3B+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_phi4"){
-    all$method[iter]="Phi-4+Euclidean Dist"
+    all$method[iter]="Phi-4+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_llama_33_70b"){
-    all$method[iter]="Llama3.3_70B+Euclidean Dist"
+    all$method[iter]="Llama3.3_70B+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_MiniLM_L6_v2"){
-    all$method[iter]="all-MiniLM-L6-v2+Euclidean Dist"
+    all$method[iter]="all-MiniLM-L6-v2+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_mpnet_base"){
-    all$method[iter]="all-mpnet-base-v2+Euclidean Dist"
+    all$method[iter]="all-mpnet-base-v2+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_e5_large"){
-    all$method[iter]="e5-large+Euclidean Dist"
+    all$method[iter]="e5-large+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_gtr_t5_large"){
-    all$method[iter]="gtr-t5-large+Euclidean Dist"
+    all$method[iter]="gtr-t5-large+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_roberta"){
-    all$method[iter]="all-roberta-large-v1+Euclidean Dist"
+    all$method[iter]="all-roberta-large-v1+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_MiniLM_L12_v2"){
-    all$method[iter]="all-MiniLM-L12-v2+Euclidean Dist"
+    all$method[iter]="all-MiniLM-L12-v2+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_labse"){
-    all$method[iter]="LaBSE+Euclidean Dist"
+    all$method[iter]="LaBSE+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_sciBERT"){
-    all$method[iter]="sciBERT+Euclidean Dist"
+    all$method[iter]="sciBERT+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_sapBERT"){
-    all$method[iter]="sapBERT+Euclidean Dist"
+    all$method[iter]="sapBERT+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_cohere"){
-    all$method[iter]="embed-english-v2.0+Euclidean Dist"
+    all$method[iter]="embed-english-v2.0+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_deepseek"){
-    all$method[iter]="DeepSeek_8B+Euclidean Dist"
+    all$method[iter]="DeepSeek_8B+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_BioGPT"){
-    all$method[iter]="BioGPT+Euclidean Dist"
+    all$method[iter]="BioGPT+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_clincalBERT"){
-    all$method[iter]="ClinicalBERT+Euclidean Dist"
+    all$method[iter]="ClinicalBERT+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_e5large_v2"){
-    all$method[iter]="e5large_v2+Euclidean Dist"
+    all$method[iter]="e5large_v2+Euclidean distance"
     
   }
   else if(all$method[iter]=="valid_euclidean_dist_nomic"){
-    all$method[iter]="nomic+Euclidean Dist"
+    all$method[iter]="nomic+Euclidean distance"
     
   }
 }
 
 for(iter in 1:nrow(fifth)){
   if(fifth$method[iter]=="valid_euclidean_dist_v3" ){
-    fifth$method[iter]="LTE-3+Euclidean Dist"
+    fifth$method[iter]="LTE-3+Euclidean distance"
   }else if(fifth$method[iter]=="valid_af_v3"){
     fifth$method[iter]="LTE-3+AP"
     
   }else if(fifth$method[iter]=="valid_euclidean_dist_ada2"){
-    fifth$method[iter]="ADA-002+Euclidean Dist"
+    fifth$method[iter]="ADA-002+Euclidean distance"
     
   }else if(fifth$method[iter]=="valid_af_ad2"){
     fifth$method[iter]="ADA-002+AP"
     
   }else if(fifth$method[iter]=="valid_kmeans_v3"){
-    fifth$method[iter]="LTE-3+KMeans"
+    fifth$method[iter]="LTE-3+K-means"
     
   }else if(fifth$method[iter]=="valid_kmeans_ada2"){
-    fifth$method[iter]="ADA-002+KMeans"
+    fifth$method[iter]="ADA-002+K-means"
     
   }else if(fifth$method[iter]=="valid_lv_match"){
     fifth$method[iter]="Levenshtein"
@@ -210,9 +206,9 @@ for(iter in 1:nrow(fifth)){
     fifth$method[iter]="Levenshtein+AP"
     
   }else if(fifth$method[iter]=="valid_jw_match"){
-    fifth$method[iter]="Jarro Winkler"
+    fifth$method[iter]="Jaro Winkler"
   }else if(fifth$method[iter]=="valid_af_jw"){
-    fifth$method[iter]="Jarro Winkler+AP"
+    fifth$method[iter]="Jaro Winkler+AP"
     
   }else if(fifth$method[iter]=="valid_cosine_match"){
     fifth$method[iter]="Cosine"
@@ -221,97 +217,97 @@ for(iter in 1:nrow(fifth)){
     fifth$method[iter]="Cosine+AP"
     
   }else if(fifth$method[iter]=="valid_euclidean_dist_llama"){
-    fifth$method[iter]="LLama3.0+Euclidean Dist"
+    fifth$method[iter]="LLama3.0+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_biobert"){
-    fifth$method[iter]="BioBERT+Euclidean Dist"
+    fifth$method[iter]="BioBERT+Euclidean distance"
     
   }else if(fifth$method[iter]=="valid_euclidean_dist_medllama"){
-    fifth$method[iter]="MedLlama_13b+Euclidean Dist"
+    fifth$method[iter]="MedLlama_13b+Euclidean distance"
     
   }else if(fifth$method[iter]=="valid_euclidean_dist_pubmedbert"){
-    fifth$method[iter]="PubMedBERT+Euclidean Dist"
+    fifth$method[iter]="PubMedBERT+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_modernbert"){
-    fifth$method[iter]="ModernBERT+Euclidean Dist"
+    fifth$method[iter]="ModernBERT+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_medllama_7b"){
-    fifth$method[iter]="MedLlama2+Euclidean Dist"
+    fifth$method[iter]="MedLlama2+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_llama_32_3b"){
-    fifth$method[iter]="LLama3.2_3B+Euclidean Dist"
+    fifth$method[iter]="LLama3.2_3B+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_phi4"){
-    fifth$method[iter]="Phi-4+Euclidean Dist"
+    fifth$method[iter]="Phi-4+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_llama_33_70b"){
-    fifth$method[iter]="Llama3.3_70B+Euclidean Dist"
+    fifth$method[iter]="Llama3.3_70B+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_MiniLM_L6_v2"){
-    fifth$method[iter]="all-MiniLM-L6-v2+Euclidean Dist"
+    fifth$method[iter]="all-MiniLM-L6-v2+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_mpnet_base"){
-    fifth$method[iter]="all-mpnet-base-v2+Euclidean Dist"
+    fifth$method[iter]="all-mpnet-base-v2+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_e5_large"){
-    fifth$method[iter]="e5-large+Euclidean Dist"
+    fifth$method[iter]="e5-large+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_gtr_t5_large"){
-    fifth$method[iter]="gtr-t5-large+Euclidean Dist"
+    fifth$method[iter]="gtr-t5-large+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_roberta"){
-    fifth$method[iter]="all-roberta-large-v1+Euclidean Dist"
+    fifth$method[iter]="all-roberta-large-v1+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_MiniLM_L12_v2"){
-    fifth$method[iter]="all-MiniLM-L12-v2+Euclidean Dist"
+    fifth$method[iter]="all-MiniLM-L12-v2+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_labse"){
-    fifth$method[iter]="LaBSE+Euclidean Dist"
+    fifth$method[iter]="LaBSE+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_sciBERT"){
-    fifth$method[iter]="sciBERT+Euclidean Dist"
+    fifth$method[iter]="sciBERT+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_sapBERT"){
-    fifth$method[iter]="sapBERT+Euclidean Dist"
+    fifth$method[iter]="sapBERT+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_cohere"){
-    fifth$method[iter]="embed-english-v2.0+Euclidean Dist"
+    fifth$method[iter]="embed-english-v2.0+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_deepseek"){
-    fifth$method[iter]="DeepSeek_8B+Euclidean Dist"
+    fifth$method[iter]="DeepSeek_8B+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_BioGPT"){
-    fifth$method[iter]="BioGPT+Euclidean Dist"
+    fifth$method[iter]="BioGPT+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_clincalBERT"){
-    fifth$method[iter]="ClinicalBERT+Euclidean Dist"
+    fifth$method[iter]="ClinicalBERT+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_e5large_v2"){
-    fifth$method[iter]="e5large_v2+Euclidean Dist"
+    fifth$method[iter]="e5large_v2+Euclidean distance"
     
   }
   else if(fifth$method[iter]=="valid_euclidean_dist_nomic"){
-    fifth$method[iter]="nomic+Euclidean Dist"
+    fifth$method[iter]="nomic+Euclidean distance"
     
   }
 }
