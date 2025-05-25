@@ -1,0 +1,158 @@
+# Computes affinity cluster of ADA2 data. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.
+start_time_0<-Sys.time()
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(data.table)
+  library(ggplot2)
+  library(tidyverse)
+  library(stringi)
+  library(qdapRegex)
+  library(jsonlite)
+  library(httr)
+  library(biomaRt)
+  library(ghql)
+  library(readxl)
+  library(apcluster)
+})
+print("Running 6A_5th")
+# Set the directories
+setwd(getwd())
+root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
+util_dir <- file.path(root_dir, "util")
+data_dir <- file.path(root_dir,"data")
+input_dir <- file.path(root_dir,"input")
+analysis_dir <- file.path(root_dir,"analysis")
+run_time_analysis<-file.path(analysis_dir,"run-time-analysis")
+intermediate_dir <- file.path(run_time_analysis,"intermediate_5th")
+results_dir <- file.path(run_time_analysis,"results_5th")
+# Load affinity Cluster
+source(paste(util_dir,"/run_affinity_clustering.R",sep=""))
+
+########################################*************************************###########
+# Load PCA Embeddings of CT , WHO, NCIT
+disease_transform<- read.csv(paste(intermediate_dir,"/disease_transform_pca_ada2_5thed.csv",sep="") )
+colnames(disease_transform)[1]<-"Tumor_Name"
+rownames(disease_transform)<-disease_transform$Tumor_Name # Needed for AP Clust
+
+# Set Seed
+set.seed(13)
+#affinity cluster
+print("CPT0")
+
+dist_euclidean<- dist(disease_transform[1:nrow(disease_transform),2:ncol(disease_transform)],method = "euclidean")
+dist_euclidean<-as.matrix(dist_euclidean)
+simmilarity_euclidean<- 1/(1+dist_euclidean)
+stop_time_0<-Sys.time()
+save.image(paste(run_time_analysis,"/ADA002_AP/6A-ADA002_5th.RData",sep=""))
+
+start_time_1<-Sys.time()
+
+af_clust_euclidean <- apcluster(simmilarity_euclidean) # 6:05 pm-8:40 pm
+cat("affinity propogation optimal number of clusters:", length(af_clust_euclidean@clusters), "\n")#3242 clusters
+print("CPT1")
+
+#d.apclus2 <- apcluster(negDistMat(r=2), disease_transform) # 1 hr 28 mins 11:28 pm - 12:08 pm
+#cat("affinity propogation optimal number of clusters:", length(d.apclus2@clusters), "\n") #1113 clusters 
+affinity_cluster_df<-as.data.frame(matrix(nrow=1,ncol=2))
+colnames(affinity_cluster_df)<-c("Tumor_Names","Cluster_ID")
+for (iter in 1: length(af_clust_euclidean@clusters)){
+  affinity_cluster_df[iter,1] <- paste(names(unlist(af_clust_euclidean@clusters[iter])),collapse = "@")
+  affinity_cluster_df[iter,2] <- iter
+}
+affinity_cluster_df<- affinity_cluster_df %>% separate_rows(Tumor_Names, sep = '@')
+affinity_cluster_df$Cluster_ID<-as.character(affinity_cluster_df$Cluster_ID)
+
+
+stop_time_1<-Sys.time()
+save.image(paste(run_time_analysis,"/ADA002_AP/6A-ADA002_5th.RData",sep=""))
+
+start_time_2<-Sys.time()
+
+print("CPT2")
+
+# Find cluster membership frequencies 
+#affinity_cluster_df$Cluster_Total_Members <- NA
+cluster_frequency_table <- as.data.frame(table(affinity_cluster_df$Cluster_ID))
+colnames(cluster_frequency_table)<- c("Cluster_ID","Primary_Cluster_Frequency")
+cluster_frequency_table$Cluster_ID<-as.character(cluster_frequency_table$Cluster_ID)
+z_scores<- (cluster_frequency_table$Primary_Cluster_Frequency-mean(cluster_frequency_table$Primary_Cluster_Frequency))/sd(cluster_frequency_table$Primary_Cluster_Frequency)
+cluster_frequency_table$z_scores<-z_scores
+
+ind_min_zscore<- which(cluster_frequency_table$z_scores < 2.5)
+max_cluster_member <- max(cluster_frequency_table$Primary_Cluster_Frequency[ind_min_zscore])
+
+#median_cluster_frequency <- median(cluster_frequency_table$Primary_Cluster_Frequency)
+
+#large_cluster_labels<- cluster_frequency_table$Cluster_ID[which(cluster_frequency_table$Primary_Cluster_Frequency>median_cluster_frequency)]
+large_cluster_labels<- cluster_frequency_table$Cluster_ID[which(cluster_frequency_table$Primary_Cluster_Frequency>max_cluster_member)]
+
+converge_list<-list()
+print("CPT3")
+
+while(length(large_cluster_labels)>0){
+  print(length(large_cluster_labels))
+  for(iter in 1:length(large_cluster_labels)){
+    Clusters_Names=large_cluster_labels[iter]
+    subset_embedding_df <- as.data.frame(affinity_cluster_df$Tumor_Names[affinity_cluster_df$Cluster_ID==Clusters_Names])
+    colnames(subset_embedding_df)<-"Tumor_Name"
+    rownames(subset_embedding_df)<-subset_embedding_df$Tumor_Name
+    subset_embedding_df<- subset_embedding_df %>% dplyr::left_join(disease_transform,by="Tumor_Name")
+    rownames(subset_embedding_df)<-subset_embedding_df$Tumor_Name
+    subset_embedding_df<-subset_embedding_df[,c(-1)]
+    
+    result_run_aff<-run_affinity_clustering(Clusters_Names,subset_embedding_df)
+    
+    flag_converge <- result_run_aff[[1]]
+    subset_affinity_df<-result_run_aff[[2]]
+    
+    if(flag_converge=="No"){
+      for (iter_nested_affinity_cluser in 1: dim(subset_affinity_df)[1]){
+        ind_location <- which (affinity_cluster_df$Tumor_Names==subset_affinity_df$Tumor_Names[iter_nested_affinity_cluser])
+        affinity_cluster_df$Cluster_ID[ind_location]<-subset_affinity_df$SubCluster_ID[iter_nested_affinity_cluser]
+      }
+    }else if(flag_converge=="Yes"){
+      converge_list<-append(Clusters_Names,converge_list)
+    }
+    
+    
+  }
+  cluster_frequency_table <- as.data.frame(table(affinity_cluster_df$Cluster_ID))
+  colnames(cluster_frequency_table)<- c("Cluster_ID","Primary_Cluster_Frequency")
+  cluster_frequency_table$Cluster_ID<-as.character(cluster_frequency_table$Cluster_ID)
+  large_cluster_labels<- cluster_frequency_table$Cluster_ID[which(cluster_frequency_table$Primary_Cluster_Frequency>max_cluster_member)]
+  large_cluster_labels<-setdiff(large_cluster_labels, unlist(converge_list))
+}
+
+stop_time_2<-Sys.time()
+elapsed_time_0<-as.numeric(difftime(stop_time_0, start_time_0, units = "secs"))
+elapsed_time_1<- as.numeric(difftime(stop_time_1, start_time_1, units = "secs"))
+elapsed_time_2<- as.numeric(difftime(stop_time_2, start_time_2, units = "secs"))
+
+elapsed_time<-elapsed_time_0+elapsed_time_1+elapsed_time_2
+
+objs <- ls(envir = .GlobalEnv)
+
+# Get the size of each object
+sizes <- sapply(objs, function(x) object.size(get(x, envir = .GlobalEnv)))
+
+# Convert sizes to readable format and summarize
+sizes_df <- data.frame(
+  Object = objs,
+  Size_MB = round(sizes / (1024^2), 3)
+)
+
+# Sort by size descending
+sizes_df <- sizes_df[order(-sizes_df$Size_MB), ]
+
+# Print the total memory used
+cat("Total memory used in Global Environment:", round(sum(sizes) / (1024^2), 3), "MB\n")
+
+Runtime_6A_5th = round(elapsed_time, 2)
+Memory_gb_6a_5th=round(sum(sizes) / (1024^2), 3)/1000
+
+
+save(affinity_cluster_df,file = paste(intermediate_dir,"/affinity_cluster_df_ada2_5thed.RData",sep=""))
+save.image(paste(run_time_analysis,"/ADA002_AP/6A-ADA002_5th.RData",sep=""))
+
+
+#save.image(file = "script6a_5thed.RData")
