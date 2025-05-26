@@ -1,0 +1,157 @@
+# Computes affinity cluster of V3 data. Nested clustering is performed on large cluster. Cluster size is determined to be large using Z scores on cluster membership.
+start_time_0<-Sys.time()
+
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(data.table)
+  library(ggplot2)
+  library(tidyverse)
+  library(stringi)
+  #library(qdapRegex)
+  #library(jsonlite)
+  #library(httr)
+  #library(biomaRt)
+  #library(ghql)
+  library(readxl)
+  library(apcluster)
+})
+
+# Set the directories
+setwd(getwd())
+root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
+util_dir <- file.path(root_dir, "util")
+data_dir <- file.path(root_dir,"data")
+input_dir <- file.path(root_dir,"input")
+analysis_dir <- file.path(root_dir,"analysis")
+intermediate_dir <- file.path(analysis_dir,"intermediate")
+results_dir <- file.path(analysis_dir,"results")
+
+source(paste(util_dir,"/run_affinity_clustering.R",sep=""))
+
+print("Running 6B_all")
+
+disease_transform_v3<- read.csv(paste(intermediate_dir,"/disease_transform_pca_v3.csv",sep="") )
+colnames(disease_transform_v3)[1]<-"Tumor_Names"
+rownames(disease_transform_v3)<-disease_transform_v3$Tumor_Name # Needed for AP Clust
+
+
+# Set Seed
+set.seed(13)
+#affinity cluster
+
+
+#######V3
+
+dist_euclidean_v3<- dist(disease_transform_v3,method = "euclidean")
+dist_euclidean_v3<-as.matrix(dist_euclidean_v3)
+simmilarity_euclidean_v3<- 1/(1+dist_euclidean_v3)
+stop_time_0<-Sys.time()
+save.image(paste(analysis_dir,"/LTE3_AP/6B-LTE3_all.RData",sep=""))
+start_time_1<-Sys.time()
+
+af_clust_euclidean_v3 <- apcluster(simmilarity_euclidean_v3)#5:11 pm start 7:08 continuing 3:45 pm start
+
+affinity_cluster_v3_df<-as.data.frame(matrix(nrow=1,ncol=2))
+colnames(affinity_cluster_v3_df)<-c("Tumor_Names","Cluster_ID")
+for (iter in 1: length(af_clust_euclidean_v3@clusters)){
+  affinity_cluster_v3_df[iter,1] <- paste(names(unlist(af_clust_euclidean_v3@clusters[iter])),collapse = "@")
+  affinity_cluster_v3_df[iter,2] <- iter
+}
+affinity_cluster_v3_df<- affinity_cluster_v3_df %>% separate_rows(Tumor_Names, sep = '@')
+affinity_cluster_v3_df$Cluster_ID<-as.character(affinity_cluster_v3_df$Cluster_ID)
+
+stop_time_1<-Sys.time()
+save.image(paste(analysis_dir,"/LTE3_AP/6B-LTE3_all.RData",sep=""))
+####v3
+
+start_time_2<-Sys.time()
+
+print("CPT2")
+
+
+################ v3 
+# Find cluster membership frequencies 
+#affinity_cluster_df$Cluster_Total_Members <- NA
+cluster_frequency_v3_table <- as.data.frame(table(affinity_cluster_v3_df$Cluster_ID))
+colnames(cluster_frequency_v3_table)<- c("Cluster_ID","Primary_Cluster_Frequency")
+cluster_frequency_v3_table$Cluster_ID<-as.character(cluster_frequency_v3_table$Cluster_ID)
+z_scores_v3<- (cluster_frequency_v3_table$Primary_Cluster_Frequency-mean(cluster_frequency_v3_table$Primary_Cluster_Frequency))/sd(cluster_frequency_v3_table$Primary_Cluster_Frequency)
+cluster_frequency_v3_table$z_scores<-z_scores_v3
+
+ind_min_zscore<- which(cluster_frequency_v3_table$z_scores < 2.5)
+max_cluster_member <- max(cluster_frequency_v3_table$Primary_Cluster_Frequency[ind_min_zscore])
+
+large_cluster_labels_v3<- cluster_frequency_v3_table$Cluster_ID[which(cluster_frequency_v3_table$Primary_Cluster_Frequency>max_cluster_member)]
+
+converge_list_v3<-list()
+print("CPT3")
+
+while(length(large_cluster_labels_v3)>0){
+  print(length(large_cluster_labels_v3))
+  for(iter in 1:length(large_cluster_labels_v3)){
+    Clusters_Names=large_cluster_labels_v3[iter]
+    subset_embedding_v3_df <- as.data.frame(affinity_cluster_v3_df$Tumor_Names[affinity_cluster_v3_df$Cluster_ID==Clusters_Names])
+    colnames(subset_embedding_v3_df)<-"Tumor_Names"
+    rownames(subset_embedding_v3_df)<-subset_embedding_v3_df$Tumor_Names
+    subset_embedding_v3_df<- subset_embedding_v3_df %>% dplyr::left_join(disease_transform_v3,by="Tumor_Names")
+    rownames(subset_embedding_v3_df)<-subset_embedding_v3_df$Tumor_Names
+    subset_embedding_v3_df<-subset_embedding_v3_df[,c(-1)]
+    
+    result_run_v3_aff<-run_affinity_clustering(Clusters_Names,subset_embedding_v3_df[,c(-1)])
+    
+    flag_converge_v3 <- result_run_v3_aff[[1]]
+    subset_affinity_v3_df<-result_run_v3_aff[[2]]
+    
+    if(flag_converge_v3=="No"){
+      for (iter_nested_affinity_cluser_v3 in 1: dim(subset_affinity_v3_df)[1]){
+        ind_location_v3 <- which (affinity_cluster_v3_df$Tumor_Names==subset_affinity_v3_df$Tumor_Names[iter_nested_affinity_cluser_v3])
+        affinity_cluster_v3_df$Cluster_ID[ind_location_v3]<-subset_affinity_v3_df$SubCluster_ID[iter_nested_affinity_cluser_v3]
+      }
+    }else if(flag_converge_v3=="Yes"){
+      converge_list_v3<-append(Clusters_Names,converge_list_v3)
+    }
+    
+    
+  }
+  cluster_frequency_v3_table <- as.data.frame(table(affinity_cluster_v3_df$Cluster_ID))
+  colnames(cluster_frequency_v3_table)<- c("Cluster_ID","Primary_Cluster_Frequency")
+  cluster_frequency_v3_table$Cluster_ID<-as.character(cluster_frequency_v3_table$Cluster_ID)
+  large_cluster_labels_v3<- cluster_frequency_v3_table$Cluster_ID[which(cluster_frequency_v3_table$Primary_Cluster_Frequency>max_cluster_member)]
+  large_cluster_labels_v3<-setdiff(large_cluster_labels_v3, unlist(converge_list_v3))
+}
+
+stop_time_2<-Sys.time()
+elapsed_time_0<-as.numeric(difftime(stop_time_0, start_time_0, units = "secs"))
+elapsed_time_1<- as.numeric(difftime(stop_time_1, start_time_1, units = "secs"))
+elapsed_time_2<- as.numeric(difftime(stop_time_2, start_time_2, units = "secs"))
+
+elapsed_time<-elapsed_time_0+elapsed_time_1+elapsed_time_2
+
+objs <- ls(envir = .GlobalEnv)
+
+# Get the size of each object
+sizes <- sapply(objs, function(x) object.size(get(x, envir = .GlobalEnv)))
+
+# Convert sizes to readable format and summarize
+sizes_df <- data.frame(
+  Object = objs,
+  Size_MB = round(sizes / (1024^2), 3)
+)
+
+# Sort by size descending
+sizes_df <- sizes_df[order(-sizes_df$Size_MB), ]
+
+# Print the total memory used
+cat("Total memory used in Global Environment:", round(sum(sizes) / (1024^2), 3), "MB\n")
+
+Runtime_6B_all = round(elapsed_time, 2)
+Memory_gb_6b_all=round(sum(sizes) / (1024^2), 3)/1000
+
+save(affinity_cluster_v3_df,file = paste(intermediate_dir,"/affinity_cluster_v3_df_all.RData",sep=""))
+
+
+save.image(paste(analysis_dir,"/LTE3_AP/6B-LTE3_all.RData",sep=""))
+
+
+
+save(affinity_cluster_v3_df,file = paste(intermediate_dir,"/affinity_cluster_v3_df.RData",sep=""))
