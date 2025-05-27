@@ -29,7 +29,6 @@ result_dir_5th <- file.path(analysis_dir,"results_5th")
 
 tumor_all_gt<-read_excel(paste(result_dir,"/tumor_manually_validated_all_corrected_May23.xlsx",sep = ""))
 tumor_5thed_gt<-read_excel(paste(result_dir_5th,"/tumor_manually_validated_5th_corrected_May23.xlsx",sep = ""))
-tumor_5thed_gt<-tumor_5thed_gt[,c(-1)]
 
 tumor_all_gt<-tumor_all_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 tumor_5thed_gt<-tumor_5thed_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
@@ -58,7 +57,7 @@ for(iter in 1:nrow(all)){
   }else if(all$method[iter]=="valid_euclidean_dist_ada2"){
     all$method[iter]="ADA-002+Euclidean distance"
     
-  }else if(all$method[iter]=="valid_af_ad2"){
+  }else if(all$method[iter]=="valid_af_ada2"){
     all$method[iter]="ADA-002+AP"
     
   }else if(all$method[iter]=="valid_kmeans_v3"){
@@ -190,7 +189,7 @@ for(iter in 1:nrow(fifth)){
   }else if(fifth$method[iter]=="valid_euclidean_dist_ada2"){
     fifth$method[iter]="ADA-002+Euclidean distance"
     
-  }else if(fifth$method[iter]=="valid_af_ad2"){
+  }else if(fifth$method[iter]=="valid_af_ada2"){
     fifth$method[iter]="ADA-002+AP"
     
   }else if(fifth$method[iter]=="valid_kmeans_v3"){
