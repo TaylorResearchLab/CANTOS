@@ -92,13 +92,13 @@ high_accuracy_methods<-c("LTE-3+AP",
                          "ADA-002+AP",
                          "LTE-3+KMeans",
                          "ADA-002+KMeans",
-                         "LTE-3+Euclidean Distance",
-                         "ADA-002+Euclidean Distance",
-                         "all-MiniLM-L6-v2+Euclidean Distance",
-                         "all-mpnet-base-v2+Euclidean Distance",
-                         "all-MiniLM-L12-v2+Euclidean Distance",
-                         "e5-large+Euclidean Distance",
-                         "nomic+Euclidean Distance")
+                         "LTE-3+Euclidean distance",
+                         "ADA-002+Euclidean distance",
+                         "all-MiniLM-L6-v2+Euclidean distance",
+                         "all-mpnet-base-v2+Euclidean distance",
+                         "all-MiniLM-L12-v2+Euclidean distance",
+                         "e5-large+Euclidean distance",
+                         "nomic+Euclidean distance")
 
 adj_all<-as.data.frame(adj_pvals_all)
 adj_5th<-as.data.frame(adj_pvals_5thed)
@@ -109,3 +109,14 @@ adj_5th_high<-adj_5th%>%filter(rownames(adj_5th)%in%high_accuracy_methods)
 adj_5th_high<-adj_5th_high%>%select(any_of(high_accuracy_methods))
 
 
+
+biomed_methods<-c("sapBERT+Euclidean distance", "ClinicalBERT+Euclidean distance", "BioGPT+Euclidean distance",
+                  "MedLlama_13B+Euclidean distance", "PubMedBERT+Euclidean distance", "sciBERT+Euclidean distance", 
+                  "BioBERT+Euclidean distance",  "MedLlama2+Euclidean distance")
+
+adj_all_biomed<-adj_all%>%filter(rownames(adj_all)%in%c(biomed_methods,high_accuracy_methods))
+adj_all_biomed<-adj_all_biomed%>%select(any_of(c(biomed_methods,high_accuracy_methods)))
+
+
+adj_5th_biomed<-adj_5th%>%filter(rownames(adj_5th)%in%c(biomed_methods,high_accuracy_methods))
+adj_5th_biomed<-adj_5th_biomed%>%select(any_of(c(biomed_methods,high_accuracy_methods)))
