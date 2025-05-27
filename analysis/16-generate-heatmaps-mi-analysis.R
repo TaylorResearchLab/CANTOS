@@ -31,12 +31,10 @@ result_dir_5th <- file.path(analysis_dir,"results_5th")
 
 source(paste(util_dir,"/compute_mi_pairwise.R",sep = ""))
 
-tumor_all_gt<-read.csv(paste(result_dir,"/tumor_manually_validated_all.csv",sep = ""))
-tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_5th.csv",sep = ""))
-
-
-tumor_all_gt<-tumor_all_gt[,c(-1)]
+tumor_all_gt<-read_excel(paste(result_dir,"/tumor_manually_validated_all_corrected_May23.xlsx",sep = ""))
+tumor_5thed_gt<-read_excel(paste(result_dir_5th,"/tumor_manually_validated_5th_corrected_May23.xlsx",sep = ""))
 tumor_5thed_gt<-tumor_5thed_gt[,c(-1)]
+
 
 tumor_all_gt<-tumor_all_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 tumor_5thed_gt<-tumor_5thed_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
@@ -57,10 +55,10 @@ data_all<-data_all%>%dplyr::select(col_select)
 MI_mat_5th <-compute_mi_pairwise(data_5th)
 MI_mat_all <-compute_mi_pairwise(data_all)
 
-method_names<-c("LTE3+Euclidean_dist","ADA002+Euclidean_dist","ADA002+AP",                      
-                "LTE3+ADA002","LTE3+kmeans","ADA002+kmeans",                 
-                "all_MiniLM_L6_v2+euclidean_dist",  "all_mpnet_base+euclidean_dist","e5_large+euclidean_dist",     
-                "all_MiniLM_L12_v2+euclidean_dist", "nomic+euclidean_dist")
+method_names<-c("LTE-3+Euclidean distance","ADA-002+Euclidean distance","ADA-002+AP",                      
+                "LTE3+AP","LTE-3+kmeans","ADA-002+k-means",                 
+                "all_MiniLM_L6_v2+Euclidean distance",  "all_mpnet_base+Euclidean distance","e5_large+Euclidean distance",     
+                "all_MiniLM_L12_v2+Euclidean distance", "nomic+Euclidean distance")
 
 colnames(MI_mat_5th)<-method_names
 colnames(MI_mat_all)<-method_names
@@ -175,6 +173,7 @@ for(iter in 1:nrow(combined_pred_all)){
 
 #print(sum(combined_pred_all$valid_combined_predictions)/nrow(combined_pred_all))
 print(signif(sum(combined_pred_all$valid_combined_predictions)/nrow(combined_pred_all),digits =3)*100)
+print(signif(sum(combined_pred_5th$valid_combined_predictions)/nrow(combined_pred_5th),digits =3)*100)
 
 # Convert MI matrix to long format for visualization
 mi_melted_all <- melt(MI_mat_all)
@@ -190,7 +189,7 @@ plt_heat_all<-ggplot(mi_melted_all, aes(Var1, Var2, fill = value)) +
   geom_point(data = min_pos_all, aes(Var1, Var2), color = "blue", size = 4, shape = 21, fill = "blue",stroke = 1.5) +  # Mark Min
   annotate("text", x = min_pos_all$Var1, y = min_pos_all$Var2, label = "Min", color = "blue", size = 3, vjust = -1) +
   theme_minimal() + 
-  labs(title = "Heatmap of Pairwise Mutual Information for WHO all editions", 
+  labs(title = "Heatmap of Pairwise Mutual Information for WHO-all editions (n=1118)", 
        x = "Methods", y = "Methods", fill = "MI")+
   theme(
     axis.text.x = element_text(size = 8, angle = 45, hjust = 1),  # Reduce x-axis tick size and rotate
@@ -212,7 +211,7 @@ plt_heat_5th<-ggplot(mi_melted_5th, aes(Var1, Var2, fill = value)) +
   geom_point(data = min_pos_5th, aes(Var1, Var2), color = "blue", size = 4, shape = 21, fill = "blue",stroke = 1.5) +  # Mark Min
   annotate("text", x = min_pos_5th$Var1, y = min_pos_5th$Var2, label = "Min", color = "blue", size = 3, vjust = -1) +
   theme_minimal() + 
-  labs(title = "Heatmap of Pairwise Mutual Information for WHO 5th editions", 
+  labs(title = "Heatmap of Pairwise Mutual Information for WHO-5th editions (n=1044) ", 
        x = "Methods", y = "Methods", fill = "MI")+
   theme(
     axis.text.x = element_text(size = 8, angle = 45, hjust = 1),  # Reduce x-axis tick size and rotate

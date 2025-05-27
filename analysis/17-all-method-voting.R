@@ -32,9 +32,8 @@ col_select <- c("valid_euclidean_dist_v3","valid_euclidean_dist_ada2","valid_af_
                 "valid_euclidean_dist_e5_large","valid_euclidean_dist_MiniLM_L12_v2","valid_euclidean_dist_nomic")
 
 
-tumor_all_gt<-read.csv(paste(result_dir,"/tumor_manually_validated_all.csv",sep = ""))
-tumor_5thed_gt<-read.csv(paste(result_dir_5th,"/tumor_manually_validated_5th.csv",sep = ""))
-tumor_all_gt<-tumor_all_gt[,c(-1)]
+tumor_all_gt<-read_excel(paste(result_dir,"/tumor_manually_validated_all_corrected_May23.xlsx",sep = ""))
+tumor_5thed_gt<-read_excel(paste(result_dir_5th,"/tumor_manually_validated_5th_corrected_May23.xlsx",sep = ""))
 tumor_5thed_gt<-tumor_5thed_gt[,c(-1)]
 
 col_select2<-col_select
