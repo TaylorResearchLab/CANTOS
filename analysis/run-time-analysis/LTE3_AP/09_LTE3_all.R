@@ -90,8 +90,8 @@ cat("Total memory used in Global Environment:", round(sum(sizes) / (1024^2), 3),
 Runtime_9_all = round(elapsed_time, 2)
 Memory_gb_9_all=round(sum(sizes) / (1024^2), 3)/1000
 
-print(Runtime_9_5th)
-print(Memory_gb_9_5th)
+print(Runtime_9_all)
+print(Memory_gb_9_all)
 
 
 #####
