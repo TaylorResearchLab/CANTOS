@@ -5,124 +5,133 @@ library(ggplot2)
 library(tidyverse)
 library(openxlsx)
 
-WHO_all_Error_Categorization_Output_Corrected <- read_excel("~/Desktop/MTP_Paper/CT_Embedding_Storage_9thJan2025/Error-Ananlysis/WHO_all_Error_Categorization_Output_Latest_Corrected.xlsx")
-WHO_all_Error_Categorization_Output_Corrected<-WHO_all_Error_Categorization_Output_Corrected%>%filter(method_eval==0)
-WHO_all_Error_Categorization_Output_Corrected<-WHO_all_Error_Categorization_Output_Corrected%>%filter(ground_truth!="NF")
+setwd(getwd())
+root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
+util_dir <- file.path(root_dir, "util")
+data_dir <- file.path(root_dir,"data")
+input_dir <- file.path(root_dir,"input")
+analysis_dir <- file.path(root_dir,"analysis")
+error_analysis_dir <- file.path(analysis_dir,"error-analysis")
 
-combined_df<-WHO_all_Error_Categorization_Output_Corrected%>%separate_rows(error_category,sep=";\\s*")
+
+combined_df_all <- read_excel(paste(error_analysis_dir,"/WHO_all_Error_Categorization_Output_Latest_Corrected.xlsx",sep=""))
+combined_df_all<-combined_df_all%>%filter(method_eval==0)
+combined_df_all<-combined_df_all%>%filter(ground_truth!="NF")
+
+combined_df_all<-combined_df_all%>%separate_rows(error_category,sep=";\\s*")
 
 
 
-ind<-which(combined_df$method_name=="euclidean_dist_v3")
-combined_df$method_name[ind]<-"LTE3+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_v3")
+combined_df_all$method_name[ind]<-"LTE3+Euclidean distance"
 
-ind<-which(combined_df$method_name=="euclidean_dist_ada2")
-combined_df$method_name[ind]<-"ADA-002+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_ada2")
+combined_df_all$method_name[ind]<-"ADA-002+Euclidean distance"
 
-ind<-which(combined_df$method_name=="LTE-3+AP")
-combined_df$method_name[ind]<-"LTE-3+AP"
+ind<-which(combined_df_all$method_name=="af_v3")
+combined_df_all$method_name[ind]<-"LTE-3+AP"
 
-ind<-which(combined_df$method_name=="ada2_ap")
-combined_df$method_name[ind]<-"ADA-002+AP"
+ind<-which(combined_df_all$method_name=="af_ada2")
+combined_df_all$method_name[ind]<-"ADA-002+AP"
 
-ind<-which(combined_df$method_name=="LTE3_kmeans")
-combined_df$method_name[ind]<-"LTE-3+K-means"
+ind<-which(combined_df_all$method_name=="kmeans_v3")
+combined_df_all$method_name[ind]<-"LTE-3+K-means"
 
-ind<-which(combined_df$method_name=="ada2_kmeans")
-combined_df$method_name[ind]<-"ADA-002+K-means"
+ind<-which(combined_df_all$method_name=="kmeans_ada2")
+combined_df_all$method_name[ind]<-"ADA-002+K-means"
 
-ind<-which(combined_df$method_name=="cosine_ap")
-combined_df$method_name[ind]<-"Cosine+AP"
+ind<-which(combined_df_all$method_name=="af_cosine")
+combined_df_all$method_name[ind]<-"Cosine+AP"
 
-ind<-which(combined_df$method_name=="jw_ap")
-combined_df$method_name[ind]<-"Jaro Winkler+AP"
+ind<-which(combined_df_all$method_name=="af_jw")
+combined_df_all$method_name[ind]<-"Jaro Winkler+AP"
 
-ind<-which(combined_df$method_name=="lv_ap")
-combined_df$method_name[ind]<-"Levenshtein+AP"
+ind<-which(combined_df_all$method_name=="af_lv")
+combined_df_all$method_name[ind]<-"Levenshtein+AP"
 
-ind<-which(combined_df$method_name=="cosine")
-combined_df$method_name[ind]<-"Cosine"
+ind<-which(combined_df_all$method_name=="cosine_match")
+combined_df_all$method_name[ind]<-"Cosine"
 
-ind<-which(combined_df$method_name=="jw")
-combined_df$method_name[ind]<-"Jaro Winkler"
+ind<-which(combined_df_all$method_name=="jw_match")
+combined_df_all$method_name[ind]<-"Jaro Winkler"
 
-ind<-which(combined_df$method_name=="lv")
-combined_df$method_name[ind]<-"Levenshtein"
+ind<-which(combined_df_all$method_name=="lv_match")
+combined_df_all$method_name[ind]<-"Levenshtein"
 
-ind<-which(combined_df$method_name=="llama")
-combined_df$method_name[ind]<-"Llama3.0+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_llama")
+combined_df_all$method_name[ind]<-"Llama3.0+Euclidean distance"
 
-ind<-which(combined_df$method_name=="biobert")
-combined_df$method_name[ind]<-"BioBERT+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_biobert")
+combined_df_all$method_name[ind]<-"BioBERT+Euclidean distance"
 
-ind<-which(combined_df$method_name=="medllama")
-combined_df$method_name[ind]<-"MedLlama_13B+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_medllama")
+combined_df_all$method_name[ind]<-"MedLlama_13B+Euclidean distance"
 
-ind<-which(combined_df$method_name=="pubmedbert")
-combined_df$method_name[ind]<-"PubMedBERT+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_pubmedbert")
+combined_df_all$method_name[ind]<-"PubMedBERT+Euclidean distance"
 
-ind<-which(combined_df$method_name=="modernbert")
-combined_df$method_name[ind]<-"ModernBERT+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_modernbert")
+combined_df_all$method_name[ind]<-"ModernBERT+Euclidean distance"
 
-ind<-which(combined_df$method_name=="medllama_7b")
-combined_df$method_name[ind]<-"MedLlama2+Euclidean Distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_medllama_7b")
+combined_df_all$method_name[ind]<-"MedLlama2+Euclidean Distance"
 
-ind<-which(combined_df$method_name=="llama_32_3b")
-combined_df$method_name[ind]<-"Llama3.2_3B+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_llama_32_3b")
+combined_df_all$method_name[ind]<-"Llama3.2_3B+Euclidean distance"
 
-ind<-which(combined_df$method_name=="phi4")
-combined_df$method_name[ind]<-"Phi-4+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_phi4")
+combined_df_all$method_name[ind]<-"Phi-4+Euclidean distance"
 
-ind<-which(combined_df$method_name=="llama_33_70b")
-combined_df$method_name[ind]<-"Llama3.3_70B+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_llama_33_70b")
+combined_df_all$method_name[ind]<-"Llama3.3_70B+Euclidean distance"
 
-ind<-which(combined_df$method_name=="MiniLM_L6_v2")
-combined_df$method_name[ind]<-"all-MiniLM-L6-v2+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_MiniLM_L6_v2")
+combined_df_all$method_name[ind]<-"all-MiniLM-L6-v2+Euclidean distance"
 
-ind<-which(combined_df$method_name=="mpnet_base")
-combined_df$method_name[ind]<-"all-mpnet-base-v2+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_mpnet_base")
+combined_df_all$method_name[ind]<-"all-mpnet-base-v2+Euclidean distance"
 
-ind<-which(combined_df$method_name=="roberta")
-combined_df$method_name[ind]<-"all-roberta-large-v1+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_roberta")
+combined_df_all$method_name[ind]<-"all-roberta-large-v1+Euclidean distance"
 
-ind<-which(combined_df$method_name=="MiniLM_L12_v2")
-combined_df$method_name[ind]<-"all-MiniLM-L12-v2+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_MiniLM_L12_v2")
+combined_df_all$method_name[ind]<-"all-MiniLM-L12-v2+Euclidean distance"
 
-ind<-which(combined_df$method_name=="e5_large")
-combined_df$method_name[ind]<-"e5-large+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_e5_large")
+combined_df_all$method_name[ind]<-"e5-large+Euclidean distance"
 
-ind<-which(combined_df$method_name=="gtr_t5_large")
-combined_df$method_name[ind]<-"gtr-t5-large+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_gtr_t5_large")
+combined_df_all$method_name[ind]<-"gtr-t5-large+Euclidean distance"
 
-ind<-which(combined_df$method_name=="labse")
-combined_df$method_name[ind]<-"LaBSE+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_labse")
+combined_df_all$method_name[ind]<-"LaBSE+Euclidean distance"
 
-ind<-which(combined_df$method_name=="sciBERT")
-combined_df$method_name[ind]<-"SciBERT+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_sciBERT")
+combined_df_all$method_name[ind]<-"SciBERT+Euclidean distance"
 
-ind<-which(combined_df$method_name=="sapBERT")
-combined_df$method_name[ind]<-"SapBERT+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_sapBERT")
+combined_df_all$method_name[ind]<-"SapBERT+Euclidean distance"
 
-ind<-which(combined_df$method_name=="cohere")
-combined_df$method_name[ind]<-"embed-english-v2.0+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_cohere")
+combined_df_all$method_name[ind]<-"embed-english-v2.0+Euclidean distance"
 
-ind<-which(combined_df$method_name=="deepseek")
-combined_df$method_name[ind]<-"DeepSeek_8B+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_deepseek")
+combined_df_all$method_name[ind]<-"DeepSeek_8B+Euclidean distance"
 
-ind<-which(combined_df$method_name=="BioGPT")
-combined_df$method_name[ind]<-"BioGPT+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_BioGPT")
+combined_df_all$method_name[ind]<-"BioGPT+Euclidean distance"
 
-ind<-which(combined_df$method_name=="clincalBERT")
-combined_df$method_name[ind]<-"ClinicalBERT+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_clincalBERT")
+combined_df_all$method_name[ind]<-"ClinicalBERT+Euclidean distance"
 
-ind<-which(combined_df$method_name=="e5large_v2")
-combined_df$method_name[ind]<-"e5-large-v2+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_e5large_v2")
+combined_df_all$method_name[ind]<-"e5-large-v2+Euclidean distance"
 
-ind<-which(combined_df$method_name=="nomic")
-combined_df$method_name[ind]<-"nomic+Euclidean distance"
+ind<-which(combined_df_all$method_name=="euclidean_dist_nomic")
+combined_df_all$method_name[ind]<-"nomic+Euclidean distance"
 
 # Compute normalized error % per method
-error_freq <- combined_df %>%
+error_freq <- combined_df_all %>%
   group_by(method_name, error_category) %>%
   summarise(count = n(), .groups = "drop") %>%
   group_by(method_name) %>%
@@ -152,12 +161,12 @@ my_colors <- c(
   
 )
 
-ggplot(error_freq, aes(x = factor(method_name, levels = method_order),
+plt<-ggplot(error_freq, aes(x = factor(method_name, levels = method_order),
                        y = percent,
                        fill = error_category)) +
   geom_bar(stat = "identity", width = 0.8) +
   scale_fill_manual(values = my_colors)+
-  labs(title = "Error Category Distribution per Method, WHO-5th",
+  labs(title = "Error Category Distribution per Method, WHO-all",
        x = "Method",
        y = "Percentage of Errors",
        fill = "Error Category") +
@@ -170,3 +179,28 @@ ggplot(error_freq, aes(x = factor(method_name, levels = method_order),
             color = "black",
             size = 3)+ coord_flip()
 
+plt
+
+
+plt
+
+
+# count bar plots
+
+unique_categories <- unique(error_freq$error_category)
+
+for (category in unique_categories) {
+  # Filter for the current error category
+  subset_df <- error_freq %>% filter(error_category == category)
+  
+  # Create the plot
+  p <- ggplot(subset_df, aes(x = method_name, y = count)) +
+    geom_bar(stat = "identity", fill = "steelblue") +
+    labs(title = paste("Count of", category, "by Method"),
+         x = "Method Name",
+         y = "Count") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+  
+  print(p)
+}
