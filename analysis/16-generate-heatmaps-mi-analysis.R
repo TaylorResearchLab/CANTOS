@@ -33,7 +33,6 @@ source(paste(util_dir,"/compute_mi_pairwise.R",sep = ""))
 
 tumor_all_gt<-read_excel(paste(result_dir,"/tumor_manually_validated_all_corrected_May23.xlsx",sep = ""))
 tumor_5thed_gt<-read_excel(paste(result_dir_5th,"/tumor_manually_validated_5th_corrected_May23.xlsx",sep = ""))
-tumor_5thed_gt<-tumor_5thed_gt[,c(-1)]
 
 
 tumor_all_gt<-tumor_all_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
@@ -42,7 +41,7 @@ tumor_5thed_gt<-tumor_5thed_gt%>%filter(ground_truth %in% c("G","MG","G-Manual")
 data_5th<- tumor_5thed_gt[,seq(6,76,2)]
 data_all<- tumor_all_gt[,seq(6,76,2)]
 
-col_select <- c("valid_euclidean_dist_v3","valid_euclidean_dist_ada2","valid_af_ad2","valid_af_v3","valid_kmeans_v3",
+col_select <- c("valid_euclidean_dist_v3","valid_euclidean_dist_ada2","valid_af_ada2","valid_af_v3","valid_kmeans_v3",
                 "valid_kmeans_ada2","valid_euclidean_dist_MiniLM_L6_v2","valid_euclidean_mpnet_base",
                 "valid_euclidean_dist_e5_large","valid_euclidean_dist_MiniLM_L12_v2","valid_euclidean_dist_nomic")
 
@@ -56,7 +55,7 @@ MI_mat_5th <-compute_mi_pairwise(data_5th)
 MI_mat_all <-compute_mi_pairwise(data_all)
 
 method_names<-c("LTE-3+Euclidean distance","ADA-002+Euclidean distance","ADA-002+AP",                      
-                "LTE3+AP","LTE-3+kmeans","ADA-002+k-means",                 
+                "LTE3+AP","LTE-3+K-means","ADA-002+K-means",                 
                 "all_MiniLM_L6_v2+Euclidean distance",  "all_mpnet_base+Euclidean distance","e5_large+Euclidean distance",     
                 "all_MiniLM_L12_v2+Euclidean distance", "nomic+Euclidean distance")
 
@@ -101,7 +100,7 @@ print(paste("Best diverse combination (lowest mutual information):", mi_scores_a
 
 ################
 combined_pred_5th<-tumor_5thed_gt%>%dplyr::select(nct_id,Tumor_Names,ground_truth,ground_truth_val,af_ada2,
-                                                                     valid_af_ad2,kmeans_v3,valid_kmeans_v3,
+                                                                     valid_af_ada2,kmeans_v3,valid_kmeans_v3,
                                                   euclidean_dist_MiniLM_L12_v2,valid_euclidean_dist_MiniLM_L12_v2)
 
 
