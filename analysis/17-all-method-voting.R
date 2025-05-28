@@ -27,14 +27,13 @@ result_dir_5th <- file.path(analysis_dir,"results_5th")
 
 
 #### Measure for all possible vote
-col_select <- c("valid_euclidean_dist_v3","valid_euclidean_dist_ada2","valid_af_ad2","valid_af_v3","valid_kmeans_v3",
+col_select <- c("valid_euclidean_dist_v3","valid_euclidean_dist_ada2","valid_af_ada2","valid_af_v3","valid_kmeans_v3",
                 "valid_kmeans_ada2","valid_euclidean_dist_MiniLM_L6_v2","valid_euclidean_mpnet_base",
                 "valid_euclidean_dist_e5_large","valid_euclidean_dist_MiniLM_L12_v2","valid_euclidean_dist_nomic")
 
 
 tumor_all_gt<-read_excel(paste(result_dir,"/tumor_manually_validated_all_corrected_May23.xlsx",sep = ""))
 tumor_5thed_gt<-read_excel(paste(result_dir_5th,"/tumor_manually_validated_5th_corrected_May23.xlsx",sep = ""))
-tumor_5thed_gt<-tumor_5thed_gt[,c(-1)]
 
 col_select2<-col_select
 col_select2 <- gsub("valid_","",col_select2)

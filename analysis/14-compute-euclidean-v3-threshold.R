@@ -37,7 +37,6 @@ source(paste(util_dir,"/find_euclidean_match.R",sep=""))
 
 tumor_all_edition<-read_excel(paste(result_dir,"/tumor_manually_validated_all_corrected_May23.xlsx",sep = ""))
 tumor_5th_edition<-read_excel(paste(result_dir_5th,"/tumor_manually_validated_5th_corrected_May23.xlsx",sep = ""))
-tumor_5th_edition<-tumor_5th_edition[,c(-1)]
 
 
 
@@ -139,10 +138,18 @@ Plt_all_ed_LTE3<- ggplot(distances_all_edition, aes(x=standardization_result_LTE
 
 
 Plt_5th_ed_MiniLM_L12_v2<- ggplot(distances_5th_edition, aes(x=standardization_result_all_MiniLM_L12_v2, y=Euclidean_distance_all_MiniLM_L12_v2_embedding,
-                                                             color=standardization_result_all_MiniLM_L12_v2)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ labs(y= "Euclidean distance in all_MiniLM_L12_v2 embedding space", x = "Standardization results for WHO 5th edition,n=1044")+ggtitle("a")
+                                                             color=standardization_result_all_MiniLM_L12_v2)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+
+  labs(y= "Euclidean distance in all_MiniLM_L12_v2 embedding space", x = "Standardization results for WHO 5th edition,n=1044")+ggtitle("a")+
+  theme(plot.title = element_text(size = 16, face = "bold"),axis.title = element_text(size = 14),
+        axis.text = element_text(size = 12),legend.title = element_text(size = 13),
+        legend.text = element_text(size = 11))
 
 Plt_all_ed_MiniLM_L12_v2<- ggplot(distances_all_edition, aes(x=standardization_result_all_MiniLM_L12_v2, y=Euclidean_distance_all_MiniLM_L12_v2_embedding,
-                                                             color=standardization_result_all_MiniLM_L12_v2)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2") + labs(y= "Euclidean distance in all_MiniLM_L12_v2 embedding space", x = "Standardization results for WHO all editions,n=1118")+ggtitle("b")
+                                                             color=standardization_result_all_MiniLM_L12_v2)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ 
+  labs(y= "Euclidean distance in all_MiniLM_L12_v2 embedding space", x = "Standardization results for WHO all editions,n=1118")+ggtitle("b")+
+  theme(plot.title = element_text(size = 16, face = "bold"),axis.title = element_text(size = 14),
+        axis.text = element_text(size = 12),legend.title = element_text(size = 13),
+        legend.text = element_text(size = 11))
 
 
 
