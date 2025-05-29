@@ -174,7 +174,7 @@ plt<-ggplot(error_freq, aes(x = factor(method_name, levels = method_order),
   theme_minimal(base_size = 12) +
   theme(axis.text.x = element_text(angle = 0, vjust = 0.5, hjust = 1),
         panel.grid.major.x = element_blank())+
-  geom_text(aes(label = ifelse(percent > 3, paste0(round(percent), "%"), "")),
+  geom_text(aes(label = ifelse(percent > 3, paste0(round(percent,1), "%"), "")),
             position = position_stack(vjust = 0.5),
             color = "black",
             size = 3)+ coord_flip()

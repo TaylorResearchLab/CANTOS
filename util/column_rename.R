@@ -9,7 +9,7 @@ for(iter in 1:length(col_names)){
   }else if(col_names[iter]=="valid_euclidean_dist_ada2"){
     col_names[iter]="ADA-002+Euclidean distance"
     
-  }else if(col_names[iter]=="valid_af_ad2"){
+  }else if(col_names[iter]=="valid_af_ada2"){
     col_names[iter]="ADA-002+AP"
     
   }else if(col_names[iter]=="valid_kmeans_v3"){
