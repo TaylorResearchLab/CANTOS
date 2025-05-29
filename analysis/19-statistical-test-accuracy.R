@@ -35,7 +35,6 @@ source(paste(util_dir,"/bootstrap_accuracy_ci_all_models.R",sep=""))
 
 tumor_all_gt<-read_excel(paste(result_dir,"/tumor_manually_validated_all_corrected_May23.xlsx",sep = ""))
 tumor_5thed_gt<-read_excel(paste(result_dir_5th,"/tumor_manually_validated_5th_corrected_May23.xlsx",sep = ""))
-tumor_5thed_gt<-tumor_5thed_gt[,c(-1)]
 
 tumor_all_gt<-tumor_all_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
 tumor_5thed_gt<-tumor_5thed_gt%>%filter(ground_truth %in% c("G","MG","G-Manual"))
@@ -108,6 +107,7 @@ adj_all_high<-adj_all_high%>%select(any_of(high_accuracy_methods))
 adj_5th_high<-adj_5th%>%filter(rownames(adj_5th)%in%high_accuracy_methods)
 adj_5th_high<-adj_5th_high%>%select(any_of(high_accuracy_methods))
 
+colnames(adj_all_high)[(which(adj_all_high[5,]>0.05))]
 
 
 biomed_methods<-c("sapBERT+Euclidean distance", "ClinicalBERT+Euclidean distance", "BioGPT+Euclidean distance",
