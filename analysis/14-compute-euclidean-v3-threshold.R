@@ -46,11 +46,11 @@ tumor_5th_edition<-read_excel(paste(result_dir_5th,"/tumor_manually_validated_5t
 tumor_5th_edition<-tumor_5th_edition %>% dplyr::select(nct_id,Tumor_Names,ground_truth_val,ground_truth,
                                                        euclidean_dist_v3,valid_euclidean_dist_v3,
                                                        euclidean_dist_MiniLM_L12_v2,valid_euclidean_dist_MiniLM_L12_v2,
-                                                       )
+)
 tumor_all_edition<-tumor_all_edition %>% dplyr::select(nct_id,Tumor_Names,ground_truth_val,ground_truth,
                                                        euclidean_dist_v3,valid_euclidean_dist_v3,
                                                        euclidean_dist_MiniLM_L12_v2,valid_euclidean_dist_MiniLM_L12_v2,
-                                                       )
+)
 
 
 # Load 5th edition distance for LTE-3
@@ -102,19 +102,19 @@ distances_5th_edition<- tumor_5th_edition%>%dplyr::select(Euclidean_Dist_LTE3,va
 distances_all_edition<- tumor_all_edition%>%dplyr::select(Euclidean_Dist_LTE3,valid_euclidean_dist_v3, Euclidean_Dist_MiniLM_L12_v2, valid_euclidean_dist_MiniLM_L12_v2)
 
 distances_5th_edition<-distances_5th_edition %>% mutate(standardization_result_LTE3= case_when(valid_euclidean_dist_v3==1~ "Correctly Standardized",
-                                                                                         valid_euclidean_dist_v3==0~"Incorrectly Standardized"))
+                                                                                               valid_euclidean_dist_v3==0~"Incorrectly Standardized"))
 
 distances_5th_edition<-distances_5th_edition %>% mutate(standardization_result_all_MiniLM_L12_v2= case_when(valid_euclidean_dist_MiniLM_L12_v2==1~ "Correctly Standardized",
-                                                                                               valid_euclidean_dist_MiniLM_L12_v2==0~"Incorrectly Standardized"))
+                                                                                                            valid_euclidean_dist_MiniLM_L12_v2==0~"Incorrectly Standardized"))
 
-                           
+
 
 
 distances_all_edition<-distances_all_edition %>% mutate(standardization_result_LTE3= case_when(valid_euclidean_dist_v3==1~ "Correctly Standardized",
                                                                                                valid_euclidean_dist_v3==0~"Incorrectly Standardized"))
 
 distances_all_edition<-distances_all_edition %>% mutate(standardization_result_all_MiniLM_L12_v2= case_when(valid_euclidean_dist_MiniLM_L12_v2==1~ "Correctly Standardized",
-                                                                                                        valid_euclidean_dist_MiniLM_L12_v2==0~"Incorrectly Standardized"))
+                                                                                                            valid_euclidean_dist_MiniLM_L12_v2==0~"Incorrectly Standardized"))
 
 
 colnames(distances_5th_edition)[c(1,3)]<-c("Euclidean_distance_LTE_embedding","Euclidean_distance_all_MiniLM_L12_v2_embedding")
@@ -122,18 +122,18 @@ colnames(distances_all_edition)[c(1,3)]<-c("Euclidean_distance_LTE_embedding","E
 
 
 Plt_5th_ed_LTE3<- ggplot(distances_5th_edition, aes(x=standardization_result_LTE3, y=Euclidean_distance_LTE_embedding,
-                                  color=standardization_result_LTE3)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ 
+                                                    color=standardization_result_LTE3)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ 
   labs(y= "Euclidean distance in LTE-3 embedding space", x = "Standardization results for WHO 5th edition,n=1044")+ggtitle("a")+
   theme(plot.title = element_text(size = 16, face = "bold"),axis.title = element_text(size = 14),
-    axis.text = element_text(size = 12),legend.title = element_text(size = 13),
-    legend.text = element_text(size = 11))
+        axis.text = element_text(size = 12),legend.title = element_text(size = 13),
+        legend.text = element_text(size = 11))
 
 Plt_all_ed_LTE3<- ggplot(distances_all_edition, aes(x=standardization_result_LTE3, y=Euclidean_distance_LTE_embedding,
-                                              color=standardization_result_LTE3)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ 
+                                                    color=standardization_result_LTE3)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ 
   labs(y= "Euclidean distance in LTE-3 embedding space", x = "Standardization results for WHO all editions,n=1118")+ggtitle("b")+
   theme(plot.title = element_text(size = 16, face = "bold"),axis.title = element_text(size = 14),
-    axis.text = element_text(size = 12),legend.title = element_text(size = 13),
-    legend.text = element_text(size = 11))
+        axis.text = element_text(size = 12),legend.title = element_text(size = 13),
+        legend.text = element_text(size = 11))
 
 
 
@@ -207,4 +207,3 @@ print(summary_5th_MiniLM_L12_v2_wrong)
 
 Plt_LTE<-ggarrange(Plt_5th_ed_LTE3, Plt_all_ed_LTE3,nrow = 1,ncol = 2)
 Plt_MiniLM_L12_v2<-ggarrange(Plt_5th_ed_MiniLM_L12_v2, Plt_all_ed_MiniLM_L12_v2,nrow = 1,ncol = 2)
-
