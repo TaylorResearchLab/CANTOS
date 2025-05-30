@@ -22,10 +22,14 @@ source(paste(util_dir,"/split_drugs.R",sep = ""))
 
 
 # Load CT data
-load(paste(input_dir,"/clinical_data.RData",sep=""))
-load(paste(input_dir,"/eligibility_data.RData",sep=""))
-load(paste(input_dir,"/conditions_data.RData",sep=""))
-load(paste(input_dir,"/browse_conditions_data.RData",sep=""))
+
+load(paste(input_dir,"/interventions.RData",sep="")) # interventions.txt file from CTR
+# will be loaded as a dataframe called "clinical_data"
+
+load(paste(input_dir,"/eligibility_data.RData",sep="")) #eligibilities.txt file from CTR
+load(paste(input_dir,"/conditions_data.RData",sep="")) # condtions.txt file from CTR
+load(paste(input_dir,"/browse_conditions_data.RData",sep=""))# browse_conditions.txt file from CTR
+
 
 # Relationship between Drug and Disease in CT and NCT IDS
 clinical_data <- clinical_data %>% dplyr::left_join(eligibility_data,by="nct_id")

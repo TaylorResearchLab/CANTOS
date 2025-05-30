@@ -54,6 +54,18 @@ result_all <- run_mcnemar_matrix(correct_all_matrix,adjust_method = "BH")
 adj_pvals_5thed<-result_5thed$adjusted_p_values
 adj_pvals_all<- result_all$adjusted_p_values
 
+rownames(adj_pvals_5thed)[which(rownames(adj_pvals_5thed)=="LTE-3+KMeans")]<-"LTE-3+K-means"
+colnames(adj_pvals_5thed)[which(colnames(adj_pvals_5thed)=="LTE-3+KMeans")]<-"LTE-3+K-means"
+
+rownames(adj_pvals_5thed)[which(rownames(adj_pvals_5thed)=="ADA-002+KMeans")]<-"ADA-002+K-means"
+colnames(adj_pvals_5thed)[which(colnames(adj_pvals_5thed)=="ADA-002+KMeans")]<-"ADA-002+K-means"
+
+
+rownames(adj_pvals_all)[which(rownames(adj_pvals_all)=="LTE-3+KMeans")]<-"LTE-3+K-means"
+colnames(adj_pvals_all)[which(colnames(adj_pvals_all)=="LTE-3+KMeans")]<-"LTE-3+K-means"
+
+rownames(adj_pvals_all)[which(rownames(adj_pvals_all)=="ADA-002+KMeans")]<-"ADA-002+K-means"
+colnames(adj_pvals_all)[which(colnames(adj_pvals_all)=="ADA-002+KMeans")]<-"ADA-002+K-means"
 
 
 
@@ -61,24 +73,68 @@ signif_matrix_5thed <- ifelse(adj_pvals_5thed < 0.05, "*", "")
 signif_matrix_all <- ifelse(adj_pvals_all < 0.05, "*", "")
 
 
+method_ranking_5th <- c("all-MiniLM-L12-v2+Euclidean distance", "e5-large+Euclidean distance", "all-mpnet-base-v2+Euclidean distance", "LTE-3+Euclidean distance", "all-MiniLM-L6-v2+Euclidean distance",
+                        "LTE-3+AP", "LTE-3+K-means", "ADA-002+Euclidean distance", "ADA-002+AP", "ADA-002+K-means", 
+                        "nomic+Euclidean distance", "all-roberta-large-v1+Euclidean distance", "e5large_v2+Euclidean distance",
+                        "gtr-t5-large+Euclidean distance", "embed-english-v2.0+Euclidean distance", "sapBERT+Euclidean distance",
+                        "BioGPT+Euclidean distance", "ClinicalBERT+Euclidean distance", "LaBSE+Euclidean distance",
+                        "MedLlama_13B+Euclidean distance", "Levenshtein", "Levenshtein+AP", "Llama3.3_70B+Euclidean distance", 
+                        "Jaro Winkler", "Jaro Winkler+AP", "Cosine", "Cosine+AP", "DeepSeek_8B+Euclidean distance", "PubMedBERT+Euclidean distance",
+                        "LLama3.2_3B+Euclidean distance", "BioBERT+Euclidean distance", "LLama3.0+Euclidean distance",
+                        "sciBERT+Euclidean distance", "ModernBERT+Euclidean distance", "Phi-4+Euclidean distance", 
+                        "MedLlama2+Euclidean distance")
+
+
+
+
+
+method_ranking_all<-c("LTE-3+Euclidean distance", "e5-large+Euclidean distance", "LTE-3+AP", "all-mpnet-base-v2+Euclidean distance", "ADA-002+Euclidean distance",
+                      "all-MiniLM-L12-v2+Euclidean distance", "all-MiniLM-L6-v2+Euclidean distance", "ADA-002+AP", 
+                      "LTE-3+K-means", "ADA-002+K-means", "nomic+Euclidean distance", "all-roberta-large-v1+Euclidean distance",
+                      "gtr-t5-large+Euclidean distance", "e5large_v2+Euclidean distance", "embed-english-v2.0+Euclidean distance",
+                      "sapBERT+Euclidean distance", "ClinicalBERT+Euclidean distance", "BioGPT+Euclidean distance", 
+                      "LaBSE+Euclidean distance", "Levenshtein", "MedLlama_13B+Euclidean distance", "Levenshtein+AP",
+                      "Llama3.3_70B+Euclidean distance", "Jaro Winkler", "Jaro Winkler+AP", "Cosine", 
+                      "DeepSeek_8B+Euclidean distance", "Cosine+AP", "PubMedBERT+Euclidean distance", 
+                      "sciBERT+Euclidean distance", "LLama3.2_3B+Euclidean distance", "BioBERT+Euclidean distance",
+                      "LLama3.0+Euclidean distance", "ModernBERT+Euclidean distance", "Phi-4+Euclidean distance", 
+                      "MedLlama2+Euclidean distance")
+
+
+print(length(!which(!rownames(adj_pvals_5thed)%in%method_ranking_5th)))
+print(length(!which(!rownames(adj_pvals_all)%in%method_ranking_all)))
+
+ordered_adj_pval_5th <- adj_pvals_5thed[method_ranking_5th, method_ranking_5th]
+ordered_signif_5th <- signif_matrix_5thed[method_ranking_5th, method_ranking_5th]
+
 #Heatmap for WHO-5th
-pheatmap(adj_pvals_5thed,
-         display_numbers = signif_matrix_5thed,
+pheatmap(ordered_adj_pval_5th,
+         display_numbers = ordered_signif_5th,
          main = "FDR-Adjusted Pairwise McNemar’s p-values, WHO-5th (n=1044) ",
          cluster_rows = TRUE,
          cluster_cols = TRUE,
-         fontsize_number = 18,
+         fontsize = 16,            # overall font size
+         fontsize_row = 14,        # row names (y-axis)
+         fontsize_col = 14,        # column names (x-axis)
+         fontsize_number = 18,     # text inside cells
          legend = TRUE,
          na_col = "white") 
 
+ordered_adj_pval_all <- adj_pvals_all[method_ranking_all, method_ranking_all]
+ordered_signif_all <- signif_matrix_all[method_ranking_all, method_ranking_all]
+
+
+
 #Heatmap for WHO-all
-pheatmap(adj_pvals_all,
-         display_numbers = signif_matrix_all,
+pheatmap(ordered_adj_pval_all,
+         display_numbers = ordered_signif_all,
          main = "FDR-Adjusted Pairwise McNemar’s p-values, WHO-all (n=1118) ",
          cluster_rows = TRUE,
          cluster_cols = TRUE,
-         fontsize_number = 18,
-         legend = TRUE,
+         fontsize = 16,            # overall font size
+         fontsize_row = 14,        # row names (y-axis)
+         fontsize_col = 14,        # column names (x-axis)
+         fontsize_number = 18,     # text inside cells         legend = TRUE,
          na_col = "white") 
 
 
@@ -89,8 +145,8 @@ ci_results_all <- bootstrap_accuracy_ci_all_models(correct_all_matrix)
 
 high_accuracy_methods<-c("LTE-3+AP",
                          "ADA-002+AP",
-                         "LTE-3+KMeans",
-                         "ADA-002+KMeans",
+                         "LTE-3+K-means",
+                         "ADA-002+K-means",
                          "LTE-3+Euclidean distance",
                          "ADA-002+Euclidean distance",
                          "all-MiniLM-L6-v2+Euclidean distance",
@@ -99,8 +155,8 @@ high_accuracy_methods<-c("LTE-3+AP",
                          "e5-large+Euclidean distance",
                          "nomic+Euclidean distance")
 
-adj_all<-as.data.frame(adj_pvals_all)
-adj_5th<-as.data.frame(adj_pvals_5thed)
+adj_all<-as.data.frame(ordered_adj_pval_all)
+adj_5th<-as.data.frame(ordered_adj_pval_5th)
 adj_all_high<-adj_all%>%filter(rownames(adj_all)%in%high_accuracy_methods)
 adj_all_high<-adj_all_high%>%select(any_of(high_accuracy_methods))
 
@@ -120,3 +176,9 @@ adj_all_biomed<-adj_all_biomed%>%select(any_of(c(biomed_methods,high_accuracy_me
 
 adj_5th_biomed<-adj_5th%>%filter(rownames(adj_5th)%in%c(biomed_methods,high_accuracy_methods))
 adj_5th_biomed<-adj_5th_biomed%>%select(any_of(c(biomed_methods,high_accuracy_methods)))
+
+colnames(adj_5th_high[which(adj_5th_high[9,]>=0.05)])
+colnames(adj_5th_high[which(adj_5th_high[9,]<0.05)])
+
+write.csv(ordered_adj_pval_5th,paste(result_dir_5th,"/mcnemars_adj_pval_5th.csv",sep=""))
+write.csv(ordered_adj_pval_all,paste(result_dir,"/mcnemars_adj_pval_all.csv",sep=""))
