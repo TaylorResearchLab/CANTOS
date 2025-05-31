@@ -185,11 +185,11 @@ plt<-ggplot(error_freq, aes(x = factor(method_name, levels = method_ranking_all)
        y = "Percentage of Errors",
        fill = "Error Category") +
   geom_bar(stat = "identity", color = "white")+
-  theme_minimal(base_size = 12) +
+  theme_minimal(base_size = 16) +
   theme(panel.grid.major.x = element_blank(),
         plot.title = element_text(size = 18, face = "bold", hjust = 0.5),
-        axis.text.x = element_text(angle = 0, vjust = 0.5, hjust = 1, size = 12),
-        axis.text.y = element_text(size = 12),
+        axis.text.x = element_text(angle = 0, vjust = 0.5, hjust = 1, size = 16),
+        axis.text.y = element_text(size = 16),
         axis.title.x = element_text(size = 16),
         axis.title.y = element_text(size = 16))+
   geom_text(aes(label = ifelse(percent > 3, paste0(round(percent,1), "%"), "")),
@@ -198,6 +198,7 @@ plt<-ggplot(error_freq, aes(x = factor(method_name, levels = method_ranking_all)
             size = 3)+ coord_flip()
 
 plt
+ggsave(paste(root_dir,"/Paper/MLWA/High_Res_Fig/figure9.jpg",sep=""), dpi = 300, width = 50, height = 25, units = "cm")
 
 
 plt

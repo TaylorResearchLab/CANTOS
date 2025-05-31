@@ -189,8 +189,13 @@ plt_heat_all<-ggplot(mi_melted_all, aes(Var1, Var2, fill = value)) +
   labs(title = "Heatmap of Pairwise Mutual Information for WHO-all editions (n=1118)", 
        x = "Methods", y = "Methods", fill = "MI")+
   theme(
-    axis.text.x = element_text(size = 8, angle = 45, hjust = 1),  # Reduce x-axis tick size and rotate
-    axis.text.y = element_text(size = 8)  # Reduce y-axis tick size
+    axis.text.x = element_text(size = 16, angle = 45, hjust = 1),  # Reduce x-axis tick size and rotate
+    axis.text.y = element_text(size = 16),  # Reduce y-axis tick size
+    axis.title.x = element_text(size = 16),
+    axis.title.y = element_text(size = 16),
+    legend.title = element_text(size = 16),
+    legend.text = element_text(size = 16),
+    plot.title = element_text(size = 18, face = "bold", hjust = 0.5)
   )
 
 
@@ -211,10 +216,20 @@ plt_heat_5th<-ggplot(mi_melted_5th, aes(Var1, Var2, fill = value)) +
   labs(title = "Heatmap of Pairwise Mutual Information for WHO-5th editions (n=1044) ", 
        x = "Methods", y = "Methods", fill = "MI")+
   theme(
-    axis.text.x = element_text(size = 8, angle = 45, hjust = 1),  # Reduce x-axis tick size and rotate
-    axis.text.y = element_text(size = 8)  # Reduce y-axis tick size
+    axis.text.x = element_text(size = 16, angle = 45, hjust = 1),  # Reduce x-axis tick size and rotate
+    axis.text.y = element_text(size = 16),  # Reduce y-axis tick size
+    axis.title.x = element_text(size = 16),
+    axis.title.y = element_text(size = 16),
+    legend.title = element_text(size = 16),
+    legend.text = element_text(size = 16),
+    plot.title = element_text(size = 18, face = "bold", hjust = 0.5)
   )
 
+plt_heat_5th
+ggsave(paste(root_dir,"/Paper/MLWA/High_Res_Fig/figure3.jpg",sep=""), dpi = 300, width = 30, height = 25, units = "cm")
+
+plt_heat_all
+ggsave(paste(root_dir,"/Paper/MLWA/High_Res_Fig/figure4.jpg",sep=""), dpi = 300, width = 30, height = 25, units = "cm")
 
 # write the files
 write.csv(MI_mat_5th,paste(result_dir_5th,"/MI_5th_results.csv",sep=""))
