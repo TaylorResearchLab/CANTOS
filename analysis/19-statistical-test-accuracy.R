@@ -108,17 +108,19 @@ ordered_adj_pval_5th <- adj_pvals_5thed[method_ranking_5th, method_ranking_5th]
 ordered_signif_5th <- signif_matrix_5thed[method_ranking_5th, method_ranking_5th]
 
 #Heatmap for WHO-5th
+jpeg(paste(root_dir,"/Paper/MLWA/High_Res_Fig/figure8.jpg",sep=""), width = 40, height = 35, units = "cm", res = 300)
 pheatmap(ordered_adj_pval_5th,
          display_numbers = ordered_signif_5th,
          main = "FDR-Adjusted Pairwise McNemar’s p-values, WHO-5th (n=1044) ",
          cluster_rows = TRUE,
          cluster_cols = TRUE,
          fontsize = 16,            # overall font size
-         fontsize_row = 14,        # row names (y-axis)
-         fontsize_col = 14,        # column names (x-axis)
-         fontsize_number = 18,     # text inside cells
+         fontsize_row = 16,        # row names (y-axis)
+         fontsize_col = 16,        # column names (x-axis)
+         fontsize_number = 16,     # text inside cells
          legend = TRUE,
          na_col = "white") 
+dev.off()
 
 ordered_adj_pval_all <- adj_pvals_all[method_ranking_all, method_ranking_all]
 ordered_signif_all <- signif_matrix_all[method_ranking_all, method_ranking_all]
@@ -126,16 +128,22 @@ ordered_signif_all <- signif_matrix_all[method_ranking_all, method_ranking_all]
 
 
 #Heatmap for WHO-all
+jpeg(paste(root_dir,"/Paper/MLWA/High_Res_Fig/figure7.jpg",sep=""), width = 40, height = 35, units = "cm", res = 300)
+
 pheatmap(ordered_adj_pval_all,
          display_numbers = ordered_signif_all,
          main = "FDR-Adjusted Pairwise McNemar’s p-values, WHO-all (n=1118) ",
          cluster_rows = TRUE,
          cluster_cols = TRUE,
          fontsize = 16,            # overall font size
-         fontsize_row = 14,        # row names (y-axis)
-         fontsize_col = 14,        # column names (x-axis)
-         fontsize_number = 18,     # text inside cells         legend = TRUE,
+         fontsize_row = 16,        # row names (y-axis)
+         fontsize_col = 16,        # column names (x-axis)
+         fontsize_number = 16,     # text inside cells         legend = TRUE,
          na_col = "white") 
+
+
+dev.off()
+
 
 
 ci_results_5thed <- bootstrap_accuracy_ci_all_models(correct_5thed_matrix)
