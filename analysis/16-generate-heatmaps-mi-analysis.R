@@ -56,8 +56,8 @@ MI_mat_all <-compute_mi_pairwise(data_all)
 
 method_names<-c("LTE-3+Euclidean distance","ADA-002+Euclidean distance","ADA-002+AP",                      
                 "LTE3+AP","LTE-3+K-means","ADA-002+K-means",                 
-                "all_MiniLM_L6_v2+Euclidean distance",  "all_mpnet_base+Euclidean distance","e5_large+Euclidean distance",     
-                "all_MiniLM_L12_v2+Euclidean distance", "nomic+Euclidean distance")
+                "all-MiniLM-L6-v2+Euclidean distance",  "all-mpnet-base+Euclidean distance","e5-large+Euclidean distance",     
+                "all-MiniLM-L12-v2+Euclidean distance", "nomic+Euclidean distance")
 
 colnames(MI_mat_5th)<-method_names
 colnames(MI_mat_all)<-method_names
@@ -226,10 +226,10 @@ plt_heat_5th<-ggplot(mi_melted_5th, aes(Var1, Var2, fill = value)) +
   )
 
 plt_heat_5th
-ggsave(paste(root_dir,"/Paper/MLWA/High_Res_Fig/figure3.jpg",sep=""), dpi = 300, width = 30, height = 25, units = "cm")
+ggsave(paste(root_dir,"/Paper/MLWA/High_Res_Fig/figure3_revise.jpg",sep=""), dpi = 300, width = 30, height = 25, units = "cm")
 
 plt_heat_all
-ggsave(paste(root_dir,"/Paper/MLWA/High_Res_Fig/figure4.jpg",sep=""), dpi = 300, width = 30, height = 25, units = "cm")
+ggsave(paste(root_dir,"/Paper/MLWA/High_Res_Fig/figure4_revise.jpg",sep=""), dpi = 300, width = 30, height = 25, units = "cm")
 
 # write the files
 write.csv(MI_mat_5th,paste(result_dir_5th,"/MI_5th_results.csv",sep=""))

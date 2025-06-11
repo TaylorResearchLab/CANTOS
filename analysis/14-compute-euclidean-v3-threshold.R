@@ -123,14 +123,14 @@ colnames(distances_all_edition)[c(1,3)]<-c("Euclidean_distance_LTE_embedding","E
 
 Plt_5th_ed_LTE3<- ggplot(distances_5th_edition, aes(x=standardization_result_LTE3, y=Euclidean_distance_LTE_embedding,
                                                     color=standardization_result_LTE3)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ 
-  labs(y= "Euclidean distance in LTE-3 embedding space", x = "Standardization results for WHO 5th edition,n=1044")+ggtitle("a")+
+  labs(y= "Euclidean distance in LTE-3 embedding space", x = "Standardization results for WHO 5th edition,n=1044",color = "Standardization Result LTE-3+Euclidean distance")+ggtitle("a")+
   theme(plot.title = element_text(size = 16, face = "bold"),axis.title = element_text(size = 16),
         axis.text = element_text(size = 16),legend.title = element_text(size = 16),axis.title.x = element_text(size = 16, face = "bold"),
         legend.text = element_text(size = 16))
 
 Plt_all_ed_LTE3<- ggplot(distances_all_edition, aes(x=standardization_result_LTE3, y=Euclidean_distance_LTE_embedding,
                                                     color=standardization_result_LTE3)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ 
-  labs(y= "Euclidean distance in LTE-3 embedding space", x = "Standardization results for WHO all editions,n=1118")+ggtitle("b")+
+  labs(y= "Euclidean distance in LTE-3 embedding space", x = "Standardization results for WHO all editions,n=1118",color = "Standardization Result LTE-3+Euclidean distance")+ggtitle("b")+
   theme(plot.title = element_text(size = 16, face = "bold"),axis.title = element_text(size = 16),
         axis.text = element_text(size = 16),legend.title = element_text(size = 16),axis.title.x = element_text(size = 16, face = "bold"),
         legend.text = element_text(size = 16))
@@ -139,14 +139,14 @@ Plt_all_ed_LTE3<- ggplot(distances_all_edition, aes(x=standardization_result_LTE
 
 Plt_5th_ed_MiniLM_L12_v2<- ggplot(distances_5th_edition, aes(x=standardization_result_all_MiniLM_L12_v2, y=Euclidean_distance_all_MiniLM_L12_v2_embedding,
                                                              color=standardization_result_all_MiniLM_L12_v2)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+
-  labs(y= "Euclidean distance in all_MiniLM_L12_v2 embedding space", x = "Standardization results for WHO 5th edition,n=1044")+ggtitle("a")+
+  labs(y= "Euclidean distance in all-MiniLM-L12-v2 embedding space", x = "Standardization results for WHO 5th edition,n=1044",color = "Standardization Result all-MiniLM-L12-v2+Euclidean distance")+ggtitle("a")+
   theme(plot.title = element_text(size = 16, face = "bold"),axis.title = element_text(size = 16),axis.title.x = element_text(size = 16, face = "bold"),
         axis.text = element_text(size = 16),legend.title = element_text(size = 16),
         legend.text = element_text(size = 16))
 
 Plt_all_ed_MiniLM_L12_v2<- ggplot(distances_all_edition, aes(x=standardization_result_all_MiniLM_L12_v2, y=Euclidean_distance_all_MiniLM_L12_v2_embedding,
                                                              color=standardization_result_all_MiniLM_L12_v2)) + geom_boxplot()+ scale_fill_brewer(palette="Dark2")+ 
-  labs(y= "Euclidean distance in all_MiniLM_L12_v2 embedding space", x = "Standardization results for WHO all editions,n=1118")+ggtitle("b")+
+  labs(y= "Euclidean distance in all-MiniLM-L12-v2 embedding space", x = "Standardization results for WHO all editions,n=1118",color = "Standardization Result all-MiniLM-L12-v2+Euclidean distance")+ggtitle("b")+
   theme(plot.title = element_text(size = 16, face = "bold"),axis.title = element_text(size = 16),axis.title.x = element_text(size = 16, face = "bold"),
         axis.text = element_text(size = 16),legend.title = element_text(size = 16),
         legend.text = element_text(size = 16))
@@ -206,7 +206,7 @@ print(summary_5th_MiniLM_L12_v2_wrong)
 
 
 Plt_LTE<-ggarrange(Plt_5th_ed_LTE3, Plt_all_ed_LTE3,nrow = 1,ncol = 2)
-ggsave(paste(root_dir,"/Paper/MLWA/High_Res_Fig/figure5.jpg",sep=""), dpi = 300, width = 50, height = 25, units = "cm")
+ggsave(paste(root_dir,"/Paper/MLWA/High_Res_Fig/figure5_revise.jpg",sep=""), dpi = 300, width = 70, height = 25, units = "cm")
 
 Plt_MiniLM_L12_v2<-ggarrange(Plt_5th_ed_MiniLM_L12_v2, Plt_all_ed_MiniLM_L12_v2,nrow = 1,ncol = 2)
-ggsave(paste(root_dir,"/Paper/MLWA/High_Res_Fig/figure6.jpg",sep=""), dpi = 300, width = 55, height = 25, units = "cm")
+ggsave(paste(root_dir,"/Paper/MLWA/High_Res_Fig/figure6_revise.jpg",sep=""), dpi = 300, width = 70, height = 25, units = "cm")
