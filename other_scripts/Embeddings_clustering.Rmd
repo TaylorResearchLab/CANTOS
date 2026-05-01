@@ -1,0 +1,79 @@
+---
+title: "Embeddings Analysis"
+author: "Taylor"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+library(lsa)
+library(tidyverse)  
+library(cluster)    
+library(factoextra) 
+library(umap)
+```
+
+```{r data}
+
+disease_names<-read.csv(file="diseases_8Nov23.csv")
+
+embed.df<-read.csv(file="disease_embeddings.csv", header=TRUE)
+
+rownames(embed.df)<-make.names(embed.df[,1], unique = TRUE)
+
+embeddings_matrix<-as.matrix(t(embed.df[,-1])) #transpose to diseases in columns
+
+```
+
+```{r}
+
+#distance matrix
+dist_matrix<-cosine(embeddings_matrix)
+#dist_matrix <- dist(embeddings_matrix, method="euclidean") #there are other distance methods but just using cosine for now.
+
+umap_result <- umap(embeddings_matrix)
+umap_df <- data.frame(UMAP1 = umap_result$layout[, 1], UMAP2 = umap_result$layout[, 2])
+
+# Plot UMAP visualization
+ggplot(umap_df, aes(x = UMAP1, y = UMAP2)) +
+  geom_point() +
+  ggtitle("UMAP Visualization of embeddings")
+
+# Find similarities between vectors (e.g., cosine similarity)
+similarity_matrix <- 1 - as.matrix(dist_matrix)  # Convert distance to similarity
+rownames(similarity_matrix)<-rownames(dist_matrix)
+colnames(similarity_matrix)<-colnames(dist_matrix)
+# You can access similarity values between vectors using similarity_matrix
+# For example, similarity between vector 1 and vector 2
+
+cat("Similarity between vector 1 and vector 2:", similarity_value, "\n")
+
+# Optionally, you can save the similarity matrix to a file if needed
+write.csv(similarity_matrix, "similarity_matrix.csv", row.names = FALSE)
+```
+
+```{r PCA reduction}
+
+
+# Set the threshold value
+threshold <- 2.5
+
+# Find row and column names where the similarity value is greater than the threshold
+indices <- which(similarity_matrix > threshold, arr.ind = TRUE)
+
+# Extract the row and column names based on the indices
+row_names <- row.names(similarity_matrix)[indices[, 1]]
+col_names <- colnames(similarity_matrix)[indices[, 2]]
+
+# Create a data frame with row and column names for values > threshold
+result_df <- data.frame(RowName = row_names, ColName = col_names, SimilarityValue = similarity_matrix[indices])
+
+# Print the data frame
+print(result_df)
+
+
+
+
+```
+
