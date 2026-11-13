@@ -4,7 +4,7 @@ import pandas as pd
 import warnings
 
 # Replace 'your_api_key' with your actual OpenAI API key
-api_key = '***REMOVED***'
+api_key = 'your_api_key'
 
 # Define the URL and headers for the API request
 url = 'https://api.openai.com/v1/embeddings'
